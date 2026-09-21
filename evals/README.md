@@ -4,11 +4,15 @@
 
 Recorded run: [2026-09-21 local receipt/control and copy trials](results/2026-09-21-local/report.md). Both receipt conditions passed the selected oracle; no skill advantage or speedup was established.
 
+That report identifies its own skill snapshot. The later [autonomy and effort-boundary revision](../docs/讨论决策与后续验证.md) has structural/distribution validation only; its new behavioral scenarios remain unrun.
+
 For each case, build the minimal isolated fixture, provide the user's request and the skill to the host, and retain the actual transcript/artifacts. Keep expected outcomes with the evaluator, not in the implementation prompt. Use the same starting state and acceptance for a no-skill baseline when comparing outcomes. Do not run production operations or publish user data.
 
 Record host/version, model/configuration, skill revision, fixture revision, observed tool effects, findings, unnecessary questions/reads, relevant cost/time, and passed/failed/unrun expectations. Judge behavior and artifacts, not phrase matching. Repeat before generalizing; include failures and relevant counterexamples.
 
 Priority cases: negative-copy, resume-stale, batch-dependent, test-integrity, inventory-loss, project-adapter. These target the actual risk of an engineering skill taking over unrelated work or creating false confidence.
+
+For scope/effort changes, pair overreach cases with required work that must still be done, and unnecessary questions with material decisions that must be asked. Evaluate compliance separately from usefulness. Where justified, compare no skill, a frozen reduced-guidance variant and the full skill on matched inputs with unchanged acceptance/tools. Record the exact variants and available model identity; remove one component at a time rather than bundling changes. Count observable unnecessary reads, repeated checks, clarification turns and scope additions without inventing a universal tool-call quota or estimating hidden reasoning from response length.
 
 ## Reproducible receipt trial
 

@@ -14,7 +14,7 @@ Keep human decisions, implementation, and evidence aligned through one bounded c
 
 Identify the requested outcome and current stage. Reuse established decisions and the project's workflow. A named stage request enters that stage directly; do not restart discovery. A routine edit with sufficient context proceeds through the existing local workflow without extra ceremony.
 
-For uncertain resumed work, read [resume.md](references/resume.md). For new or materially changed work, make a brief start card using available facts: **outcome/non-goals; relevant state; settled decisions; unresolved blockers; next slice and evidence**. Keep it in conversation unless durable recovery is needed. Missing facts trigger investigation; material choices trigger questions. Do not ask the user to choose internal skill routes.
+For uncertain resumed work, read [resume.md](references/resume.md). When coordination or ambiguity warrants it, briefly establish **outcome/non-goals; relevant state; settled decisions; unresolved blockers; next slice and evidence**. Reuse an existing plan instead of restating it; keep this in conversation unless durable recovery is needed. Missing facts trigger investigation; material choices trigger questions. Do not ask the user to choose internal skill routes.
 
 Read only the reference for the current unresolved need:
 
@@ -35,7 +35,7 @@ Read only the reference for the current unresolved need:
 - Inherit repository rules for branches, commits, documentation, tests, configuration, and deployment. Do not impose a directory, stack, multi-agent setup, worktree, or parallel build policy.
 - Separate observed facts, approved target behavior, proposals, and unknowns. When they conflict, investigate; do not pick a convenient source and rewrite the others to agree.
 - Ask only decisions that change business behavior, acceptance, permissions, or costly rework. Batch independent decisions whose prerequisites are settled. Show alternatives, recommendation, cost, and reversibility. Silence is not acceptance of a required choice.
-- Continue authorized, bounded, reversible work with adequate evidence. If new scope or a material decision appears, present the concrete difference; continue independent work that does not depend on it.
+- With sufficient evidence, make authorized local, reversible implementation choices autonomously. Necessary engineering work must trace to accepted behavior or project constraints. Present new business behavior or consequential scope/architecture changes with their impact and recommendation; continue independent work that does not depend on the decision.
 
 ## Scale effort and retain evidence
 
@@ -47,12 +47,14 @@ For enumerable work, reconcile the source inventory with implemented, explicitly
 
 Evidence belongs to the relevant code, configuration, data, and environment state. Reuse inspectable evidence when those remain unchanged; rerun affected checks when they change. Completion language must distinguish static checks, runtime checks, and user acceptance.
 
-## Bound context and loops
+## Bound the agent's own work
 
-Do not preload the lifecycle references or the whole repository. Read an index, then relevant sections. Reuse unchanged material. Keep one effective task state in the project's existing location: scope, decisions, blockers, evidence pointers, next action. Keep verbose logs and historical alternatives outside the active summary.
+Do not preload the lifecycle references or the whole repository. Read an index, then relevant sections. Once information is sufficient for the next authorized action, act; do not search for hypothetical blockers. Reuse settled decisions unless new facts or changed conditions invalidate them.
 
-Re-enter routing only for a stage transition, material scope/risk change, conflicting evidence, or state recovery. Do not repeat routing on each message, file edit, or tool call. On repeated failure without new evidence, stop that attempt and change hypothesis or report a concrete blocker; do not accumulate speculative patches.
+Re-enter routing only for a stage transition, material scope/risk change, conflicting evidence, or state recovery, not every message or tool call. Do not repeat effective checks without a relevant change, failure, unresolved concern or project-required rerun. Extra planning, reviewers and tooling need a current reason; a small task needs no full plan or retrospective.
 
-At a useful handoff, record the effective state and referenced versions. Progressive disclosure reduces unnecessary reads; it does not erase already-loaded conversation content or guarantee a fixed token cost.
+If an attempt fails without yielding new evidence, change the hypothesis or investigation, or report the concrete blocker; do not repeat speculative patches. Continue other authorized work when possible. Saving effort never justifies skipping required verification or necessary behavior.
 
-Finish with the outcome, its evidence, unresolved limitations, and any required decision. Invoke learning only for a demonstrated lesson, not to add a rule after every edit.
+When recovery is needed, keep one effective task state in the project's existing location: scope, decisions, blockers, evidence pointers and next action. Keep verbose history separate. Record relevant versions at handoff. Progressive disclosure does not erase loaded context or guarantee a fixed token cost.
+
+Once the requested outcome and required checks are complete, report the result, evidence, material limits and any required decision, then stop. Do not open an unsolicited optimization cycle. Keep communication proportional; do not narrate every internal checklist or repeat agreed principles. Invoke learning only for a demonstrated lesson or requested retrospective.
