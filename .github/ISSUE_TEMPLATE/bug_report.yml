@@ -1,0 +1,27 @@
+name: Workflow failure / 流程问题
+description: Report an observed failure, unnecessary ceremony, or a missed boundary.
+title: "[failure] "
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Host, version, model, installation method
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal request and context (sanitized)
+      description: Do not include secrets, private code, or personal data.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Expected versus observed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence, impact, and any workaround

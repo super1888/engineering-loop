@@ -1,0 +1,18 @@
+{
+  "name": "engineering-loop",
+  "version": "0.1.0",
+  "description": "Bounded AI engineering: human decisions, small slices, and verifiable delivery.",
+  "author": {
+    "name": "super1888"
+  },
+  "homepage": "https://github.com/super1888/engineering-loop",
+  "repository": "https://github.com/super1888/engineering-loop",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "workflow",
+    "skills",
+    "sdd",
+    "tdd"
+  ]
+}

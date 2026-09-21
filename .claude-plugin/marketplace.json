@@ -1,0 +1,16 @@
+{
+  "name": "engineering-loop-marketplace",
+  "metadata": {
+    "description": "Portable, bounded engineering workflows for AI coding agents."
+  },
+  "owner": {
+    "name": "super1888"
+  },
+  "plugins": [
+    {
+      "name": "engineering-loop",
+      "source": "./",
+      "description": "A bounded engineering workflow for AI coding agents."
+    }
+  ]
+}

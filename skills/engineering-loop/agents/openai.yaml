@@ -1,0 +1,4 @@
+interface:
+  display_name: "Engineering Loop"
+  short_description: "Bounded engineering, from intent to evidence"
+  default_prompt: "Use $engineering-loop to move this change from current project state to a verified outcome within the agreed scope."

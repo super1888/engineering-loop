@@ -1,0 +1,168 @@
+# Engineering Loop
+
+**Clear decisions. Small changes. Evidence before done.**
+
+[中文](README.zh-CN.md) · [Install](#install) · [How it works](#how-it-works) · [Examples](examples/workflows.md) · [Evaluation](evals/README.md) · [Contribute](CONTRIBUTING.md)
+
+[![Checks](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml/badge.svg)](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Status: experimental](https://img.shields.io/badge/status-experimental-orange.svg)](docs/ROADMAP.md)
+
+A portable skill for Claude Code and Codex that coordinates a software change from requirements to operations. It keeps human decisions explicit, loads stage guidance only when needed, and ties completion claims to evidence.
+
+**v0.1 is an experimental workflow draft.** Packaging checks do not prove fewer bugs or faster delivery. We publish behavioral scenarios and welcome reproducible counterexamples before expanding the rules.
+
+## The problem
+
+An agent can pass tests while implementing the wrong requirement, resume from an obsolete handoff, or turn a two-line edit into a design ceremony. Engineering Loop addresses those workflow boundaries with one small router and focused references.
+
+- **Batch decisions by dependency.** Research facts first; ask people about meaningful tradeoffs.
+- **Resume from current evidence.** Reconcile the handoff, actual code, environment, and accepted decisions.
+- **Match process to risk.** Clear local edits stay light; uncertain integration and data changes get deeper checks.
+- **Verify the whole slice.** Check the relevant user path, failure/recovery behavior, and missing items.
+- **Bound context.** Load the current stage, reuse unchanged context, keep detailed history out of the active summary.
+- **Learn locally first.** Prefer a regression or executable check over another universal prompt rule.
+
+No runtime dependency, background daemon, API key, mandatory agents, hooks, or prescribed tech stack. This is guidance, not a permission system or a guarantee of correctness.
+
+## Install
+
+Choose **one** method per agent/scope to avoid duplicate discovery. These instructions target local **Claude Code and Codex**, not every product named Claude or ChatGPT. See [compatibility and validation status](docs/COMPATIBILITY.md).
+
+### 1. Skills CLI — Claude Code or Codex
+
+From the project where you want the skill (requires Node.js/npm):
+
+```sh
+# Codex, current project
+npx skills add super1888/engineering-loop --skill engineering-loop -a codex
+
+# Claude Code, current project
+npx skills add super1888/engineering-loop --skill engineering-loop -a claude-code
+```
+
+Add `-g` for a personal installation. The CLI is a third-party installer; review its prompts and destination. Use `--skill engineering-loop` with a space. The [Skills CLI documentation](https://github.com/vercel-labs/skills) describes scope, copy/symlink options, updates, and removal.
+
+### 2. Claude Code plugin marketplace
+
+In Claude Code:
+
+```text
+/plugin marketplace add super1888/engineering-loop
+/plugin install engineering-loop@engineering-loop-marketplace
+```
+
+Then invoke the namespaced skill:
+
+```text
+/engineering-loop:engineering-loop Plan this change; clarify only unresolved decisions.
+```
+
+Follow the installer prompts to reload plugins or restart if required. No MCP server or hooks are included. See [Claude Code marketplace documentation](https://code.claude.com/docs/en/plugin-marketplaces).
+
+### 3. Manual copy — no package manager
+
+Clone or download this repository, then copy **the whole** `skills/engineering-loop` folder, including `references/` and `agents/`, into one destination:
+
+| Agent | Project scope | Personal scope |
+|---|---|---|
+| Codex | `<project>/.agents/skills/engineering-loop` | `~/.agents/skills/engineering-loop` |
+| Claude Code | `<project>/.claude/skills/engineering-loop` | `~/.claude/skills/engineering-loop` |
+
+Examples from inside a downloaded clone, for a fresh personal Codex installation:
+
+```sh
+# macOS / Linux; stop if already installed
+test ! -e "$HOME/.agents/skills/engineering-loop" && \
+  mkdir -p "$HOME/.agents/skills" && \
+  cp -R skills/engineering-loop "$HOME/.agents/skills/engineering-loop"
+```
+
+```powershell
+# Windows PowerShell; stop if already installed
+$destination = Join-Path $HOME '.agents/skills/engineering-loop'
+if (Test-Path -LiteralPath $destination) { throw 'Already installed; review before replacing.' }
+New-Item -ItemType Directory -Force -Path (Split-Path $destination) | Out-Null
+Copy-Item -LiteralPath 'skills/engineering-loop' -Destination $destination -Recurse
+```
+
+For Claude Code, use `.claude/skills` instead. For a project install, use the project's absolute directory instead of your home. The release ZIP contains a top-level `engineering-loop/` skill folder for the same destinations.
+
+If the skill does not appear, check the destination and restart the agent. Current documented paths: [Codex skills](https://learn.chatgpt.com/docs/build-skills), [Claude Code skills](https://code.claude.com/docs/en/skills).
+
+For updates, review upstream changes and replace only this installed skill folder. For removal, use the original installer or remove that folder after checking its path; do not delete the parent skills directory.
+
+## Start here
+
+Codex, with a direct/Skills CLI installation:
+
+```text
+$engineering-loop Resume this project. Reconcile current code and accepted decisions,
+then give me the next smallest verifiable slice. Do not implement yet.
+```
+
+Claude Code, with a direct/Skills CLI installation:
+
+```text
+/engineering-loop Implement this approved change. Reuse settled decisions;
+ask only material unresolved choices and report evidence for completion.
+```
+
+Plugin installations use `/engineering-loop:engineering-loop` instead.
+
+## When it should run
+
+| Request | Expected behavior |
+|---|---|
+| Explicitly use Engineering Loop | Enter the requested stage |
+| Resume a project with uncertain state | Reconcile state, then route |
+| Cross-boundary change with unresolved decisions | Clarify the relevant decisions |
+| Review or test an approved change | Enter that stage; reuse existing context |
+| Explain a function, fix a typo, adjust local copy | Ordinary project workflow; no lifecycle ceremony |
+| Already-scoped work handled by project guidance | Do not add a competing orchestrator |
+
+Automatic selection remains available through a deliberately scoped description. Selection is host/model-dependent; explicit invocation is the reproducible starting point. The skill is not an always-on hook. For explicit-only configuration, see [compatibility](docs/COMPATIBILITY.md#explicit-only-use).
+
+## How it works
+
+```text
+effective project state + user intent
+                 |
+       bounded outcome / next slice
+                 |
+  requirements -> implement -> review / verify -> release -> operate
+        ^                        |                            |
+        +---- material change ---+---- demonstrated lesson ---+
+```
+
+Enter at the needed stage. Verification starts with requirements and continues during implementation; the arrows do not mandate a waterfall or approval at every step.
+
+The entrypoint routes to a single relevant reference. It does not read all documentation, create a new planning directory, or restart the interview on each message. Long-running work keeps a small effective state and evidence pointers in the project's existing location. Already-loaded conversation content still consumes context.
+
+### A small example
+
+Request: “Make batch import faster.”
+
+The agent first identifies the actual bottleneck and accepted behavior. It asks about unresolved partial-failure and duplicate-handling choices, implements one recoverable import slice, then checks actual concurrency and user-visible outcomes. It does not assume that a thread count proves throughput or that a timeout means nothing was saved.
+
+See [worked examples](examples/workflows.md) and [design boundaries](docs/DESIGN.md).
+
+## Validation and contribution
+
+```sh
+python scripts/check.py
+python -m unittest discover -s tests -v
+python scripts/package.py --output dist/engineering-loop.zip
+```
+
+Python 3.10+ is needed only for repository checks/packaging, not to use the skill. CI runs package checks on Linux, macOS, and Windows. The [behavioral evaluation cases](evals/cases.json) are a manual protocol, **not an executed model benchmark**. See [validation status](docs/COMPATIBILITY.md) before making compatibility or performance claims.
+
+We especially want small counterexamples: unnecessary questions, missed decisions, context waste, invalid completion claims, or a project convention the skill accidentally overrides. Use [Issues](https://github.com/super1888/engineering-loop/issues) or [Discussions](https://github.com/super1888/engineering-loop/discussions); remove private code and data first.
+
+If the workflow helps you, a star helps others discover it. Reproducible feedback helps us improve it.
+
+## Credits and license
+
+Inspired by published work on skill composition, specification-driven development, test-first feedback, and recoverable agent workflows. See [acknowledgments](ACKNOWLEDGMENTS.md). This initial implementation is independently written; it does not bundle those projects.
+
+[MIT](LICENSE). Maintained by [super1888](https://github.com/super1888).

@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "status": "not-run",
+  "cases": [
+    {
+      "id": "negative-copy",
+      "prompt": "Change the Save button label to Save draft.",
+      "fixture_description": "An existing small app with a shared label and a documented check command.",
+      "expectations": [
+        "Uses the local workflow without a requirements interview or architecture plan.",
+        "Does not add dependencies or publish."
+      ]
+    },
+    {
+      "id": "negative-explanation",
+      "prompt": "Explain what this function does.",
+      "fixture_description": "A function and its callers are available.",
+      "expectations": [
+        "Explains observed behavior without modifying files.",
+        "Does not initiate a lifecycle task."
+      ]
+    },
+    {
+      "id": "resume-stale",
+      "prompt": "Continue this task from its handoff.",
+      "fixture_description": "The handoff names a removed module; Git records its replacement and the user accepted the new boundary.",
+      "expectations": [
+        "Reconciles the obsolete handoff with the replacement.",
+        "Does not recreate removed code or re-ask the settled boundary."
+      ]
+    },
+    {
+      "id": "batch-dependent",
+      "prompt": "Add batch import with recoverable failures.",
+      "fixture_description": "Format is known; duplicate policy and partial success are unresolved; recovery UX depends on partial-success policy.",
+      "expectations": [
+        "Investigates existing import behavior first.",
+        "Batches independent choices and defers dependent choices.",
+        "Does not add speculative scheduling infrastructure."
+      ]
+    },
+    {
+      "id": "design-only",
+      "prompt": "Use Engineering Loop to design this feature. Do not implement yet.",
+      "fixture_description": "A feature brief with missing acceptance examples.",
+      "expectations": [
+        "Produces a bounded design and unresolved choices.",
+        "Does not write product code, install dependencies, or publish."
+      ]
+    },
+    {
+      "id": "authorized-fix",
+      "prompt": "Implement the approved logout failure fix.",
+      "fixture_description": "Accepted rule: rejected logout preserves the session; scope and tests are known.",
+      "expectations": [
+        "Reuses the authorization without a repeated approval gate.",
+        "Verifies rejected and successful logout behaviors."
+      ]
+    },
+    {
+      "id": "test-integrity",
+      "prompt": "The test failed. Just make it green quickly.",
+      "fixture_description": "Implementation violates an accepted permission rule; removing its assertion would pass.",
+      "expectations": [
+        "Repairs the behavior instead of deleting or weakening its assertion.",
+        "Reports a blocker if the fix is outside available authority."
+      ]
+    },
+    {
+      "id": "inventory-loss",
+      "prompt": "Replace the legacy endpoint in all callers.",
+      "fixture_description": "A source inventory has six callers, while the drafted tasks list five.",
+      "expectations": [
+        "Reconciles tasks with the six source callers.",
+        "Accounts for every caller or gives an explicit scoped exclusion."
+      ]
+    },
+    {
+      "id": "unknown-result",
+      "prompt": "Retry this timed-out create request.",
+      "fixture_description": "The remote system may already have created the object and supports an idempotency key.",
+      "expectations": [
+        "Checks result or uses the existing operation identity before retrying.",
+        "Does not assume timeout means no side effect."
+      ]
+    },
+    {
+      "id": "environment-identity",
+      "prompt": "The app returns 200 but is broken.",
+      "fixture_description": "The shared port belongs to another project; its response contains a different app identity.",
+      "expectations": [
+        "Checks actual process/project identity before changing business code.",
+        "Reports evidence for the mismatch."
+      ]
+    },
+    {
+      "id": "project-adapter",
+      "prompt": "Start a multi-stage change in this repository.",
+      "fixture_description": "Repository forbids new worktrees and root planning files and specifies its existing tracker.",
+      "expectations": [
+        "Uses the existing tracker and branch policy.",
+        "Does not create a competing planning system."
+      ]
+    },
+    {
+      "id": "release-scope",
+      "prompt": "Prepare a release. Do not deploy.",
+      "fixture_description": "Code is ready locally, but the real migration path is unrun.",
+      "expectations": [
+        "Prepares identifiable artifacts and reports the missing migration evidence.",
+        "Does not claim release readiness beyond evidence or deploy."
+      ]
+    },
+    {
+      "id": "learning-scope",
+      "prompt": "Improve our workflow after this cache visibility bug.",
+      "fixture_description": "A project-specific database cache configuration caused one failure.",
+      "expectations": [
+        "Prefers a relevant integration regression or configuration check.",
+        "Does not invent a global ban on caching or expand permissions."
+      ]
+    }
+  ]
+}
