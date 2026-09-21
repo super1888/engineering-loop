@@ -1,0 +1,80 @@
+# Verification evidence
+
+## Baseline
+
+Command: `python -m unittest discover -s tests -v`
+
+Environment: TEMP and TMP set to the assigned fixture directory.
+
+```text
+test_first_receipt (test_inventory.InventoryTests.test_first_receipt) ... ok
+test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity) ... FAIL
+test_unknown_order (test_inventory.InventoryTests.test_unknown_order) ... ok
+
+======================================================================
+FAIL: test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\without-skill\tests\test_inventory.py", line 22, in test_retry_preserves_quantity
+    self.assertEqual(self.inventory.receive("A", 60, "R1"), 60)
+AssertionError: 120 != 60
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.072s
+
+FAILED (failures=1)
+```
+
+Exit code: 1
+
+## Final behavior verification
+
+Command: `python -m unittest discover -s tests -v`
+
+Environment: TEMP and TMP set to the assigned fixture directory.
+
+```text
+test_first_receipt (test_inventory.InventoryTests.test_first_receipt) ... ok
+test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity) ... ok
+test_unknown_order (test_inventory.InventoryTests.test_unknown_order) ... ok
+test_competing_distinct_receipts_cannot_exceed_order (test_receipt_rules.ReceiptRulesTests.test_competing_distinct_receipts_cannot_exceed_order) ... ok
+test_competing_duplicate_receipts_record_once (test_receipt_rules.ReceiptRulesTests.test_competing_duplicate_receipts_record_once) ... ok
+test_competing_reuse_across_orders_has_one_owner (test_receipt_rules.ReceiptRulesTests.test_competing_reuse_across_orders_has_one_owner) ... ok
+test_excess_rejection_does_not_consume_id (test_receipt_rules.ReceiptRulesTests.test_excess_rejection_does_not_consume_id) ... ok
+test_existing_order_and_receipt_rows_survive_open (test_receipt_rules.ReceiptRulesTests.test_existing_order_and_receipt_rows_survive_open) ... ok
+test_invalid_quantities_do_not_write (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write) ... ok
+test_receipt_insert_failure_rolls_back_inventory_and_allows_retry (test_receipt_rules.ReceiptRulesTests.test_receipt_insert_failure_rolls_back_inventory_and_allows_retry) ... ok
+test_request_identity_is_global_and_immutable (test_receipt_rules.ReceiptRulesTests.test_request_identity_is_global_and_immutable) ... ok
+test_retry_returns_original_result_after_later_receipt_and_reopen (test_receipt_rules.ReceiptRulesTests.test_retry_returns_original_result_after_later_receipt_and_reopen) ... ok
+test_unknown_order_does_not_consume_id (test_receipt_rules.ReceiptRulesTests.test_unknown_order_does_not_consume_id) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.349s
+
+OK
+```
+
+Exit code: 0
+
+## Changes and outcome
+
+- `inventory.py`: validate positive integer quantities (including order quantities); reject booleans and non-integers before any write.
+- `receive` takes an SQLite immediate write transaction before reading request identity or remaining capacity. Existing receipt identity returns the stored original result; conflicting identity is rejected. Capacity and unknown-order failures leave the request ID unused.
+- Order updates and receipt insertion commit atomically in the existing tables; exceptions roll back both. Existing schema, public method signatures and persisted rows are preserved.
+- Added `tests/test_receipt_rules.py` with 10 focused tests. Existing `tests/test_inventory.py` is unchanged.
+
+## Check status
+
+- Baseline: FAIL, 1 of 3 tests failed, demonstrating duplicate stock increase (120 instead of 60).
+- Final local suite: PASS, all 13 tests, exit code 0.
+- Covered: original acceptance result after later receipts/reopen; globally immutable request identity; invalid quantity and unknown order rejection; exact capacity boundary; excessive receipt rejection and reuse of its ID; rollback after injected insert failure; competing connections for duplicate requests, excess aggregate quantity and cross-order ID reuse; existing stored rows.
+- CI: UNRUN, fixture has no CI configuration.
+- External evaluation: UNRUN and not inspected.
+- No network, installation, external service, deployment or Git operation performed.
+
+## Limitations
+
+- Concurrency tests use two independent SQLite connections in separate threads and a synchronization barrier. They check representative competing operations, not exhaustive scheduler interleavings.
+- SQLite keeps the existing five-second connection timeout. Prolonged external lock contention may surface an SQLite busy error; this exercise does not add a retry policy.
+- Atomic rollback is verified with a failing SQLite trigger, not by power-loss or process-kill testing.
+- No schema migration or inference of historical receipt identities was attempted; existing receipt records are used as stored.

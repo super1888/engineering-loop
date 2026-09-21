@@ -34,14 +34,16 @@ Initial local checks on Windows (2026-09-21):
 | Claude Code 2.1.215 native manifest validation | Plugin and marketplace passed without warnings |
 | Codex skill creator structural validation | Passed; installed Codex CLI version: 0.146.1 |
 | Distribution unit tests | 4 passed; symlink test skipped because this Windows host disallowed creating it |
-| Model behavior and native skill invocation | Not evaluated |
+| Model behavior and native skill invocation | Not evaluated in these initial installation checks; see the later local trial below |
 
 These installation checks use temporary project directories, not a personal skills folder. See the linked CI runs and release notes for published-source and platform results.
 
 [Initial cross-platform CI](https://github.com/super1888/engineering-loop/actions/runs/35565419870) passed on Windows, macOS, and Linux for commit `73074fa`, using Python 3.12. It ran metadata/link checks, distribution unit tests, and offline packaging. Later runs are available in [Actions](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml).
 
-The release notes record actual packaging, CLI, and installation checks for this version. Native host discovery and model behavior are separate from successful file installation. Evaluation cases are supplied but no model-level behavioral pass rate or development speedup is claimed.
+The release notes record actual packaging, CLI, and installation checks for this version. Native host discovery and model behavior are separate from successful file installation.
 
-CI checks links, package structure, metadata consistency, archive contents, and archive path safety. They do not prove software correctness, automatic trigger accuracy, or instruction compliance.
+Later local trial on Windows (2026-09-21): [receipt/control and copy evidence](../evals/results/2026-09-21-local/report.md). Explicitly supplied skill files were used by isolated Codex desktop subagents; this does not test native discovery or install invocation. Both receipt candidates passed seven independent evaluator checks, and the copy candidate changed only the label. An evaluator resource defect was reproduced, fixed and regression-tested. The full scenario catalog, Claude Code behavior, production work and cross-project transfer remain unverified. No overall behavioral pass rate, quality advantage or development speedup is claimed.
+
+CI checks links, package structure, metadata consistency, archive contents, archive path safety and the evaluator's connection-release regression. It does not run models or prove automatic trigger accuracy or instruction compliance. This turn ran local checks; a new remote CI result is not claimed.
 
 Local personal-folder installation does not imply availability in cloud products or scheduled remote sessions. Follow each host's documentation for those environments. No automatic install, setting mutation, or API call occurs merely from reading this skill.

@@ -20,6 +20,7 @@ Read only the reference for the current unresolved need:
 
 | Need | Reference | Exit evidence |
 |---|---|---|
+| Connect a new project or missing cross-boundary rules | [project.md](references/project.md) | Relevant sources, owners, active checks and gaps |
 | Clarify behavior and tradeoffs | [requirements.md](references/requirements.md) | Accepted examples, boundaries, unresolved items |
 | Implement a slice or diagnose a bug | [implementation.md](references/implementation.md) | Scoped changes and relevant checks |
 | Review a concrete diff | [review.md](references/review.md) | Evidence-linked findings and dispositions |

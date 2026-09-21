@@ -1,0 +1,14 @@
+COMMAND: python evals/receipt_oracle.py <trial>\without-skill
+EXIT: 0
+test_competing_distinct_receipts_cannot_over_receive (__main__.ReceiptContractTests.test_competing_distinct_receipts_cannot_over_receive) ... ok
+test_competing_duplicate_connections_write_once (__main__.ReceiptContractTests.test_competing_duplicate_connections_write_once) ... ok
+test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged) ... ok
+test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) ... ok
+test_over_receipt_is_atomic_and_does_not_consume_identity (__main__.ReceiptContractTests.test_over_receipt_is_atomic_and_does_not_consume_identity) ... ok
+test_retry_retains_original_result_after_other_receipt_and_reopen (__main__.ReceiptContractTests.test_retry_retains_original_result_after_other_receipt_and_reopen) ... ok
+test_storage_failure_rolls_back_inventory_and_identity (__main__.ReceiptContractTests.test_storage_failure_rolls_back_inventory_and_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.192s
+
+OK

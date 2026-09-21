@@ -1,0 +1,182 @@
+COMMAND: python <repository>\evals\receipt_oracle.py <trial>\with-skill
+EXIT: 1
+test_competing_distinct_receipts_cannot_over_receive (__main__.ReceiptContractTests.test_competing_distinct_receipts_cannot_over_receive) ... ERROR
+test_competing_duplicate_connections_write_once (__main__.ReceiptContractTests.test_competing_duplicate_connections_write_once) ... ERROR
+test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged) ... ERROR
+test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) ... ERROR
+test_over_receipt_is_atomic_and_does_not_consume_identity (__main__.ReceiptContractTests.test_over_receipt_is_atomic_and_does_not_consume_identity) ... ERROR
+test_retry_retains_original_result_after_other_receipt_and_reopen (__main__.ReceiptContractTests.test_retry_retains_original_result_after_other_receipt_and_reopen) ... ERROR
+test_storage_failure_rolls_back_inventory_and_identity (__main__.ReceiptContractTests.test_storage_failure_rolls_back_inventory_and_identity) ... ERROR
+
+======================================================================
+ERROR: test_competing_distinct_receipts_cannot_over_receive (__main__.ReceiptContractTests.test_competing_distinct_receipts_cannot_over_receive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\shutil.py", line 646, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmpc4zs1sim\\stock.db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\tempfile.py", line 950, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "<python-runtime>\Lib\tempfile.py", line 930, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<python-runtime>\Lib\shutil.py", line 820, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<python-runtime>\Lib\shutil.py", line 648, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "<python-runtime>\Lib\tempfile.py", line 905, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmpc4zs1sim\\stock.db'
+
+======================================================================
+ERROR: test_competing_duplicate_connections_write_once (__main__.ReceiptContractTests.test_competing_duplicate_connections_write_once)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\shutil.py", line 646, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmpsz7l4x9a\\stock.db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\tempfile.py", line 950, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "<python-runtime>\Lib\tempfile.py", line 930, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<python-runtime>\Lib\shutil.py", line 820, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<python-runtime>\Lib\shutil.py", line 648, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "<python-runtime>\Lib\tempfile.py", line 905, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmpsz7l4x9a\\stock.db'
+
+======================================================================
+ERROR: test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\shutil.py", line 646, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmp79611af5\\stock.db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\tempfile.py", line 950, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "<python-runtime>\Lib\tempfile.py", line 930, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<python-runtime>\Lib\shutil.py", line 820, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<python-runtime>\Lib\shutil.py", line 648, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "<python-runtime>\Lib\tempfile.py", line 905, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmp79611af5\\stock.db'
+
+======================================================================
+ERROR: test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\shutil.py", line 646, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmpiwcnvmu1\\stock.db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\tempfile.py", line 950, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "<python-runtime>\Lib\tempfile.py", line 930, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<python-runtime>\Lib\shutil.py", line 820, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<python-runtime>\Lib\shutil.py", line 648, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "<python-runtime>\Lib\tempfile.py", line 905, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmpiwcnvmu1\\stock.db'
+
+======================================================================
+ERROR: test_over_receipt_is_atomic_and_does_not_consume_identity (__main__.ReceiptContractTests.test_over_receipt_is_atomic_and_does_not_consume_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\shutil.py", line 646, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmp4r6n3i1l\\stock.db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\tempfile.py", line 950, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "<python-runtime>\Lib\tempfile.py", line 930, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<python-runtime>\Lib\shutil.py", line 820, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<python-runtime>\Lib\shutil.py", line 648, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "<python-runtime>\Lib\tempfile.py", line 905, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmp4r6n3i1l\\stock.db'
+
+======================================================================
+ERROR: test_retry_retains_original_result_after_other_receipt_and_reopen (__main__.ReceiptContractTests.test_retry_retains_original_result_after_other_receipt_and_reopen)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\shutil.py", line 646, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmp6eensvqc\\stock.db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\tempfile.py", line 950, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "<python-runtime>\Lib\tempfile.py", line 930, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<python-runtime>\Lib\shutil.py", line 820, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<python-runtime>\Lib\shutil.py", line 648, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "<python-runtime>\Lib\tempfile.py", line 905, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmp6eensvqc\\stock.db'
+
+======================================================================
+ERROR: test_storage_failure_rolls_back_inventory_and_identity (__main__.ReceiptContractTests.test_storage_failure_rolls_back_inventory_and_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\shutil.py", line 646, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmpegmw27t7\\stock.db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<python-runtime>\Lib\tempfile.py", line 950, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "<python-runtime>\Lib\tempfile.py", line 930, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<python-runtime>\Lib\shutil.py", line 820, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<python-runtime>\Lib\shutil.py", line 648, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "<python-runtime>\Lib\tempfile.py", line 905, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: '<user-home>\\AppData\\Local\\Temp\\tmpegmw27t7\\stock.db'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.220s
+
+FAILED (errors=7)

@@ -1,0 +1,5 @@
+COMMAND: python check.py
+EXIT: 0
+Static form structure passed; browser behavior was not tested.
+
+Independent byte comparison: only the requested label differs; file inventory unchanged.

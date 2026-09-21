@@ -1,0 +1,18 @@
+COMMAND: python -m unittest discover -s tests -v
+EXIT: 1
+test_first_receipt (test_inventory.InventoryTests.test_first_receipt) ... ok
+test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity) ... FAIL
+test_unknown_order (test_inventory.InventoryTests.test_unknown_order) ... ok
+
+======================================================================
+FAIL: test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\fixtures\receipt\tests\test_inventory.py", line 22, in test_retry_preserves_quantity
+    self.assertEqual(self.inventory.receive("A", 60, "R1"), 60)
+AssertionError: 120 != 60
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.075s
+
+FAILED (failures=1)

@@ -1,0 +1,333 @@
+# Receipt retry implementation evidence
+
+Outcome: implemented the approved RULES.md receipt behavior without changing the public method signatures, existing schema, accepted rules, or existing tests.
+
+Scope:
+- inventory.py: validate positive integer receipt quantities (excluding booleans); begin an immediate SQLite transaction before reading; enforce immutable global request identity; return stored original results; reject unknown orders and excess quantities; atomically persist inventory plus receipt.
+- tests/test_receipt_rules.py: ten additional contract tests for persistence/reopening, existing data, identity conflicts, invalid input, rejected ID reuse, full-capacity acceptance, rollback injection, and actual concurrent connections.
+- WORK.md: completion status.
+- This EVIDENCE.md: commands and complete raw verification outputs.
+
+Accepted examples are the independent test oracle. No additional business decisions were required. BEGIN IMMEDIATE serializes the check/update sequence across separate connections, and the existing connection context commits or rolls back the receipt and inventory together. No new dependencies or schema migration were needed.
+
+Passed: final full unittest run, 13 tests; real local SQLite file integration, two separately opened connections synchronized at a thread barrier, rollback trigger injection.
+Failed earlier: unchanged baseline had 1 failing test; expanded tests against unchanged source had 17 assertion failures and 2 errors. These failures reproduced missing behavior and were resolved in the final run. No remaining failed checks.
+Unrun: CI (not configured), production deployment/migrations (out of scope), process-kill/power-failure testing, extended contention stress. The concurrent tests cover two competing connections, not every possible schedule. SQLite's existing five-second busy timeout is unchanged.
+No network, installs, external services, publication, Git operations or sibling/original/evaluator inspection was performed. Temporary test databases were redirected to this fixture's .tmp folder; test cleanup removed their databases. The explicitly supplied skill and implementation/verification references were the only sources read outside the fixture.
+
+All commands below ran in:
+<trial>\with-skill
+
+Raw outputs are retained including expected red-phase failures. Code and tests were unchanged between the final green run and snapshot capture.
+
+## Baseline existing tests
+
+Command:
+```powershell
+$env:TEMP = Join-Path (Get-Location) '.tmp'; $env:TMP = $env:TEMP; $env:TMPDIR = $env:TEMP; New-Item -ItemType Directory -Force -Path $env:TEMP | Out-Null; python -m unittest discover -s tests -v
+```
+
+Exit code: 1
+
+Raw output:
+```text
+test_first_receipt (test_inventory.InventoryTests.test_first_receipt) ... ok
+test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity) ... FAIL
+test_unknown_order (test_inventory.InventoryTests.test_unknown_order) ... ok
+
+======================================================================
+FAIL: test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_inventory.py", line 22, in test_retry_preserves_quantity
+    self.assertEqual(self.inventory.receive("A", 60, "R1"), 60)
+AssertionError: 120 != 60
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.073s
+
+FAILED (failures=1)
+```
+
+## Regression tests against unchanged implementation (red)
+
+Command:
+```powershell
+$env:TEMP = Join-Path (Get-Location) '.tmp'; $env:TMP = $env:TEMP; $env:TMPDIR = $env:TEMP; python -m unittest discover -s tests -v
+```
+
+Exit code: 1
+
+Raw output:
+```text
+test_first_receipt (test_inventory.InventoryTests.test_first_receipt) ... ok
+test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity) ... FAIL
+test_unknown_order (test_inventory.InventoryTests.test_unknown_order) ... ok
+test_concurrent_conflicting_request_identity (test_receipt_rules.ReceiptRulesTests.test_concurrent_conflicting_request_identity) ... FAIL
+test_concurrent_distinct_receipts_cannot_exceed_order (test_receipt_rules.ReceiptRulesTests.test_concurrent_distinct_receipts_cannot_exceed_order) ... FAIL
+test_concurrent_duplicate_requests_have_one_receipt (test_receipt_rules.ReceiptRulesTests.test_concurrent_duplicate_requests_have_one_receipt) ... FAIL
+test_existing_data_and_original_results_survive_open (test_receipt_rules.ReceiptRulesTests.test_existing_data_and_original_results_survive_open) ... FAIL
+test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) ...
+  test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=0) ... FAIL
+  test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=-1) ... FAIL
+  test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=1.5) ... FAIL
+  test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity='1') ... FAIL
+  test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=None) ... ERROR
+  test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=True) ... FAIL
+  test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=False) ... FAIL
+test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) ... FAIL
+test_over_receipt_is_atomic_and_rejected_id_can_be_reused (test_receipt_rules.ReceiptRulesTests.test_over_receipt_is_atomic_and_rejected_id_can_be_reused) ... FAIL
+test_receipt_insert_failure_rolls_back_inventory_update (test_receipt_rules.ReceiptRulesTests.test_receipt_insert_failure_rolls_back_inventory_update) ... FAIL
+test_request_identity_is_global_and_immutable (test_receipt_rules.ReceiptRulesTests.test_request_identity_is_global_and_immutable) ...
+  test_request_identity_is_global_and_immutable (test_receipt_rules.ReceiptRulesTests.test_request_identity_is_global_and_immutable) (order='A', quantity=50) ... FAIL
+  test_request_identity_is_global_and_immutable (test_receipt_rules.ReceiptRulesTests.test_request_identity_is_global_and_immutable) (order='B', quantity=60) ... FAIL
+  test_request_identity_is_global_and_immutable (test_receipt_rules.ReceiptRulesTests.test_request_identity_is_global_and_immutable) (order='missing', quantity=60) ... ERROR
+test_retry_returns_original_result_after_later_receipts_and_reopen (test_receipt_rules.ReceiptRulesTests.test_retry_returns_original_result_after_later_receipts_and_reopen) ... FAIL
+test_unknown_order_does_not_consume_request_id (test_receipt_rules.ReceiptRulesTests.test_unknown_order_does_not_consume_request_id) ... ok
+
+======================================================================
+ERROR: test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 51, in test_invalid_quantities_do_not_write_or_consume_ids
+    self.inventory.receive("A", quantity, "R1")
+  File "<trial>\with-skill\inventory.py", line 37, in receive
+    self.db.execute("UPDATE orders SET received = received + ? WHERE order_id = ?",
+sqlite3.IntegrityError: NOT NULL constraint failed: orders.received
+
+======================================================================
+ERROR: test_request_identity_is_global_and_immutable (test_receipt_rules.ReceiptRulesTests.test_request_identity_is_global_and_immutable) (order='missing', quantity=60)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 43, in test_request_identity_is_global_and_immutable
+    self.inventory.receive(order, quantity, "R1")
+  File "<trial>\with-skill\inventory.py", line 39, in receive
+    return self.received(order_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<trial>\with-skill\inventory.py", line 32, in received
+    raise KeyError(order_id)
+KeyError: 'missing'
+
+======================================================================
+FAIL: test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_inventory.py", line 22, in test_retry_preserves_quantity
+    self.assertEqual(self.inventory.receive("A", 60, "R1"), 60)
+AssertionError: 120 != 60
+
+======================================================================
+FAIL: test_concurrent_conflicting_request_identity (test_receipt_rules.ReceiptRulesTests.test_concurrent_conflicting_request_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 125, in test_concurrent_conflicting_request_identity
+    self.assertCountEqual(results, [("accepted", 60), ("rejected", None)])
+AssertionError: Element counts were not equal:
+First has 2, Second has 1:  ('accepted', 60)
+First has 0, Second has 1:  ('rejected', None)
+
+======================================================================
+FAIL: test_concurrent_distinct_receipts_cannot_exceed_order (test_receipt_rules.ReceiptRulesTests.test_concurrent_distinct_receipts_cannot_exceed_order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 119, in test_concurrent_distinct_receipts_cannot_exceed_order
+    self.assertCountEqual(results, [("accepted", 60), ("rejected", None)])
+AssertionError: Element counts were not equal:
+First has 1, Second has 0:  ('accepted', 120)
+First has 0, Second has 1:  ('rejected', None)
+
+======================================================================
+FAIL: test_concurrent_duplicate_requests_have_one_receipt (test_receipt_rules.ReceiptRulesTests.test_concurrent_duplicate_requests_have_one_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 112, in test_concurrent_duplicate_requests_have_one_receipt
+    self.assertEqual(self.race([("A", 60, "R1")] * 2),
+AssertionError: Lists differ: [('accepted', 120), ('accepted', 60)] != [('accepted', 60), ('accepted', 60)]
+
+First differing element 0:
+('accepted', 120)
+('accepted', 60)
+
+- [('accepted', 120), ('accepted', 60)]
+?               ^^
+
++ [('accepted', 60), ('accepted', 60)]
+?               ^
+
+
+======================================================================
+FAIL: test_existing_data_and_original_results_survive_open (test_receipt_rules.ReceiptRulesTests.test_existing_data_and_original_results_survive_open)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 78, in test_existing_data_and_original_results_survive_open
+    self.assertEqual(reopened.receive("A", 60, "old"), 60)
+AssertionError: 140 != 60
+
+======================================================================
+FAIL: test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 50, in test_invalid_quantities_do_not_write_or_consume_ids
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=-1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 50, in test_invalid_quantities_do_not_write_or_consume_ids
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=1.5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 50, in test_invalid_quantities_do_not_write_or_consume_ids
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity='1')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 50, in test_invalid_quantities_do_not_write_or_consume_ids
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 50, in test_invalid_quantities_do_not_write_or_consume_ids
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) (quantity=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 50, in test_invalid_quantities_do_not_write_or_consume_ids
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 53, in test_invalid_quantities_do_not_write_or_consume_ids
+    self.assertEqual(self.inventory.receive("A", 1, "R1"), 1)
+AssertionError: 3.5 != 1
+
+======================================================================
+FAIL: test_over_receipt_is_atomic_and_rejected_id_can_be_reused (test_receipt_rules.ReceiptRulesTests.test_over_receipt_is_atomic_and_rejected_id_can_be_reused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 59, in test_over_receipt_is_atomic_and_rejected_id_can_be_reused
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_receipt_insert_failure_rolls_back_inventory_update (test_receipt_rules.ReceiptRulesTests.test_receipt_insert_failure_rolls_back_inventory_update)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 88, in test_receipt_insert_failure_rolls_back_inventory_update
+    with self.assertRaises(sqlite3.IntegrityError):
+AssertionError: IntegrityError not raised
+
+======================================================================
+FAIL: test_request_identity_is_global_and_immutable (test_receipt_rules.ReceiptRulesTests.test_request_identity_is_global_and_immutable) (order='A', quantity=50)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 42, in test_request_identity_is_global_and_immutable
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_request_identity_is_global_and_immutable (test_receipt_rules.ReceiptRulesTests.test_request_identity_is_global_and_immutable) (order='B', quantity=60)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 42, in test_request_identity_is_global_and_immutable
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_retry_returns_original_result_after_later_receipts_and_reopen (test_receipt_rules.ReceiptRulesTests.test_retry_returns_original_result_after_later_receipts_and_reopen)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<trial>\with-skill\tests\test_receipt_rules.py", line 33, in test_retry_returns_original_result_after_later_receipts_and_reopen
+    self.assertEqual(reopened.receive("A", 60, "R1"), 60)
+AssertionError: 140 != 60
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.429s
+
+FAILED (failures=17, errors=2)
+```
+
+## Final implementation: full local verification (green)
+
+Command:
+```powershell
+$env:TEMP = Join-Path (Get-Location) '.tmp'; $env:TMP = $env:TEMP; $env:TMPDIR = $env:TEMP; python -m unittest discover -s tests -v
+```
+
+Exit code: 0
+
+Raw output:
+```text
+test_first_receipt (test_inventory.InventoryTests.test_first_receipt) ... ok
+test_retry_preserves_quantity (test_inventory.InventoryTests.test_retry_preserves_quantity) ... ok
+test_unknown_order (test_inventory.InventoryTests.test_unknown_order) ... ok
+test_concurrent_conflicting_request_identity (test_receipt_rules.ReceiptRulesTests.test_concurrent_conflicting_request_identity) ... ok
+test_concurrent_distinct_receipts_cannot_exceed_order (test_receipt_rules.ReceiptRulesTests.test_concurrent_distinct_receipts_cannot_exceed_order) ... ok
+test_concurrent_duplicate_requests_have_one_receipt (test_receipt_rules.ReceiptRulesTests.test_concurrent_duplicate_requests_have_one_receipt) ... ok
+test_existing_data_and_original_results_survive_open (test_receipt_rules.ReceiptRulesTests.test_existing_data_and_original_results_survive_open) ... ok
+test_invalid_quantities_do_not_write_or_consume_ids (test_receipt_rules.ReceiptRulesTests.test_invalid_quantities_do_not_write_or_consume_ids) ... ok
+test_over_receipt_is_atomic_and_rejected_id_can_be_reused (test_receipt_rules.ReceiptRulesTests.test_over_receipt_is_atomic_and_rejected_id_can_be_reused) ... ok
+test_receipt_insert_failure_rolls_back_inventory_update (test_receipt_rules.ReceiptRulesTests.test_receipt_insert_failure_rolls_back_inventory_update) ... ok
+test_request_identity_is_global_and_immutable (test_receipt_rules.ReceiptRulesTests.test_request_identity_is_global_and_immutable) ... ok
+test_retry_returns_original_result_after_later_receipts_and_reopen (test_receipt_rules.ReceiptRulesTests.test_retry_returns_original_result_after_later_receipts_and_reopen) ... ok
+test_unknown_order_does_not_consume_request_id (test_receipt_rules.ReceiptRulesTests.test_unknown_order_does_not_consume_request_id) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.367s
+
+OK
+```
+
+## Environment and verified source snapshot
+
+Command:
+```powershell
+python -c "import sys, sqlite3; print(sys.version); print('SQLite:', sqlite3.sqlite_version)"; Get-FileHash -Algorithm SHA256 -LiteralPath inventory.py, tests/test_inventory.py, tests/test_receipt_rules.py, RULES.md, AGENTS.md | Format-List
+```
+
+Exit code: 0
+
+Raw output:
+```text
+3.12.3 (tags/v3.12.3:f6650f9, Apr  9 2024, 14:05:25) [MSC v.1938 64 bit (AMD64)]
+SQLite: 3.45.1
+
+Algorithm : SHA256
+Hash      : 066A5BBF7DD406C12E51B0EAFABCA010369569ABB4BE641957DC67F747B660F2
+Path      : <trial>\with-skill\inventory.py
+
+Algorithm : SHA256
+Hash      : D60A49FBB2B6F3F84EB65153A0537C96017AF445DCF0F66F6A5E3FBF81F6D840
+Path      : <trial>\with-skill\tests\test_inventory.py
+
+Algorithm : SHA256
+Hash      : 3F3D57E68C0337904D0229CBFEADE0942658CF0E0D7B7F80794D5B98D8FAC2CE
+Path      : <trial>\with-skill\tests\test_receipt_rules.py
+
+Algorithm : SHA256
+Hash      : 3DD0670F4B95C5B49719A29A3E85B97E7AB6C821CC64F9BE71A829E75B4858C5
+Path      : <trial>\with-skill\RULES.md
+
+Algorithm : SHA256
+Hash      : 6DD5652536BCDE257D3DB4BBCD37CB05A06FFB9382CBADD5BD0E7EE18C218C18
+Path      : <trial>\with-skill\AGENTS.md
+
+```

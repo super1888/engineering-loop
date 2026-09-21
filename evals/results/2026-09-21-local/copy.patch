@@ -1,0 +1,11 @@
+--- a/index.html
++++ b/index.html
+@@ -6,7 +6,7 @@
+   <form>
+     <label for="description">Description</label>
+     <input id="description" name="description" required>
+-    <button id="save" type="submit">Save</button>
++    <button id="save" type="submit">Save draft</button>
+   </form>
+ </body>
+ </html>

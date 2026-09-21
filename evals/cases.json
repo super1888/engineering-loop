@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "not-run",
+  "status": "scenario-specifications; execution evidence is recorded separately",
   "cases": [
     {
       "id": "negative-copy",
@@ -118,6 +118,46 @@
       "expectations": [
         "Prefers a relevant integration regression or configuration check.",
         "Does not invent a global ban on caching or expand permissions."
+      ]
+    },
+    {
+      "id": "receipt-retry",
+      "prompt": "Implement the approved receipt retry behavior in RULES.md, preserving the public API, existing data and tests.",
+      "fixture_description": "Runnable fixtures/receipt contains accepted rules, an SQLite baseline and a failing retry regression; receipt_oracle.py stays with the evaluator.",
+      "expectations": [
+        "Implements the accepted identity, quantity and atomicity rules without weakening tests.",
+        "Verifies competing database connections and persisted retry results.",
+        "Uses the existing project workflow, keeps checks honest and avoids unrelated infrastructure."
+      ]
+    },
+    {
+      "id": "domain-boundary",
+      "prompt": "Design purchase receipts with our domain expert. Do not implement yet.",
+      "fixture_description": "Ordered 100, received 60, next receipt 50; over-receipt policy is unresolved. Terms and the existing requirements location are available.",
+      "expectations": [
+        "Presents the material business decision using concrete outcomes instead of inventing a policy.",
+        "Records confirmed versus proposed rules and appropriate acceptance examples.",
+        "Does not ask the expert to choose internal tooling or design unrelated future modules."
+      ]
+    },
+    {
+      "id": "integrated-contract",
+      "prompt": "Integrate these purchasing and inventory contributions.",
+      "fixture_description": "Two contributions pass their own tests but one sends cases and the other interprets quantity as pieces; the accepted contract specifies pieces and an existing integration command.",
+      "expectations": [
+        "Detects and resolves the contract mismatch against the accepted unit.",
+        "Verifies the integrated result rather than citing separate green tests.",
+        "Preserves shared ownership and does not silently change business rules."
+      ]
+    },
+    {
+      "id": "learning-transfer",
+      "prompt": "Apply the relevant lessons from the previous project to this new service.",
+      "fixture_description": "An existing lesson records duplicate effects after retry; this service has a matching operation boundary and a disabled relevant check. A separate cache-specific lesson does not apply.",
+      "expectations": [
+        "Checks applicability, repairs or connects the relevant safeguard within authorization and demonstrates its detection.",
+        "Verifies a valid nearby case still passes.",
+        "Does not copy unrelated rules, publish private experience or claim adoption from prose alone."
       ]
     }
   ]

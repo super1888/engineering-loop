@@ -1,0 +1,148 @@
+COMMAND: python evals/receipt_oracle.py evals/fixtures/receipt
+EXIT: 1
+test_competing_distinct_receipts_cannot_over_receive (__main__.ReceiptContractTests.test_competing_distinct_receipts_cannot_over_receive) ... FAIL
+test_competing_duplicate_connections_write_once (__main__.ReceiptContractTests.test_competing_duplicate_connections_write_once) ... FAIL
+test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged) ...
+  test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged) (order='A', quantity=30) ... FAIL
+  test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged) (order='B', quantity=20) ... FAIL
+test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged) ... FAIL
+test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) ...
+  test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity=0) ... FAIL
+  test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity=-1) ... FAIL
+  test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity=1.5) ... FAIL
+  test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity=True) ... FAIL
+  test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity='2') ... FAIL
+test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) ... FAIL
+test_over_receipt_is_atomic_and_does_not_consume_identity (__main__.ReceiptContractTests.test_over_receipt_is_atomic_and_does_not_consume_identity) ... FAIL
+test_retry_retains_original_result_after_other_receipt_and_reopen (__main__.ReceiptContractTests.test_retry_retains_original_result_after_other_receipt_and_reopen) ... FAIL
+test_storage_failure_rolls_back_inventory_and_identity (__main__.ReceiptContractTests.test_storage_failure_rolls_back_inventory_and_identity) ... FAIL
+
+======================================================================
+FAIL: test_competing_distinct_receipts_cannot_over_receive (__main__.ReceiptContractTests.test_competing_distinct_receipts_cannot_over_receive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 98, in test_competing_distinct_receipts_cannot_over_receive
+    self.assertCountEqual(results, [("accepted", 60), ("rejected", None)])
+AssertionError: Element counts were not equal:
+First has 1, Second has 0:  ('accepted', 120)
+First has 0, Second has 1:  ('rejected', None)
+
+======================================================================
+FAIL: test_competing_duplicate_connections_write_once (__main__.ReceiptContractTests.test_competing_duplicate_connections_write_once)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 91, in test_competing_duplicate_connections_write_once
+    self.assertEqual(self.compete([(60, "R1"), (60, "R1")]),
+AssertionError: Lists differ: [('accepted', 60), ('accepted', 120)] != [('accepted', 60), ('accepted', 60)]
+
+First differing element 1:
+('accepted', 120)
+('accepted', 60)
+
+- [('accepted', 60), ('accepted', 120)]
+?                                 ^^
+
++ [('accepted', 60), ('accepted', 60)]
+?                                 ^
+
+
+======================================================================
+FAIL: test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged) (order='A', quantity=30)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 49, in test_conflicting_identity_leaves_both_orders_unchanged
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged) (order='B', quantity=20)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 49, in test_conflicting_identity_leaves_both_orders_unchanged
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_conflicting_identity_leaves_both_orders_unchanged (__main__.ReceiptContractTests.test_conflicting_identity_leaves_both_orders_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 51, in test_conflicting_identity_leaves_both_orders_unchanged
+    self.assertEqual(self.inventory.received("A"), 20)
+AssertionError: 50 != 20
+
+======================================================================
+FAIL: test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 66, in test_invalid_quantity_and_unknown_order_leave_no_receipt
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity=-1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 66, in test_invalid_quantity_and_unknown_order_leave_no_receipt
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity=1.5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 66, in test_invalid_quantity_and_unknown_order_leave_no_receipt
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 66, in test_invalid_quantity_and_unknown_order_leave_no_receipt
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt) (quantity='2')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 66, in test_invalid_quantity_and_unknown_order_leave_no_receipt
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_quantity_and_unknown_order_leave_no_receipt (__main__.ReceiptContractTests.test_invalid_quantity_and_unknown_order_leave_no_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 70, in test_invalid_quantity_and_unknown_order_leave_no_receipt
+    self.assertEqual(self.inventory.received("A"), 0)
+AssertionError: 3.5 != 0
+
+======================================================================
+FAIL: test_over_receipt_is_atomic_and_does_not_consume_identity (__main__.ReceiptContractTests.test_over_receipt_is_atomic_and_does_not_consume_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 57, in test_over_receipt_is_atomic_and_does_not_consume_identity
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_retry_retains_original_result_after_other_receipt_and_reopen (__main__.ReceiptContractTests.test_retry_retains_original_result_after_other_receipt_and_reopen)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 39, in test_retry_retains_original_result_after_other_receipt_and_reopen
+    self.assertEqual(other.receive("A", 60, "R1"), 60)
+AssertionError: 140 != 60
+
+======================================================================
+FAIL: test_storage_failure_rolls_back_inventory_and_identity (__main__.ReceiptContractTests.test_storage_failure_rolls_back_inventory_and_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\evals\receipt_oracle.py", line 106, in test_storage_failure_rolls_back_inventory_and_identity
+    with self.assertRaises(sqlite3.DatabaseError):
+AssertionError: DatabaseError not raised
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.226s
+
+FAILED (failures=14)

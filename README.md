@@ -22,6 +22,7 @@ An agent can pass tests while implementing the wrong requirement, resume from an
 - **Verify the whole slice.** Check the relevant user path, failure/recovery behavior, and missing items.
 - **Bound context.** Load the current stage, reuse unchanged context, keep detailed history out of the active summary.
 - **Learn locally first.** Prefer a regression or executable check over another universal prompt rule.
+- **Connect project rules to enforcement.** Locate domain examples, module/contract owners and active checks before scaling implementation; verify relevant safeguards when transferring lessons.
 
 No runtime dependency, background daemon, API key, mandatory agents, hooks, or prescribed tech stack. This is guidance, not a permission system or a guarantee of correctness.
 
@@ -147,6 +148,8 @@ The agent first identifies the actual bottleneck and accepted behavior. It asks 
 
 See [worked examples](examples/workflows.md) and [design boundaries](docs/DESIGN.md).
 
+For a new project, the [project connection guide](skills/engineering-loop/references/project.md) reuses existing requirements, architecture and checks. It does not impose another tracker or ask every project to load every historical lesson. Domain decisions stay with the people responsible for them; mechanically checkable constraints should reach the project's actual gates.
+
 ## Validation and contribution
 
 ```sh
@@ -155,7 +158,7 @@ python -m unittest discover -s tests -v
 python scripts/package.py --output dist/engineering-loop.zip
 ```
 
-Python 3.10+ is needed only for repository checks/packaging, not to use the skill. CI runs package checks on Linux, macOS, and Windows. The [behavioral evaluation cases](evals/cases.json) are a manual protocol, **not an executed model benchmark**. See [validation status](docs/COMPATIBILITY.md) before making compatibility or performance claims.
+Python 3.10+ is needed only for repository checks/packaging and local evaluation helpers, not to use the skill. CI runs package checks and helper unit tests on Linux, macOS, and Windows; it does not run models. The [behavioral evaluation cases](evals/cases.json) remain a protocol with partial execution: one [local receipt/control and copy trial](evals/results/2026-09-21-local/report.md) is recorded with artifacts, including an evaluator defect and its fix. Both receipt conditions passed; no quality advantage or speedup is established. See [validation status](docs/COMPATIBILITY.md) before making compatibility or performance claims.
 
 We especially want small counterexamples: unnecessary questions, missed decisions, context waste, invalid completion claims, or a project convention the skill accidentally overrides. Use [Issues](https://github.com/super1888/engineering-loop/issues) or [Discussions](https://github.com/super1888/engineering-loop/discussions); remove private code and data first.
 

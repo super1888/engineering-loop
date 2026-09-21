@@ -15,6 +15,20 @@ One small router, focused references, and project-owned state. This is a workflo
 
 Branch/commit policy, document paths, test commands, quality thresholds, stack, model, deployment system, and operational authority belong to the project. There is no mandatory `.planning/` folder, coverage percentage, number of questions, retry count, or multi-agent topology.
 
+The optional [project connection guide](../skills/engineering-loop/references/project.md) maps the relevant choices to their maintained sources, owners and executable checks. It does not mandate a new project file or a fixed architecture. Unknown business policy remains unknown until resolved; documented enforcement remains a gap until it actually runs.
+
+### Connections in this repository
+
+| Concern | Authoritative source and enforcement |
+|---|---|
+| Skill scope and behavior | [Entrypoint](../skills/engineering-loop/SKILL.md) and focused references; author/reviewer settle scope changes |
+| Portable distribution | [Checker](../scripts/check.py), [distribution tests](../tests/test_distribution.py), [packager](../scripts/package.py) |
+| Automated execution | [CI workflow](../.github/workflows/checks.yml) runs distribution checks; it does not run model trials |
+| Behavioral acceptance | [Scenarios](../evals/cases.json), [trial protocol](../evals/README.md), independent oracle and recorded trial evidence |
+| Compatibility claims | [Observed validation status](COMPATIBILITY.md); an installer success does not prove native invocation |
+
+This is a map to existing sources, not a second set of requirements. A contributor changing the payload owns its checks; the integrating maintainer verifies combined changes and decides release scope. The receipt fixture is an evaluation artifact, not an ERP architecture recommendation.
+
 ## Context lifecycle
 
 Discovery uses concise metadata. Activation reads the entrypoint. A current need reads its reference. Existing decisions and evidence are reused if relevant state is unchanged. Material changes invalidate only affected evidence. A handoff keeps effective state with pointers, not a growing transcript.
