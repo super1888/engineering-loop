@@ -63,7 +63,7 @@ npx skills add super1888/engineering-loop --skill engineering-loop -a claude-cod
 | Codex | `<项目>/.agents/skills/engineering-loop` | `~/.agents/skills/engineering-loop` |
 | Claude Code | `<项目>/.claude/skills/engineering-loop` | `~/.claude/skills/engineering-loop` |
 
-不要只复制 `SKILL.md`，还需要 `references/` 和 `agents/`。发行版 ZIP 解压后包含同名 skill 文件夹。Windows PowerShell 和 macOS/Linux 的具体复制命令见 [英文安装说明](README.md#3-manual-copy--no-package-manager)。已安装时先查看差异，不盲目覆盖本地修改。
+不要只复制 `SKILL.md`，还需要 `references/` 和 `agents/`。[发行版 ZIP](https://github.com/super1888/engineering-loop/releases/tag/v0.1.0) 解压后包含同名 skill 文件夹。Windows PowerShell 和 macOS/Linux 的具体复制命令见 [英文安装说明](README.md#3-manual-copy--no-package-manager)。已安装时先查看差异，不盲目覆盖本地修改。
 
 更新或卸载优先使用原安装器；手动安装只替换或移除确认过路径的本 skill 文件夹，不操作整个 skills 目录。
 

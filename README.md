@@ -86,7 +86,7 @@ New-Item -ItemType Directory -Force -Path (Split-Path $destination) | Out-Null
 Copy-Item -LiteralPath 'skills/engineering-loop' -Destination $destination -Recurse
 ```
 
-For Claude Code, use `.claude/skills` instead. For a project install, use the project's absolute directory instead of your home. The release ZIP contains a top-level `engineering-loop/` skill folder for the same destinations.
+For Claude Code, use `.claude/skills` instead. For a project install, use the project's absolute directory instead of your home. The [release ZIP](https://github.com/super1888/engineering-loop/releases/tag/v0.1.0) contains a top-level `engineering-loop/` skill folder for the same destinations.
 
 If the skill does not appear, check the destination and restart the agent. Current documented paths: [Codex skills](https://learn.chatgpt.com/docs/build-skills), [Claude Code skills](https://code.claude.com/docs/en/skills).
 

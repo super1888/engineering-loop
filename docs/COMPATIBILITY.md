@@ -30,12 +30,15 @@ Initial local checks on Windows (2026-09-21):
 | Check | Result |
 |---|---|
 | Skills CLI 1.7.0, local source, isolated project installs | Codex and Claude Code installs completed |
+| Skills CLI 1.7.0, GitHub shorthand source, isolated project installs | Both targets completed; all 10 skill files matched source bytes |
 | Claude Code 2.1.215 native manifest validation | Plugin and marketplace passed without warnings |
 | Codex skill creator structural validation | Passed; installed Codex CLI version: 0.146.1 |
 | Distribution unit tests | 4 passed; symlink test skipped because this Windows host disallowed creating it |
 | Model behavior and native skill invocation | Not evaluated |
 
 These installation checks use temporary project directories, not a personal skills folder. See the linked CI runs and release notes for published-source and platform results.
+
+[Initial cross-platform CI](https://github.com/super1888/engineering-loop/actions/runs/35565419870) passed on Windows, macOS, and Linux for commit `73074fa`, using Python 3.12. It ran metadata/link checks, distribution unit tests, and offline packaging. Later runs are available in [Actions](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml).
 
 The release notes record actual packaging, CLI, and installation checks for this version. Native host discovery and model behavior are separate from successful file installation. Evaluation cases are supplied but no model-level behavioral pass rate or development speedup is claimed.
 
