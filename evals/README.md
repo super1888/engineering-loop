@@ -60,3 +60,11 @@ Copy `fixtures/copy` into another isolated directory and ask: “Change the Save
 Domain clarification, stale-state recovery, integration of conflicting contracts and transfer of a safeguard to a second real project still require their own runs. The fixture's configured checks, accepted rules and missing CI also exercise part of project adaptation, but do not cover the full `project-adapter` scenario.
 
 The repository's unit tests include an oracle resource-lifecycle regression; cross-platform CI does not execute model trials. The oracle is a local behavioral check of candidate artifacts, not an autonomous model runner. Preserve transcripts when the host exposes them; otherwise say which observations are reconstructed from artifacts and agent reports instead of claiming a complete interaction trace.
+
+## Unreleased flow, visual and learning revision
+
+The `return-path-visible-state`, `responsive-rendered-evidence` and `lesson-evidence-calibration` cases are unrun specifications accompanying the current guidance revision. It makes affected return paths and rendered visual evidence explicit, and separates known-fix replay from independent workflow improvement. The entrypoint and stage routing are unchanged.
+
+The observations motivating this revision were a stale parent view on an alternate exit, a background seam left after geometry checks passed, and a document-consistency comparison with no observed behavioral advantage. These are local artifact findings, not proof that revised instructions prevent recurrence. The scenarios use synthetic descriptions; private project artifacts are not included.
+
+Compare matched fresh contexts before claiming a skill benefit. Keep the original failure and a valid nearby control: a separate status view must remain valid without invented polling, a copy-only edit must not trigger a full visual audit, and justified document corrections must remain possible without invented efficiency claims. Freeze acceptance before implementation; record later discoveries and unmeasured outcomes explicitly. Classroom exercises motivate investigation, not mandatory tool choices or workflow stages.

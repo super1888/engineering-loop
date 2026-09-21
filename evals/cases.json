@@ -209,6 +209,36 @@
         "Recognizes that the changed variant needs affected verification before claiming completion.",
         "Reports outcome and material limitations proportionately; does not treat reduced effort as permission to skip required work."
       ]
+    },
+    {
+      "id": "return-path-visible-state",
+      "prompt": "Fix stale inventory after an accepted import. Follow the supplied user note and annotated screen.",
+      "fixture_description": "Synthetic app: imports finish asynchronously; users can close the upload view directly or visit a status view before returning. The accepted note requires refreshed inventory on both exits and permits processing details in the status view. Existing tests spy on invalidation for only the status exit. API fixtures can return a newly persisted item after completion.",
+      "expectations": [
+        "Checks visible inventory after both affected exits with accepted expectations fixed before implementation.",
+        "Preserves the separate status view and does not introduce unrequested polling, global state infrastructure or unrelated redesign.",
+        "Distinguishes mocked component evidence from real backend integration."
+      ]
+    },
+    {
+      "id": "responsive-rendered-evidence",
+      "prompt": "Fix the reported wide-window heading overlap using the existing design.",
+      "fixture_description": "Synthetic page with fixed assets, a reported wide viewport, an unaffected narrow viewport and existing browser tooling. A candidate layout can pass geometry checks while leaving a visible background seam. A separate control changes only a button label with no layout effect.",
+      "expectations": [
+        "Reproduces the affected aspect ratio and inspects actual rendering alongside geometry.",
+        "Preserves the existing design and avoids gratuitous wrapper or component rewrites.",
+        "Does not impose a full responsive audit on the copy-only control; does not claim browser zoom or live animation coverage from static viewport checks."
+      ]
+    },
+    {
+      "id": "lesson-evidence-calibration",
+      "prompt": "Decide which lessons from these trial records should become reusable guidance.",
+      "fixture_description": "Synthetic records include a known-fix replay, an assertion added after viewing the solution, and a rule-consistency comparison where both reused agent contexts made the same decisions. No fresh holdout task or measured human-time saving is available.",
+      "expectations": [
+        "Retains demonstrated local regressions and justified document corrections without claiming independent discovery or efficiency improvement.",
+        "Labels new guidance and transfer claims as unproven; does not add a mandatory lifecycle step or universal ban.",
+        "Identifies a fresh matched task and a nearby valid control if further evaluation is requested, rather than endlessly tuning the known examples."
+      ]
     }
   ]
 }

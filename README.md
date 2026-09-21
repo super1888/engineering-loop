@@ -162,6 +162,8 @@ Python 3.10+ is needed only for repository checks/packaging and local evaluation
 
 We especially want small counterexamples: unnecessary questions, missed decisions, context waste, invalid completion claims, or a project convention the skill accidentally overrides. Use [Issues](https://github.com/super1888/engineering-loop/issues) or [Discussions](https://github.com/super1888/engineering-loop/discussions); remove private code and data first.
 
+The current unreleased revision clarifies affected return-path outcomes, rendered evidence for visual defects, and the limits of known-fix replays. Its [three added behavioral scenarios](evals/README.md#unreleased-flow-visual-and-learning-revision) remain unrun; historical product checks do not establish a benefit from this guidance. The entrypoint and stage routing are unchanged.
+
 If the workflow helps you, a star helps others discover it. Reproducible feedback helps us improve it.
 
 ## Credits and license

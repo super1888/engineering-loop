@@ -2,7 +2,7 @@
 
 Investigate facts available in the project before asking the user. Separate current behavior, desired behavior, assumptions, and unknowns. Agree the current slice, not every hypothetical future feature.
 
-Use concrete normal, rejected, and uncertain-result examples. For stateful behavior, consider only relevant cases such as duplicate submission, missing data, partial failure, permissions, and refresh recovery. Do not turn a coverage checklist into mandatory new product features.
+Use concrete normal, rejected, and uncertain-result examples from the accepted request, including relevant screenshot annotations. For a flow crossing screens or asynchronous states, trace the affected entry, action, completion signal, and supported exit/return paths to what the user should then see. Do not equate request acceptance with completion or invent live polling when the accepted flow uses a separate status view. Consider duplicate submission, missing data, partial failure, permissions, and refresh recovery only when relevant; do not turn coverage examples into mandatory new product features.
 
 Translate domain-expert explanations into only the terms, invariants, state transitions and permissions needed for this slice. Have consequential rules grounded in accepted examples with inputs, actions and observable outcomes; distinguish an expert's confirmed rule from an agent's proposal. Use boundary examples to expose ambiguity (for example, ordered 100, received 60, next receipt 50). Do not silently choose a business policy or treat an unanswered question as acceptance. Technical implementation choices need not be sent back to the expert.
 

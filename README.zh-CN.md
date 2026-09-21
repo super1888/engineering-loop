@@ -115,6 +115,8 @@ python scripts/package.py --output dist/engineering-loop.zip
 
 Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 本身不需要 Python。CI 执行分发检查和工具单元测试，不运行模型。具体已测范围见[兼容与验证状态](docs/COMPATIBILITY.md)；实际问题的本地沉淀见[项目经验](docs/LESSONS.md)。
 
+当前未发布修订明确了受影响返回路径的可见结果、视觉缺陷的实际渲染证据，以及已知修复回放的结论边界。[新增三个行为场景](evals/README.md#unreleased-flow-visual-and-learning-revision)仍待执行；历史产品检查不能证明新指导有额外收益。主入口与阶段路由不变。
+
 欢迎在 [Issues](https://github.com/super1888/engineering-loop/issues) 提供脱敏反例，在 [Discussions](https://github.com/super1888/engineering-loop/discussions) 讨论流程取舍。重点是实际减少重复沟通、遗漏与返工，不以规则条数或文档数量作为成熟度。
 
 如果对你有用，欢迎 Star；可复现的反馈更能帮助项目成长。
