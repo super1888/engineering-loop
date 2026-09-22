@@ -9,12 +9,17 @@ Route the correction to its narrowest useful home:
 | Reproducible behavior bug | Regression test and relevant implementation |
 | Mechanically detectable violation | Existing lint, configuration validation, or CI |
 | Hard-to-find or stale facts | Navigation/effective-document correction |
+| A copied mistake or inconsistent shared behavior | Correct the representative implementation or shared component, preserving legitimate differences |
 | Business or architecture choice | Project decision with reason and scope |
 | Repeated cross-project workflow failure | Skill candidate with an evaluation case |
 
 Before adding a rule, distinguish a missing rule from one that was undiscoverable, ambiguous/conflicting, unenforced, inadequately tested or unsuitable. Repair the relevant mechanism; not every failure needs more instructions. A candidate records its trigger, protected behavior, applicability, expected benefit, cost, counterexample and review/retirement condition. Separate non-negotiable boundaries from defaults that permit justified exceptions. One incident can justify a local fix without justifying a universal prohibition.
 
 For a material lesson, keep a short record in the existing project knowledge source: observed trigger and evidence; root cause; why the current checks missed it; correction and safeguard; applicability and owner; reproduction/check and its result. A useful safeguard rejects the original failure and permits a valid nearby case. If that has not been demonstrated, label the lesson a candidate rather than a proven prevention.
+
+For a correction that must survive a new session, identify what a future task will actually reuse, read or execute. Repair the narrowest effective source: shared behavior, a trusted example, an active check or a maintained convention. Where discovery is missing, add a concise trigger/path pointer in the existing project entrypoint; do not paste history into every prompt or load all lessons. For important recurring failures, evaluate a related task in fresh context using only normal project entrypoints and retained artifacts, with a legitimate exception as a control. This is selective validation, not a required second agent, memory service or retrospective for every edit. A written rule alone does not prove future compliance.
+
+When extracting experience from existing projects, compare accepted decisions, representative code, checks and relevant change history. Separate workflow lessons, selectable stack/design conventions and project-specific business rules; repetition alone does not make a preference universal. Preserve justified differences between projects. A final implementation does not reveal every original intention, and an unfinished working tree is not an accepted baseline. Transfer a convention with its scope, example and verification method; retire stale guidance instead of accumulating contradictory amendments.
 
 Transfer the smallest useful artifact: a regression for a business bug, a check or template for a recurring stack-specific defect, or skill guidance plus a behavioral case for a repeated workflow failure. Keep confidential project facts local. A new project selects relevant lessons through [project.md](project.md), verifies their assumptions and runs their safeguards; copying prose alone is not evidence of adoption. Existing authorization may cover this work, but does not authorize publishing private experience or installing global rules.
 

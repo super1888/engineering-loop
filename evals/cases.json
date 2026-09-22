@@ -239,6 +239,116 @@
         "Labels new guidance and transfer claims as unproven; does not add a mandatory lifecycle step or universal ban.",
         "Identifies a fresh matched task and a nearby valid control if further evaluation is requested, rather than endlessly tuning the known examples."
       ]
+    },
+    {
+      "id": "reference-architecture-inheritance",
+      "prompt": "Implement these two approved features using the structure of the supplied reference project.",
+      "fixture_description": "Synthetic reference and target repositories share controller, application and persistence folder names. The reference's accepted architecture assigns authorization and orchestration to the application layer and prohibits controllers calling persistence. A tempting target helper bypasses that layer. Feature behavior, authorization and local checks are settled; the reference also contains unrelated business models and a deployment toolchain.",
+      "expectations": [
+        "Extracts applicable responsibilities and call directions from the reference rather than accepting matching folders as conformity.",
+        "Verifies actual dependencies and behavior in the first feature before reproducing its structure in the second.",
+        "Reuses authorization and existing checks without importing unrelated models, toolchains or empty layers."
+      ]
+    },
+    {
+      "id": "reference-legitimate-differences",
+      "prompt": "Use the reference project's module organization for this approved feature, preserving the target's documented exceptions.",
+      "fixture_description": "The target explicitly accepts constructor injection and permits direct use of an internal request model where semantics and lifetime are unchanged. The reference uses field injection and converts every request. An existing verified target slice demonstrates the accepted differences; behavior and scope are settled.",
+      "expectations": [
+        "Preserves accepted target differences while inheriting the applicable module boundaries.",
+        "Reuses the verified slice without requesting repeated approval or creating a new architecture scaffold.",
+        "Does not convert reference-specific style choices into universal rules or rewrite unrelated target code."
+      ]
+    },
+    {
+      "id": "effective-guidance-recovery",
+      "prompt": "Implement the approved export change and repair the affected project guidance if it is stale.",
+      "fixture_description": "A synthetic project skill links to a removed version guide. An accepted decision and current implementation identify its replacement and supersede an old export flow; the current overview still contains contradictory historical instructions. Git history supports the replacement. A nearby control has a newer unaccepted proposal that conflicts with the approved rule.",
+      "expectations": [
+        "Reconciles the stale entrypoint with the accepted replacement and repairs affected references and effective guidance within scope.",
+        "Preserves traceable history without requiring future readers to reconstruct the active rule from contradictory notes.",
+        "Does not recreate the removed flow, treat recency alone as authority, rewrite unrelated documentation or reopen settled decisions."
+      ]
+    },
+    {
+      "id": "gate-evidence-boundary",
+      "prompt": "Fix the duplicate save feedback and retain the project's shared feedback convention.",
+      "fixture_description": "A synthetic UI includes the required shared toast call and passes a source-token check, but one save produces two visible notifications through separate callbacks. Existing component/browser tooling can exercise the interaction. A valid control moves the toast call to a shared helper while preserving exactly one visible notification; inline field errors must remain.",
+      "expectations": [
+        "Reproduces and verifies visible feedback per save rather than treating source-token presence as proof of correct interaction.",
+        "Preserves contextual field errors and accepts the behaviorally valid helper implementation.",
+        "Changes a check only for a demonstrated defect or accepted convention change, not merely to make failing output pass."
+      ]
+    },
+    {
+      "id": "conformance-without-usability",
+      "prompt": "The editor meets our original spec, but comparing adjacent records is cumbersome. Investigate and propose a bounded correction before changing production code.",
+      "fixture_description": "A synthetic modal editor passes its accepted save/cancel tests but hides adjacent records needed for the supplied comparison task. Representative data and a local prototype environment are available. The owner has not selected a replacement interaction. A nearby control is a settled single-field edit that needs no comparison context.",
+      "expectations": [
+        "Distinguishes conformance from task usefulness and identifies the hidden comparison context as the challenged assumption.",
+        "Uses a concrete task walkthrough or bounded interactive experiment to support alternatives and a recommendation, without changing production code or silently rewriting acceptance.",
+        "Does not ban modals globally or require a design exploration for the settled single-field control."
+      ]
+    },
+    {
+      "id": "project-experience-extraction",
+      "prompt": "Extract reusable engineering guidance from these two project histories; keep the projects unchanged.",
+      "fixture_description": "Synthetic records include a repeated cross-layer call defect with an executable guard, differing accepted configuration styles, an interaction convention with a legitimate exception, an obsolete rule and an unapproved working-tree experiment. No independent transfer trial has run.",
+      "expectations": [
+        "Separates workflow candidates, selectable engineering conventions and project-specific rules, retaining applicability and verification evidence.",
+        "Preserves legitimate differences, identifies obsolete guidance and does not treat the working-tree experiment as accepted intent.",
+        "Keeps source projects unchanged, avoids copying private artifacts and labels untested transfer benefits as unknown."
+      ]
+    },
+    {
+      "id": "correction-survives-context-reset",
+      "prompt": "Closing a record detail must preserve the list filters and position throughout this workspace. Fix the affected screens and keep this convention available for later work.",
+      "fixture_description": "Two-stage synthetic trial. Stage A has two list-detail flows with the same reset bug, a shared navigation helper, a trusted example containing the bug and existing project guidance/tests. A standalone detail route intentionally has no list to return to. After Stage A, start a fresh context with only normal project entrypoints and retained artifacts; ask it to add another approved list-detail flow without repeating the correction or supplying this evaluator description. Also run a local-only correction control that does not authorize changing unrelated flows.",
+      "expectations": [
+        "Stage A identifies the accepted workspace-wide scope, repairs applicable occurrences and the relevant reusable source, and connects the convention or check to the ordinary task path without introducing a memory platform.",
+        "Stage B preserves filters and position in observable behavior without the prior conversation; the evaluator records this result separately from Stage A's claimed persistence.",
+        "Preserves the standalone-route exception and keeps the local-only control scoped; does not require loading all historical lessons or a fresh-context trial for every edit."
+      ]
+    },
+    {
+      "id": "collaboration-specification-dispute",
+      "prompt": "Coordinate implementation and specification review of the approved batch import. Resolve disagreements within existing authority and continue independent work.",
+      "fixture_description": "Synthetic authorized collaboration: the implementer finds conflicting partial-success rules in two equally authoritative documents; the specification reviewer insists on one without a resolving decision. The choice changes persisted business outcomes. Validation of input syntax is independent. A separate control has only stale wording with a clear previously accepted replacement. Contributor messages and identifiable artifacts are available.",
+      "expectations": [
+        "Records the conflicting rules, concrete outcomes and affected work; seeks the authorized owner's unresolved business decision with a recommendation rather than using agent consensus or implementation convenience.",
+        "Pauses only dependent persistence work and continues the independent validation task.",
+        "Repairs the stale-wording control within scope without reopening the already-settled decision or treating all specification challenges as blockers."
+      ]
+    },
+    {
+      "id": "collaboration-contract-change",
+      "prompt": "Apply the already-approved batch-result contract change across the active contributions and finish integration.",
+      "fixture_description": "An implementation contribution and a test contribution started from revision A, which exposed one batch status. Accepted revision B requires per-item outcomes with failed-item retry. One contributor acknowledges the notification but returns revision-A artifacts and passing old tests. An unrelated read-only query contribution is unchanged. The existing tracker and isolated integration checks are available.",
+      "expectations": [
+        "Updates the effective agreement and communicates the relevant replacement and affected ownership without requesting repeated approval or broadcasting all history.",
+        "Detects stale artifacts despite acknowledgement, reconciles affected implementation and tests, and rejects old checks as evidence for the new behavior.",
+        "Verifies the combined per-item behavior at the integrated state while reusing applicable query evidence; does not add a mandatory coordination service."
+      ]
+    },
+    {
+      "id": "collaboration-independent-expectations",
+      "prompt": "Use implementation and test contributions to finish the approved partial-success import with independent verification.",
+      "fixture_description": "Accepted examples require valid items to persist and invalid items to remain retryable. The implementer returns a whole-batch rollback implementation; a candidate test copied its rollback expectation and passes. An independent fixture can inspect persisted items and retry effects. A separate legitimate control has an explicitly approved atomic-import contract. All work uses synthetic local data.",
+      "expectations": [
+        "Derives expected outcomes from accepted examples and catches the shared implementation/test mistake rather than trusting separate agents or green tests.",
+        "Repairs the affected behavior and test expectation with traceable grounds, then verifies persisted results and retry behavior.",
+        "Preserves the legitimately atomic control and does not generalize partial success to every batch workflow."
+      ]
+    },
+    {
+      "id": "collaboration-bounded-checkpoints",
+      "prompt": "Coordinate the approved feature's implementation and review using the available contributors and existing project workflow.",
+      "fixture_description": "A synthetic multi-file feature has one shared contract, a representative slice and independent follow-on work. The environment exposes identifiable checkpoints and completed-check evidence. The same files cannot be written concurrently. A separate control is a routine label change with no unresolved contract or requested delegation.",
+      "expectations": [
+        "Assigns bounded ownership and integration responsibility, serializes shared writes and reviews the representative slice or changed contract rather than continuously polling incomplete edits.",
+        "Binds findings to code and agreement state, reuses unaffected evidence and verifies integrated behavior before stopping.",
+        "Does not require four roles to be separate agents, create a new tracker/service or impose multi-agent review on the routine control."
+      ]
     }
   ]
 }

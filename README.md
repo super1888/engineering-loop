@@ -162,7 +162,9 @@ Python 3.10+ is needed only for repository checks/packaging and local evaluation
 
 We especially want small counterexamples: unnecessary questions, missed decisions, context waste, invalid completion claims, or a project convention the skill accidentally overrides. Use [Issues](https://github.com/super1888/engineering-loop/issues) or [Discussions](https://github.com/super1888/engineering-loop/discussions); remove private code and data first.
 
-The current unreleased revision clarifies affected return-path outcomes, rendered evidence for visual defects, and the limits of known-fix replays. Its [three added behavioral scenarios](evals/README.md#unreleased-flow-visual-and-learning-revision) remain unrun; historical product checks do not establish a benefit from this guidance. The entrypoint and stage routing are unchanged.
+The unreleased revisions clarify affected return-path outcomes, rendered evidence for visual defects, and the limits of known-fix replays ([three scenarios](evals/README.md#unreleased-flow-visual-and-learning-revision)). They also cover reference-project inheritance, effective conventions, gate evidence, task usefulness and corrections surviving a new session ([seven scenarios](evals/README.md#unreleased-reference-inheritance-and-effective-guidance-revision)). All ten scenarios remain unrun; historical product checks do not establish a benefit from the revised guidance. The existing stage routes remain in place; no fixed project architecture is imposed.
+
+The optional [collaboration guide](skills/engineering-loop/references/collaboration.md) adds scoped ownership, specification-dispute resolution, accepted-change propagation and independent verification without requiring a fixed agent team. Its [four additional scenarios](evals/README.md#unreleased-collaboration-revision) also remain unrun; additional agents are not evidence of improved accuracy.
 
 If the workflow helps you, a star helps others discover it. Reproducible feedback helps us improve it.
 

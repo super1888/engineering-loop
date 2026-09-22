@@ -68,3 +68,19 @@ The `return-path-visible-state`, `responsive-rendered-evidence` and `lesson-evid
 The observations motivating this revision were a stale parent view on an alternate exit, a background seam left after geometry checks passed, and a document-consistency comparison with no observed behavioral advantage. These are local artifact findings, not proof that revised instructions prevent recurrence. The scenarios use synthetic descriptions; private project artifacts are not included.
 
 Compare matched fresh contexts before claiming a skill benefit. Keep the original failure and a valid nearby control: a separate status view must remain valid without invented polling, a copy-only edit must not trigger a full visual audit, and justified document corrections must remain possible without invented efficiency claims. Freeze acceptance before implementation; record later discoveries and unmeasured outcomes explicitly. Classroom exercises motivate investigation, not mandatory tool choices or workflow stages.
+
+## Unreleased reference inheritance and effective guidance revision
+
+Seven additional scenario specifications cover this revision: `reference-architecture-inheritance`, `reference-legitimate-differences`, `effective-guidance-recovery`, `gate-evidence-boundary`, `conformance-without-usability`, `project-experience-extraction`, and `correction-survives-context-reset`. All remain unrun. Build isolated synthetic fixtures from their descriptions; do not copy source-project code, names, credentials or business data.
+
+The revision addresses observed structural rework, stale guidance references, historical overrides and source checks whose evidence is narrower than interaction quality. These observations motivate candidate guidance; they do not establish that it prevents recurrence. Evaluate actual dependencies, effective decisions, visible behavior and artifacts, not whether an agent repeats the new wording.
+
+Pair each failure with its legitimate control: target-specific architecture exceptions, reusable verified slices, newer but unaccepted proposals, equivalent helper implementations, and settled local edits. A guidance change must improve the intended behavior without forcing template adoption, repeated approval, unrelated rewrites or a design review for every task. Use the protocol above for matched trials; packaging checks are not behavioral results.
+
+For `correction-survives-context-reset`, retain Stage A's project artifacts but not its conversation when starting Stage B. Keep evaluator expectations out of the new task prompt. Record both correction coverage and the later task's actual behavior; a persistence claim or a new document is not evidence that the convention survived. Compare the same two-stage protocol when evaluating a baseline.
+
+## Unreleased collaboration revision
+
+The four specifications `collaboration-specification-dispute`, `collaboration-contract-change`, `collaboration-independent-expectations`, and `collaboration-bounded-checkpoints` remain unrun. They exercise decision authority, affected-work suspension, propagation of accepted changes, independent expectations and bounded coordination. Use isolated fixtures and authorized contributors; if contributor messages are simulated, report that limitation rather than claiming live multi-agent validation.
+
+Keep the evaluator's conflicting and stale artifacts out of contributor instructions except where they are normal task inputs. Check actual ownership, artifacts and integrated behavior; notification receipts, role labels and agreement counts are insufficient. Include settled-decision, unaffected-evidence, legitimate-contract and single-agent controls. Compare missed defects, rework, human decisions, duplicate checks and coordination effort when measured; do not infer an accuracy improvement from adding agents.

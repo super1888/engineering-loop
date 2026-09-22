@@ -20,7 +20,7 @@ Read only the reference for the current unresolved need:
 
 | Need | Reference | Exit evidence |
 |---|---|---|
-| Connect a new project or missing cross-boundary rules | [project.md](references/project.md) | Relevant sources, owners, active checks and gaps |
+| Connect project rules, reference projects or contributors | [project.md](references/project.md) | Effective conventions, owners, active checks and gaps |
 | Clarify behavior and tradeoffs | [requirements.md](references/requirements.md) | Accepted examples, boundaries, unresolved items |
 | Implement a slice or diagnose a bug | [implementation.md](references/implementation.md) | Scoped changes and relevant checks |
 | Review a concrete diff | [review.md](references/review.md) | Evidence-linked findings and dispositions |
@@ -42,6 +42,8 @@ Read only the reference for the current unresolved need:
 Use a light path for clear local changes, a standard path for a complete feature slice, and a deeper path for uncertain or high-impact boundaries. These are effort choices, not mandatory approval stages. A small data migration can need deeper verification than a large text change.
 
 Keep acceptance independent of the implementation. Do not lower a threshold, erase a failing assertion, or rewrite an expectation merely to obtain green checks. Legitimate requirement or test corrections need their reason and preserved intent recorded.
+
+Separate conformance from usefulness. When observed use challenges an accepted design, identify the failed assumption and validate a bounded alternative before changing the effective agreement; do not silently redefine success.
 
 For enumerable work, reconcile the source inventory with implemented, explicitly excluded, and remaining items. A tidy task list is not evidence that all required items were listed. For non-enumerable claims, state the coverage limit.
 
