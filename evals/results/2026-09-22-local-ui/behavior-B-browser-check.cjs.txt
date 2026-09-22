@@ -1,0 +1,57 @@
+const assert = require('node:assert/strict');
+const { chromium } = require('playwright');
+(async () => {
+  const browser = await chromium.launch({ executablePath: '<BROWSER>', headless: true });
+  console.log(`Browser: ${browser.version()}; viewport 1100x800`);
+  const page = await browser.newPage({ viewport: { width: 1100, height: 800 } });
+  page.setDefaultTimeout(5000);
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  let failed = 0;
+  const exit = async action => {
+    if (action === 'escape') await page.keyboard.press('Escape');
+    else if (action === 'backdrop') await page.locator('#detail').click({ position: { x: 5, y: 5 } });
+    else await page.locator(`#${action}`).click();
+  };
+  for (const source of ['list-A', 'list-B', 'direct']) {
+    for (const action of ['save', 'cancel', 'close', 'escape', 'backdrop']) {
+      const label = `${source} / ${action}`;
+      try {
+        await page.goto(`http://127.0.0.1:8769/${source === 'direct' ? '?record=17' : ''}`);
+        let id = 17, expectedGroup = 'all', expectedStatus = 'Page 1 of 6', expectedScroll = 0;
+        if (source !== 'direct') {
+          expectedGroup = source.slice(-1);
+          expectedStatus = 'Page 2 of 3';
+          id = expectedGroup === 'A' ? 77 : 78;
+          await page.locator('#group').selectOption(expectedGroup);
+          await page.getByRole('button', { name: 'Next', exact: true }).click();
+          await page.locator('#records').evaluate(element => { element.scrollTop = 440; });
+          expectedScroll = await page.locator('#records').evaluate(element => element.scrollTop);
+          await page.getByRole('button', { name: `Open record ${id}`, exact: true }).click();
+        }
+        assert.equal(await page.getByRole('dialog').count(), 1);
+        await page.getByLabel('Name', { exact: true }).fill('Edited record');
+        await exit(action);
+        assert.equal(await page.locator('#group').inputValue(), expectedGroup, 'group restored');
+        assert.equal(await page.locator('#page-status').textContent(), expectedStatus, 'page restored');
+        assert.equal(await page.locator('#records').evaluate(element => element.scrollTop), expectedScroll, 'record-area scroll restored');
+        assert.equal(await page.locator('#list-view:visible').count(), 1, 'exactly one visible list');
+        assert.equal(await page.getByRole('dialog').count(), 0, 'detail closed');
+        assert.equal(await page.locator('#records .row').count(), 30, 'page size unchanged');
+        await page.getByRole('button', { name: `Open record ${id}`, exact: true }).click();
+        assert.equal(await page.getByLabel('Name', { exact: true }).inputValue(), action === 'save' ? 'Edited record' : `Record ${id}`, 'save versus dismiss');
+        await exit('cancel');
+        await page.getByRole('button', { name: 'Next', exact: true }).click();
+        assert.equal(await page.locator('#page-status').textContent(), source === 'direct' ? 'Page 2 of 6' : 'Page 3 of 3', 'list remains usable after repeated return');
+        console.log(`PASS ${label}`);
+      } catch (error) {
+        failed++;
+        console.log(`FAIL ${label}: ${error.message}`);
+      }
+    }
+  }
+  assert.deepEqual(errors, [], 'no browser runtime errors');
+  await browser.close();
+  console.log(`Browser scenarios: ${15 - failed} passed, ${failed} failed`);
+  process.exitCode = failed ? 1 : 0;
+})().catch(error => { console.error(error); process.exitCode = 1; });

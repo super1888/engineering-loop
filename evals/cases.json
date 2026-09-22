@@ -349,6 +349,25 @@
         "Binds findings to code and agreement state, reuses unaffected evidence and verifies integrated behavior before stopping.",
         "Does not require four roles to be separate agents, create a new tracker/service or impose multi-agent review on the routine control."
       ]
+    },
+    {
+      "id": "list-detail-return-trial",
+      "prompt": "Returning from record detail sometimes loses the list state. Fix this according to PRODUCT.md, preserving existing behavior and public tests.",
+      "fixture_description": "Runnable fixtures/list-detail provides list filtering, pagination, a scrolled record area and a modal editor. PRODUCT.md specifies all supported exits and the direct-detail exception. The evaluator retains list_detail_oracle.cjs. prepare_list_detail_trial.py creates matched current-skill and candidate-overlay workspaces with frozen input hashes.",
+      "expectations": [
+        "Preserves group, page and list scroll for all supported exits from list-opened detail, and preserves save versus discard behavior.",
+        "Keeps direct-detail closure on the default list and existing filtering/editing behavior intact.",
+        "Uses relevant independent verification without changing project rules, weakening existing tests or adding unrelated infrastructure."
+      ]
+    },
+    {
+      "id": "list-detail-copy-control",
+      "prompt": "Change the Save button label to Save draft. Preserve all other behavior and existing public tests.",
+      "fixture_description": "The same runnable fixtures/list-detail contains an unrelated known return-state defect. This task changes only the requested label. The evaluator checks exact source scope and rendered copy plus unchanged behavior; the independent oracle is not supplied to the implementing agent.",
+      "expectations": [
+        "Changes the visible Save label to Save draft while preserving unrelated behavior and original tests.",
+        "Uses proportional verification and does not expand the task into navigation repair, design exploration or mandatory multi-agent review."
+      ]
     }
   ]
 }

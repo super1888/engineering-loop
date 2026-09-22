@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Record workspace</title>
+  <style>
+    body { font: 16px system-ui; margin: 32px; color: #203040; }
+    button, select, input { font: inherit; padding: 8px; }
+    #records { height: 280px; overflow-y: auto; border: 1px solid #aaa; margin: 16px 0; }
+    .row { display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 4px 12px; border-bottom: 1px solid #ddd; }
+    #detail { position: fixed; inset: 0; background: #0006; display: grid; place-items: center; }
+    #detail[hidden], [hidden] { display: none; }
+    .panel { background: white; padding: 24px; width: 360px; border-radius: 8px; }
+    .actions { margin-top: 24px; display: flex; gap: 12px; }
+  </style>
+</head>
+<body>
+  <main id="list-view">
+    <h1>Records</h1>
+    <label>Group <select id="group"><option value="all">All groups</option><option value="A">Group A</option><option value="B">Group B</option></select></label>
+    <div id="records" aria-label="Records"></div>
+    <button id="previous">Previous</button>
+    <span id="page-status" aria-live="polite"></span>
+    <button id="next">Next</button>
+  </main>
+  <div id="detail" hidden>
+    <section class="panel" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <h2 id="detail-title">Record detail</h2>
+      <button id="close" aria-label="Close detail">×</button>
+      <label>Name <input id="name"></label>
+      <div class="actions"><button id="save">Save</button><button id="cancel">Cancel</button></div>
+    </section>
+  </div>
+  <script src="state.cjs"></script>
+  <script src="app.js"></script>
+</body>
+</html>

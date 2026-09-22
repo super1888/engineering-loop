@@ -1,0 +1,15 @@
+# Behavior-A final account
+
+Implemented the PRODUCT.md return behavior in workspace/app.js. The common leaveDetail function now restores captured list origin whenever it exists and otherwise returns to all groups, page 1, scroll 0. Save, Cancel, close, Escape and backdrop all use that same rule. Only Save applies the edited name. Existing state logic, DOM labels, page size and public tests were left unchanged.
+
+Root cause: four dismissal paths passed false to leaveDetail, explicitly discarding the captured origin. The corrected pre-fix browser matrix reproduced group A/page 2/scroll 300 changing to all/page 1/scroll 0. The Save case initially restored correctly, then failed when its repeat-open Cancel reset the list.
+
+Verification performed:
+- Passed before and after: node --test state.test.cjs, 2/2 public checks.
+- Passed after fix: node --test ..\evidence\app.browser.test.cjs with supplied NODE_PATH, 10/10 real browser scenarios in headless Edge 153.0.4234.48 / Node v24.14.1, served by Python on 127.0.0.1:8767.
+- Browser coverage: every required exit action with list entry (group A, page 2, nonzero record-area scroll 300) and direct ?record=17 entry; saved names, discarded names, one visible list and hidden detail, repeated opening/cancel, subsequent Next/Previous operation, 30 rows, and no page errors.
+- Failed pre-fix: corrected browser matrix 5/10; all five direct-entry scenarios passed, four dismissal scenarios lost context, and the Save scenario failed on its second Cancel.
+- Initial test setup failure: exact getByLabel('Group') did not match the select's accessible name. Changed the fixture to the existing #group selector and reduced timeout; acceptance assertions were preserved. The initial run therefore did not itself establish the list-state bug.
+- Unrun: other browsers, other viewport sizes, exhaustive group/page/scroll combinations, manual user acceptance, and hidden tests. No access to hidden tests or model telemetry is claimed.
+
+Command/output evidence is retained in commands.txt and the runnable browser regression in app.browser.test.cjs. Only app.js was changed in the workspace. No dependencies were installed, no commits or publication were performed. No delegation was used and no user questions were required. The supplied Engineering Loop implementation and verification references guided the work.

@@ -1,0 +1,571 @@
+Initial inspection: read AGENTS.md, PRODUCT.md, supplied skill/SKILL.md and trial-guidance.md successfully. package.json was absent. Requirements: all five exit actions preserve originating group, page and record-area scroll; direct detail returns to defaults; save edits, dismiss does not. No commits or dependency installation.
+
+COMMAND:
+rg --files; Get-Content -LiteralPath '..\skill\references\implementation.md'; Get-Content -LiteralPath 'app.js'; Get-Content -LiteralPath 'state.test.cjs'; Get-Content -LiteralPath 'index.html'
+OUTPUT:
+state.test.cjs
+state.cjs
+PRODUCT.md
+index.html
+app.js
+AGENTS.md
+# Implement and diagnose in slices
+
+Inspect the incumbent behavior, related tests, callers, and boundaries. Select the smallest complete user behavior that can be verified. Reuse the repository's architecture and commands; do not introduce dependencies, abstractions, or a parallel framework without a current reason.
+
+Distinguish accepted features, engineering work required for their correctness, and optional improvements. An unstated implementation detail is not automatically out of scope; necessary permissions, validation and recovery must not be dropped to keep a diff small. For a new dependency, service, general abstraction or parallel implementation, establish the current need, why existing mechanisms are insufficient and the maintenance cost. Local choices inside settled boundaries can proceed; consequential new scope or architecture choices need the developer's decision. Report material unrelated findings without automatically adding them to this task.
+
+Bound unfinished work by what can be explained, reviewed and verified together, not by a fixed line count. Verify the first representative slice before multiplying similar implementations: trace actual calls, model conversions and ownership against the selected architecture, as well as checking behavior. Matching folders or class names is insufficient. Reuse approved local patterns; do not add empty layers to imitate a reference. If the next slice depends on an unresolved contract or a failing relevant check, resolve that dependency first; independent authorized work can continue. Use [project.md](project.md) when inherited conventions, ownership or enforcement are missing.
+
+For a bug, reproduce the symptom and preserve a regression that distinguishes it. Form a falsifiable hypothesis, run the smallest useful experiment, then modify the relevant cause. Classify code, configuration, environment, dependency, test, and misunderstood-requirement failures before choosing a fix. A number of failed attempts is not proof of bad architecture.
+
+For a user correction, infer its intended scope from the request and existing decisions; clarify only consequential ambiguity. Check relevant callers or analogous implementations for the same demonstrated cause, fix applicable occurrences within scope, and report material remaining ones. Do not turn a local preference into a global rule or expand this check into a repository audit. If the correction should govern future tasks, use [learning.md](learning.md) to place it in a durable implementation, check or discoverable convention rather than relying on conversation memory.
+
+For testable behavior changes, use red → green → refactor where it provides useful feedback. Derive expected behavior from an accepted example, independent calculation, or contract. Avoid tests that simply repeat the implementation. A copy-only edit may need consistency checks rather than unit tests.
+
+For stateful or asynchronous changes, identify operation ownership, transitions, idempotency, result-unknown behavior, and recovery. Consider real boundary behavior when transactions, caches, queues, authentication, or external services interact. Verify actual scheduling rather than equating configured threads with throughput.
+
+Explain justified redundancy by the failure it addresses and its maintenance cost. Preserve required recovery and authorization behavior when simplifying. Reconcile source inventories for broad replacements. Raise material contract or data-impact changes as concrete deltas; continue authorized work elsewhere.
+
+For an accepted deferral with meaningful future cost, record its reason, affected behavior and a condition for revisiting it in the existing tracker. Do not label incomplete acceptance as harmless debt or create a debt entry for every minor imperfection.
+const state = RecordState.createState();
+const list = document.querySelector('#list-view');
+const records = document.querySelector('#records');
+const group = document.querySelector('#group');
+const detail = document.querySelector('#detail');
+const nameInput = document.querySelector('#name');
+let activeId = null;
+let origin = null;
+
+function renderList(scrollTop = 0) {
+  group.value = state.group;
+  const page = RecordState.pageRecords(state);
+  records.replaceChildren(...page.rows.map(record => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const text = document.createElement('span');
+    text.textContent = record.name;
+    const open = document.createElement('button');
+    open.textContent = 'Open';
+    open.setAttribute('aria-label', `Open record ${record.id}`);
+    open.addEventListener('click', () => openDetail(record.id, true));
+    row.append(text, open);
+    return row;
+  }));
+  document.querySelector('#page-status').textContent = `Page ${state.page} of ${page.pages}`;
+  document.querySelector('#previous').disabled = state.page === 1;
+  document.querySelector('#next').disabled = state.page >= page.pages;
+  list.hidden = false;
+  records.scrollTop = scrollTop;
+}
+
+function openDetail(id, fromList) {
+  const record = state.records.find(item => item.id === id);
+  if (!record) return;
+  origin = fromList ? { group: state.group, page: state.page, scrollTop: records.scrollTop } : null;
+  activeId = id;
+  nameInput.value = record.name;
+  list.hidden = true;
+  detail.hidden = false;
+  nameInput.focus();
+}
+
+function leaveDetail(restoreOrigin) {
+  detail.hidden = true;
+  const target = restoreOrigin && origin ? origin : { group: 'all', page: 1, scrollTop: 0 };
+  state.group = target.group;
+  state.page = target.page;
+  activeId = null;
+  origin = null;
+  renderList(target.scrollTop);
+}
+
+group.addEventListener('change', () => {
+  state.group = group.value;
+  state.page = 1;
+  renderList();
+});
+document.querySelector('#previous').addEventListener('click', () => { state.page -= 1; renderList(); });
+document.querySelector('#next').addEventListener('click', () => { state.page += 1; renderList(); });
+document.querySelector('#save').addEventListener('click', () => {
+  RecordState.rename(state, activeId, nameInput.value);
+  leaveDetail(true);
+});
+document.querySelector('#cancel').addEventListener('click', () => leaveDetail(false));
+document.querySelector('#close').addEventListener('click', () => leaveDetail(false));
+detail.addEventListener('click', event => { if (event.target === detail) leaveDetail(false); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !detail.hidden) leaveDetail(false);
+});
+
+renderList();
+const directId = Number(new URLSearchParams(location.search).get('record'));
+if (directId) openDetail(directId, false);
+const assert = require('node:assert/strict');
+const test = require('node:test');
+const { createState, pageRecords, rename } = require('./state.cjs');
+
+test('group filtering and pagination retain the page size', () => {
+  const state = createState();
+  state.group = 'A';
+  state.page = 2;
+  const page = pageRecords(state);
+  assert.equal(page.pages, 3);
+  assert.equal(page.rows.length, 30);
+  assert.equal(page.rows[0].id, 61);
+  assert.ok(page.rows.every(row => row.group === 'A'));
+});
+
+test('save changes only the selected name and validates input', () => {
+  const state = createState();
+  rename(state, 17, ' Updated name ');
+  assert.equal(state.records[16].name, 'Updated name');
+  assert.equal(state.records[15].name, 'Record 16');
+  assert.throws(() => rename(state, 17, ' '), /required/);
+});
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Record workspace</title>
+  <style>
+    body { font: 16px system-ui; margin: 32px; color: #203040; }
+    button, select, input { font: inherit; padding: 8px; }
+    #records { height: 280px; overflow-y: auto; border: 1px solid #aaa; margin: 16px 0; }
+    .row { display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 4px 12px; border-bottom: 1px solid #ddd; }
+    #detail { position: fixed; inset: 0; background: #0006; display: grid; place-items: center; }
+    #detail[hidden], [hidden] { display: none; }
+    .panel { background: white; padding: 24px; width: 360px; border-radius: 8px; }
+    .actions { margin-top: 24px; display: flex; gap: 12px; }
+  </style>
+</head>
+<body>
+  <main id="list-view">
+    <h1>Records</h1>
+    <label>Group <select id="group"><option value="all">All groups</option><option value="A">Group A</option><option value="B">Group B</option></select></label>
+    <div id="records" aria-label="Records"></div>
+    <button id="previous">Previous</button>
+    <span id="page-status" aria-live="polite"></span>
+    <button id="next">Next</button>
+  </main>
+  <div id="detail" hidden>
+    <section class="panel" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <h2 id="detail-title">Record detail</h2>
+      <button id="close" aria-label="Close detail">×</button>
+      <label>Name <input id="name"></label>
+      <div class="actions"><button id="save">Save</button><button id="cancel">Cancel</button></div>
+    </section>
+  </div>
+  <script src="state.cjs"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
+COMMAND:
+Get-Content -LiteralPath 'state.cjs'; Get-Content -LiteralPath '..\skill\references\verification.md'; node --test state.test.cjs
+OUTPUT:
+(function (root) {
+  function createState() {
+    return {
+      group: 'all', page: 1, pageSize: 30,
+      records: Array.from({ length: 180 }, (_, index) => ({
+        id: index + 1, name: `Record ${index + 1}`, group: index % 2 ? 'B' : 'A'
+      }))
+    };
+  }
+
+  function pageRecords(state) {
+    const filtered = state.records.filter(record => state.group === 'all' || record.group === state.group);
+    const start = (state.page - 1) * state.pageSize;
+    return { rows: filtered.slice(start, start + state.pageSize), pages: Math.ceil(filtered.length / state.pageSize) };
+  }
+
+  function rename(state, id, name) {
+    const record = state.records.find(item => item.id === id);
+    if (!record) throw new Error('Record not found');
+    const value = name.trim();
+    if (!value) throw new Error('Name is required');
+    record.name = value;
+  }
+
+  const api = { createState, pageRecords, rename };
+  if (typeof module !== 'undefined') module.exports = api;
+  else root.RecordState = api;
+})(globalThis);
+# Verify claims at the appropriate boundary
+
+Select checks from the changed behavior and project requirements. Distinguish document/schema validity, static checks, simulated behavior, real integration, and user acceptance. Reuse a broader check only if it actually executes the required path.
+
+Match the check to the claim: source tokens can protect an implementation convention, dependency checks can reject forbidden calls, and interaction checks can establish visible behavior. Finding a toast API or responsive CSS in source does not prove correct timing, a single notification or usable layout. Prefer behavior assertions when different valid implementations should remain possible; test rendered interaction where source checks cannot distinguish the reported failure.
+
+Test meaningful cross-boundary values and combinations: large identifiers across languages, null versus zero, accepted versus unknown outcomes, competing credentials, duplicate calls, transaction/cache visibility, and persisted state after refresh when relevant. Do not make every example mandatory for every change.
+
+Derive expected results from confirmed domain examples, an independent calculation or an authoritative contract. For a cross-screen state change, verify the visible outcome on affected return paths; a callback or cache-invalidation spy alone does not establish it. Another agent sharing the same mistaken premise is not an independent oracle. For concurrent contributors, verify the affected combined behavior after integration, not only each contribution in isolation.
+
+For delegated verification, provide the effective agreement and independent examples, not just the developer's claimed result. Establish critical expectations before or alongside implementation where useful. If an accepted contract changes during work, reconcile affected tests and invalidate related old evidence before integration; [collaboration.md](collaboration.md) describes ownership and notification. A test agent must not silently choose a new business rule to resolve the conflict.
+
+For a visual or responsive defect, reproduce the reported viewport or aspect ratio and inspect the rendered result as well as relevant geometry. Use the project's existing browser/design checks; passing overlap or overflow assertions does not establish visual quality. Include a nearby unaffected layout when useful, without imposing a universal viewport matrix or treating a smaller viewport as actual browser zoom. Scope evidence to the rendered asset and animation state.
+
+Use an explicitly configured test environment for real boundaries. Do not treat a mock database, preview page, or synthetic model as proof of real integration. For AI output quality, separate structure from semantics; use independently specified examples and human domain review where needed. Keep evaluation samples/version changes traceable, and retain cases not used for tuning when practical.
+
+When checks fail, classify implementation regression, accepted contract change, fixture weakness, timing/resource instability, or environment/command failure. Preserve the intended assertion. Do not silently update snapshots, remove cases, or broaden tolerances to fit an incorrect result.
+
+When implementation conforms but observed use fails the intended task, record the scenario and challenged assumption; return to [requirements.md](requirements.md) for a bounded design correction. Separate implementation defects, newly discovered constraints and changed preferences. Green checks do not settle usefulness, and dissatisfaction alone does not authorize unrelated redesign or invalidating unchanged acceptance.
+
+For an enumerable migration or replacement, compare the source set with covered/excluded/remaining items. State limits for claims that cannot be enumerated.
+
+Record command, exit/result, scope, relevant revision or dirty-file snapshot, environment/configuration identity, and limitations without secrets. Report passed, failed, and unrun separately. Related changes invalidate related evidence; an old success count does not establish the new behavior.
+✔ group filtering and pagination retain the page size (0.7403ms)
+✔ save changes only the selected name and validates input (0.4095ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 103.7411
+
+COMMAND:
+python -m http.server 8767 --bind 127.0.0.1
+OUTPUT:
+
+COMMAND: NODE_PATH=<provided runtime> node --test ..\evidence\app.browser.test.cjs (before fix)
+Browser: 153.0.4234.48; Node: v24.14.1
+✖ List context restored via Save (31026.5735ms)
+✔ Direct detail defaults via Save (406.055ms)
+✖ List context restored via Cancel (30244.1687ms)
+✔ Direct detail defaults via Cancel (488.64ms)
+✖ List context restored via Close detail (30223.7737ms)
+✔ Direct detail defaults via Close detail (448.1286ms)
+✖ List context restored via Escape (30223.7325ms)
+✔ Direct detail defaults via Escape (381.7315ms)
+✖ List context restored via Backdrop (30210.4711ms)
+✔ Direct detail defaults via Backdrop (454.1916ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 5
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 155164.7671
+
+✖ failing tests:
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Save (31026.5735ms)
+  locator.selectOption: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for getByLabel('Group', { exact: true })[22m
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:40:59) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByLabel('Group', { exact: true })" ]
+  }
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Cancel (30244.1687ms)
+  locator.selectOption: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for getByLabel('Group', { exact: true })[22m
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:40:59) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByLabel('Group', { exact: true })" ]
+  }
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Close detail (30223.7737ms)
+  locator.selectOption: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for getByLabel('Group', { exact: true })[22m
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:40:59) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByLabel('Group', { exact: true })" ]
+  }
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Escape (30223.7325ms)
+  locator.selectOption: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for getByLabel('Group', { exact: true })[22m
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:40:59) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByLabel('Group', { exact: true })" ]
+  }
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Backdrop (30210.4711ms)
+  locator.selectOption: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for getByLabel('Group', { exact: true })[22m
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:40:59) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByLabel('Group', { exact: true })" ]
+  }
+
+First browser run failed in fixture locator getByLabel('Group', exact), before list interactions. Corrected selector to existing #group; assertions unchanged.
+COMMAND: NODE_PATH=<provided runtime> node --test ..\evidence\app.browser.test.cjs (corrected baseline)
+Browser: 153.0.4234.48; Node: v24.14.1
+✖ List context restored via Save (4110.3296ms)
+✔ Direct detail defaults via Save (443.5179ms)
+✖ List context restored via Cancel (391.742ms)
+✔ Direct detail defaults via Cancel (450.4805ms)
+✖ List context restored via Close detail (413.9029ms)
+✔ Direct detail defaults via Close detail (429.8626ms)
+✖ List context restored via Escape (383.2956ms)
+✔ Direct detail defaults via Escape (408.4889ms)
+✖ List context restored via Backdrop (391.7133ms)
+✔ Direct detail defaults via Backdrop (410.1112ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 5
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8677.0016
+
+✖ failing tests:
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Save (4110.3296ms)
+  locator.textContent: Timeout 3000ms exceeded.
+  Call log:
+  [2m  - waiting for getByRole('button', { name: 'Open record 73', exact: true }).locator('..').locator('span')[22m
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:60:63) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByRole('button', { name: 'Open record 73', exact: true }).locator('..').locator('span')" ]
+  }
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Cancel (391.742ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    {
+      detailHidden: true,
+  +   group: 'all',
+  -   group: 'A',
+      lists: 1,
+  +   page: 'Page 1 of 6',
+  -   page: 'Page 2 of 3',
+      rows: 30,
+  +   scroll: 0
+  -   scroll: 300
+    }
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:52:16)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { group: 'all', page: 'Page 1 of 6', scroll: 0, rows: 30, lists: 1, detailHidden: true },
+    expected: { group: 'A', page: 'Page 2 of 3', scroll: 300, rows: 30, lists: 1, detailHidden: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Close detail (413.9029ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    {
+      detailHidden: true,
+  +   group: 'all',
+  -   group: 'A',
+      lists: 1,
+  +   page: 'Page 1 of 6',
+  -   page: 'Page 2 of 3',
+      rows: 30,
+  +   scroll: 0
+  -   scroll: 300
+    }
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:52:16)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { group: 'all', page: 'Page 1 of 6', scroll: 0, rows: 30, lists: 1, detailHidden: true },
+    expected: { group: 'A', page: 'Page 2 of 3', scroll: 300, rows: 30, lists: 1, detailHidden: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Escape (383.2956ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    {
+      detailHidden: true,
+  +   group: 'all',
+  -   group: 'A',
+      lists: 1,
+  +   page: 'Page 1 of 6',
+  -   page: 'Page 2 of 3',
+      rows: 30,
+  +   scroll: 0
+  -   scroll: 300
+    }
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:52:16)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { group: 'all', page: 'Page 1 of 6', scroll: 0, rows: 30, lists: 1, detailHidden: true },
+    expected: { group: 'A', page: 'Page 2 of 3', scroll: 300, rows: 30, lists: 1, detailHidden: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at ..\evidence\app.browser.test.cjs:31:5
+✖ List context restored via Backdrop (391.7133ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    {
+      detailHidden: true,
+  +   group: 'all',
+  -   group: 'A',
+      lists: 1,
+  +   page: 'Page 1 of 6',
+  -   page: 'Page 2 of 3',
+      rows: 30,
+  +   scroll: 0
+  -   scroll: 300
+    }
+
+      at TestContext.<anonymous> (<TRIAL_ROOT>\behavior-A\evidence\app.browser.test.cjs:52:16)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { group: 'all', page: 'Page 1 of 6', scroll: 0, rows: 30, lists: 1, detailHidden: true },
+    expected: { group: 'A', page: 'Page 2 of 3', scroll: 300, rows: 30, lists: 1, detailHidden: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+PATCH: app.js leaveDetail always restores origin when present, otherwise defaults; all five handlers call it without boolean flag.
+COMMAND: node --test state.test.cjs (after fix)
+✔ group filtering and pagination retain the page size (1.1358ms)
+✔ save changes only the selected name and validates input (0.5228ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 111.1768
+PUBLIC EXIT: 0
+COMMAND: NODE_PATH=<provided runtime> node --test ..\evidence\app.browser.test.cjs (after fix)
+Browser: 153.0.4234.48; Node: v24.14.1
+✔ List context restored via Save (1115.2256ms)
+✔ Direct detail defaults via Save (425.55ms)
+✔ List context restored via Cancel (455.0546ms)
+✔ Direct detail defaults via Cancel (409.3947ms)
+✔ List context restored via Close detail (443.6921ms)
+✔ Direct detail defaults via Close detail (393.3225ms)
+✔ List context restored via Escape (457.8916ms)
+✔ Direct detail defaults via Escape (386.4388ms)
+✔ List context restored via Backdrop (491.6027ms)
+✔ Direct detail defaults via Backdrop (425.0795ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5920.2037
+BROWSER EXIT: 0
+
+COMMAND: final scoped source review and source hash
+const state = RecordState.createState();
+const list = document.querySelector('#list-view');
+const records = document.querySelector('#records');
+const group = document.querySelector('#group');
+const detail = document.querySelector('#detail');
+const nameInput = document.querySelector('#name');
+let activeId = null;
+let origin = null;
+
+function renderList(scrollTop = 0) {
+  group.value = state.group;
+  const page = RecordState.pageRecords(state);
+  records.replaceChildren(...page.rows.map(record => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const text = document.createElement('span');
+    text.textContent = record.name;
+    const open = document.createElement('button');
+    open.textContent = 'Open';
+    open.setAttribute('aria-label', `Open record ${record.id}`);
+    open.addEventListener('click', () => openDetail(record.id, true));
+    row.append(text, open);
+    return row;
+  }));
+  document.querySelector('#page-status').textContent = `Page ${state.page} of ${page.pages}`;
+  document.querySelector('#previous').disabled = state.page === 1;
+  document.querySelector('#next').disabled = state.page >= page.pages;
+  list.hidden = false;
+  records.scrollTop = scrollTop;
+}
+
+function openDetail(id, fromList) {
+  const record = state.records.find(item => item.id === id);
+  if (!record) return;
+  origin = fromList ? { group: state.group, page: state.page, scrollTop: records.scrollTop } : null;
+  activeId = id;
+  nameInput.value = record.name;
+  list.hidden = true;
+  detail.hidden = false;
+  nameInput.focus();
+}
+
+function leaveDetail() {
+  detail.hidden = true;
+  const target = origin || { group: 'all', page: 1, scrollTop: 0 };
+  state.group = target.group;
+  state.page = target.page;
+  activeId = null;
+  origin = null;
+  renderList(target.scrollTop);
+}
+
+group.addEventListener('change', () => {
+  state.group = group.value;
+  state.page = 1;
+  renderList();
+});
+document.querySelector('#previous').addEventListener('click', () => { state.page -= 1; renderList(); });
+document.querySelector('#next').addEventListener('click', () => { state.page += 1; renderList(); });
+document.querySelector('#save').addEventListener('click', () => {
+  RecordState.rename(state, activeId, nameInput.value);
+  leaveDetail();
+});
+document.querySelector('#cancel').addEventListener('click', () => leaveDetail());
+document.querySelector('#close').addEventListener('click', () => leaveDetail());
+detail.addEventListener('click', event => { if (event.target === detail) leaveDetail(); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !detail.hidden) leaveDetail();
+});
+
+renderList();
+const directId = Number(new URLSearchParams(location.search).get('record'));
+if (directId) openDetail(directId, false);
+
+Algorithm : SHA256
+Hash      : E65F78490EC0C873ED1BA97EC20F9F0961D310920C56A3153E63D64082D3D4A6
+Path      : <TRIAL_ROOT>\behavior-A\workspace\app.js

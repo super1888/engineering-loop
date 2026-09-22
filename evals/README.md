@@ -1,10 +1,12 @@
 # Behavioral evaluation protocol
 
-`cases.json` contains scenario specifications, not a model runner or a pass-rate claim. Most descriptions still require a tester to build a fixture. Two small fixtures are now supplied below. Execution evidence is recorded per trial; a completed trial does not mark all scenarios or all hosts as passed.
+`cases.json` contains scenario specifications, not a model runner or a pass-rate claim. Most descriptions still require a tester to build a fixture. Receipt, copy and list-detail fixtures are supplied below. Execution evidence is recorded per trial; a completed trial does not mark all scenarios or all hosts as passed.
 
 Recorded run: [2026-09-21 local receipt/control and copy trials](results/2026-09-21-local/report.md). Both receipt conditions passed the selected oracle; no skill advantage or speedup was established.
 
-That report identifies its own skill snapshot. The later [autonomy and effort-boundary revision](../docs/讨论决策与后续验证.md) has structural/distribution validation only; its new behavioral scenarios remain unrun.
+Latest run: [2026-09-22 list-detail A/B trial](results/2026-09-22-local-ui/report.md). Current guidance and a two-instruction candidate overlay produced identical paired source artifacts and passed the same browser acceptance. No incremental correctness benefit was observed; no candidate delegated work.
+
+Each report identifies its own skill snapshot and tested scope. Historical runs do not validate all later [guidance revisions](../docs/讨论决策与后续验证.md); scenario specifications remain unrun unless covered by explicit execution evidence.
 
 For each case, build the minimal isolated fixture, provide the user's request and the skill to the host, and retain the actual transcript/artifacts. Keep expected outcomes with the evaluator, not in the implementation prompt. Use the same starting state and acceptance for a no-skill baseline when comparing outcomes. Do not run production operations or publish user data.
 
@@ -60,6 +62,25 @@ Copy `fixtures/copy` into another isolated directory and ask: “Change the Save
 Domain clarification, stale-state recovery, integration of conflicting contracts and transfer of a safeguard to a second real project still require their own runs. The fixture's configured checks, accepted rules and missing CI also exercise part of project adaptation, but do not cover the full `project-adapter` scenario.
 
 The repository's unit tests include an oracle resource-lifecycle regression; cross-platform CI does not execute model trials. The oracle is a local behavioral check of candidate artifacts, not an autonomous model runner. Preserve transcripts when the host exposes them; otherwise say which observations are reconstructed from artifacts and agent reports instead of claiming a complete interaction trace.
+
+## List-detail A/B trial
+
+The [list-detail fixture](fixtures/list-detail/PRODUCT.md) is a dependency-free synthetic browser app with working filtering, pagination and editing. Its public Node tests cover the data model; several detail exits deliberately violate the accepted list-context behavior. The independent [browser oracle](list_detail_oracle.cjs) checks Save, Cancel, close, Escape and backdrop dismissal, both from a scrolled/filtered list and a direct detail URL. It checks saved versus discarded edits through visible controls. It does not evaluate visual taste, backend integration or production-scale state management.
+
+The preparation helper creates four disposable workspaces with identical application inputs and copies of the current skill. A uses the skill normally; B adds only two experimental instructions: identify the uncertainty an additional contributor would resolve, and seek a concrete counterexample to a material completion claim. These overlays are trial inputs, not changes to the distributed skill. Each condition gets a behavior-repair task and a copy-only control. Start every task in fresh context and run the recorded sequence without showing agents sibling trials or evaluator checks.
+
+```text
+python evals/prepare_list_detail_trial.py --output <new-result-directory> --node-modules <playwright-parent-directory> --browser <chromium-executable>
+node --test <workspace>/state.test.cjs
+node evals/list_detail_oracle.cjs <workspace> behavior
+node evals/list_detail_oracle.cjs <workspace> copy
+```
+
+For the oracle, make the existing Playwright package resolvable through `NODE_PATH` and set `EVAL_BROWSER_EXECUTABLE` to an installed Chromium browser, or use Playwright's configured browser. No browser packages are included in the skill or installed by these helpers. The server listens on loopback and serves the fixture's three production assets. Candidate JavaScript executes in a local browser; use trusted synthetic exercise code only.
+
+Freeze the fixture, skill, overlays, task prompts and oracle before dispatch. Keep actual candidate patches, input/output hashes, command evidence and independent results. Check that original project instructions and tests remain unchanged. The copy-only oracle deliberately expects the unrelated baseline behavior to remain, including its defect; also compare the exact requested label change and modified-file scope. This measures scope restraint, not acceptance of that defect for the behavior task. A positive reference repair and a copy-only reference should pass their respective checks before candidate assessment.
+
+The two overlays are evaluated together in this pilot. If no contributor is delegated, the run cannot establish better delegation decisions or live multi-agent coordination. Record that boundary and all unavailable telemetry; do not infer total work or token savings from shorter patches or agent-written summaries.
 
 ## Unreleased flow, visual and learning revision
 

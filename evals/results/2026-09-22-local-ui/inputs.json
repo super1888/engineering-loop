@@ -1,0 +1,40 @@
+{
+  "source_revision": "9c1fb972ab477da4f5f61f72577381e34c377058",
+  "fixture_hashes": {
+    "AGENTS.md": "cff6459f568c05002586c14bd43fe9c17f51801e265a6496becc224673315e25",
+    "app.js": "d45cdf03b4fb93e712033ba66d6dd9f2d037acc11fda76badc5a7e082a747bcc",
+    "index.html": "c6759c31c6769bc88f1735ccbcd0db4fc1bda47e84dad3e20fe9d9abe01d699f",
+    "PRODUCT.md": "59eb12524e99f43d068cba4718d168f8cda5f17bdfdaabe3b4c7360d579d567c",
+    "state.cjs": "8470e0909a68a0dff4603746f7f54f8e88473dd8f2e584524c4c0a3d4bc2e63d",
+    "state.test.cjs": "9ab1edff6857878eaab687097e24f8831ba03cf12545edf9f0d551707867782e"
+  },
+  "skill_hashes": {
+    "agents/openai.yaml": "275c645616220591089b951f0fe73dcba4fdd317b2b2dc52df79d824245db743",
+    "references/collaboration.md": "5696624d2e86ef556e544d74191c85c6494a5aa613aa07b90d33800c261f6e4e",
+    "references/implementation.md": "26a058d36747fda5655d17ca3f62c3c8d78f9a3bca1a271a0a2220e449276df6",
+    "references/learning.md": "5b0f7f4cacf4ed6ae4500b07b1b86153aed7fefcbe11b67796c09ae5101044df",
+    "references/operations.md": "4d7395ee032ac48beb31105599252013af77f4a8878c7c884734e333374fa730",
+    "references/project.md": "7fe194e7bd5f7f28c95cd8c3fb55c58e032ba40c9bc0f42eb2a3a8d8e6fcfb83",
+    "references/release.md": "e644236f19d80d542c6b4be11fb16f228060d443b8d422e33ee05a3abe74fd51",
+    "references/requirements.md": "2009686861a65be92979246f89b05dbe336e5e6d7529abe4a29744bd2fddbd39",
+    "references/resume.md": "8a1b26bffe04c2f1ee9bb0298a25ae1956cc273bfc247311fb3e84cfa1835328",
+    "references/review.md": "5c69a7bb8525de7ce51f3bc70b8ed2c954e14d16a36c325f547c4807cd8d4f3a",
+    "references/verification.md": "4dd8f6f9d2c501d2a5f8c042e91a437e8e834b3ec9055685171833848faade18",
+    "SKILL.md": "0de277a4427ac69b818a350ce4a6fe2c6aad98e68c44cb7a2c31efcd179623b9"
+  },
+  "oracle_sha256": "2e8243cc5a9d6c85688ee94531c1c2d202cdb488a884ecec2ba1df8f02a72da4",
+  "tasks": {
+    "behavior": "Returning from record detail sometimes loses the list state. Fix this according to PRODUCT.md, preserving existing behavior and public tests.",
+    "copy": "Change the Save button label to Save draft. Preserve all other behavior and existing public tests."
+  },
+  "prompt_template": "Complete this task in the isolated exercise workspace {workspace}:\n{task}\n\nUse Engineering Loop at {skill}/SKILL.md and read {guidance} as additional trial guidance. Read the workspace's AGENTS.md. Your shell may initially be in another repository; use the supplied workspace explicitly.\nOnly inspect or edit that workspace, the supplied read-only skill/guidance, and the trial evidence directory {evidence}. Do not inspect sibling trials, the source repository, evaluator material or prior task conversations. Do not commit, publish or install dependencies. This is a disposable synthetic exercise, not the current root project.\nPerform appropriate verification and report passed, failed and unrun checks. Delegation is permitted when useful and available, within the same resource boundaries; it is not required. Keep command/output evidence in {evidence}/commands.txt and write a short final account to {evidence}/agent-report.md, including actual verification, any delegation, questions and known limits. Do not claim access to hidden tests or model telemetry.\nAvailable tools: node and Python; Playwright can be resolved with NODE_PATH={node_modules}. A local browser executable is {browser}. Use these only when useful; the public project test is node --test state.test.cjs.\n",
+  "guidance_A": "# Trial guidance\n\nUse the supplied skill normally.\n",
+  "guidance_B": "# Trial guidance\n\nUse the supplied skill normally.\n\nBefore deciding whether to delegate, identify the concrete uncertainty an additional contributor would resolve. Delegate only work with an independent useful outcome; settled local work can remain with one agent. No extra planning artifact or approval is required.\n\nWhen review is warranted, select a material completion claim and seek a concrete supported scenario that could falsify it. Use the relevant evidence, preserve legitimate exceptions, and stop once the claim and required checks are supported. Do not add generic critique or an extra reviewer without an unresolved reason.\n",
+  "execution_order": [
+    "behavior-A",
+    "copy-B",
+    "behavior-B",
+    "copy-A"
+  ],
+  "isolation": "Fresh conversation contexts; file access separation is procedural, not a security sandbox."
+}

@@ -1,0 +1,46 @@
+{
+  "mode": "copy",
+  "browser": "153.0.4234.48",
+  "results": [
+    {
+      "name": "list-save",
+      "passed": true
+    },
+    {
+      "name": "list-cancel",
+      "passed": true
+    },
+    {
+      "name": "list-close",
+      "passed": true
+    },
+    {
+      "name": "list-escape",
+      "passed": true
+    },
+    {
+      "name": "list-backdrop",
+      "passed": true
+    },
+    {
+      "name": "direct-save",
+      "passed": true
+    },
+    {
+      "name": "direct-cancel",
+      "passed": true
+    },
+    {
+      "name": "direct-close",
+      "passed": true
+    },
+    {
+      "name": "direct-escape",
+      "passed": true
+    },
+    {
+      "name": "direct-backdrop",
+      "passed": true
+    }
+  ]
+}

@@ -166,6 +166,8 @@ The unreleased revisions clarify affected return-path outcomes, rendered evidenc
 
 The optional [collaboration guide](skills/engineering-loop/references/collaboration.md) adds scoped ownership, specification-dispute resolution, accepted-change propagation and independent verification without requiring a fixed agent team. Its [four additional scenarios](evals/README.md#unreleased-collaboration-revision) also remain unrun; additional agents are not evidence of improved accuracy.
 
+The [2026-09-22 UI A/B pilot](evals/results/2026-09-22-local-ui/report.md) compared current guidance with two experimental instructions on list-state repair and a copy-only control. Paired source artifacts were identical and all independent browser checks passed; no incremental correctness benefit was observed. Neither condition delegated, so live multi-agent coordination remains untested.
+
 If the workflow helps you, a star helps others discover it. Reproducible feedback helps us improve it.
 
 ## Credits and license

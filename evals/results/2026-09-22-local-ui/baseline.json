@@ -1,0 +1,27 @@
+{
+  "capture": "Reconstructed from the parent tool output before candidate dispatch; not a raw stdout file.",
+  "public_tests": {
+    "passed": 2,
+    "failed": 0,
+    "exit_code": 0
+  },
+  "oracle": {
+    "mode": "behavior",
+    "browser": "153.0.4234.48",
+    "exit_code": 1,
+    "passed": [
+      "list-save",
+      "direct-save",
+      "direct-cancel",
+      "direct-close",
+      "direct-escape",
+      "direct-backdrop"
+    ],
+    "failed": {
+      "list-cancel": "Group reset to all; expected A.",
+      "list-close": "Group reset to all; expected A.",
+      "list-escape": "Group reset to all; expected A.",
+      "list-backdrop": "Group reset to all; expected A."
+    }
+  }
+}

@@ -1,0 +1,694 @@
+**********************
+PowerShell transcript start
+Start time: 20260922154053
+Username: <REDACTED>
+RunAs User: <REDACTED>
+Configuration Name:
+Machine: <REDACTED>
+Host Application: <REDACTED>
+$base = '<TRIAL_ROOT>\behavior-B'; New-Item -ItemType Directory -Force -Path "$base\evidence" | Out-Null; Start-Transcript -Path "$base\evidence\commands.txt" -Append; Get-Content -LiteralPath "$base\skill\SKILL.md"; Get-Content -LiteralPath "$base\trial-guidance.md"; Get-Content -LiteralPath "$base\workspace\AGENTS.md"; Stop-Transcript
+Process ID: 29452
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is <TRIAL_ROOT>\behavior-B\evidence\commands.txt
+---
+name: engineering-loop
+description: Coordinate a bounded engineering change across requirements, implementation, review, verification, and delivery. Use when explicitly requested, when resuming work with uncertain state, or when a cross-boundary change needs unresolved decisions coordinated. Do not activate for explanations, routine local edits, or an already-scoped stage handled by project guidance.
+license: MIT
+metadata:
+  version: "0.1.0"
+---
+
+# Engineering Loop
+
+Keep human decisions, implementation, and evidence aligned through one bounded change. Match the user's language. This skill guides decisions; tool permissions and executable checks enforce boundaries.
+
+## Enter once; route only when needed
+
+Identify the requested outcome and current stage. Reuse established decisions and the project's workflow. A named stage request enters that stage directly; do not restart discovery. A routine edit with sufficient context proceeds through the existing local workflow without extra ceremony.
+
+For uncertain resumed work, read [resume.md](references/resume.md). When coordination or ambiguity warrants it, briefly establish **outcome/non-goals; relevant state; settled decisions; unresolved blockers; next slice and evidence**. Reuse an existing plan instead of restating it; keep this in conversation unless durable recovery is needed. Missing facts trigger investigation; material choices trigger questions. Do not ask the user to choose internal skill routes.
+
+Read only the reference for the current unresolved need:
+
+| Need | Reference | Exit evidence |
+|---|---|---|
+| Connect project rules, reference projects or contributors | [project.md](references/project.md) | Effective conventions, owners, active checks and gaps |
+| Clarify behavior and tradeoffs | [requirements.md](references/requirements.md) | Accepted examples, boundaries, unresolved items |
+| Implement a slice or diagnose a bug | [implementation.md](references/implementation.md) | Scoped changes and relevant checks |
+| Review a concrete diff | [review.md](references/review.md) | Evidence-linked findings and dispositions |
+| Verify behavior or integration | [verification.md](references/verification.md) | Passed, failed, unrun, with version/scope |
+| Prepare or execute a release | [release.md](references/release.md) | Identified artifact, migration/recovery, smoke evidence |
+| Diagnose a running service | [operations.md](references/operations.md) | Impact, tested hypothesis, recovery evidence |
+| Preserve a demonstrated lesson | [learning.md](references/learning.md) | Scoped correction and a counterexample |
+
+## Keep authority and scope explicit
+
+- Follow the user's intent and existing authorization. Analysis does not authorize implementation; implementation does not silently authorize publication or destructive data changes. Do not ask again for an action already authorized within unchanged scope.
+- Inherit repository rules for branches, commits, documentation, tests, configuration, and deployment. Do not impose a directory, stack, multi-agent setup, worktree, or parallel build policy.
+- Separate observed facts, approved target behavior, proposals, and unknowns. When they conflict, investigate; do not pick a convenient source and rewrite the others to agree.
+- Ask only decisions that change business behavior, acceptance, permissions, or costly rework. Batch independent decisions whose prerequisites are settled. Show alternatives, recommendation, cost, and reversibility. Silence is not acceptance of a required choice.
+- With sufficient evidence, make authorized local, reversible implementation choices autonomously. Necessary engineering work must trace to accepted behavior or project constraints. Present new business behavior or consequential scope/architecture changes with their impact and recommendation; continue independent work that does not depend on the decision.
+
+## Scale effort and retain evidence
+
+Use a light path for clear local changes, a standard path for a complete feature slice, and a deeper path for uncertain or high-impact boundaries. These are effort choices, not mandatory approval stages. A small data migration can need deeper verification than a large text change.
+
+Keep acceptance independent of the implementation. Do not lower a threshold, erase a failing assertion, or rewrite an expectation merely to obtain green checks. Legitimate requirement or test corrections need their reason and preserved intent recorded.
+
+Separate conformance from usefulness. When observed use challenges an accepted design, identify the failed assumption and validate a bounded alternative before changing the effective agreement; do not silently redefine success.
+
+For enumerable work, reconcile the source inventory with implemented, explicitly excluded, and remaining items. A tidy task list is not evidence that all required items were listed. For non-enumerable claims, state the coverage limit.
+
+Evidence belongs to the relevant code, configuration, data, and environment state. Reuse inspectable evidence when those remain unchanged; rerun affected checks when they change. Completion language must distinguish static checks, runtime checks, and user acceptance.
+
+## Bound the agent's own work
+
+Do not preload the lifecycle references or the whole repository. Read an index, then relevant sections. Once information is sufficient for the next authorized action, act; do not search for hypothetical blockers. Reuse settled decisions unless new facts or changed conditions invalidate them.
+
+Re-enter routing only for a stage transition, material scope/risk change, conflicting evidence, or state recovery, not every message or tool call. Do not repeat effective checks without a relevant change, failure, unresolved concern or project-required rerun. Extra planning, reviewers and tooling need a current reason; a small task needs no full plan or retrospective.
+
+If an attempt fails without yielding new evidence, change the hypothesis or investigation, or report the concrete blocker; do not repeat speculative patches. Continue other authorized work when possible. Saving effort never justifies skipping required verification or necessary behavior.
+
+When recovery is needed, keep one effective task state in the project's existing location: scope, decisions, blockers, evidence pointers and next action. Keep verbose history separate. Record relevant versions at handoff. Progressive disclosure does not erase loaded context or guarantee a fixed token cost.
+
+Once the requested outcome and required checks are complete, report the result, evidence, material limits and any required decision, then stop. Do not open an unsolicited optimization cycle. Keep communication proportional; do not narrate every internal checklist or repeat agreed principles. Invoke learning only for a demonstrated lesson or requested retrospective.
+# Trial guidance
+
+Use the supplied skill normally.
+
+Before deciding whether to delegate, identify the concrete uncertainty an additional contributor would resolve. Delegate only work with an independent useful outcome; settled local work can remain with one agent. No extra planning artifact or approval is required.
+
+When review is warranted, select a material completion claim and seek a concrete supported scenario that could falsify it. Use the relevant evidence, preserve legitimate exceptions, and stop once the claim and required checks are supported. Do not add generic critique or an extra reviewer without an unresolved reason.
+# Local exercise
+
+This is a synthetic, dependency-free browser application. Follow PRODUCT.md and preserve existing public tests. Keep changes scoped to the request and retain existing DOM accessibility labels.
+
+Run `node --test state.test.cjs` for the existing public checks. For browser inspection, serve this directory on loopback with Python's standard HTTP server. Do not install dependencies or modify the supplied skill snapshot. Do not commit or publish this disposable exercise; the evaluator owns artifact collection.
+**********************
+PowerShell transcript end
+End time: 20260922154053
+**********************
+**********************
+PowerShell transcript start
+Start time: 20260922154106
+Username: <REDACTED>
+RunAs User: <REDACTED>
+Configuration Name:
+Machine: <REDACTED>
+Host Application: <REDACTED>
+Start-Transcript -Path '..\evidence\commands.txt' -Append; Get-Content -LiteralPath '..\skill\references\implementation.md'; rg --files; Get-Content PRODUCT.md; Get-Content state.test.cjs; Stop-Transcript
+Process ID: 40872
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is ..\evidence\commands.txt
+# Implement and diagnose in slices
+
+Inspect the incumbent behavior, related tests, callers, and boundaries. Select the smallest complete user behavior that can be verified. Reuse the repository's architecture and commands; do not introduce dependencies, abstractions, or a parallel framework without a current reason.
+
+Distinguish accepted features, engineering work required for their correctness, and optional improvements. An unstated implementation detail is not automatically out of scope; necessary permissions, validation and recovery must not be dropped to keep a diff small. For a new dependency, service, general abstraction or parallel implementation, establish the current need, why existing mechanisms are insufficient and the maintenance cost. Local choices inside settled boundaries can proceed; consequential new scope or architecture choices need the developer's decision. Report material unrelated findings without automatically adding them to this task.
+
+Bound unfinished work by what can be explained, reviewed and verified together, not by a fixed line count. Verify the first representative slice before multiplying similar implementations: trace actual calls, model conversions and ownership against the selected architecture, as well as checking behavior. Matching folders or class names is insufficient. Reuse approved local patterns; do not add empty layers to imitate a reference. If the next slice depends on an unresolved contract or a failing relevant check, resolve that dependency first; independent authorized work can continue. Use [project.md](project.md) when inherited conventions, ownership or enforcement are missing.
+
+For a bug, reproduce the symptom and preserve a regression that distinguishes it. Form a falsifiable hypothesis, run the smallest useful experiment, then modify the relevant cause. Classify code, configuration, environment, dependency, test, and misunderstood-requirement failures before choosing a fix. A number of failed attempts is not proof of bad architecture.
+
+For a user correction, infer its intended scope from the request and existing decisions; clarify only consequential ambiguity. Check relevant callers or analogous implementations for the same demonstrated cause, fix applicable occurrences within scope, and report material remaining ones. Do not turn a local preference into a global rule or expand this check into a repository audit. If the correction should govern future tasks, use [learning.md](learning.md) to place it in a durable implementation, check or discoverable convention rather than relying on conversation memory.
+
+For testable behavior changes, use red → green → refactor where it provides useful feedback. Derive expected behavior from an accepted example, independent calculation, or contract. Avoid tests that simply repeat the implementation. A copy-only edit may need consistency checks rather than unit tests.
+
+For stateful or asynchronous changes, identify operation ownership, transitions, idempotency, result-unknown behavior, and recovery. Consider real boundary behavior when transactions, caches, queues, authentication, or external services interact. Verify actual scheduling rather than equating configured threads with throughput.
+
+Explain justified redundancy by the failure it addresses and its maintenance cost. Preserve required recovery and authorization behavior when simplifying. Reconcile source inventories for broad replacements. Raise material contract or data-impact changes as concrete deltas; continue authorized work elsewhere.
+
+For an accepted deferral with meaningful future cost, record its reason, affected behavior and a condition for revisiting it in the existing tracker. Do not label incomplete acceptance as harmless debt or create a debt entry for every minor imperfection.
+
+# Record workspace
+
+The list has a group filter, pagination and an independently scrollable record area. Users open details while working through the list.
+
+- Returning from a detail opened from the list preserves the selected group, page and record-area scroll position. This applies to Save, Cancel, the close button, Escape and clicking the backdrop.
+- Save applies the edited record name. Dismissal does not apply an unsaved name. Each action leaves one usable list view.
+- A direct detail URL (`?record=17`) has no originating list context. Closing it opens the default list: all groups, page 1, scroll position 0.
+- Keep the existing group filtering, page size, editing and labels except for any explicitly requested copy change. No new navigation framework, persistence mechanism or visual redesign is required.
+const assert = require('node:assert/strict');
+const test = require('node:test');
+const { createState, pageRecords, rename } = require('./state.cjs');
+
+test('group filtering and pagination retain the page size', () => {
+  const state = createState();
+  state.group = 'A';
+  state.page = 2;
+  const page = pageRecords(state);
+  assert.equal(page.pages, 3);
+  assert.equal(page.rows.length, 30);
+  assert.equal(page.rows[0].id, 61);
+  assert.ok(page.rows.every(row => row.group === 'A'));
+});
+
+test('save changes only the selected name and validates input', () => {
+  const state = createState();
+  rename(state, 17, ' Updated name ');
+  assert.equal(state.records[16].name, 'Updated name');
+  assert.equal(state.records[15].name, 'Record 16');
+  assert.throws(() => rename(state, 17, ' '), /required/);
+});
+**********************
+PowerShell transcript end
+End time: 20260922154106
+**********************
+**********************
+PowerShell transcript start
+Start time: 20260922154119
+Username: <REDACTED>
+RunAs User: <REDACTED>
+Configuration Name:
+Machine: <REDACTED>
+Host Application: <REDACTED>
+Start-Transcript -Path '..\evidence\commands.txt' -Append; Get-Content app.js; Get-Content state.cjs; Get-Content index.html; node --test state.test.cjs; Stop-Transcript
+Process ID: 46036
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is ..\evidence\commands.txt
+const state = RecordState.createState();
+const list = document.querySelector('#list-view');
+const records = document.querySelector('#records');
+const group = document.querySelector('#group');
+const detail = document.querySelector('#detail');
+const nameInput = document.querySelector('#name');
+let activeId = null;
+let origin = null;
+
+function renderList(scrollTop = 0) {
+  group.value = state.group;
+  const page = RecordState.pageRecords(state);
+  records.replaceChildren(...page.rows.map(record => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const text = document.createElement('span');
+    text.textContent = record.name;
+    const open = document.createElement('button');
+    open.textContent = 'Open';
+    open.setAttribute('aria-label', `Open record ${record.id}`);
+    open.addEventListener('click', () => openDetail(record.id, true));
+    row.append(text, open);
+    return row;
+  }));
+  document.querySelector('#page-status').textContent = `Page ${state.page} of ${page.pages}`;
+  document.querySelector('#previous').disabled = state.page === 1;
+  document.querySelector('#next').disabled = state.page >= page.pages;
+  list.hidden = false;
+  records.scrollTop = scrollTop;
+}
+
+function openDetail(id, fromList) {
+  const record = state.records.find(item => item.id === id);
+  if (!record) return;
+  origin = fromList ? { group: state.group, page: state.page, scrollTop: records.scrollTop } : null;
+  activeId = id;
+  nameInput.value = record.name;
+  list.hidden = true;
+  detail.hidden = false;
+  nameInput.focus();
+}
+
+function leaveDetail(restoreOrigin) {
+  detail.hidden = true;
+  const target = restoreOrigin && origin ? origin : { group: 'all', page: 1, scrollTop: 0 };
+  state.group = target.group;
+  state.page = target.page;
+  activeId = null;
+  origin = null;
+  renderList(target.scrollTop);
+}
+
+group.addEventListener('change', () => {
+  state.group = group.value;
+  state.page = 1;
+  renderList();
+});
+document.querySelector('#previous').addEventListener('click', () => { state.page -= 1; renderList(); });
+document.querySelector('#next').addEventListener('click', () => { state.page += 1; renderList(); });
+document.querySelector('#save').addEventListener('click', () => {
+  RecordState.rename(state, activeId, nameInput.value);
+  leaveDetail(true);
+});
+document.querySelector('#cancel').addEventListener('click', () => leaveDetail(false));
+document.querySelector('#close').addEventListener('click', () => leaveDetail(false));
+detail.addEventListener('click', event => { if (event.target === detail) leaveDetail(false); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !detail.hidden) leaveDetail(false);
+});
+
+renderList();
+const directId = Number(new URLSearchParams(location.search).get('record'));
+if (directId) openDetail(directId, false);
+(function (root) {
+  function createState() {
+    return {
+      group: 'all', page: 1, pageSize: 30,
+      records: Array.from({ length: 180 }, (_, index) => ({
+        id: index + 1, name: `Record ${index + 1}`, group: index % 2 ? 'B' : 'A'
+      }))
+    };
+  }
+
+  function pageRecords(state) {
+    const filtered = state.records.filter(record => state.group === 'all' || record.group === state.group);
+    const start = (state.page - 1) * state.pageSize;
+    return { rows: filtered.slice(start, start + state.pageSize), pages: Math.ceil(filtered.length / state.pageSize) };
+  }
+
+  function rename(state, id, name) {
+    const record = state.records.find(item => item.id === id);
+    if (!record) throw new Error('Record not found');
+    const value = name.trim();
+    if (!value) throw new Error('Name is required');
+    record.name = value;
+  }
+
+  const api = { createState, pageRecords, rename };
+  if (typeof module !== 'undefined') module.exports = api;
+  else root.RecordState = api;
+})(globalThis);
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Record workspace</title>
+  <style>
+    body { font: 16px system-ui; margin: 32px; color: #203040; }
+    button, select, input { font: inherit; padding: 8px; }
+    #records { height: 280px; overflow-y: auto; border: 1px solid #aaa; margin: 16px 0; }
+    .row { display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 4px 12px; border-bottom: 1px solid #ddd; }
+    #detail { position: fixed; inset: 0; background: #0006; display: grid; place-items: center; }
+    #detail[hidden], [hidden] { display: none; }
+    .panel { background: white; padding: 24px; width: 360px; border-radius: 8px; }
+    .actions { margin-top: 24px; display: flex; gap: 12px; }
+  </style>
+</head>
+<body>
+  <main id="list-view">
+    <h1>Records</h1>
+    <label>Group <select id="group"><option value="all">All groups</option><option value="A">Group A</option><option value="B">Group B</option></select></label>
+    <div id="records" aria-label="Records"></div>
+    <button id="previous">Previous</button>
+    <span id="page-status" aria-live="polite"></span>
+    <button id="next">Next</button>
+  </main>
+  <div id="detail" hidden>
+    <section class="panel" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <h2 id="detail-title">Record detail</h2>
+      <button id="close" aria-label="Close detail">×</button>
+      <label>Name <input id="name"></label>
+      <div class="actions"><button id="save">Save</button><button id="cancel">Cancel</button></div>
+    </section>
+  </div>
+  <script src="state.cjs"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
+**********************
+PowerShell transcript end
+End time: 20260922154120
+**********************
+**********************
+PowerShell transcript start
+Start time: 20260922154141
+Username: <REDACTED>
+RunAs User: <REDACTED>
+Configuration Name:
+Machine: <REDACTED>
+Host Application: <REDACTED>
+Start-Transcript -Path '..\evidence\commands.txt' -Append; python --version; node --version; Get-Content '..\skill\references\verification.md'; Stop-Transcript; python -m http.server 8769 --bind 127.0.0.1
+Process ID: 24880
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is ..\evidence\commands.txt
+
+
+# Verify claims at the appropriate boundary
+
+Select checks from the changed behavior and project requirements. Distinguish document/schema validity, static checks, simulated behavior, real integration, and user acceptance. Reuse a broader check only if it actually executes the required path.
+
+Match the check to the claim: source tokens can protect an implementation convention, dependency checks can reject forbidden calls, and interaction checks can establish visible behavior. Finding a toast API or responsive CSS in source does not prove correct timing, a single notification or usable layout. Prefer behavior assertions when different valid implementations should remain possible; test rendered interaction where source checks cannot distinguish the reported failure.
+
+Test meaningful cross-boundary values and combinations: large identifiers across languages, null versus zero, accepted versus unknown outcomes, competing credentials, duplicate calls, transaction/cache visibility, and persisted state after refresh when relevant. Do not make every example mandatory for every change.
+
+Derive expected results from confirmed domain examples, an independent calculation or an authoritative contract. For a cross-screen state change, verify the visible outcome on affected return paths; a callback or cache-invalidation spy alone does not establish it. Another agent sharing the same mistaken premise is not an independent oracle. For concurrent contributors, verify the affected combined behavior after integration, not only each contribution in isolation.
+
+For delegated verification, provide the effective agreement and independent examples, not just the developer's claimed result. Establish critical expectations before or alongside implementation where useful. If an accepted contract changes during work, reconcile affected tests and invalidate related old evidence before integration; [collaboration.md](collaboration.md) describes ownership and notification. A test agent must not silently choose a new business rule to resolve the conflict.
+
+For a visual or responsive defect, reproduce the reported viewport or aspect ratio and inspect the rendered result as well as relevant geometry. Use the project's existing browser/design checks; passing overlap or overflow assertions does not establish visual quality. Include a nearby unaffected layout when useful, without imposing a universal viewport matrix or treating a smaller viewport as actual browser zoom. Scope evidence to the rendered asset and animation state.
+
+Use an explicitly configured test environment for real boundaries. Do not treat a mock database, preview page, or synthetic model as proof of real integration. For AI output quality, separate structure from semantics; use independently specified examples and human domain review where needed. Keep evaluation samples/version changes traceable, and retain cases not used for tuning when practical.
+
+When checks fail, classify implementation regression, accepted contract change, fixture weakness, timing/resource instability, or environment/command failure. Preserve the intended assertion. Do not silently update snapshots, remove cases, or broaden tolerances to fit an incorrect result.
+
+When implementation conforms but observed use fails the intended task, record the scenario and challenged assumption; return to [requirements.md](requirements.md) for a bounded design correction. Separate implementation defects, newly discovered constraints and changed preferences. Green checks do not settle usefulness, and dissatisfaction alone does not authorize unrelated redesign or invalidating unchanged acceptance.
+
+For an enumerable migration or replacement, compare the source set with covered/excluded/remaining items. State limits for claims that cannot be enumerated.
+
+Record command, exit/result, scope, relevant revision or dirty-file snapshot, environment/configuration identity, and limitations without secrets. Report passed, failed, and unrun separately. Related changes invalidate related evidence; an old success count does not establish the new behavior.
+**********************
+PowerShell transcript end
+End time: 20260922154141
+**********************
+**********************
+PowerShell transcript start
+Start time: 20260922154240
+Username: <REDACTED>
+RunAs User: <REDACTED>
+Configuration Name:
+Machine: <REDACTED>
+Host Application: <REDACTED>
+Start-Transcript -Path '..\evidence\commands.txt' -Append; @'
+const assert = require('node:assert/strict');
+const { chromium } = require('playwright');
+(async () => {
+  const browser = await chromium.launch({ executablePath: '<BROWSER>', headless: true });
+  console.log(`Browser: ${browser.version()}; viewport 1100x800`);
+  const page = await browser.newPage({ viewport: { width: 1100, height: 800 } });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  let failed = 0;
+  const exit = async action => {
+    if (action === 'escape') await page.keyboard.press('Escape');
+    else if (action === 'backdrop') await page.locator('#detail').click({ position: { x: 5, y: 5 } });
+    else await page.locator(`#${action}`).click();
+  };
+  for (const source of ['list-A', 'list-B', 'direct']) {
+    for (const action of ['save', 'cancel', 'close', 'escape', 'backdrop']) {
+      const label = `${source} / ${action}`;
+      try {
+        await page.goto(`http://127.0.0.1:8769/${source === 'direct' ? '?record=17' : ''}`);
+        let id = 17, expectedGroup = 'all', expectedStatus = 'Page 1 of 6', expectedScroll = 0;
+        if (source !== 'direct') {
+          expectedGroup = source.slice(-1);
+          expectedStatus = 'Page 2 of 3';
+          id = expectedGroup === 'A' ? 77 : 78;
+          await page.getByLabel('Group', { exact: true }).selectOption(expectedGroup);
+          await page.getByRole('button', { name: 'Next', exact: true }).click();
+          await page.locator('#records').evaluate(element => { element.scrollTop = 440; });
+          expectedScroll = await page.locator('#records').evaluate(element => element.scrollTop);
+          await page.getByRole('button', { name: `Open record ${id}`, exact: true }).click();
+        }
+        assert.equal(await page.getByRole('dialog').count(), 1);
+        await page.getByLabel('Name', { exact: true }).fill('Edited record');
+        await exit(action);
+        assert.equal(await page.locator('#group').inputValue(), expectedGroup, 'group restored');
+        assert.equal(await page.locator('#page-status').textContent(), expectedStatus, 'page restored');
+        assert.equal(await page.locator('#records').evaluate(element => element.scrollTop), expectedScroll, 'record-area scroll restored');
+        assert.equal(await page.locator('#list-view:visible').count(), 1, 'exactly one visible list');
+        assert.equal(await page.getByRole('dialog').count(), 0, 'detail closed');
+        assert.equal(await page.locator('#records .row').count(), 30, 'page size unchanged');
+        await page.getByRole('button', { name: `Open record ${id}`, exact: true }).click();
+        assert.equal(await page.getByLabel('Name', { exact: true }).inputValue(), action === 'save' ? 'Edited record' : `Record ${id}`, 'save versus dismiss');
+        await exit('cancel');
+        await page.getByRole('button', { name: 'Next', exact: true }).click();
+        assert.equal(await page.locator('#page-status').textContent(), source === 'direct' ? 'Page 2 of 6' : 'Page 3 of 3', 'list remains usable after repeated return');
+        console.log(`PASS ${label}`);
+      } catch (error) {
+        failed++;
+        console.log(`FAIL ${label}: ${error.message}`);
+      }
+    }
+  }
+  assert.deepEqual(errors, [], 'no browser runtime errors');
+  await browser.close();
+  console.log(`Browser scenarios: ${15 - failed} passed, ${failed} failed`);
+  process.exitCode = failed ? 1 : 0;
+})().catch(error => { console.error(error); process.exitCode = 1; });
+'@ | Set-Content -Encoding utf8 '..\evidence\browser-check.cjs'; $env:NODE_PATH = '<NODE_MODULES>'; node '..\evidence\browser-check.cjs'; $result = $LASTEXITCODE; Write-Output "Browser check exit: $result"; Stop-Transcript; exit $result
+Process ID: 23808
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is ..\evidence\commands.txt
+**********************
+PowerShell transcript start
+Start time: 20260922154340
+Username: <REDACTED>
+RunAs User: <REDACTED>
+Configuration Name:
+Machine: <REDACTED>
+Host Application: <REDACTED>
+Start-Transcript -Path '..\evidence\commands.txt' -Append; $script = Get-Content -Raw '..\evidence\browser-check.cjs'; $script = $script.Replace("page.getByLabel('Group', { exact: true })", "page.locator('#group')"); $script = $script.Replace("const errors = [];", "page.setDefaultTimeout(5000);`n  const errors = [];"); Set-Content -Encoding utf8 '..\evidence\browser-check.cjs' $script; Write-Output 'Fixture correction: wrapping Group label includes option text, so target the existing select ID.'; $env:NODE_PATH = '<NODE_MODULES>'; node '..\evidence\browser-check.cjs'; $result = $LASTEXITCODE; Write-Output "Browser check exit: $result"; Stop-Transcript; exit $result
+Process ID: 38916
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is ..\evidence\commands.txt
+Fixture correction: wrapping Group label includes option text, so target the existing select ID.
+
+Browser check exit: 1
+**********************
+PowerShell transcript end
+End time: 20260922154345
+**********************
+**********************
+PowerShell transcript start
+Start time: 20260922154405
+Username: <REDACTED>
+RunAs User: <REDACTED>
+Configuration Name:
+Machine: <REDACTED>
+Host Application: <REDACTED>
+Start-Transcript -Path '..\evidence\commands.txt' -Append; $app = Get-Content -Raw app.js; $app = $app.Replace('function leaveDetail(restoreOrigin)', 'function leaveDetail()').Replace('restoreOrigin && origin ? origin :', 'origin ||').Replace('leaveDetail(true)', 'leaveDetail()').Replace('leaveDetail(false)', 'leaveDetail()'); Set-Content -Encoding utf8 -NoNewline app.js $app; Write-Output 'app.js: removed exit-specific restore flag; all exits restore origin or default.'; node --check app.js; node --test state.test.cjs; $publicResult = $LASTEXITCODE; $env:NODE_PATH = '<NODE_MODULES>'; node '..\evidence\browser-check.cjs'; $browserResult = $LASTEXITCODE; Write-Output "Public checks exit: $publicResult; Browser checks exit: $browserResult"; Get-Content app.js; Stop-Transcript; if ($publicResult -ne 0 -or $browserResult -ne 0) { exit 1 }
+Process ID: 39516
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is ..\evidence\commands.txt
+PS>TerminatingError(Set-Content): "A parameter cannot be found that matches parameter name 'Encoding'."
+Set-Content:
+Line |
+   2 |  … 'leaveDetail(false)', 'leaveDetail()'); Set-Content -Encoding utf8 -N …
+     |                                                        ~~~~~~~~~
+     | A parameter cannot be found that matches parameter name 'Encoding'.
+Set-Content:
+Line |
+   2 |  … 'leaveDetail(false)', 'leaveDetail()'); Set-Content -Encoding utf8 -N …
+     |                                                        ~~~~~~~~~
+     | A parameter cannot be found that matches parameter name 'Encoding'.
+app.js: removed exit-specific restore flag; all exits restore origin or default.
+
+
+
+Public checks exit: 0; Browser checks exit: 1
+const state = RecordState.createState();
+const list = document.querySelector('#list-view');
+const records = document.querySelector('#records');
+const group = document.querySelector('#group');
+const detail = document.querySelector('#detail');
+const nameInput = document.querySelector('#name');
+let activeId = null;
+let origin = null;
+
+function renderList(scrollTop = 0) {
+  group.value = state.group;
+  const page = RecordState.pageRecords(state);
+  records.replaceChildren(...page.rows.map(record => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const text = document.createElement('span');
+    text.textContent = record.name;
+    const open = document.createElement('button');
+    open.textContent = 'Open';
+    open.setAttribute('aria-label', `Open record ${record.id}`);
+    open.addEventListener('click', () => openDetail(record.id, true));
+    row.append(text, open);
+    return row;
+  }));
+  document.querySelector('#page-status').textContent = `Page ${state.page} of ${page.pages}`;
+  document.querySelector('#previous').disabled = state.page === 1;
+  document.querySelector('#next').disabled = state.page >= page.pages;
+  list.hidden = false;
+  records.scrollTop = scrollTop;
+}
+
+function openDetail(id, fromList) {
+  const record = state.records.find(item => item.id === id);
+  if (!record) return;
+  origin = fromList ? { group: state.group, page: state.page, scrollTop: records.scrollTop } : null;
+  activeId = id;
+  nameInput.value = record.name;
+  list.hidden = true;
+  detail.hidden = false;
+  nameInput.focus();
+}
+
+function leaveDetail(restoreOrigin) {
+  detail.hidden = true;
+  const target = restoreOrigin && origin ? origin : { group: 'all', page: 1, scrollTop: 0 };
+  state.group = target.group;
+  state.page = target.page;
+  activeId = null;
+  origin = null;
+  renderList(target.scrollTop);
+}
+
+group.addEventListener('change', () => {
+  state.group = group.value;
+  state.page = 1;
+  renderList();
+});
+document.querySelector('#previous').addEventListener('click', () => { state.page -= 1; renderList(); });
+document.querySelector('#next').addEventListener('click', () => { state.page += 1; renderList(); });
+document.querySelector('#save').addEventListener('click', () => {
+  RecordState.rename(state, activeId, nameInput.value);
+  leaveDetail(true);
+});
+document.querySelector('#cancel').addEventListener('click', () => leaveDetail(false));
+document.querySelector('#close').addEventListener('click', () => leaveDetail(false));
+detail.addEventListener('click', event => { if (event.target === detail) leaveDetail(false); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !detail.hidden) leaveDetail(false);
+});
+
+renderList();
+const directId = Number(new URLSearchParams(location.search).get('record'));
+if (directId) openDetail(directId, false);
+**********************
+PowerShell transcript end
+End time: 20260922154410
+**********************
+**********************
+PowerShell transcript start
+Start time: 20260922154429
+Username: <REDACTED>
+RunAs User: <REDACTED>
+Configuration Name:
+Machine: <REDACTED>
+Host Application: <REDACTED>
+Start-Transcript -Path '..\evidence\commands.txt' -Append; $ErrorActionPreference = 'Stop'; $appPath = Join-Path (Get-Location) 'app.js'; $appText = [System.IO.File]::ReadAllText($appPath); $appText = $appText.Replace('function leaveDetail(restoreOrigin)', 'function leaveDetail()').Replace('restoreOrigin && origin ? origin :', 'origin ||').Replace('leaveDetail(true)', 'leaveDetail()').Replace('leaveDetail(false)', 'leaveDetail()'); [System.IO.File]::WriteAllText($appPath, $appText, [System.Text.UTF8Encoding]::new($false)); Write-Output 'Corrected failed write using explicit absolute path; app.js now updated.'; node --check app.js; $syntaxResult = $LASTEXITCODE; node --test state.test.cjs; $publicResult = $LASTEXITCODE; $env:NODE_PATH = '<NODE_MODULES>'; node '..\evidence\browser-check.cjs'; $browserResult = $LASTEXITCODE; Write-Output "Syntax exit: $syntaxResult; Public exit: $publicResult; Browser exit: $browserResult"; rg -n 'leaveDetail|const target' app.js; Get-FileHash app.js; Stop-Transcript; if ($syntaxResult -ne 0 -or $publicResult -ne 0 -or $browserResult -ne 0) { exit 1 }
+Process ID: 40924
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is ..\evidence\commands.txt
+Corrected failed write using explicit absolute path; app.js now updated.
+
+
+
+Syntax exit: 0; Public exit: 0; Browser exit: 0
+
+
+Algorithm       Hash                                                                   Path
+---------       ----                                                                   ----
+SHA256          E65F78490EC0C873ED1BA97EC20F9F0961D310920C56A3153E63D64082D3D4A6       <USER_HOME>\AppData\Local\T…
+**********************
+PowerShell transcript end
+End time: 20260922154435
+**********************
+**********************
+PowerShell transcript start
+Start time: 20260922154509
+Username: <REDACTED>
+RunAs User: <REDACTED>
+Configuration Name:
+Machine: <REDACTED>
+Host Application: <REDACTED>
+Start-Transcript -Path '..\evidence\commands.txt' -Append; @'
+# Agent report
+
+Implemented the PRODUCT.md return-state contract by changing only workspace/app.js. All five exit paths now use the originating list snapshot; a direct detail URL has no snapshot and therefore still returns to all groups, page 1, scroll 0. Save still renames the record; dismissal leaves names unchanged. No markup, accessibility labels, filtering, pagination, public tests, dependencies, or persistence mechanisms changed.
+
+## Verification
+
+- PASS: node --check app.js (exit 0).
+- PASS: node --test state.test.cjs, 2/2 existing public tests (exit 0), before and after the change.
+- PASS: evidence/browser-check.cjs, 15/15 real browser scenarios on Edge 153.0.4234.48, headless, 1100x800. Covers Save, Cancel, close button, Escape and backdrop for group A/page 2, group B/page 2, and direct ?record=17. Verifies list group, page, nonzero record-area scroll restoration, save versus unsaved dismissal, exactly one visible list, closed dialog, 30-row page size, repeat open/cancel and usable Next pagination. No browser page errors.
+- Reproduction: before the fix the browser suite had 10 failures and 5 passes. All list-origin scenarios failed, including Save followed by a repeated Cancel; all direct-origin scenarios passed.
+- Initial fixture attempt timed out because the wrapping Group label includes select option text. Corrected the locator to the existing #group without changing product expectations; interrupted the initial attempt.
+- One initial PowerShell write failed to bind Set-Content parameters and left app.js unchanged. Subsequent checks remained red. Corrected with explicit-path UTF-8 file write, then reran affected checks successfully. No outstanding failed checks.
+- Browser server: Python 3.12.3 standard HTTP server on 127.0.0.1:8769, started from the workspace and stopped after verification. Node v24.14.1. No dependencies installed.
+
+Final app.js SHA256: E65F78490EC0C873ED1BA97EC20F9F0961D310920C56A3153E63D64082D3D4A6.
+
+## Review, questions and limits
+
+The concrete falsification target was that every exit preserves list-origin state while direct exits preserve the default-list exception. The browser matrix above and a repeated-open scenario support that claim. Changes were reviewed locally against the existing origin snapshot and all exit callers; no extra reviewer or delegation was needed because the remaining uncertainty was directly testable in the browser.
+
+No questions or approvals were required. No delegation. No commit, publication or installation. Public tests were preserved. No hidden tests or model telemetry were accessed or claimed. Unrun: other browser engines/viewports, manual human acceptance and hidden tests. This is a bounded synthetic application verification, not a broad accessibility or visual design audit.
+
+Command/output evidence: commands.txt. Reusable browser regression: browser-check.cjs.
+'@ | Set-Content -LiteralPath '..\evidence\agent-report.md' -Encoding utf8; Write-Output 'Wrote evidence/agent-report.md. Temporary HTTP server stopped via Ctrl+C.'; Stop-Transcript
+Process ID: 18372
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is ..\evidence\commands.txt
+Wrote evidence/agent-report.md. Temporary HTTP server stopped via Ctrl+C.
+**********************
+PowerShell transcript end
+End time: 20260922154510
+**********************

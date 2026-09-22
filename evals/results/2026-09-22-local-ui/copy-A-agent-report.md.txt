@@ -1,0 +1,17 @@
+# Agent report
+
+Changed only `workspace/index.html`: the button with id `save` now displays `Save draft`. No JavaScript, accessibility attributes, public tests, or other application behavior was edited.
+
+Verification:
+- Passed: byte-level comparison confirmed that reversing this exact text replacement reproduces the original file, with every other byte preserved.
+- Passed: `node --test state.test.cjs` (2 tests passed, 0 failed; exit 0), covering filtering/pagination and rename validation.
+- Failed: none.
+- Unrun: browser interaction and visual checks; this is a literal button-copy change with unchanged event binding by `#save`. Browser layout and interaction were not directly verified.
+
+Environment: Node v24.14.1; Python 3.12.3.
+
+Delegation: none. Questions: none; the requested copy and boundaries were explicit.
+
+Known limits: public tests do not exercise the rendered button. No hidden tests or model telemetry were accessed. No commits, publishing, or dependency installations were performed.
+
+Command and output evidence: `commands.txt` in this evidence directory. Initial skill/guidance reads are summarized there; subsequent command output is recorded directly.

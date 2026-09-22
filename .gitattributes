@@ -6,5 +6,7 @@
 *.yml text eol=lf
 # Keep evaluation fixtures/evidence stable; unified-diff blank context carries a space.
 evals/fixtures/**/*.html text eol=lf
+evals/fixtures/**/*.js text eol=lf
+evals/**/*.cjs text eol=lf
 evals/results/** text eol=lf
 evals/results/**/*.patch whitespace=-blank-at-eol
