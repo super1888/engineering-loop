@@ -166,7 +166,9 @@ The unreleased revisions clarify affected return-path outcomes, rendered evidenc
 
 The optional [collaboration guide](skills/engineering-loop/references/collaboration.md) adds scoped ownership, specification-dispute resolution, accepted-change propagation and independent verification without requiring a fixed agent team. Its [four additional scenarios](evals/README.md#unreleased-collaboration-revision) also remain unrun; additional agents are not evidence of improved accuracy.
 
-The [2026-09-22 UI A/B pilot](evals/results/2026-09-22-local-ui/report.md) compared current guidance with two experimental instructions on list-state repair and a copy-only control. Paired source artifacts were identical and all independent browser checks passed; no incremental correctness benefit was observed. Neither condition delegated, so live multi-agent coordination remains untested.
+The [2026-09-22 UI A/B pilot](evals/results/2026-09-22-local-ui/report.md) compared current guidance with two experimental instructions on list-state repair and a copy-only control. Paired source artifacts were identical and all independent browser checks passed; no incremental correctness benefit was observed. Neither condition delegated, so that pilot did not test live coordination.
+
+The subsequent [asynchronous-import A/B trial](evals/results/2026-09-22-async-import/report.md) used actual backend/frontend contributors, conflicting specifications and a scheduled owner contract change. Both conditions passed eight independent service scenarios and seven browser-flow milestones. An evaluator false positive was corrected with positive and negative controls. No incremental correctness benefit or reduction in work was established; the two candidate instructions remain experimental.
 
 If the workflow helps you, a star helps others discover it. Reproducible feedback helps us improve it.
 

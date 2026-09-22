@@ -1,0 +1,656 @@
+diff --git a/API.md b/API.md
+index 0f43eba..9a36136 100644
+--- a/API.md
++++ b/API.md
+@@ -1,9 +1,15 @@
+-# Batch API — revision 1
++# Batch API — revision 2
+ 
+-POST /api/batches with `{ "requestId": "client-operation", "rows": [{ "rowId": "alpha", "name": "Ada" }] }` accepts work with HTTP 202. The response includes batchId and status QUEUED. GET /api/batches/{batchId} returns batchId, status, total, succeeded and failed. Status values are QUEUED, RUNNING, SUCCEEDED, PARTIAL and FAILED.
++POST /api/batches accepts { "requestId": "client-operation", "rows": [{ "rowId": "alpha", "name": "Ada" }] } with HTTP 202. New work returns QUEUED. Acceptance does not mean completion. Repeated identical requestId/payload returns the original batch's current snapshot; changed payload with that identity returns 409.
+ 
+-Processing is atomic for the whole batch: if any row fails, all imported rows from that batch must roll back. This describes revision 1 behavior and has the same authority as PRODUCT.md until an owner decision resolves any disagreement.
++GET /api/batches/{batchId} returns the current persisted snapshot. Every snapshot, including submission and retry receipts, contains contractVersion: 2, batchId, status, total, succeeded, failed, and items. Each item has original string rowId, status, integer attempts, and nullable error. All items start QUEUED with attempts 0. Row states are QUEUED, RUNNING, SUCCEEDED and FAILED. Successful errors are null; failed errors explain the failure.
+ 
+-An identical repeated requestId returns the original batch identity; different data with that requestId returns 409. Input errors return 400 and missing batches return 404. Row identifiers are strings and must not be converted to numeric identifiers. Validation rejects empty rows, duplicate rowIds or blank names before accepting work.
++Batch status is QUEUED while accepted work waits, RUNNING while processing, then SUCCEEDED if all rows succeed, FAILED if all fail, or PARTIAL if both exist. Successful rows persist when others fail. Status and counts must agree with persisted outcomes. Each processor invocation increments that item's attempts exactly once.
+ 
+-An older example mentions a maximum of 50 rows; consult the maintained decisions for the active limit.
++POST /api/batches/{batchId}/retry takes { "requestId": "retry-operation" } and returns HTTP 202 with the full snapshot. requestId must be a nonblank string. Only currently FAILED rows are queued in the same batch. Successful identities, outputs and attempts stay unchanged. Errors on failed rows remain visible while queued/running and clear on success. Retrying a fully successful batch is a harmless no-op.
++
++Retry request identity is durable and batch-scoped. Replaying an accepted retry identity does not enqueue another attempt, including after reopen or another processing failure. A distinct request identity may retry newly failed work. Concurrent calls and workers must not duplicate attempts or imported records.
++
++Input errors return 400, identity conflicts 409 and missing batches 404. Row identifiers are opaque strings and never numeric conversions. Reject empty or over-100 rows, duplicate rowIds, blank names and missing/blank request identities before accepting work. D-01 settles 100; older 50-row examples are superseded.
++
++OWNER_CHANGE.md supersedes revision-1 aggregate-only responses and atomic rollback language. The UI restores its active batch using GET and retains an uncertain retry identity until that request's response can be received.
+diff --git a/DECISIONS.md b/DECISIONS.md
+index bb78e58..cab5f98 100644
+--- a/DECISIONS.md
++++ b/DECISIONS.md
+@@ -1,4 +1,9 @@
+ # Accepted decisions
+ 
+-- D-01: The active limit is 100 rows per batch. The older 50-row example is superseded. This decision is settled and does not need another owner question.
+-- Runtime row-failure semantics are not settled between the two revision-1 documents. Do not infer a policy from the incomplete implementation.
++- D-01: The active limit is 100 rows per batch. The older 50-row example is superseded.
++- D-02 (owner checkpoint, revision 2, OWNER_CHANGE.md): Runtime failures retain successful rows; failed rows are individually retryable. Supersedes conflicting revision-1 atomic rollback and retry exclusion.
++- D-03 (revision 2): Every snapshot has contractVersion 2 and items with opaque rowId, status, attempts and nullable error. Supersedes aggregate-only snapshots. Pending acceptance is distinct from completion.
++- D-04 (revision 2): Durable batch-scoped retry identities replay without additional attempts; successful outputs and attempts are preserved. Failed errors remain until successful reprocessing. Concurrent workers/calls must not duplicate attempts or records.
++- D-05 (revision 2): UI restores active batch from server after refresh and preserves the same retry requestId when retry response is uncertain. Inputs survive request failures.
++
++All current product questions are resolved by OWNER_CHANGE.md; no additional approval is required within this scope.
+diff --git a/OWNER_CHANGE.md b/OWNER_CHANGE.md
+new file mode 100644
+index 0000000..89bb681
+--- /dev/null
++++ b/OWNER_CHANGE.md
+@@ -0,0 +1,12 @@
++# Owner decision and contract change — revision 2
++
++This is the approved owner response. Apply it to the current implementation and active contributor work. It supersedes revision 1's aggregate-only response and conflicting runtime failure descriptions. No further approval is needed for the behavior below; keep unaffected scope and validation unchanged.
++
++1. Runtime row failures use partial success: successful rows persist and failed rows remain individually retryable. D-01's 100-row limit remains settled.
++2. Every batch snapshot, including submit/retry receipts and GET results, contains `contractVersion: 2`, `batchId`, `status`, `total`, `succeeded`, `failed`, and `items`. Each item contains its original string `rowId`, `status`, integer `attempts`, and nullable `error`. Successful rows have status SUCCEEDED and error null; failed rows have status FAILED with a useful error. Items start QUEUED with attempts 0. One processor invocation increments that item's attempts once.
++3. Batch status is QUEUED while accepted work awaits the worker, RUNNING while processing, then SUCCEEDED if all succeeded, FAILED if all failed, or PARTIAL if both exist. Request acceptance must not be displayed as completion. Return all row outcomes; status must agree with persisted state.
++4. POST /api/batches/{batchId}/retry with a nonblank string requestId queues only currently failed rows in the same batch. Their attempts do not increment until processing. Successful row identity, output and attempts remain unchanged. Preserve failed-item error information until that item's next successful processing, when it clears. Retrying a completed successful batch is a harmless no-op.
++5. A retry request identity belongs to its batch and is durable. Replaying an accepted retry requestId must not enqueue another attempt, even after processing/reopen or if that retry failed again. Concurrent retry calls or concurrent workers must not duplicate an item attempt or imported record. A distinct retry requestId may retry rows that failed again. An identical submission requestId still identifies one batch; changed payload with it remains a conflict.
++6. The UI displays the real batch status and each row's identity, status, attempts and error. It offers Retry failed rows when failures can be retried. Refreshing the page restores the active batch from the server. If a retry request reaches the backend but its response is lost, the user can retry that uncertain request using the same requestId; do not silently create a new logical retry. Preserve entered rows on request failure.
++
++Use the stable entrypoints and local test controls in SERVICE.md. Update the effective project documents and affected tests, notify active contributors of the change, and verify the combined frontend/backend behavior. Do not add deployment systems or real services.
+diff --git a/PRODUCT.md b/PRODUCT.md
+index ee49489..2ea24c4 100644
+--- a/PRODUCT.md
++++ b/PRODUCT.md
+@@ -1,9 +1,13 @@
+-# Batch import — revision 1
++# Batch import — revision 2
+ 
+-Users submit 1–100 named rows. Each row has an opaque string rowId unique within the batch and a nonblank name. Submitting is asynchronous: HTTP acceptance does not mean records have been imported. Users must be able to see queued work and a terminal outcome.
++Users submit 1–100 named rows. Each row has an opaque string rowId unique within the batch and a nonblank name. Submission is asynchronous: HTTP acceptance is not import completion. Users see QUEUED, RUNNING and the terminal outcome.
+ 
+-When processing one row fails, retain the other successfully imported rows. The UI must show that the batch is only partially successful. Failures can be inspected; retry is not yet included in revision 1.
++Runtime failures use partial success: successfully imported rows persist. Every row exposes its identity, state, attempts and nullable error. A batch finishes SUCCEEDED when all succeed, FAILED when all fail, or PARTIAL when both exist.
+ 
+-Repeated submission with the same client requestId and identical row payload identifies one batch, including after reopening the database. Reusing it for different data is a conflict. Successful rows must never create duplicate records.
++Failed rows can be retried within the same batch. Retry queues only currently failed rows; successful rows, output and attempts remain unchanged. Attempts increment once per processor invocation. Failed errors remain visible through queued/processing retries and clear only on success. Retrying a successful batch is a harmless no-op.
+ 
+-The maximum batch size is 100. No file-upload parsing, authentication, new framework, real external integration or visual redesign is in scope.
++Repeated identical submission requestId and row payload identifies one batch, including after database reopen. Different data under that requestId conflicts. Retry requestId is durable and scoped to its batch: replay never queues another attempt, even if the earlier retry failed. A distinct retry identity may retry a new failure. Concurrent calls/workers must not duplicate attempts or records.
++
++The UI displays real batch and row outcomes, offers Retry failed rows, and restores the active batch from the server after refresh. An uncertain retry caused by a lost response is replayed with the same requestId; entered rows remain intact on request failures.
++
++Maximum size remains 100. No file parsing, authentication, framework, real external integration, deployment system or visual redesign is in scope. OWNER_CHANGE.md is the accepted revision-2 basis; revision-1 atomicity and retry exclusion are superseded.
+diff --git a/SERVICE.md b/SERVICE.md
+index dfb46db..c57b9c6 100644
+--- a/SERVICE.md
++++ b/SERVICE.md
+@@ -5,7 +5,7 @@
+ - `submit(request_id, rows)` validates and returns a batch snapshot. ValueError means rejected input or a conflicting request identity; KeyError means a missing batch. Do not rename these entrypoints.
+ - `snapshot(batch_id)` returns the current snapshot.
+ - `process_next()` processes one queued batch, including its queued rows, and returns whether work was found. All persisted side effects and attempts must correspond to that work. Distinct service instances may use the same database; workers must not duplicate a claimed item.
+-- `retry(batch_id, request_id)` is reserved for an owner-approved later contract; revision 1 may raise NotImplementedError.
++- `retry(batch_id, request_id)` follows accepted revision 2 (OWNER_CHANGE.md): queue currently failed items only; durably replay a batch-scoped request identity without additional attempts. Return the full version-2 snapshot.
+ - `records()` returns imported rows as dictionaries with batchId, rowId and name. It is a read-only exercise inspection method.
+ 
+ SQLite tables are already created by backend/storage.py. Keep their names and existing columns so retained state is inspectable; additional columns/tables are allowed when justified. No live database is used.
+@@ -13,3 +13,4 @@ SQLite tables are already created by backend/storage.py. Keep their names and ex
+ server.py provides the HTTP/static adapter and a background worker. For deterministic local tests only, `--manual-worker` disables automatic scheduling and reads `process` commands from stdin. `--fail-once-row beta` injects one RuntimeError for that row identity before succeeding on later processing. These are local harness controls, not public HTTP endpoints. Preserve both modes and the CLI while changing the application.
+ 
+ The UI has existing ids: rows, submit, status, message, results, retry. Retain them for accessibility/test continuity. The results table displays the current batch's row identifiers and states when a contract supplies them. Keep user-entered form values intact after request failures.
++
+diff --git a/backend/service.py b/backend/service.py
+index 2e88ec9..9ca71aa 100644
+--- a/backend/service.py
++++ b/backend/service.py
+@@ -1,4 +1,8 @@
+-from .storage import initialize
++from contextlib import closing
++import json
++from uuid import uuid4
++
++from .storage import connect, initialize
+ 
+ 
+ class ImportService:
+@@ -21,16 +25,120 @@ class ImportService:
+             identities.add(row['rowId'])
+             if not isinstance(row.get('name'), str) or not row['name'].strip():
+                 raise ValueError('name is required')
+-        raise NotImplementedError('submission persistence is not implemented')
++        payload = json.dumps(rows, sort_keys=True, separators=(',', ':'), ensure_ascii=False)
++        with closing(connect(self.db_path)) as connection, connection:
++            connection.execute('BEGIN IMMEDIATE')
++            existing = connection.execute(
++                'SELECT id, payload FROM batches WHERE request_id = ?', (request_id,)
++            ).fetchone()
++            if existing:
++                if existing['payload'] != payload:
++                    raise ValueError('requestId conflict: different row payload')
++                return self._snapshot(connection, existing['id'])
++            batch_id = str(uuid4())
++            connection.execute(
++                'INSERT INTO batches (id, request_id, payload, status) VALUES (?, ?, ?, ?)',
++                (batch_id, request_id, payload, 'QUEUED'),
++            )
++            connection.executemany(
++                'INSERT INTO items (batch_id, row_id, name, status) VALUES (?, ?, ?, ?)',
++                [(batch_id, row['rowId'], row['name'], 'QUEUED') for row in rows],
++            )
++            return self._snapshot(connection, batch_id)
+ 
+     def snapshot(self, batch_id):
+-        raise KeyError(batch_id)
++        with closing(connect(self.db_path)) as connection, connection:
++            connection.execute('BEGIN')
++            return self._snapshot(connection, batch_id)
++
++    @staticmethod
++    def _snapshot(connection, batch_id):
++        batch = connection.execute('SELECT status FROM batches WHERE id = ?', (batch_id,)).fetchone()
++        if batch is None:
++            raise KeyError(batch_id)
++        rows = [dict(row) for row in connection.execute(
++            'SELECT row_id AS rowId, status, attempts, error FROM items WHERE batch_id = ? ORDER BY rowid',
++            (batch_id,),
++        )]
++        return {
++            'contractVersion': 2, 'batchId': batch_id, 'status': batch['status'], 'total': len(rows),
++            'succeeded': sum(row['status'] == 'SUCCEEDED' for row in rows),
++            'failed': sum(row['status'] == 'FAILED' for row in rows), 'items': rows,
++        }
+ 
+     def process_next(self):
+-        return False
++        # The committed batch claim gives one worker ownership without holding a
++        # database write lock while calling the processor.
++        with closing(connect(self.db_path)) as connection, connection:
++            connection.execute('BEGIN IMMEDIATE')
++            batch = connection.execute(
++                "SELECT id FROM batches WHERE status = 'QUEUED' ORDER BY rowid LIMIT 1"
++            ).fetchone()
++            if batch is None:
++                return False
++            batch_id = batch['id']
++            connection.execute("UPDATE batches SET status = 'RUNNING' WHERE id = ?", (batch_id,))
++        while True:
++            with closing(connect(self.db_path)) as connection, connection:
++                connection.execute('BEGIN IMMEDIATE')
++                row = connection.execute(
++                    "SELECT row_id AS rowId, name FROM items WHERE batch_id = ? AND status = 'QUEUED' ORDER BY rowid LIMIT 1",
++                    (batch_id,),
++                ).fetchone()
++                if row is None:
++                    snapshot = self._snapshot(connection, batch_id)
++                    status = 'SUCCEEDED' if snapshot['succeeded'] == snapshot['total'] else (
++                        'FAILED' if snapshot['failed'] == snapshot['total'] else 'PARTIAL'
++                    )
++                    connection.execute('UPDATE batches SET status = ? WHERE id = ?', (status, batch_id))
++                    return True
++                connection.execute(
++                    "UPDATE items SET status = 'RUNNING', attempts = attempts + 1 WHERE batch_id = ? AND row_id = ?",
++                    (batch_id, row['rowId']),
++                )
++            try:
++                output = self.processor(dict(row))
++            except Exception as error:
++                with closing(connect(self.db_path)) as connection, connection:
++                    connection.execute(
++                        "UPDATE items SET status = 'FAILED', error = ? WHERE batch_id = ? AND row_id = ?",
++                        (str(error) or type(error).__name__, batch_id, row['rowId']),
++                    )
++            else:
++                with closing(connect(self.db_path)) as connection, connection:
++                    connection.execute(
++                        'INSERT INTO records (batch_id, row_id, name) VALUES (?, ?, ?)',
++                        (batch_id, row['rowId'], output),
++                    )
++                    connection.execute(
++                        "UPDATE items SET status = 'SUCCEEDED', error = NULL, output = ? WHERE batch_id = ? AND row_id = ?",
++                        (output, batch_id, row['rowId']),
++                    )
+ 
+     def retry(self, batch_id, request_id):
+-        raise NotImplementedError('retry is not part of revision 1')
++        if not isinstance(request_id, str) or not request_id.strip():
++            raise ValueError('requestId is required')
++        with closing(connect(self.db_path)) as connection, connection:
++            connection.execute('BEGIN IMMEDIATE')
++            snapshot = self._snapshot(connection, batch_id)
++            previous = connection.execute(
++                'SELECT 1 FROM retry_requests WHERE batch_id = ? AND request_id = ?', (batch_id, request_id)
++            ).fetchone()
++            if previous:
++                return snapshot
++            connection.execute(
++                'INSERT INTO retry_requests (batch_id, request_id) VALUES (?, ?)', (batch_id, request_id)
++            )
++            if snapshot['failed']:
++                connection.execute(
++                    "UPDATE items SET status = 'QUEUED' WHERE batch_id = ? AND status = 'FAILED'", (batch_id,)
++                )
++                if snapshot['status'] != 'RUNNING':
++                    connection.execute("UPDATE batches SET status = 'QUEUED' WHERE id = ?", (batch_id,))
++            return self._snapshot(connection, batch_id)
+ 
+     def records(self):
+-        return []
++        with closing(connect(self.db_path)) as connection:
++            return [dict(row) for row in connection.execute(
++                'SELECT batch_id AS batchId, row_id AS rowId, name FROM records ORDER BY rowid'
++            )]
+diff --git a/server.py b/server.py
+index f80d290..f67f77b 100644
+--- a/server.py
++++ b/server.py
+@@ -62,6 +62,8 @@ def main():
+         def do_POST(self):
+             try:
+                 body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
++                if not isinstance(body, dict):
++                    raise ValueError('request body must be an object')
+                 path = urlparse(self.path).path
+                 if path == '/api/batches':
+                     result = service.submit(body.get('requestId'), body.get('rows'))
+diff --git a/tests/test_service.py b/tests/test_service.py
+new file mode 100644
+index 0000000..bc90a31
+--- /dev/null
++++ b/tests/test_service.py
+@@ -0,0 +1,224 @@
++from concurrent.futures import ThreadPoolExecutor
++from pathlib import Path
++import tempfile
++import threading
++import unittest
++
++from backend.service import ImportService
++
++
++class ServiceTests(unittest.TestCase):
++    def setUp(self):
++        directory = tempfile.TemporaryDirectory()
++        self.addCleanup(directory.cleanup)
++        self.path = Path(directory.name) / 'test.db'
++        self.service = ImportService(self.path)
++        self.rows = [{'rowId': '001', 'name': 'Ada'}, {'rowId': 'alpha / 中文', 'name': 'Lin'}]
++
++    def test_submission_is_queued_and_preserves_opaque_identities(self):
++        snapshot = self.service.submit('request', self.rows)
++        self.assertEqual(snapshot['status'], 'QUEUED')
++        self.assertEqual(snapshot['contractVersion'], 2)
++        self.assertEqual((snapshot['total'], snapshot['succeeded'], snapshot['failed']), (2, 0, 0))
++        self.assertEqual(snapshot['items'], [dict(rowId=row['rowId'], status='QUEUED', attempts=0, error=None) for row in self.rows])
++        self.assertEqual(self.service.records(), [])
++        self.assertEqual(self.service.snapshot(snapshot['batchId']), snapshot)
++
++    def test_submission_identity_survives_reopen_and_object_key_order(self):
++        original = self.service.submit('request', self.rows)
++        reopened = ImportService(self.path)
++        reordered = [{'name': row['name'], 'rowId': row['rowId']} for row in self.rows]
++        self.assertEqual(reopened.submit('request', reordered), original)
++        with self.assertRaisesRegex(ValueError, 'conflict'):
++            reopened.submit('request', list(reversed(self.rows)))
++        self.assertEqual(reopened.snapshot(original['batchId']), original)
++
++    def test_limit_is_100_and_rejection_does_not_consume_identity(self):
++        rows = [{'rowId': str(index), 'name': 'Name'} for index in range(101)]
++        with self.assertRaises(ValueError):
++            self.service.submit('request', rows)
++        self.assertEqual(self.service.submit('request', rows[:100])['total'], 100)
++
++    def test_missing_snapshot(self):
++        with self.assertRaises(KeyError):
++            self.service.snapshot('missing')
++
++    def test_simultaneous_identical_submissions_create_one_batch(self):
++        other = ImportService(self.path)
++        with ThreadPoolExecutor(max_workers=2) as workers:
++            snapshots = list(workers.map(lambda service: service.submit('request', self.rows), [self.service, other]))
++        self.assertEqual(snapshots[0], snapshots[1])
++
++    def test_partial_outcome_failed_only_retry_and_durable_replay(self):
++        calls = []
++
++        def processor(row):
++            calls.append(row['rowId'])
++            if row['rowId'] == 'alpha / 中文' and calls.count(row['rowId']) <= 2:
++                raise RuntimeError('temporary failure')
++            return row['name'].upper()
++
++        self.service = ImportService(self.path, processor)
++        batch_id = self.service.submit('request', self.rows)['batchId']
++        self.assertTrue(self.service.process_next())
++        partial = self.service.snapshot(batch_id)
++        self.assertEqual((partial['status'], partial['succeeded'], partial['failed']), ('PARTIAL', 1, 1))
++        self.assertEqual([item['attempts'] for item in partial['items']], [1, 1])
++        saved_success = partial['items'][0]
++        successful_record = self.service.records()[0]
++        queued = self.service.retry(batch_id, 'retry-1')
++        self.assertEqual(queued['status'], 'QUEUED')
++        self.assertEqual(queued['items'][1], dict(rowId='alpha / 中文', status='QUEUED', attempts=1, error='temporary failure'))
++        self.assertEqual(self.service.retry(batch_id, 'retry-1'), queued)
++        self.assertTrue(self.service.process_next())
++        failed_again = self.service.snapshot(batch_id)
++        reopened = ImportService(self.path, processor)
++        self.assertEqual(reopened.retry(batch_id, 'retry-1'), failed_again)
++        self.assertFalse(reopened.process_next())
++        self.assertEqual(reopened.retry(batch_id, 'retry-2')['status'], 'QUEUED')
++        self.assertTrue(reopened.process_next())
++        completed = reopened.snapshot(batch_id)
++        self.assertEqual((completed['status'], completed['succeeded'], completed['failed']), ('SUCCEEDED', 2, 0))
++        self.assertEqual(completed['items'][0], saved_success)
++        self.assertEqual(completed['items'][1]['attempts'], 3)
++        self.assertIsNone(completed['items'][1]['error'])
++        self.assertEqual(reopened.records()[0], successful_record)
++        self.assertEqual(len(reopened.records()), 2)
++        self.assertEqual(calls, ['001', 'alpha / 中文', 'alpha / 中文', 'alpha / 中文'])
++        self.assertEqual(reopened.retry(batch_id, 'no-op'), completed)
++        self.assertFalse(reopened.process_next())
++
++    def test_all_failure_and_success_terminal_statuses(self):
++        def failure(row):
++            raise RuntimeError('unavailable')
++
++        failed_service = ImportService(self.path, failure)
++        batch_id = failed_service.submit('request', self.rows)['batchId']
++        failed_service.process_next()
++        self.assertEqual(failed_service.snapshot(batch_id)['status'], 'FAILED')
++        self.assertEqual(failed_service.records(), [])
++        failed_service.retry(batch_id, 'retry')
++        self.service.process_next()
++        self.assertEqual(self.service.snapshot(batch_id)['status'], 'SUCCEEDED')
++        self.assertEqual(len(self.service.records()), 2)
++
++    def test_workers_claim_once_and_running_is_observable(self):
++        entered = threading.Event()
++        release = threading.Event()
++        calls = []
++
++        def processor(row):
++            calls.append(row['rowId'])
++            entered.set()
++            if not release.wait(5):
++                raise RuntimeError('test timed out')
++            return row['name']
++
++        worker = ImportService(self.path, processor)
++        batch_id = worker.submit('request', self.rows)['batchId']
++        with ThreadPoolExecutor(max_workers=2) as workers:
++            first = workers.submit(worker.process_next)
++            try:
++                self.assertTrue(entered.wait(5))
++                running = self.service.snapshot(batch_id)
++                self.assertEqual(running['status'], 'RUNNING')
++                self.assertEqual(running['items'][0]['status'], 'RUNNING')
++                self.assertEqual(running['items'][0]['attempts'], 1)
++                self.assertFalse(self.service.process_next())
++            finally:
++                release.set()
++            self.assertTrue(first.result(timeout=5))
++        self.assertEqual(calls, [row['rowId'] for row in self.rows])
++        self.assertEqual(len(self.service.records()), 2)
++
++    def test_simultaneous_retry_replay_queues_one_attempt(self):
++        def failure(row):
++            raise RuntimeError('failure')
++
++        worker = ImportService(self.path, failure)
++        batch_id = worker.submit('request', self.rows)['batchId']
++        worker.process_next()
++        other = ImportService(self.path)
++        with ThreadPoolExecutor(max_workers=2) as workers:
++            snapshots = list(workers.map(lambda service: service.retry(batch_id, 'retry'), [self.service, other]))
++        self.assertEqual(snapshots[0], snapshots[1])
++        self.service.process_next()
++        self.assertEqual([item['attempts'] for item in self.service.snapshot(batch_id)['items']], [2, 2])
++        self.assertEqual(len(self.service.records()), 2)
++
++    def test_retry_identity_is_batch_scoped_and_input_validated(self):
++        def failure(row):
++            raise RuntimeError('failure')
++
++        worker = ImportService(self.path, failure)
++        ids = [worker.submit(request, self.rows)['batchId'] for request in ('first', 'second')]
++        worker.process_next()
++        worker.process_next()
++        for batch_id in ids:
++            with self.assertRaises(ValueError):
++                worker.retry(batch_id, ' ')
++            self.assertEqual(worker.retry(batch_id, 'same-retry')['status'], 'QUEUED')
++        with self.assertRaises(KeyError):
++            worker.retry('missing', 'valid')
++
++    def test_retry_during_processing_drains_failures_and_preserves_error(self):
++        second_entered = threading.Event()
++        second_release = threading.Event()
++        retry_entered = threading.Event()
++        retry_release = threading.Event()
++        calls = []
++
++        def processor(row):
++            calls.append(row['rowId'])
++            if row['rowId'] == '001':
++                if calls.count('001') == 1:
++                    raise RuntimeError('original error')
++                retry_entered.set()
++                if not retry_release.wait(5):
++                    raise RuntimeError('retry test timed out')
++            else:
++                second_entered.set()
++                if not second_release.wait(5):
++                    raise RuntimeError('second test timed out')
++            return row['name']
++
++        worker = ImportService(self.path, processor)
++        batch_id = worker.submit('request', self.rows)['batchId']
++        with ThreadPoolExecutor(max_workers=1) as workers:
++            work = workers.submit(worker.process_next)
++            try:
++                self.assertTrue(second_entered.wait(5))
++                queued = self.service.retry(batch_id, 'during-work')
++                self.assertEqual(queued['status'], 'RUNNING')
++                self.assertEqual(queued['items'][0], dict(rowId='001', status='QUEUED', attempts=1, error='original error'))
++                self.assertFalse(self.service.process_next())
++                second_release.set()
++                self.assertTrue(retry_entered.wait(5))
++                running = self.service.snapshot(batch_id)
++                self.assertEqual(running['items'][0], dict(rowId='001', status='RUNNING', attempts=2, error='original error'))
++            finally:
++                second_release.set()
++                retry_release.set()
++            self.assertTrue(work.result(timeout=5))
++        done = self.service.snapshot(batch_id)
++        self.assertEqual(done['status'], 'SUCCEEDED')
++        self.assertIsNone(done['items'][0]['error'])
++        self.assertEqual(calls, ['001', 'alpha / 中文', '001'])
++        self.assertEqual(len(self.service.records()), 2)
++
++    def test_retry_without_current_failures_is_a_durable_noop(self):
++        def failure(row):
++            raise RuntimeError('failure')
++
++        worker = ImportService(self.path, failure)
++        queued = worker.submit('request', self.rows)
++        self.assertEqual(worker.retry(queued['batchId'], 'early-retry'), queued)
++        worker.process_next()
++        failed = worker.snapshot(queued['batchId'])
++        reopened = ImportService(self.path)
++        self.assertEqual(reopened.retry(queued['batchId'], 'early-retry'), failed)
++        self.assertFalse(reopened.process_next())
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff --git a/ui/app.js b/ui/app.js
+index 4d239c7..8e62abb 100644
+--- a/ui/app.js
++++ b/ui/app.js
+@@ -1,17 +1,145 @@
+ const rows = document.querySelector('#rows');
+ const status = document.querySelector('#status');
+ const message = document.querySelector('#message');
+-document.querySelector('#submit').addEventListener('click', async () => {
++const submit = document.querySelector('#submit');
++const results = document.querySelector('#results');
++const retry = document.querySelector('#retry');
++const storageKey = 'batch-import-v2';
++let saved = {};
++try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) { /* Ignore invalid saved state. */ }
++let activeBatchId = saved.activeBatchId || null;
++let submitOperation = saved.submitOperation || null;
++let retryOperation = saved.retryOperation || null;
++let currentBatch = null;
++let pollTimer = null;
++let generation = 0;
++let busy = false;
++rows.value = saved.rowsText || '';
++
++function persist() {
++  localStorage.setItem(storageKey, JSON.stringify({ activeBatchId, submitOperation, retryOperation, rowsText: rows.value }));
++}
++rows.addEventListener('input', persist);
++
++function active(batch) {
++  return batch && (batch.status === 'QUEUED' || batch.status === 'RUNNING');
++}
++
++function controls() {
++  submit.disabled = busy || active(currentBatch) || Boolean(retryOperation);
++  retry.hidden = !currentBatch || (!retryOperation && !['PARTIAL', 'FAILED'].includes(currentBatch.status));
++  retry.disabled = busy;
++  retry.textContent = retryOperation ? 'Retry unconfirmed request' : 'Retry failed rows';
++}
++
++function render(batch) {
++  currentBatch = batch;
++  activeBatchId = batch.batchId;
++  persist();
++  status.textContent = `${batch.status}: ${batch.succeeded} succeeded, ${batch.failed} failed, ${batch.total} total`;
++  results.replaceChildren();
++  for (const item of batch.items) {
++    const tr = document.createElement('tr');
++    for (const value of [item.rowId, item.status, item.attempts, item.error || '']) {
++      const td = document.createElement('td');
++      td.textContent = String(value ?? '');
++      tr.appendChild(td);
++    }
++    results.appendChild(tr);
++  }
++  controls();
++}
++
++async function request(url, options) {
++  const response = await fetch(url, options);
++  const data = await response.json();
++  if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`);
++  return data;
++}
++
++function schedulePoll(batchId, version) {
++  clearTimeout(pollTimer);
++  pollTimer = setTimeout(() => refresh(batchId, version), 300);
++}
++
++async function refresh(batchId, version) {
++  try {
++    const batch = await request(`/api/batches/${encodeURIComponent(batchId)}`);
++    if (version !== generation) return;
++    busy = false;
++    message.textContent = retryOperation ? 'Retry response is unconfirmed. Retry the same request to confirm it.' : '';
++    render(batch);
++    if (active(batch)) schedulePoll(batchId, version);
++  } catch (error) {
++    if (version !== generation) return;
++    message.textContent = `Could not refresh status: ${error.message}. Trying again.`;
++    schedulePoll(batchId, version);
++  }
++}
++
++submit.addEventListener('click', async () => {
++  if (submit.disabled) return;
+   message.textContent = '';
+   try {
+-    const response = await fetch('/api/batches', {
++    const payload = JSON.stringify(JSON.parse(rows.value));
++    if (!submitOperation || submitOperation.payload !== payload) {
++      submitOperation = { requestId: crypto.randomUUID(), payload };
++    }
++    persist();
++    const version = ++generation;
++    clearTimeout(pollTimer);
++    busy = true;
++    controls();
++    status.textContent = 'Submitting…';
++    const batch = await request('/api/batches', {
+       method: 'POST', headers: { 'Content-Type': 'application/json' },
+-      body: JSON.stringify({ requestId: crypto.randomUUID(), rows: JSON.parse(rows.value) })
++      body: JSON.stringify({ requestId: submitOperation.requestId, rows: JSON.parse(payload) })
+     });
+-    const batch = await response.json();
+-    if (!response.ok) throw new Error(batch.error);
+-    status.textContent = 'Completed';
++    if (version !== generation) return;
++    busy = false;
++    render(batch);
++    if (active(batch)) schedulePoll(batch.batchId, version);
+   } catch (error) {
++    busy = false;
++    controls();
++    status.textContent = currentBatch ? `${currentBatch.status} (new submission not confirmed)` : 'Submission not confirmed';
+     message.textContent = error.message;
+   }
+ });
++
++retry.addEventListener('click', async () => {
++  if (!currentBatch || retry.disabled) return;
++  message.textContent = '';
++  const version = ++generation;
++  clearTimeout(pollTimer);
++  try {
++    if (!retryOperation) retryOperation = { batchId: currentBatch.batchId, requestId: crypto.randomUUID() };
++    persist();
++    busy = true;
++    controls();
++    status.textContent = 'Submitting retry…';
++    const batch = await request(`/api/batches/${encodeURIComponent(retryOperation.batchId)}/retry`, {
++      method: 'POST', headers: { 'Content-Type': 'application/json' },
++      body: JSON.stringify({ requestId: retryOperation.requestId })
++    });
++    if (version !== generation) return;
++    retryOperation = null;
++    busy = false;
++    render(batch);
++    if (active(batch)) schedulePoll(batch.batchId, version);
++  } catch (error) {
++    busy = false;
++    controls();
++    status.textContent = `${currentBatch.status} (retry not confirmed)`;
++    message.textContent = `Retry response is unconfirmed: ${error.message}. Retry the same request to confirm it.`;
++    schedulePoll(currentBatch.batchId, version);
++  }
++});
++
++controls();
++if (activeBatchId) {
++  busy = true;
++  controls();
++  status.textContent = 'Restoring batch…';
++  refresh(activeBatchId, generation);
++}
+diff --git a/ui/index.html b/ui/index.html
+index 768dae5..6118e72 100644
+--- a/ui/index.html
++++ b/ui/index.html
+@@ -4,10 +4,11 @@
+ <style>body{font:16px system-ui;margin:32px}textarea{display:block;width:600px;height:150px}button{padding:10px;margin:10px 0}td,th{padding:8px;text-align:left}#message{color:#a22}</style></head>
+ <body>
+ <h1>Batch import</h1>
+-<label for="rows">Rows (JSON)</label><textarea id="rows"></textarea>
++<label for="rows">Rows (JSON, 1–100 rows)</label><textarea id="rows"></textarea>
+ <button id="submit">Import</button>
+ <p id="status" role="status">No batch</p><p id="message" role="alert"></p>
+ <table><thead><tr><th>Row</th><th>Status</th><th>Attempts</th><th>Error</th></tr></thead><tbody id="results"></tbody></table>
+ <button id="retry" hidden>Retry failed rows</button>
+ <script src="app.js"></script>
+ </body></html>
++

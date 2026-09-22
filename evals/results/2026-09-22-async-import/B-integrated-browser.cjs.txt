@@ -1,0 +1,148 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const {spawn} = require('node:child_process');
+const {once} = require('node:events');
+const readline = require('node:readline');
+const {chromium} = require('playwright');
+const workspace = path.resolve(__dirname, '../workspace');
+const temp = fs.mkdtempSync(path.join(__dirname, 'integration-db-'));
+const logs = [];
+const log = (s) => { logs.push(s); console.log(s); };
+const servers = [];
+let browser;
+async function start(manual, name) {
+  const args = ['server.py', '--db', path.join(temp, name + '.db'), '--port', '0'];
+  if (manual) args.push('--manual-worker', '--fail-once-row', 'beta');
+  const child = spawn('python', args, {cwd: workspace, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true});
+  servers.push(child);
+  const lines = readline.createInterface({input: child.stdout});
+  const line = await Promise.race([once(lines, 'line').then(([line]) => line), new Promise((_, reject) => {const timer=setTimeout(() => reject(new Error('server startup timeout')), 10000); timer.unref();})]);
+  child.stderr.on('data', chunk => logs.push('server stderr: ' + chunk));
+  return {child, url: 'http://127.0.0.1:' + JSON.parse(line).port};
+}
+async function request(url, method='GET', body) {
+  const response = await fetch(url, {method, headers: {'Content-Type':'application/json'}, body: body===undefined ? undefined : JSON.stringify(body)});
+  return {status: response.status, body: await response.json()};
+}
+function checkSnapshot(batch) {
+  assert.equal(batch.contractVersion, 2);
+  assert.equal(batch.items.length, batch.total);
+  assert.equal(batch.succeeded, batch.items.filter(i=>i.status==='SUCCEEDED').length);
+  assert.equal(batch.failed, batch.items.filter(i=>i.status==='FAILED').length);
+  for (const item of batch.items) {
+    assert.equal(typeof item.rowId, 'string');
+    assert(Number.isInteger(item.attempts));
+    assert(item.error===null || typeof item.error==='string');
+  }
+}
+async function untilSnapshot(url, status) {
+  for(let n=0;n<100;n++) {
+    const {body} = await request(url);
+    checkSnapshot(body);
+    if(body.status===status) return body;
+    await new Promise(resolve=>setTimeout(resolve,50));
+  }
+  throw new Error('Timed out awaiting '+status);
+}
+(async()=>{
+  try {
+    const server=await start(true,'manual');
+    browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
+    const page=await browser.newPage();
+    const pageErrors=[]; page.on('pageerror',error=>pageErrors.push(error.message));
+    const seen=[];
+    page.on('request',req=>{ if(req.method()==='POST') seen.push({url:req.url(),data:req.postDataJSON()}); });
+    await page.goto(server.url);
+    const input=[{rowId:'900719925474099312345',name:'Ada'},{rowId:'beta',name:'Bea'}];
+    await page.locator('#rows').fill(JSON.stringify(input));
+    const receiptPromise=page.waitForResponse(r=>r.url()===server.url+'/api/batches' && r.request().method()==='POST');
+    await page.locator('#submit').click();
+    const response=await receiptPromise;
+    assert.equal(response.status(),202);
+    const queued=await response.json(); checkSnapshot(queued);
+    assert.equal(queued.status,'QUEUED');
+    assert(queued.items.every(i=>i.attempts===0 && i.error===null));
+    const batchUrl=server.url+'/api/batches/'+encodeURIComponent(queued.batchId);
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('QUEUED'));
+    assert(!(await page.locator('#status').textContent()).includes('Completed'));
+    await page.waitForFunction(()=>document.querySelector('#results').textContent.includes('900719925474099312345'));
+    await page.screenshot({path:path.join(__dirname,'browser-queued.png')});
+    await page.reload();
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('QUEUED'));
+    assert.equal(await page.locator('#rows').inputValue(),JSON.stringify(input));
+    log('PASS real UI submission shows QUEUED with attempts 0; opaque large rowId and entered rows survive refresh.');
+    server.child.stdin.write('process\n');
+    const partial=await untilSnapshot(batchUrl,'PARTIAL');
+    assert.equal(partial.succeeded,1); assert.equal(partial.failed,1);
+    assert.deepEqual(partial.items.map(i=>i.attempts),[1,1]);
+    assert(partial.items.find(i=>i.rowId==='beta').error);
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('PARTIAL'));
+    await page.waitForFunction(()=>document.querySelector('#results').textContent.includes('temporary processor failure'));
+    assert(await page.locator('#retry').isVisible());
+    await page.screenshot({path:path.join(__dirname,'browser-partial.png')});
+    log('PASS real worker produces PARTIAL, retains success, renders both item outcomes/attempts and useful failure.');
+    let dropped=false;
+    await page.route('**/api/batches/*/retry',async route=>{
+      if(!dropped){dropped=true; await route.fetch(); await route.abort('connectionreset');}
+      else await route.continue();
+    });
+    await page.locator('#retry').click();
+    await page.waitForFunction(()=>document.querySelector('#message').textContent.length>0);
+    const retried=(await request(batchUrl)).body; checkSnapshot(retried);
+    assert.equal(retried.status,'QUEUED');
+    const beforeRetry=partial.items.find(i=>i.rowId==='beta');
+    const queuedRetry=retried.items.find(i=>i.rowId==='beta');
+    assert.equal(queuedRetry.attempts,1); assert.equal(queuedRetry.error,beforeRetry.error);
+    assert.deepEqual(retried.items.find(i=>i.rowId!=='beta'),partial.items.find(i=>i.rowId!=='beta'));
+    const firstRetry=seen.find(r=>r.url.endsWith('/retry'));
+    await page.reload();
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('QUEUED'));
+    await page.locator('#retry').waitFor({state:'visible'});
+    const replayPromise=page.waitForResponse(r=>r.url().endsWith('/retry') && r.request().method()==='POST');
+    await page.locator('#retry').click();
+    const replayResponse=await replayPromise; assert.equal(replayResponse.status(),202);
+    const retries=seen.filter(r=>r.url.endsWith('/retry'));
+    assert.equal(retries.length,2); assert.equal(retries[1].data.requestId,firstRetry.data.requestId);
+    assert.equal(await page.locator('#rows').inputValue(),JSON.stringify(input));
+    log('PASS lost retry response reached backend; refresh restores batch and reuses same pending retry identity; requeue preserves attempts/errors/success.');
+    server.child.stdin.write('process\n');
+    const completed=await untilSnapshot(batchUrl,'SUCCEEDED');
+    assert.deepEqual(completed.items.map(i=>i.attempts),[1,2]);
+    assert(completed.items.every(i=>i.error===null));
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('SUCCEEDED'));
+    assert(!(await page.locator('#retry').isVisible()));
+    await page.screenshot({path:path.join(__dirname,'browser-success.png')});
+    const repeated=await request(batchUrl+'/retry','POST',firstRetry.data); assert.equal(repeated.status,202); assert.deepEqual(repeated.body,completed);
+    const submission=seen.find(r=>r.url===server.url+'/api/batches').data;
+    assert.equal((await request(server.url+'/api/batches','POST',submission)).body.batchId,queued.batchId);
+    assert.equal((await request(server.url+'/api/batches','POST',{...submission,rows:[{rowId:'x',name:'Changed'}]})).status,409);
+    assert.equal((await request(batchUrl+'/retry','POST',{requestId:'success-no-op'})).body.status,'SUCCEEDED');
+    assert.equal((await request(batchUrl+'/retry','POST',{requestId:' '})).status,400);
+    assert.equal((await request(server.url+'/api/batches/missing')).status,404);
+    for(const body of [null,[],{}, {requestId:'bad',rows:[]}, {requestId:'large',rows:Array.from({length:101},(_,i)=>({rowId:String(i),name:'n'}))}]) assert.equal((await request(server.url+'/api/batches','POST',body)).status,400);
+    const hundred=await request(server.url+'/api/batches','POST',{requestId:'limit100',rows:Array.from({length:100},(_,i)=>({rowId:String(i),name:'n'}))});
+    assert.equal(hundred.status,202); assert.equal(hundred.body.total,100); checkSnapshot(hundred.body);
+    log('PASS retry succeeds with attempts [1,2], clears error, hides retry; HTTP 100/101 limits, 400/404/409, durable identity/no-op receipts checked.');
+    const originalRows=await page.locator('#rows').inputValue();
+    await page.route('**/api/batches',route=>route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({error:'Rejected for preservation check'})}));
+    await page.locator('#submit').click();
+    await page.waitForFunction(()=>document.querySelector('#message').textContent.includes('Rejected for preservation check'));
+    assert.equal(await page.locator('#rows').inputValue(),originalRows);
+    assert.deepEqual(pageErrors,[]);
+    log('PASS request failure retains entered rows; browser had no uncaught page errors.');
+    const automatic=await start(false,'automatic');
+    const autoReceipt=await request(automatic.url+'/api/batches','POST',{requestId:'auto',rows:[{rowId:'auto-row',name:'Automatic'}]});
+    assert.equal(autoReceipt.status,202); checkSnapshot(autoReceipt.body);
+    const autoDone=await untilSnapshot(automatic.url+'/api/batches/'+autoReceipt.body.batchId,'SUCCEEDED');
+    assert.equal(autoDone.items[0].attempts,1);
+    log('PASS default background worker processes accepted work without manual commands.');
+    log('ALL INTEGRATED CHECKS PASSED');
+  } catch(error) { log('FAIL '+error.stack); process.exitCode=1; }
+  finally {
+    if(browser) await browser.close();
+    for(const server of servers){ server.kill(); await Promise.race([once(server,'exit'),new Promise(resolve=>{const timer=setTimeout(resolve,3000);timer.unref();})]); }
+    fs.writeFileSync(path.join(__dirname,'integrated-browser-results.txt'),logs.join('\n')+'\n');
+    fs.rmSync(temp,{recursive:true,force:true});
+  }
+})();

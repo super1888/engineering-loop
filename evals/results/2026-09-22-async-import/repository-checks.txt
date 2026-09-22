@@ -1,0 +1,16 @@
+$ python -B scripts/check.py
+exit=0
+Distribution checks passed. Model behavior was not evaluated.
+$ python -B -m unittest discover -s tests -v
+exit=0
+test_archive_is_complete_and_contains_only_skill_and_license (test_distribution.DistributionTests.test_archive_is_complete_and_contains_only_skill_and_license) ... ok
+test_external_symlink_is_rejected (test_distribution.DistributionTests.test_external_symlink_is_rejected) ... skipped 'Host does not permit creating a test symlink'
+test_local_links_and_metadata (test_distribution.DistributionTests.test_local_links_and_metadata) ... ok
+test_output_cannot_overwrite_source (test_distribution.DistributionTests.test_output_cannot_overwrite_source) ... ok
+test_repeated_build_is_identical (test_distribution.DistributionTests.test_repeated_build_is_identical) ... ok
+test_receipt_inspection_releases_database_connection (test_receipt_oracle.OracleResourceTests.test_receipt_inspection_releases_database_connection) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.103s
+
+OK (skipped=1)

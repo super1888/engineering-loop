@@ -1,0 +1,131 @@
+{
+  "baseline": {
+    "public_exit": 0,
+    "service_exit": 1,
+    "browser_exit": 1
+  },
+  "positive": {
+    "public_exit": 0,
+    "service_exit": 0,
+    "browser_exit": 0
+  },
+  "positive_artifact": {
+    "changed_files": [
+      "backend/service.py",
+      "ui/app.js"
+    ],
+    "source_hashes": {
+      "AGENTS.md": "920e81badd0a61f796ff308527ffa96f7796819508a5459e0798fbb060d79bae",
+      "API.md": "be62765ee3cd2ae76465573a6e577e071cb9cb000ed773fd5f1e6d4ff22fd8be",
+      "DECISIONS.md": "e997ab9608d0c6e5876c57d64fba74b543667307506b1757a8484a01f2a5c8e5",
+      "PRODUCT.md": "27eb615580a5240d9b23d68318e07fd2aaffb67383fea1bf4e6c68f06ee7b65d",
+      "server.py": "d400e42816b4b1dcfc7a86aa3e0e7be697a98da3d69561b4d235863b0bf74ee0",
+      "SERVICE.md": "1dede06d0a520db75dd0e1a14ebd6298e675f6c5894b9ab26bd419e3af2ecc0b",
+      "backend/service.py": "d8e1f12c72d5b4e7ec91b17d6a4080ef7568d0c1a9f522aaab486e58158c81e6",
+      "backend/storage.py": "df859770066d18f44c711bca5d566ad4ad934855fe07a6e7f385d8062e36e94e",
+      "backend/__init__.py": "bf4106e9adb505b0833635064d3ac21ded8b20e80c87faaff1f6779db2aeb875",
+      "tests/test_validation.py": "cb2bb05128a3c4db2dc4a20594d0259334ff29fe42524b55647ef10b2c4ed042",
+      "ui/app.js": "26260df233d71b5d8e32db882fff4e9255ca38d8b721603e89ce789415ee9f70",
+      "ui/index.html": "fb4fb76780c9e82450c705c93d0116fbe6b12e29a0295086b243acb3aa433180"
+    },
+    "patch_replay_exact": true
+  },
+  "mutant-forgotten-retry": {
+    "expected_exit": "nonzero",
+    "actual_exit": 1,
+    "artifact": {
+      "changed_files": [
+        "backend/service.py",
+        "ui/app.js"
+      ],
+      "source_hashes": {
+        "AGENTS.md": "920e81badd0a61f796ff308527ffa96f7796819508a5459e0798fbb060d79bae",
+        "API.md": "be62765ee3cd2ae76465573a6e577e071cb9cb000ed773fd5f1e6d4ff22fd8be",
+        "DECISIONS.md": "e997ab9608d0c6e5876c57d64fba74b543667307506b1757a8484a01f2a5c8e5",
+        "PRODUCT.md": "27eb615580a5240d9b23d68318e07fd2aaffb67383fea1bf4e6c68f06ee7b65d",
+        "server.py": "d400e42816b4b1dcfc7a86aa3e0e7be697a98da3d69561b4d235863b0bf74ee0",
+        "SERVICE.md": "1dede06d0a520db75dd0e1a14ebd6298e675f6c5894b9ab26bd419e3af2ecc0b",
+        "backend/service.py": "40dd445cb62ea3a32184a4f0f4e5da917fcffcb6896f06773a6d5d803f2b4036",
+        "backend/storage.py": "df859770066d18f44c711bca5d566ad4ad934855fe07a6e7f385d8062e36e94e",
+        "backend/__init__.py": "bf4106e9adb505b0833635064d3ac21ded8b20e80c87faaff1f6779db2aeb875",
+        "tests/test_validation.py": "cb2bb05128a3c4db2dc4a20594d0259334ff29fe42524b55647ef10b2c4ed042",
+        "ui/app.js": "26260df233d71b5d8e32db882fff4e9255ca38d8b721603e89ce789415ee9f70",
+        "ui/index.html": "fb4fb76780c9e82450c705c93d0116fbe6b12e29a0295086b243acb3aa433180"
+      },
+      "patch_replay_exact": true
+    }
+  },
+  "mutant-new-retry-key": {
+    "expected_exit": "nonzero",
+    "actual_exit": 1,
+    "artifact": {
+      "changed_files": [
+        "backend/service.py",
+        "ui/app.js"
+      ],
+      "source_hashes": {
+        "AGENTS.md": "920e81badd0a61f796ff308527ffa96f7796819508a5459e0798fbb060d79bae",
+        "API.md": "be62765ee3cd2ae76465573a6e577e071cb9cb000ed773fd5f1e6d4ff22fd8be",
+        "DECISIONS.md": "e997ab9608d0c6e5876c57d64fba74b543667307506b1757a8484a01f2a5c8e5",
+        "PRODUCT.md": "27eb615580a5240d9b23d68318e07fd2aaffb67383fea1bf4e6c68f06ee7b65d",
+        "server.py": "d400e42816b4b1dcfc7a86aa3e0e7be697a98da3d69561b4d235863b0bf74ee0",
+        "SERVICE.md": "1dede06d0a520db75dd0e1a14ebd6298e675f6c5894b9ab26bd419e3af2ecc0b",
+        "backend/service.py": "d8e1f12c72d5b4e7ec91b17d6a4080ef7568d0c1a9f522aaab486e58158c81e6",
+        "backend/storage.py": "df859770066d18f44c711bca5d566ad4ad934855fe07a6e7f385d8062e36e94e",
+        "backend/__init__.py": "bf4106e9adb505b0833635064d3ac21ded8b20e80c87faaff1f6779db2aeb875",
+        "tests/test_validation.py": "cb2bb05128a3c4db2dc4a20594d0259334ff29fe42524b55647ef10b2c4ed042",
+        "ui/app.js": "2cd351049291d7f9c1b18676b210018a8d95052f08ae21b066e2ce2689e1e2db",
+        "ui/index.html": "fb4fb76780c9e82450c705c93d0116fbe6b12e29a0295086b243acb3aa433180"
+      },
+      "patch_replay_exact": true
+    }
+  },
+  "positive-queued-counts": {
+    "actual_exit": 0,
+    "artifact": {
+      "changed_files": [
+        "backend/service.py",
+        "ui/app.js"
+      ],
+      "source_hashes": {
+        "AGENTS.md": "920e81badd0a61f796ff308527ffa96f7796819508a5459e0798fbb060d79bae",
+        "API.md": "be62765ee3cd2ae76465573a6e577e071cb9cb000ed773fd5f1e6d4ff22fd8be",
+        "DECISIONS.md": "e997ab9608d0c6e5876c57d64fba74b543667307506b1757a8484a01f2a5c8e5",
+        "PRODUCT.md": "27eb615580a5240d9b23d68318e07fd2aaffb67383fea1bf4e6c68f06ee7b65d",
+        "server.py": "d400e42816b4b1dcfc7a86aa3e0e7be697a98da3d69561b4d235863b0bf74ee0",
+        "SERVICE.md": "1dede06d0a520db75dd0e1a14ebd6298e675f6c5894b9ab26bd419e3af2ecc0b",
+        "backend/service.py": "d8e1f12c72d5b4e7ec91b17d6a4080ef7568d0c1a9f522aaab486e58158c81e6",
+        "backend/storage.py": "df859770066d18f44c711bca5d566ad4ad934855fe07a6e7f385d8062e36e94e",
+        "backend/__init__.py": "bf4106e9adb505b0833635064d3ac21ded8b20e80c87faaff1f6779db2aeb875",
+        "tests/test_validation.py": "cb2bb05128a3c4db2dc4a20594d0259334ff29fe42524b55647ef10b2c4ed042",
+        "ui/app.js": "464d1ba46708ad62f7cc5ec08c30362a3187bebcd3e601f46aa422186bdb3ed1",
+        "ui/index.html": "fb4fb76780c9e82450c705c93d0116fbe6b12e29a0295086b243acb3aa433180"
+      },
+      "patch_replay_exact": true
+    }
+  },
+  "mutant-acceptance-completed": {
+    "actual_exit": 1,
+    "artifact": {
+      "changed_files": [
+        "backend/service.py",
+        "ui/app.js"
+      ],
+      "source_hashes": {
+        "AGENTS.md": "920e81badd0a61f796ff308527ffa96f7796819508a5459e0798fbb060d79bae",
+        "API.md": "be62765ee3cd2ae76465573a6e577e071cb9cb000ed773fd5f1e6d4ff22fd8be",
+        "DECISIONS.md": "e997ab9608d0c6e5876c57d64fba74b543667307506b1757a8484a01f2a5c8e5",
+        "PRODUCT.md": "27eb615580a5240d9b23d68318e07fd2aaffb67383fea1bf4e6c68f06ee7b65d",
+        "server.py": "d400e42816b4b1dcfc7a86aa3e0e7be697a98da3d69561b4d235863b0bf74ee0",
+        "SERVICE.md": "1dede06d0a520db75dd0e1a14ebd6298e675f6c5894b9ab26bd419e3af2ecc0b",
+        "backend/service.py": "d8e1f12c72d5b4e7ec91b17d6a4080ef7568d0c1a9f522aaab486e58158c81e6",
+        "backend/storage.py": "df859770066d18f44c711bca5d566ad4ad934855fe07a6e7f385d8062e36e94e",
+        "backend/__init__.py": "bf4106e9adb505b0833635064d3ac21ded8b20e80c87faaff1f6779db2aeb875",
+        "tests/test_validation.py": "cb2bb05128a3c4db2dc4a20594d0259334ff29fe42524b55647ef10b2c4ed042",
+        "ui/app.js": "c06ee92cf65520f573cddfe39dee06b4176e66faf8753640a33714686f4d1980",
+        "ui/index.html": "fb4fb76780c9e82450c705c93d0116fbe6b12e29a0295086b243acb3aa433180"
+      },
+      "patch_replay_exact": true
+    }
+  }
+}

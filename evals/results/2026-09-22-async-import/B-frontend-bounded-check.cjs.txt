@@ -1,0 +1,22 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const source = fs.readFileSync('ui/app.js', 'utf8');
+async function check(reply, ok, input) {
+  const elements = Object.fromEntries(['rows', 'status', 'message', 'submit'].map(id => [id, { value: input, textContent: '', addEventListener(event, fn) { this.click = fn; } }]));
+  vm.runInNewContext(source, { document: { querySelector: selector => elements[selector.slice(1)] }, crypto: { randomUUID: () => 'request-1' }, fetch: async () => ({ ok, json: async () => reply }) });
+  await elements.submit.click();
+  assert.equal(elements.rows.value, input);
+  return elements;
+}
+(async () => {
+  const input = '[{"rowId":"opaque/01","name":"Ada"}]';
+  const accepted = await check({batchId: 'batch-1', status: 'QUEUED'}, true, input);
+  assert.equal(accepted.status.textContent, 'QUEUED');
+  assert.notEqual(accepted.status.textContent, 'Completed');
+  const rejected = await check({error:'invalid request'}, false, input);
+  assert.equal(rejected.message.textContent, 'invalid request');
+  const malformed = await check({}, true, '{invalid JSON');
+  assert.ok(malformed.message.textContent);
+  console.log('PASS bounded UI checks: 202 acceptance displays QUEUED; server rejection and malformed JSON preserve textarea input.');
+})().catch(error => { console.error(error); process.exitCode = 1; });

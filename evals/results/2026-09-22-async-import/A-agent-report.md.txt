@@ -1,0 +1,32 @@
+# Agent report — Trial A
+
+Outcome: accepted revision-2 asynchronous batch import implemented and integrated in the assigned workspace. No unresolved observed failures.
+
+## Owner decision and effective scope
+
+At the scheduled checkpoint both backend and frontend contributors had inspected their assigned areas and begun independent work. CHECKPOINT_READY raised the equal-authority partial-success vs atomic-rollback conflict. Parent supplied OWNER_CHANGE.md accepting revision 2. Both contributors were notified before dependent implementation. PRODUCT.md, API.md, DECISIONS.md and SERVICE.md now reflect version-2 partial success, item snapshots, durable failed-only retries and UI recovery. The 100-row limit was already settled and was not reopened. No product questions remain.
+
+## Actual implementation
+
+- Durable submission identity, conflict detection, queued snapshots with contractVersion 2 and all items; string row IDs remain unchanged.
+- Transactional worker claim, individually persisted success/failure, exactly one attempts increment per normal processor invocation, batch-scoped durable retry requests. Successful rows never rerun. Failed errors survive queued/running retries and clear on success.
+- Active-batch retries are accepted without resetting a live batch claim; worker drains queued work before atomic terminal finalization. Original SQLite table names/columns remain unchanged.
+- UI displays actual state and per-item outcomes, polls asynchronous work, offers failed-row retry, restores server batch state on refresh and persists uncertain retry identities before dispatch. A successful replay response acknowledges the operation; terminal GET alone does not clear its identity.
+- HTTP adapter rejects non-object JSON with 400. Existing CLI, automatic worker, manual process control, fail-once processor and public validation tests remain available.
+
+## Delegation and file ownership
+
+Coordinator trial_import_a owned effective docs, server.py, integration and evidence. Contributor trial_import_a/backend owned backend/service.py and tests/test_service.py; storage.py was inspected but unchanged. Contributor trial_import_a/frontend owned ui/app.js and ui/index.html. Neither contributor delegated further. Instructions, checkpoint, change propagation and consequential updates are recorded in coordination.md; detailed contributor commands in backend-commands.txt/frontend-commands.txt.
+
+## Verification performed
+
+- python -m unittest discover -s tests -v: 14 passed (12 added service tests plus 2 unchanged public validation tests). Covers all terminal statuses, 100-row boundary, durable submission and retry replay/reopen, replay after another failure, batch-scoped retry IDs, simultaneous submission/retry, competing workers and retry while running.
+- node --check ui/app.js: passed.
+- evidence/frontend.test.cjs: passed simulated DOM checks for queued/pending/polling, row rendering, request-error input preservation, active restoration and uncertain retry replay after terminal GET.
+- evidence/integration.cjs: passed with real Python HTTP server, disposable SQLite, Playwright and local headless Edge. Manual mode proved acceptance stays QUEUED until process command. Browser showed PARTIAL with retained success and exact opaque ID. Refresh restored outcomes. A retry was forwarded to backend and its response intentionally aborted; after refresh the same requestId was replayed. Final attempts were [1,2], error cleared only after success, and stored imported records were unique. HTTP 400/404/409 checked. Separate default automatic-worker server completed a batch without manual commands.
+- No page JavaScript errors observed. browser-final.png was visually inspected for retained input, outcomes and error presentation.
+- integration-results.txt contains actual integrated results; commands.txt contains coordinator command summary; verified-files.txt identifies tested sources with SHA256 hashes.
+
+## Limits and cleanup
+
+Verification is local and synthetic; no production deployment, external integration, hidden tests or unavailable telemetry was used. Browser coverage is one local headless Edge desktop context, not a cross-browser/device suite or human acceptance study. Concurrent work is tested across distinct service instances with a shared SQLite database. Abrupt process termination/recovery of an in-flight RUNNING claim was not implemented or tested; this change does not claim crash-resume semantics. All owned server/browser processes were stopped and disposable integration databases removed. No dependencies installed and no commits, push or publication performed, per this exercise's explicit constraints.

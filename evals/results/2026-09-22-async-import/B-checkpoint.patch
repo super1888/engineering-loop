@@ -1,0 +1,124 @@
+diff --git a/backend/service.py b/backend/service.py
+index 2e88ec9..9c8c359 100644
+--- a/backend/service.py
++++ b/backend/service.py
+@@ -1,4 +1,8 @@
+-from .storage import initialize
++from contextlib import closing
++import json
++import uuid
++
++from .storage import connect, initialize
+ 
+ 
+ class ImportService:
+@@ -21,10 +25,39 @@ class ImportService:
+             identities.add(row['rowId'])
+             if not isinstance(row.get('name'), str) or not row['name'].strip():
+                 raise ValueError('name is required')
+-        raise NotImplementedError('submission persistence is not implemented')
++        payload = json.dumps(rows, sort_keys=True, separators=(',', ':'), ensure_ascii=False)
++        with closing(connect(self.db_path)) as connection, connection:
++            connection.execute('BEGIN IMMEDIATE')
++            previous = connection.execute('SELECT id, payload FROM batches WHERE request_id = ?', (request_id,)).fetchone()
++            if previous:
++                if previous['payload'] != payload:
++                    raise ValueError('requestId conflict: payload differs')
++                batch_id = previous['id']
++            else:
++                batch_id = uuid.uuid4().hex
++                connection.execute('INSERT INTO batches (id, request_id, payload, status) VALUES (?, ?, ?, ?)',
++                                   (batch_id, request_id, payload, 'QUEUED'))
++                connection.executemany('INSERT INTO items (batch_id, row_id, name, status) VALUES (?, ?, ?, ?)',
++                                       [(batch_id, row['rowId'], row['name'], 'QUEUED') for row in rows])
++            return self._snapshot(connection, batch_id)
++
++    @staticmethod
++    def _snapshot(connection, batch_id):
++        batch = connection.execute('SELECT status FROM batches WHERE id = ?', (batch_id,)).fetchone()
++        if batch is None:
++            raise KeyError(batch_id)
++        rows = connection.execute('SELECT row_id, name, status, attempts, error FROM items WHERE batch_id = ? ORDER BY rowid',
++                                  (batch_id,)).fetchall()
++        return {'batchId': batch_id, 'status': batch['status'], 'total': len(rows),
++                'succeeded': sum(row['status'] == 'SUCCEEDED' for row in rows),
++                'failed': sum(row['status'] == 'FAILED' for row in rows),
++                'rows': [{'rowId': row['row_id'], 'name': row['name'], 'status': row['status'],
++                          'attempts': row['attempts'], 'error': row['error']} for row in rows]}
+ 
+     def snapshot(self, batch_id):
+-        raise KeyError(batch_id)
++        with closing(connect(self.db_path)) as connection, connection:
++            connection.execute('BEGIN')
++            return self._snapshot(connection, batch_id)
+ 
+     def process_next(self):
+         return False
+@@ -33,4 +66,6 @@ class ImportService:
+         raise NotImplementedError('retry is not part of revision 1')
+ 
+     def records(self):
+-        return []
++        with closing(connect(self.db_path)) as connection:
++            return [dict(row) for row in connection.execute(
++                'SELECT batch_id AS batchId, row_id AS rowId, name FROM records ORDER BY rowid')]
+diff --git a/tests/test_service.py b/tests/test_service.py
+new file mode 100644
+index 0000000..78d8560
+--- /dev/null
++++ b/tests/test_service.py
+@@ -0,0 +1,41 @@
++from pathlib import Path
++import tempfile
++import unittest
++
++from backend.service import ImportService
++
++
++class SubmissionTests(unittest.TestCase):
++    def setUp(self):
++        self.directory = tempfile.TemporaryDirectory()
++        self.addCleanup(self.directory.cleanup)
++        self.path = Path(self.directory.name) / 'service.db'
++        self.service = ImportService(self.path)
++
++    def test_submission_is_queued_and_durable(self):
++        rows = [{'rowId': 'opaque/001', 'name': 'Ada'}]
++        first = self.service.submit('client-operation', rows)
++        self.assertEqual(first['status'], 'QUEUED')
++        self.assertEqual(first['total'], 1)
++        self.assertEqual(first['succeeded'], 0)
++        self.assertEqual(self.service.records(), [])
++        reopened = ImportService(self.path)
++        self.assertEqual(reopened.submit('client-operation', rows)['batchId'], first['batchId'])
++        with self.assertRaisesRegex(ValueError, 'conflict'):
++            reopened.submit('client-operation', [{'rowId': 'opaque/001', 'name': 'Grace'}])
++        self.assertEqual(reopened.snapshot(first['batchId'])['status'], 'QUEUED')
++
++    def test_active_limit_is_100(self):
++        rows = [{'rowId': str(i), 'name': 'Name'} for i in range(100)]
++        self.assertEqual(self.service.submit('limit', rows)['total'], 100)
++        with self.assertRaises(ValueError):
++            self.service.submit('too-large', rows + [{'rowId': 'extra', 'name': 'Name'}])
++
++    def test_invalid_later_row_has_no_persisted_acceptance(self):
++        with self.assertRaises(ValueError):
++            self.service.submit('correctable', [{'rowId': 'ok', 'name': 'A'}, {'rowId': 'bad', 'name': ' '}])
++        self.assertEqual(self.service.submit('correctable', [{'rowId': 'ok', 'name': 'A'}])['total'], 1)
++
++    def test_missing_snapshot_is_key_error(self):
++        with self.assertRaises(KeyError):
++            self.service.snapshot('missing')
+diff --git a/ui/app.js b/ui/app.js
+index 4d239c7..d491036 100644
+--- a/ui/app.js
++++ b/ui/app.js
+@@ -10,7 +10,7 @@ document.querySelector('#submit').addEventListener('click', async () => {
+     });
+     const batch = await response.json();
+     if (!response.ok) throw new Error(batch.error);
+-    status.textContent = 'Completed';
++    status.textContent = batch.status;
+   } catch (error) {
+     message.textContent = error.message;
+   }

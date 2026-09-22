@@ -1,0 +1,23 @@
+# Coordination
+
+Coordinator: /root/trial_import_b. Authorized scope: supplied B workspace only; no installation, commits, publication or real services.
+
+Ownership and independent uncertainty:
+- backend contributor /root/trial_import_b/backend owns backend/service.py, backend/storage.py, server.py, tests/test_service.py. Resolves durable SQLite submission/claim semantics and service adapter correctness. Initial independent step: settled validation and idempotent submission; runtime-failure/retry policy blocked pending owner.
+- frontend contributor /root/trial_import_b/frontend owns ui/app.js and ui/index.html. Resolves asynchronous user-visible acceptance, state and error handling. Initial independent step: acceptance display and form preservation; terminal failure/retry policy blocked pending owner.
+- coordinator owns PRODUCT.md, API.md, DECISIONS.md, SERVICE.md, integrated tests and evidence. No shared-file writes delegated. Contributors instructed not to delegate.
+
+Settled initial agreement: 1–100 named rows, opaque nonblank string rowIds unique per batch, durable request identity, conflicts on changed payload, asynchronous queued/running/terminal states. D-01 already resolves 100-row limit.
+Unresolved: PRODUCT partial retained successes versus API whole-batch rollback have equal authority. Revision 1 excludes retry, subject to scheduled owner response. Never infer business policy from stub.
+
+Checkpoint will be sent once both contributors have inspected and begun their independent steps. Dependent implementation awaits owner response.
+
+Checkpoint ready: both contributors inspected and began independent steps. Sent CHECKPOINT_READY to parent owner with contributor identities, contract interpretation, partial-vs-atomic policy question and proposed inspectable rows shape. Dependent implementation remains paused.
+Environment available: Python 3.12.3, Node v24.14.1, Playwright resolves via supplied NODE_PATH, Edge executable exists.
+
+Owner response: read workspace OWNER_CHANGE.md. Revision 2 approved without further approval. Partial success resolves PRODUCT/API conflict; retry now authorized; every snapshot uses contractVersion:2 and items (not the provisional rows field). Retry IDs are durable per batch, replay-safe after another failure/reopen; preserve errors until success and attempts count processor calls. UI must restore active batch after refresh and reuse an uncertain retry identity after lost response.
+Sent targeted delta to both active contributors before dependent processing/retry implementation. Backend acknowledged adaptation; frontend notified. Updated PRODUCT.md, API.md, DECISIONS.md and SERVICE.md to keep the effective agreement current. Coordinator's integrated expectations will use owner examples, not infer semantics from contributor implementation.
+
+Integration completed: both contributors acknowledged and adapted revision 2. Final source review confirms items/contractVersion:2 end-to-end; obsolete proposed rows shape is not used. Material completion claim challenged: an accepted retry with lost response must not be duplicated after page refresh. Real browser test sent retry to real server, discarded response, refreshed, replayed same ID and observed one new beta attempt while alpha stayed at one. Backend recurrent-failure/reopen and concurrent claim tests supply complementary persistence/race evidence.
+Checks: 12 service/public tests PASS; focused frontend VM checks PASS; real Edge + HTTP + SQLite manual/default-worker integration PASS. No current failing checks or unresolved owner decisions. Known boundary: abrupt worker death while RUNNING is not lease-recovered; not part of approved owner scope and not tested as crash recovery. No additional reviewer/delegation added because the material contract claim and required checks are supported.
+Final changed files: backend/service.py, server.py, tests/test_service.py, ui/app.js, PRODUCT.md, API.md, DECISIONS.md, SERVICE.md. Existing storage schema and public validation tests retained. Owner supplied OWNER_CHANGE.md is preserved.

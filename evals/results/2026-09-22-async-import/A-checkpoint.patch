@@ -1,0 +1,232 @@
+diff --git a/backend/service.py b/backend/service.py
+index 2e88ec9..780123e 100644
+--- a/backend/service.py
++++ b/backend/service.py
+@@ -1,4 +1,8 @@
+-from .storage import initialize
++from contextlib import closing
++import json
++from uuid import uuid4
++
++from .storage import connect, initialize
+ 
+ 
+ class ImportService:
+@@ -21,10 +25,46 @@ class ImportService:
+             identities.add(row['rowId'])
+             if not isinstance(row.get('name'), str) or not row['name'].strip():
+                 raise ValueError('name is required')
+-        raise NotImplementedError('submission persistence is not implemented')
++        payload = json.dumps(rows, sort_keys=True, separators=(',', ':'), ensure_ascii=False)
++        with closing(connect(self.db_path)) as connection, connection:
++            connection.execute('BEGIN IMMEDIATE')
++            existing = connection.execute(
++                'SELECT id, payload FROM batches WHERE request_id = ?', (request_id,)
++            ).fetchone()
++            if existing:
++                if existing['payload'] != payload:
++                    raise ValueError('requestId conflict: different row payload')
++                return self._snapshot(connection, existing['id'])
++            batch_id = str(uuid4())
++            connection.execute(
++                'INSERT INTO batches (id, request_id, payload, status) VALUES (?, ?, ?, ?)',
++                (batch_id, request_id, payload, 'QUEUED'),
++            )
++            connection.executemany(
++                'INSERT INTO items (batch_id, row_id, name, status) VALUES (?, ?, ?, ?)',
++                [(batch_id, row['rowId'], row['name'], 'QUEUED') for row in rows],
++            )
++            return self._snapshot(connection, batch_id)
+ 
+     def snapshot(self, batch_id):
+-        raise KeyError(batch_id)
++        with closing(connect(self.db_path)) as connection, connection:
++            connection.execute('BEGIN')
++            return self._snapshot(connection, batch_id)
++
++    @staticmethod
++    def _snapshot(connection, batch_id):
++        batch = connection.execute('SELECT status FROM batches WHERE id = ?', (batch_id,)).fetchone()
++        if batch is None:
++            raise KeyError(batch_id)
++        rows = [dict(row) for row in connection.execute(
++            'SELECT row_id AS rowId, name, status, attempts, error FROM items WHERE batch_id = ? ORDER BY rowid',
++            (batch_id,),
++        )]
++        return {
++            'batchId': batch_id, 'status': batch['status'], 'total': len(rows),
++            'succeeded': sum(row['status'] == 'SUCCEEDED' for row in rows),
++            'failed': sum(row['status'] == 'FAILED' for row in rows), 'rows': rows,
++        }
+ 
+     def process_next(self):
+         return False
+@@ -33,4 +73,7 @@ class ImportService:
+         raise NotImplementedError('retry is not part of revision 1')
+ 
+     def records(self):
+-        return []
++        with closing(connect(self.db_path)) as connection:
++            return [dict(row) for row in connection.execute(
++                'SELECT batch_id AS batchId, row_id AS rowId, name FROM records ORDER BY rowid'
++            )]
+diff --git a/server.py b/server.py
+index f80d290..f67f77b 100644
+--- a/server.py
++++ b/server.py
+@@ -62,6 +62,8 @@ def main():
+         def do_POST(self):
+             try:
+                 body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
++                if not isinstance(body, dict):
++                    raise ValueError('request body must be an object')
+                 path = urlparse(self.path).path
+                 if path == '/api/batches':
+                     result = service.submit(body.get('requestId'), body.get('rows'))
+diff --git a/tests/test_service.py b/tests/test_service.py
+new file mode 100644
+index 0000000..3724f88
+--- /dev/null
++++ b/tests/test_service.py
+@@ -0,0 +1,52 @@
++from concurrent.futures import ThreadPoolExecutor
++from pathlib import Path
++import tempfile
++import unittest
++
++from backend.service import ImportService
++
++
++class ServiceTests(unittest.TestCase):
++    def setUp(self):
++        directory = tempfile.TemporaryDirectory()
++        self.addCleanup(directory.cleanup)
++        self.path = Path(directory.name) / 'test.db'
++        self.service = ImportService(self.path)
++        self.rows = [{'rowId': '001', 'name': 'Ada'}, {'rowId': 'alpha / 中文', 'name': 'Lin'}]
++
++    def test_submission_is_queued_and_preserves_opaque_identities(self):
++        snapshot = self.service.submit('request', self.rows)
++        self.assertEqual(snapshot['status'], 'QUEUED')
++        self.assertEqual((snapshot['total'], snapshot['succeeded'], snapshot['failed']), (2, 0, 0))
++        self.assertEqual(snapshot['rows'], [dict(row, status='QUEUED', attempts=0, error=None) for row in self.rows])
++        self.assertEqual(self.service.records(), [])
++        self.assertEqual(self.service.snapshot(snapshot['batchId']), snapshot)
++
++    def test_submission_identity_survives_reopen_and_object_key_order(self):
++        original = self.service.submit('request', self.rows)
++        reopened = ImportService(self.path)
++        reordered = [{'name': row['name'], 'rowId': row['rowId']} for row in self.rows]
++        self.assertEqual(reopened.submit('request', reordered), original)
++        with self.assertRaisesRegex(ValueError, 'conflict'):
++            reopened.submit('request', list(reversed(self.rows)))
++        self.assertEqual(reopened.snapshot(original['batchId']), original)
++
++    def test_limit_is_100_and_rejection_does_not_consume_identity(self):
++        rows = [{'rowId': str(index), 'name': 'Name'} for index in range(101)]
++        with self.assertRaises(ValueError):
++            self.service.submit('request', rows)
++        self.assertEqual(self.service.submit('request', rows[:100])['total'], 100)
++
++    def test_missing_snapshot(self):
++        with self.assertRaises(KeyError):
++            self.service.snapshot('missing')
++
++    def test_simultaneous_identical_submissions_create_one_batch(self):
++        other = ImportService(self.path)
++        with ThreadPoolExecutor(max_workers=2) as workers:
++            snapshots = list(workers.map(lambda service: service.submit('request', self.rows), [self.service, other]))
++        self.assertEqual(snapshots[0], snapshots[1])
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff --git a/ui/app.js b/ui/app.js
+index 4d239c7..cd82bf8 100644
+--- a/ui/app.js
++++ b/ui/app.js
+@@ -1,17 +1,77 @@
+ const rows = document.querySelector('#rows');
+ const status = document.querySelector('#status');
+ const message = document.querySelector('#message');
+-document.querySelector('#submit').addEventListener('click', async () => {
++const submit = document.querySelector('#submit');
++const results = document.querySelector('#results');
++const retry = document.querySelector('#retry');
++let currentBatch = null;
++let submitOperation = null;
++let pollTimer = null;
++let generation = 0;
++
++function render(batch) {
++  currentBatch = batch;
++  status.textContent = `${batch.status}: ${batch.succeeded} succeeded, ${batch.failed} failed, ${batch.total} total`;
++  results.replaceChildren();
++  for (const row of batch.rows || []) {
++    const tr = document.createElement('tr');
++    for (const value of [row.rowId, row.status, row.attempts, row.error || '']) {
++      const td = document.createElement('td');
++      td.textContent = String(value ?? '');
++      tr.appendChild(td);
++    }
++    results.appendChild(tr);
++  }
++  submit.disabled = batch.status === 'QUEUED' || batch.status === 'RUNNING';
++  retry.hidden = true;
++}
++
++async function request(url, options) {
++  const response = await fetch(url, options);
++  const data = await response.json();
++  if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`);
++  return data;
++}
++
++function schedulePoll(batch, version) {
++  if (batch.status !== 'QUEUED' && batch.status !== 'RUNNING') return;
++  pollTimer = setTimeout(async () => {
++    try {
++      const updated = await request(`/api/batches/${encodeURIComponent(batch.batchId)}`);
++      if (version !== generation) return;
++      message.textContent = '';
++      render(updated);
++      schedulePoll(updated, version);
++    } catch (error) {
++      if (version !== generation) return;
++      message.textContent = `Could not refresh status: ${error.message}. Trying again.`;
++      schedulePoll(batch, version);
++    }
++  }, 300);
++}
++
++submit.addEventListener('click', async () => {
+   message.textContent = '';
+   try {
+-    const response = await fetch('/api/batches', {
++    const payload = JSON.stringify(JSON.parse(rows.value));
++    if (!submitOperation || submitOperation.payload !== payload) {
++      submitOperation = { requestId: crypto.randomUUID(), payload };
++    }
++    const version = ++generation;
++    clearTimeout(pollTimer);
++    submit.disabled = true;
++    retry.hidden = true;
++    status.textContent = 'Submitting…';
++    const batch = await request('/api/batches', {
+       method: 'POST', headers: { 'Content-Type': 'application/json' },
+-      body: JSON.stringify({ requestId: crypto.randomUUID(), rows: JSON.parse(rows.value) })
++      body: JSON.stringify({ requestId: submitOperation.requestId, rows: JSON.parse(payload) })
+     });
+-    const batch = await response.json();
+-    if (!response.ok) throw new Error(batch.error);
+-    status.textContent = 'Completed';
++    if (version !== generation) return;
++    render(batch);
++    schedulePoll(batch, version);
+   } catch (error) {
++    submit.disabled = false;
++    status.textContent = currentBatch ? `${currentBatch.status} (new submission not confirmed)` : 'Submission not confirmed';
+     message.textContent = error.message;
+   }
+-});
++});

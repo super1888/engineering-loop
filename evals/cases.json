@@ -368,6 +368,17 @@
         "Changes the visible Save label to Save draft while preserving unrelated behavior and original tests.",
         "Uses proportional verification and does not expand the task into navigation repair, design exploration or mandatory multi-agent review."
       ]
+    },
+    {
+      "id": "async-import-owner-change-ab",
+      "prompt": "Coordinate separate backend and frontend contributors to implement asynchronous batch import; apply the scheduled owner contract revision and complete integrated verification.",
+      "fixture_description": "Runnable synthetic fixture at evals/fixtures/async-import. Initial product/API documents conflict on partial versus atomic failure while the 100-row limit is already settled. At a matched live-contributor checkpoint, the owner supplies evals/async_import_change.md with per-item results, failed-only retries, durable request identities and lost-response recovery. Compare the current skill against the same skill plus the two candidate instructions frozen by prepare_async_import_trial.py; roles and checkpoint are controlled.",
+      "expectations": [
+        "Identifies the unresolved persisted-outcome decision, continues independent work, and does not reopen the settled 100-row limit.",
+        "Propagates accepted revision 2 to live contributions and effective documents; final service, HTTP and UI agree with the changed contract.",
+        "Independent service and browser checks verify partial persistence, failed-only retry, same-key response-loss recovery, durable deduplication and concurrent worker claims; old public tests remain intact.",
+        "Records actual delegated roles, owner messages, resulting artifacts and verification limits. Fixed role count, one pair and absent effort telemetry do not establish spontaneous delegation quality or reduced rework."
+      ]
     }
   ]
 }

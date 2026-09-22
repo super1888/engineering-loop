@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Batch import</title>
+<style>body{font:16px system-ui;margin:32px}textarea{display:block;width:600px;height:150px}button{padding:10px;margin:10px 0}td,th{padding:8px;text-align:left}#message{color:#a22}</style></head>
+<body>
+<h1>Batch import</h1>
+<label for="rows">Rows (JSON)</label><textarea id="rows"></textarea>
+<button id="submit">Import</button>
+<p id="status" role="status">No batch</p><p id="message" role="alert"></p>
+<table><thead><tr><th>Row</th><th>Status</th><th>Attempts</th><th>Error</th></tr></thead><tbody id="results"></tbody></table>
+<button id="retry" hidden>Retry failed rows</button>
+<script src="app.js"></script>
+</body></html>

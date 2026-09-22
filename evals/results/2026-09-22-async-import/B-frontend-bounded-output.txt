@@ -1,0 +1,1 @@
+PASS bounded UI checks: 202 acceptance displays QUEUED; server rejection and malformed JSON preserve textarea input.

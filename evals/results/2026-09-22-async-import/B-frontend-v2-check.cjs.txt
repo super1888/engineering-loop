@@ -1,0 +1,67 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const source = fs.readFileSync('ui/app.js', 'utf8');
+const saved = new Map();
+let sequence = 0;
+const calls = [];
+const fixture = (status, failedStatus = 'FAILED', attempts = 1, error = 'temporary failure') => ({contractVersion:2,batchId:'batch/opaque',status,total:2,succeeded:1,failed:failedStatus === 'FAILED' ? 1 : 0,items:[{rowId:'007',status:'SUCCEEDED',attempts:1,error:null},{rowId:'<row/beta>',status:failedStatus,attempts,error}]});
+let next;
+function boot() {
+  const element = () => ({value:'',textContent:'',children:[],disabled:false,hidden:false,addEventListener(event, fn){this[event]=fn;},appendChild(child){this.children.push(child);},replaceChildren(){this.children=[];}});
+  const elements = Object.fromEntries(['rows','status','message','results','submit','retry'].map(id=>[id,element()]));
+  elements.retry.hidden = true;
+  const timers = new Map(); let timerId=0;
+  vm.runInNewContext(source, {document:{querySelector:selector=>elements[selector.slice(1)],createElement:element},crypto:{randomUUID:()=>`request-${++sequence}`},localStorage:{getItem:key=>saved.get(key),setItem:(key,value)=>saved.set(key,value)},setTimeout:fn=>{timers.set(++timerId,fn);return timerId;},clearTimeout:id=>timers.delete(id),fetch:async(url,options)=>{calls.push({url,body:options.body && JSON.parse(options.body)});return next(url,options);}});
+  return {elements,timers,async tick(){const [id,fn]=timers.entries().next().value;timers.delete(id);await fn();}};
+}
+function response(value, ok = true) { return {ok,status:ok?200:400,json:async()=>value}; }
+async function flush(){await new Promise(resolve=>setImmediate(resolve));}
+(async()=>{
+  let ui = boot();
+  const input='[{"rowId":"007","name":"Ada"},{"rowId":"<row/beta>","name":"Beta"}]';
+  ui.elements.rows.value=input;
+  next=()=>response(fixture('QUEUED','QUEUED',0,null));
+  await ui.elements.submit.click();
+  assert.match(ui.elements.status.textContent,/^QUEUED/);
+  assert.ok(ui.elements.submit.disabled);
+  assert.equal(ui.elements.rows.value,input);
+  next=()=>response(fixture('PARTIAL'));
+  await ui.tick();
+  assert.match(ui.elements.status.textContent,/^PARTIAL/);
+  assert.equal(ui.elements.results.children[1].children[0].textContent,'<row/beta>');
+  assert.equal(ui.elements.results.children[1].children[3].textContent,'temporary failure');
+  assert.equal(ui.elements.retry.hidden,false);
+  next=()=>{throw new Error('response lost');};
+  await ui.elements.retry.click();
+  const lostId=calls.at(-1).body.requestId;
+  assert.equal(ui.elements.rows.value,input);
+  assert.equal(ui.elements.retry.textContent,'Retry pending request');
+  assert.ok(JSON.parse(saved.get('batch-import-v2')).pendingRetry);
+  next=()=>response(fixture('PARTIAL','FAILED',2));
+  ui=boot(); await flush();
+  assert.equal(ui.elements.rows.value,input);
+  assert.match(ui.elements.status.textContent,/^PARTIAL/);
+  assert.equal(ui.elements.retry.textContent,'Retry pending request');
+  await ui.elements.retry.click();
+  assert.equal(calls.at(-1).body.requestId,lostId);
+  assert.equal(JSON.parse(saved.get('batch-import-v2')).pendingRetry,null);
+  next=()=>response(fixture('QUEUED','QUEUED',2));
+  await ui.elements.retry.click();
+  assert.notEqual(calls.at(-1).body.requestId,lostId);
+  assert.equal(ui.elements.results.children[1].children[3].textContent,'temporary failure');
+  assert.equal(ui.elements.results.children[1].children[2].textContent,2);
+  next=()=>response({...fixture('SUCCEEDED','SUCCEEDED',3,null),succeeded:2});
+  await ui.tick();
+  assert.equal(ui.elements.retry.hidden,true);
+  assert.equal(ui.elements.results.children[0].children[2].textContent,1);
+  assert.equal(ui.elements.results.children[1].children[3].textContent,'');
+  next=()=>response({error:'rejected input'},false);
+  await ui.elements.submit.click();
+  const failedSubmitId=calls.at(-1).body.requestId;
+  assert.equal(ui.elements.rows.value,input);
+  await ui.elements.submit.click();
+  assert.equal(calls.at(-1).body.requestId,failedSubmitId);
+  assert.equal(ui.elements.message.textContent,'rejected input');
+  console.log('PASS revision 2 UI checks: queued polling, partial rows, opaque identities, lost retry response + refresh replay, distinct new retry, retained errors/attempts, success cleanup, form preservation, failed-submit identity reuse.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

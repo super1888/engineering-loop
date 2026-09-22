@@ -1,0 +1,1 @@
+PASS revision 2 UI checks: queued polling, partial rows, opaque identities, lost retry response + refresh replay, distinct new retry, retained errors/attempts, success cleanup, form preservation, failed-submit identity reuse.

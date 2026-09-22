@@ -1,0 +1,7 @@
+Frontend command log
+1. Read AGENTS.md, PRODUCT.md, API.md, DECISIONS.md, SERVICE.md, supplied skill and ui/app.js/ui/index.html. Result: confirmed asynchronous acceptance, 100-row limit, opaque IDs, and unresolved atomic-vs-partial runtime behavior.
+2. Read supplied skill references/implementation.md; locate node. Result: D:\node24\node.exe available, no dependency installation.
+3. Implement independent pending/queued/polling slice in ui/app.js. Preserve text input and retain request identity for identical resubmissions. Render data via textContent. Runtime failure/retry policy pending owner decision.
+4. node --check ui/app.js: PASS. node ../evidence/frontend.test.cjs: PASS pending/queued, GET polling, opaque string rendering, retained form input and identical request identity after network error, malformed JSON. Node VM DOM simulation; integrated browser verification remains coordinator-owned.
+5. Read OWNER_CHANGE.md; reconciled contractVersion 2/items, partial success, retry POST, persisted current batch and uncertain retry ID across refresh. Implemented ui/app.js and input-limit label in ui/index.html. node --check ui/app.js: PASS. No dependent policy implemented before owner approval.
+6. Updated Node VM smoke test to contract v2; PASS including restoration from storage and uncertain retry receipt loss followed by refresh/terminal FAILED GET/same-ID replay. This is simulated DOM/fetch evidence, not real browser integration.

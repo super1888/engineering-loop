@@ -1,0 +1,15 @@
+$ python -B <REPO>\evals\async_import_oracle.py <TRIALS>\B\workspace
+exit=0
+test_all_failed_and_retry_id_is_scoped_to_batch (__main__.RevisionTwoTests.test_all_failed_and_retry_id_is_scoped_to_batch) ... ok
+test_concurrent_retry_calls_and_workers_do_not_duplicate_attempts (__main__.RevisionTwoTests.test_concurrent_retry_calls_and_workers_do_not_duplicate_attempts) ... ok
+test_failed_only_retry_and_lost_response_replay_after_reopen (__main__.RevisionTwoTests.test_failed_only_retry_and_lost_response_replay_after_reopen) ... ok
+test_partial_success_preserves_opaque_row_ids_after_reopen (__main__.RevisionTwoTests.test_partial_success_preserves_opaque_row_ids_after_reopen) ... ok
+test_retry_that_fails_again_requires_new_identity (__main__.RevisionTwoTests.test_retry_that_fails_again_requires_new_identity) ... ok
+test_running_status_is_observable_during_processing (__main__.RevisionTwoTests.test_running_status_is_observable_during_processing) ... ok
+test_settled_limit_validation_and_missing_batch (__main__.RevisionTwoTests.test_settled_limit_validation_and_missing_batch) ... ok
+test_submission_identity_survives_processing_and_reopen (__main__.RevisionTwoTests.test_submission_identity_survives_processing_and_reopen) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.474s
+
+OK

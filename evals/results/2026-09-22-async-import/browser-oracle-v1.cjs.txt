@@ -1,0 +1,312 @@
+/* Independent revision-2 integration checks against a candidate's actual server.
+ * Usage: NODE_PATH=<Playwright modules> EVAL_BROWSER_EXECUTABLE=<Edge path>
+ *        node evals/async_import_browser_oracle.cjs PATH_TO_CANDIDATE
+ * EVAL_PYTHON optionally selects Python. All state is disposable and local.
+ */
+'use strict';
+
+const assert = require('node:assert/strict');
+const { spawn, execFileSync } = require('node:child_process');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { chromium } = require('playwright');
+
+const candidate = path.resolve(process.argv[2] || '');
+const python = process.env.EVAL_PYTHON || 'python';
+const executable = process.env.EVAL_BROWSER_EXECUTABLE;
+const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
+let stage = 'configuration';
+let server;
+let browser;
+let temporary;
+let stderr = '';
+let serverError;
+const pageErrors = [];
+
+async function until(description, operation, predicate, timeout = 12000) {
+  const deadline = Date.now() + timeout;
+  let last;
+  while (Date.now() < deadline) {
+    if (serverError) throw serverError;
+    if (server && server.exitCode !== null) {
+      throw new Error(`Server exited with code ${server.exitCode}: ${stderr}`);
+    }
+    last = await operation();
+    if (predicate(last)) return last;
+    await delay(75);
+  }
+  throw new Error(`${description} did not settle; last observation: ${JSON.stringify(last)}`);
+}
+
+function snapshot(actual, batchId, expected, status) {
+  assert.equal(actual.contractVersion, 2, 'Snapshot contractVersion');
+  assert.equal(actual.batchId, batchId, 'Snapshot batch identity');
+  assert.equal(typeof batchId, 'string');
+  assert.ok(batchId.trim());
+  assert.equal(actual.status, status, `Expected ${status}: ${JSON.stringify(actual)}`);
+  assert.equal(actual.total, Object.keys(expected).length);
+  assert.ok(Array.isArray(actual.items), 'Snapshot must contain item outcomes');
+  assert.equal(actual.items.length, Object.keys(expected).length);
+  assert.deepEqual(actual.items.map(item => item.rowId).sort(), Object.keys(expected).sort());
+  assert.equal(actual.succeeded, Object.values(expected).filter(item => item[0] === 'SUCCEEDED').length);
+  assert.equal(actual.failed, Object.values(expected).filter(item => item[0] === 'FAILED').length);
+  for (const item of actual.items) {
+    assert.deepEqual([item.status, item.attempts], expected[item.rowId], `Wrong outcome for ${item.rowId}`);
+    assert.ok(Object.hasOwn(item, 'error'), `Missing error for ${item.rowId}`);
+    if (item.status === 'SUCCEEDED') assert.equal(item.error, null);
+    if (item.status === 'FAILED') assert.ok(typeof item.error === 'string' && item.error.trim());
+  }
+}
+
+const statusPatterns = {
+  QUEUED: /\bqueued\b|\bwaiting\b|\bpending\b|排队|等待/i,
+  PARTIAL: /\bpartial(?:ly)?\b|部分/i,
+  SUCCEEDED: /\bsucceeded\b|\bsuccess(?:ful(?:ly)?)?\b|\bcompleted\b|成功|完成/i,
+};
+
+async function uiMatches(page, serverSnapshot) {
+  // The caller establishes the authoritative HTTP snapshot before asking the UI
+  // to converge. Cell boundaries avoid confusing a row ID with its attempt count.
+  const observation = await until(`UI for ${serverSnapshot.status}`, async () => ({
+    status: await page.locator('#status').innerText(),
+    rows: await page.locator('#results tr').evaluateAll(rows => rows.map(row =>
+      Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.trim()))),
+  }), observation => {
+    if (!statusPatterns[serverSnapshot.status].test(observation.status)) return false;
+    if (observation.rows.length !== serverSnapshot.items.length) return false;
+    return serverSnapshot.items.every(item => {
+      const row = observation.rows.find(cells => cells.includes(item.rowId));
+      if (!row) return false;
+      const statusPattern = item.status === 'FAILED' ? /\bfailed\b|失败/i : statusPatterns[item.status];
+      if (!row.some(cell => statusPattern.test(cell))) return false;
+      if (!row.some(cell => cell === String(item.attempts) || new RegExp(`^attempts?\\s*:?\\s*${item.attempts}$`, 'i').test(cell))) return false;
+      if (item.error && !row.some(cell => cell.includes(item.error))) return false;
+      return true;
+    });
+  });
+  if (serverSnapshot.status === 'QUEUED') {
+    assert.ok(!/\bcompleted\b|\bsucceeded\b|已完成/.test(observation.status.toLowerCase()),
+      `Acceptance displayed as completion: ${observation.status}`);
+  }
+}
+
+function databaseSnapshot(db) {
+  const script = [
+    'import json, sqlite3, sys',
+    'from contextlib import closing',
+    'with closing(sqlite3.connect(sys.argv[1])) as connection:',
+    '    connection.row_factory = sqlite3.Row',
+    '    columns = {"batches": "id, request_id, payload, status", "items": "batch_id, row_id, name, status, attempts, error, output", "records": "batch_id, row_id, name"}',
+    '    result = {name: [dict(row) for row in connection.execute("SELECT " + fields + " FROM " + name)] for name, fields in columns.items()}',
+    'print(json.dumps(result))',
+  ].join('\n');
+  return JSON.parse(execFileSync(python, ['-c', script, db], { encoding: 'utf8', timeout: 10000, windowsHide: true }));
+}
+
+async function main() {
+  assert.ok(process.argv[2], 'Provide the candidate directory');
+  assert.ok(fs.existsSync(path.join(candidate, 'server.py')), 'Candidate must contain server.py');
+  assert.ok(executable && fs.existsSync(executable), 'Set EVAL_BROWSER_EXECUTABLE to a real Edge executable');
+  temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'async-import-browser-'));
+  const db = path.join(temporary, 'state.sqlite');
+  stage = 'launch actual candidate server';
+  let output = '';
+  server = spawn(python, ['server.py', '--db', db, '--port', '0', '--manual-worker', '--fail-once-row', 'beta'], {
+    cwd: candidate, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true,
+    env: { ...process.env, PYTHONUNBUFFERED: '1' },
+  });
+  server.on('error', error => { serverError = error; });
+  server.stdin.on('error', error => { serverError = error; });
+  server.stdout.on('data', chunk => { output = (output + chunk).slice(-16000); });
+  server.stderr.on('data', chunk => { stderr = (stderr + chunk).slice(-16000); });
+  const port = await until('Server port announcement', async () => {
+    for (const line of output.split(/\r?\n/)) {
+      try {
+        const item = JSON.parse(line);
+        if (Number.isInteger(item.port) && item.port > 0) return item.port;
+      } catch { /* Wait for a complete JSON announcement. */ }
+    }
+    return null;
+  }, value => value !== null);
+  const base = `http://127.0.0.1:${port}`;
+  browser = await chromium.launch({ executablePath: executable, headless: true });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  page.setDefaultTimeout(12000);
+  page.on('pageerror', error => { pageErrors.push(String(error)); });
+  const get = async batchId => {
+    const response = await context.request.get(`${base}/api/batches/${encodeURIComponent(batchId)}`, { timeout: 5000 });
+    assert.equal(response.status(), 200, 'GET current batch');
+    try { return await response.json(); } finally { await response.dispose(); }
+  };
+  const commandProcess = () => {
+    assert.ok(!server.stdin.destroyed, 'Server worker control input closed');
+    server.stdin.write('process\n');
+  };
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  const entered = JSON.stringify([{ rowId: 'alpha', name: 'Ada' }, { rowId: 'beta', name: 'Ben' }]);
+  await page.locator('#rows').fill(entered);
+  stage = 'submit and observe queued acceptance';
+  const acceptedPromise = page.waitForResponse(response =>
+    new URL(response.url()).pathname === '/api/batches' && response.request().method() === 'POST');
+  await page.locator('#submit').click();
+  const acceptedResponse = await acceptedPromise;
+  assert.equal(acceptedResponse.status(), 202, `Submission response: ${await acceptedResponse.text()}`);
+  const accepted = await acceptedResponse.json();
+  const batchId = accepted.batchId;
+  const queuedExpected = { alpha: ['QUEUED', 0], beta: ['QUEUED', 0] };
+  snapshot(accepted, batchId, queuedExpected, 'QUEUED');
+  const queued = await get(batchId);
+  snapshot(queued, batchId, queuedExpected, 'QUEUED');
+  assert.equal(databaseSnapshot(db).records.length, 0, 'Submission must not import synchronously');
+  await uiMatches(page, queued);
+
+  stage = 'worker partial outcome and per-item UI';
+  commandProcess();
+  const partial = await until('HTTP partial outcome', () => get(batchId), value => value.status === 'PARTIAL');
+  snapshot(partial, batchId, { alpha: ['SUCCEEDED', 1], beta: ['FAILED', 1] }, 'PARTIAL');
+  const beforeRetry = databaseSnapshot(db);
+  assert.deepEqual(beforeRetry.records.map(row => [row.row_id, row.name]), [['alpha', 'Ada']]);
+  await uiMatches(page, partial);
+  await page.locator('#retry').waitFor({ state: 'visible' });
+  assert.ok(await page.locator('#retry').isEnabled(), 'Partial failures need an enabled retry action');
+
+  stage = 'refresh restores active batch from server';
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  const restored = await get(batchId);
+  snapshot(restored, batchId, { alpha: ['SUCCEEDED', 1], beta: ['FAILED', 1] }, 'PARTIAL');
+  await uiMatches(page, restored);
+  // Persistence of input over refresh is not required; preservation on a failed
+  // request is. Establish the entered value anew before the failure below.
+  await page.locator('#rows').fill(entered);
+
+  stage = 'retry commits but its HTTP response is lost';
+  const retryRequests = [];
+  let committedReceipt;
+  let routeError;
+  await page.route('**/api/batches/*/retry', async route => {
+    try {
+      const request = route.request();
+      if (request.method() !== 'POST') return await route.continue();
+      retryRequests.push(request.postDataJSON());
+      if (retryRequests.length === 1) {
+        // This reaches the actual backend first. Aborting before route.fetch
+        // would test a request that never committed, a different scenario.
+        const response = await route.fetch({ timeout: 5000 });
+        try {
+          assert.equal(response.status(), 202, `Retry response: ${await response.text()}`);
+          committedReceipt = await response.json();
+        } finally { await response.dispose(); }
+        await route.abort('failed');
+      } else {
+        await route.continue();
+      }
+    } catch (error) {
+      routeError = error;
+      await route.abort('failed').catch(() => {});
+    }
+  });
+  const lostResponse = page.waitForEvent('requestfailed', request =>
+    request.method() === 'POST' && new URL(request.url()).pathname.endsWith('/retry'));
+  await page.locator('#retry').click();
+  await lostResponse;
+  await until('Committed retry receipt', async () => {
+    if (routeError) throw routeError;
+    return committedReceipt;
+  }, Boolean);
+  const retryExpected = { alpha: ['SUCCEEDED', 1], beta: ['QUEUED', 1] };
+  snapshot(committedReceipt, batchId, retryExpected, 'QUEUED');
+  assert.ok(typeof retryRequests[0].requestId === 'string' && retryRequests[0].requestId.trim(),
+    'Retry needs a nonblank logical request identity');
+  const afterLostResponse = await get(batchId);
+  snapshot(afterLostResponse, batchId, retryExpected, 'QUEUED');
+  assert.equal(afterLostResponse.items.find(item => item.rowId === 'beta').error,
+    partial.items.find(item => item.rowId === 'beta').error, 'Queueing retry must preserve failure details');
+  assert.equal(await page.locator('#rows').inputValue(), entered, 'Lost retry response erased entered rows');
+
+  stage = 'UI retries the uncertain operation using the same identity';
+  // Allow automatic replay as well as a user invoking the existing retry action.
+  const recovery = await until('Retry recovery action or automatic replay', async () => ({
+    count: retryRequests.length,
+    available: await page.locator('#retry').isVisible() && await page.locator('#retry').isEnabled(),
+  }), value => value.count > 1 || value.available);
+  if (recovery.count === 1) await page.locator('#retry').click();
+  await until('Second retry POST', async () => {
+    if (routeError) throw routeError;
+    return retryRequests;
+  }, value => value.length >= 2);
+  for (const request of retryRequests) {
+    assert.equal(request.requestId, retryRequests[0].requestId, 'Lost response created a new logical retry');
+  }
+  const retryQueued = await get(batchId);
+  snapshot(retryQueued, batchId, retryExpected, 'QUEUED');
+  await uiMatches(page, retryQueued);
+
+  stage = 'retry succeeds without duplicating successful rows';
+  commandProcess();
+  const succeeded = await until('HTTP retry success', () => get(batchId), value => value.status === 'SUCCEEDED');
+  const finalExpected = { alpha: ['SUCCEEDED', 1], beta: ['SUCCEEDED', 2] };
+  snapshot(succeeded, batchId, finalExpected, 'SUCCEEDED');
+  await uiMatches(page, succeeded);
+  const finalState = databaseSnapshot(db);
+  assert.equal(finalState.batches.length, 1, 'Retry unexpectedly created another batch');
+  assert.equal(finalState.items.length, 2);
+  assert.deepEqual(finalState.records.map(row => [row.row_id, row.name]).sort(), [['alpha', 'Ada'], ['beta', 'Ben']]);
+  assert.deepEqual(finalState.items.map(row => [row.row_id, row.status, row.attempts, row.error]).sort(),
+    [['alpha', 'SUCCEEDED', 1, null], ['beta', 'SUCCEEDED', 2, null]]);
+  assert.deepEqual(finalState.items.find(row => row.row_id === 'alpha'),
+    beforeRetry.items.find(row => row.row_id === 'alpha'), 'Retry changed a successful persisted item');
+
+  stage = 'durable HTTP replay after successful processing';
+  const replayResponse = await context.request.post(`${base}/api/batches/${encodeURIComponent(batchId)}/retry`, {
+    data: { requestId: retryRequests[0].requestId }, timeout: 5000,
+  });
+  try {
+    assert.equal(replayResponse.status(), 202);
+    snapshot(await replayResponse.json(), batchId, finalExpected, 'SUCCEEDED');
+  } finally { await replayResponse.dispose(); }
+  // A durable replay must leave no queued work or changed state even before any
+  // worker scheduling can mask it.
+  assert.deepEqual(databaseSnapshot(db), finalState, 'Replayed retry changed durable data');
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  const finalRestored = await get(batchId);
+  snapshot(finalRestored, batchId, finalExpected, 'SUCCEEDED');
+  await uiMatches(page, finalRestored);
+  assert.deepEqual(pageErrors, [], 'Uncaught browser errors');
+  return { passed: true, batchId, retryPosts: retryRequests.length,
+    checks: ['queued acceptance', 'partial outcomes', 'refresh restoration',
+      'committed response loss', 'same-key recovery', 'persisted effects', 'durable retry replay'] };
+}
+
+(async () => {
+  let result;
+  try {
+    result = await main();
+  } catch (error) {
+    process.exitCode = 1;
+    result = { passed: false, stage, error: error.stack || String(error), pageErrors, serverStderr: stderr };
+  } finally {
+    const cleanupErrors = [];
+    if (browser) {
+      try { await browser.close(); } catch (error) { cleanupErrors.push(`browser: ${error}`); }
+    }
+    if (server && server.exitCode === null) {
+      try {
+        server.kill();
+        const deadline = Date.now() + 5000;
+        while (server.exitCode === null && server.signalCode === null && Date.now() < deadline) await delay(50);
+        if (server.exitCode === null && server.signalCode === null) throw new Error('Server did not stop');
+      } catch (error) { cleanupErrors.push(`server: ${error}`); }
+    }
+    if (temporary) {
+      try { fs.rmSync(temporary, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }); }
+      catch (error) { cleanupErrors.push(`temporary state: ${error}`); }
+    }
+    if (cleanupErrors.length) {
+      process.exitCode = 1;
+      result = { ...result, passed: false, cleanupErrors };
+    }
+  }
+  process.stdout.write(JSON.stringify(result, null, 2) + '\n');
+})();

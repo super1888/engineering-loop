@@ -1,0 +1,21 @@
+$ python -B -m unittest discover -s tests -v
+exit=0
+test_all_failure_and_success_terminal_statuses (test_service.ServiceTests.test_all_failure_and_success_terminal_statuses) ... ok
+test_limit_is_100_and_rejection_does_not_consume_identity (test_service.ServiceTests.test_limit_is_100_and_rejection_does_not_consume_identity) ... ok
+test_missing_snapshot (test_service.ServiceTests.test_missing_snapshot) ... ok
+test_partial_outcome_failed_only_retry_and_durable_replay (test_service.ServiceTests.test_partial_outcome_failed_only_retry_and_durable_replay) ... ok
+test_retry_during_processing_drains_failures_and_preserves_error (test_service.ServiceTests.test_retry_during_processing_drains_failures_and_preserves_error) ... ok
+test_retry_identity_is_batch_scoped_and_input_validated (test_service.ServiceTests.test_retry_identity_is_batch_scoped_and_input_validated) ... ok
+test_retry_without_current_failures_is_a_durable_noop (test_service.ServiceTests.test_retry_without_current_failures_is_a_durable_noop) ... ok
+test_simultaneous_identical_submissions_create_one_batch (test_service.ServiceTests.test_simultaneous_identical_submissions_create_one_batch) ... ok
+test_simultaneous_retry_replay_queues_one_attempt (test_service.ServiceTests.test_simultaneous_retry_replay_queues_one_attempt) ... ok
+test_submission_identity_survives_reopen_and_object_key_order (test_service.ServiceTests.test_submission_identity_survives_reopen_and_object_key_order) ... ok
+test_submission_is_queued_and_preserves_opaque_identities (test_service.ServiceTests.test_submission_is_queued_and_preserves_opaque_identities) ... ok
+test_workers_claim_once_and_running_is_observable (test_service.ServiceTests.test_workers_claim_once_and_running_is_observable) ... ok
+test_duplicate_rows_and_missing_request_identity_are_rejected (test_validation.ValidationTests.test_duplicate_rows_and_missing_request_identity_are_rejected) ... ok
+test_invalid_input_is_rejected_without_records (test_validation.ValidationTests.test_invalid_input_is_rejected_without_records) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.743s
+
+OK

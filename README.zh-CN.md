@@ -119,7 +119,9 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 
 可选的[协作指南](skills/engineering-loop/references/collaboration.md)补充职责归属、规格分歧裁决、已接受变更的同步和独立验证，不要求固定 agent 团队。对应[另四个协作场景](evals/README.md#unreleased-collaboration-revision)也尚未试跑；增加 agent 不代表已经提高准确率。
 
-[2026-09-22 前端 A/B 小型试验](evals/results/2026-09-22-local-ui/report.md)比较了当前指导与两条候选指导，覆盖列表状态恢复和纯文案修改。对应任务的产物字节一致，独立浏览器检查均通过；未观察到额外正确性收益。两组均未委派，真实多 agent 协调仍待验证。
+[2026-09-22 前端 A/B 小型试验](evals/results/2026-09-22-local-ui/report.md)比较了当前指导与两条候选指导，覆盖列表状态恢复和纯文案修改。对应任务的产物字节一致，独立浏览器检查均通过；未观察到额外正确性收益。两组均未委派，因此该轮没有检验真实协作。
+
+后续[异步导入 A/B 试验](evals/results/2026-09-22-async-import/report.md)采用实际前后端子代理、冲突规格及预定的 owner 契约变更。两组均通过八项独立服务场景及七个浏览器流程阶段。期间修正一次验收器误报，并用正反对照确认修复。未证明额外正确性收益或工作量下降，两条候选指导仍保留为实验内容。
 
 欢迎在 [Issues](https://github.com/super1888/engineering-loop/issues) 提供脱敏反例，在 [Discussions](https://github.com/super1888/engineering-loop/discussions) 讨论流程取舍。重点是实际减少重复沟通、遗漏与返工，不以规则条数或文档数量作为成熟度。
 

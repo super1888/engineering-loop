@@ -1,0 +1,112 @@
+$ python -B <REPO>\evals\async_import_oracle.py <REPO>\evals\fixtures\async-import
+exit=1
+test_all_failed_and_retry_id_is_scoped_to_batch (__main__.RevisionTwoTests.test_all_failed_and_retry_id_is_scoped_to_batch) ... ERROR
+test_concurrent_retry_calls_and_workers_do_not_duplicate_attempts (__main__.RevisionTwoTests.test_concurrent_retry_calls_and_workers_do_not_duplicate_attempts) ... ERROR
+test_failed_only_retry_and_lost_response_replay_after_reopen (__main__.RevisionTwoTests.test_failed_only_retry_and_lost_response_replay_after_reopen) ... ERROR
+test_partial_success_preserves_opaque_row_ids_after_reopen (__main__.RevisionTwoTests.test_partial_success_preserves_opaque_row_ids_after_reopen) ... ERROR
+test_retry_that_fails_again_requires_new_identity (__main__.RevisionTwoTests.test_retry_that_fails_again_requires_new_identity) ... ERROR
+test_running_status_is_observable_during_processing (__main__.RevisionTwoTests.test_running_status_is_observable_during_processing) ... ERROR
+test_settled_limit_validation_and_missing_batch (__main__.RevisionTwoTests.test_settled_limit_validation_and_missing_batch) ... ERROR
+test_submission_identity_survives_processing_and_reopen (__main__.RevisionTwoTests.test_submission_identity_survives_processing_and_reopen) ... ERROR
+
+======================================================================
+ERROR: test_all_failed_and_retry_id_is_scoped_to_batch (__main__.RevisionTwoTests.test_all_failed_and_retry_id_is_scoped_to_batch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\evals\async_import_oracle.py", line 205, in test_all_failed_and_retry_id_is_scoped_to_batch
+    batch = service.submit("submit-" + str(number), [{"rowId": "same-row", "name": "A"}])["batchId"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\fixtures\async-import\backend\service.py", line 24, in submit
+    raise NotImplementedError('submission persistence is not implemented')
+NotImplementedError: submission persistence is not implemented
+
+======================================================================
+ERROR: test_concurrent_retry_calls_and_workers_do_not_duplicate_attempts (__main__.RevisionTwoTests.test_concurrent_retry_calls_and_workers_do_not_duplicate_attempts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\evals\async_import_oracle.py", line 242, in test_concurrent_retry_calls_and_workers_do_not_duplicate_attempts
+    _, batch, processor, calls = self.prepare_partial()
+                                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\async_import_oracle.py", line 115, in prepare_partial
+    receipt = service.submit(request_id, rows)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\fixtures\async-import\backend\service.py", line 24, in submit
+    raise NotImplementedError('submission persistence is not implemented')
+NotImplementedError: submission persistence is not implemented
+
+======================================================================
+ERROR: test_failed_only_retry_and_lost_response_replay_after_reopen (__main__.RevisionTwoTests.test_failed_only_retry_and_lost_response_replay_after_reopen)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\evals\async_import_oracle.py", line 161, in test_failed_only_retry_and_lost_response_replay_after_reopen
+    service, batch, processor, calls = self.prepare_partial()
+                                       ^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\async_import_oracle.py", line 115, in prepare_partial
+    receipt = service.submit(request_id, rows)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\fixtures\async-import\backend\service.py", line 24, in submit
+    raise NotImplementedError('submission persistence is not implemented')
+NotImplementedError: submission persistence is not implemented
+
+======================================================================
+ERROR: test_partial_success_preserves_opaque_row_ids_after_reopen (__main__.RevisionTwoTests.test_partial_success_preserves_opaque_row_ids_after_reopen)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\evals\async_import_oracle.py", line 135, in test_partial_success_preserves_opaque_row_ids_after_reopen
+    receipt = service.submit("opaque-identities", rows)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\fixtures\async-import\backend\service.py", line 24, in submit
+    raise NotImplementedError('submission persistence is not implemented')
+NotImplementedError: submission persistence is not implemented
+
+======================================================================
+ERROR: test_retry_that_fails_again_requires_new_identity (__main__.RevisionTwoTests.test_retry_that_fails_again_requires_new_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\evals\async_import_oracle.py", line 182, in test_retry_that_fails_again_requires_new_identity
+    service, batch, processor, calls = self.prepare_partial(failures=2)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\async_import_oracle.py", line 115, in prepare_partial
+    receipt = service.submit(request_id, rows)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\fixtures\async-import\backend\service.py", line 24, in submit
+    raise NotImplementedError('submission persistence is not implemented')
+NotImplementedError: submission persistence is not implemented
+
+======================================================================
+ERROR: test_running_status_is_observable_during_processing (__main__.RevisionTwoTests.test_running_status_is_observable_during_processing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\evals\async_import_oracle.py", line 268, in test_running_status_is_observable_during_processing
+    batch = worker.submit("running-state", [{"rowId": "a", "name": "Ada"}])["batchId"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\fixtures\async-import\backend\service.py", line 24, in submit
+    raise NotImplementedError('submission persistence is not implemented')
+NotImplementedError: submission persistence is not implemented
+
+======================================================================
+ERROR: test_settled_limit_validation_and_missing_batch (__main__.RevisionTwoTests.test_settled_limit_validation_and_missing_batch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\evals\async_import_oracle.py", line 308, in test_settled_limit_validation_and_missing_batch
+    receipt = self.service.submit("hundred", valid)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\fixtures\async-import\backend\service.py", line 24, in submit
+    raise NotImplementedError('submission persistence is not implemented')
+NotImplementedError: submission persistence is not implemented
+
+======================================================================
+ERROR: test_submission_identity_survives_processing_and_reopen (__main__.RevisionTwoTests.test_submission_identity_survives_processing_and_reopen)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\evals\async_import_oracle.py", line 148, in test_submission_identity_survives_processing_and_reopen
+    first = self.service.submit("same-submit", rows)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\evals\fixtures\async-import\backend\service.py", line 24, in submit
+    raise NotImplementedError('submission persistence is not implemented')
+NotImplementedError: submission persistence is not implemented
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.160s
+
+FAILED (errors=8)

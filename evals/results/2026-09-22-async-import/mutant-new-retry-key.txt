@@ -1,0 +1,9 @@
+$ node <REPO>\evals\async_import_browser_oracle.cjs <USER_HOME>\AppData\Local\Temp\engineering-loop-import-mutant-4bc4skzv\workspace
+exit=1
+{
+  "passed": false,
+  "stage": "UI retries the uncertain operation using the same identity",
+  "error": "AssertionError [ERR_ASSERTION]: Lost response created a new logical retry\n+ actual - expected\n\n+ 'a522e44e-96b0-4ccd-a30d-1e9dd2a88413'\n- '007ca921-05e0-4c2b-9e93-f06c84513e69'\n\n    at main (<REPO>\\evals\\async_import_browser_oracle.cjs:240:12)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async <REPO>\\evals\\async_import_browser_oracle.cjs:285:14",
+  "pageErrors": [],
+  "serverStderr": ""
+}

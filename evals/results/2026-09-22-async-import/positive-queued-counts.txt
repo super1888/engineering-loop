@@ -1,0 +1,16 @@
+$ node <REPO>\evals\async_import_browser_oracle.cjs <USER_HOME>\AppData\Local\Temp\engineering-loop-import-oracle-regression-i1y3wlz1\workspace
+exit=0
+{
+  "passed": true,
+  "batchId": "a4982fe3-db31-42f2-8d0b-177cfa132c22",
+  "retryPosts": 2,
+  "checks": [
+    "queued acceptance",
+    "partial outcomes",
+    "refresh restoration",
+    "committed response loss",
+    "same-key recovery",
+    "persisted effects",
+    "durable retry replay"
+  ]
+}

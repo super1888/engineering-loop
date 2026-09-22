@@ -1,0 +1,6 @@
+PASS real HTTP: version-2 QUEUED receipt/items, duplicate request identity, 409 payload conflict, 400 non-object JSON, 404 missing batch.
+PASS real browser: asynchronous QUEUED before manual processing, PARTIAL retained-success outcomes, opaque text-safe IDs, per-item attempts/errors, active batch restored on refresh.
+PASS real browser/backend: dropped accepted retry response + page refresh + same-requestId replay, error retained while queued, successful row never rerun, failed row attempts 2 and cleared error after success.
+PASS persisted inspection: {"records":3,"attempts":[["0001/<b>中文",1,"SUCCEEDED",null],["beta",2,"SUCCEEDED",null],["x",1,"SUCCEEDED",null]]}
+PASS real automatic scheduling: accepted batch reaches SUCCEEDED without manual process command.
+PASS integration completed; local servers and disposable databases cleaned in finally.

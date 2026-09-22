@@ -1,0 +1,33 @@
+# Agent report — trial B
+
+Outcome: implemented the owner-approved revision 2 asynchronous batch import in the supplied B workspace. No unresolved failing checks or business questions remain within the accepted scope.
+
+## Delivered behavior
+
+- Durable 1–100-row submissions, opaque string identities, duplicate request replay and changed-payload conflict.
+- Real queued/running/terminal processing, retained successful records on row failure and full version-2 item snapshots.
+- Failed-row retry with durable batch-scoped identity; replay after another failure or database reopening does not enqueue again. Errors survive requeue and clear on success. Successful records and attempts remain unchanged.
+- Transactional batch claims prevent concurrent workers from duplicating processing; concurrent retry calls coalesce work. RUNNING is observable while a processor is blocked.
+- UI renders status and every row's identity/status/attempts/error, polls, restores active batch/form on refresh and retains uncertain retry identity across response loss/refresh.
+- HTTP body validation handles non-object JSON as 400. Public service entrypoints, CLI harness modes, table names/columns and UI IDs remain intact.
+
+## Owner decisions and delegation
+
+The coordinator raised the equal-authority PRODUCT partial-success/API atomic rollback conflict at CHECKPOINT_READY after both contributors inspected their areas and began independent bounded work. No failure policy was inferred from the stub. Owner supplied OWNER_CHANGE.md approved revision 2: partial retention, retries, items/contractVersion:2, persistence and uncertain-response recovery. The 100-row decision was already settled and was not reopened. The coordinator notified both active contributors, received their acknowledgements and updated PRODUCT.md, API.md, DECISIONS.md and SERVICE.md.
+
+- /root/trial_import_b/backend owned backend/service.py, backend/storage.py, server.py and tests/test_service.py; modified service, adapter and new tests, leaving storage schema unchanged.
+- /root/trial_import_b/frontend owned ui/app.js and ui/index.html; modified app.js only.
+- Coordinator owned shared documents, contract decisions and integrated verification. Contributors did not delegate further. Ownership remained disjoint.
+
+## Evidence
+
+- `python -m unittest discover -s tests -v`: 12 passed, including the preserved 2 public validation tests. Tests cover 100/101 boundaries, durable identity/conflict, partial/recurrent failures, successful output stability, retry error retention, replay/reopen, batch-scoped IDs, concurrent submissions/retries/workers and retry during RUNNING. Initial red submission tests were resolved; their output remains in backend-commands.txt.
+- `node --check ui/app.js` and frontend-v2-check.cjs: passed focused UI checks with fake DOM/fetch/storage; evidence is explicitly narrower than browser integration.
+- integrated-browser.cjs: passed against real server, disposable SQLite and headless installed Edge. Checked QUEUED receipt, refresh recovery, huge opaque string rowId, visible PARTIAL/error/attempts, retry response lost after actual backend acceptance, refresh and same-ID replay, final attempts [1,2], successful error clearing and retry hiding. Also checked real HTTP 400/404/409, 100/101 limits, success no-op and default automatic worker processing. No uncaught browser page errors.
+- Coordinator inspected browser-partial.png. Screenshots also capture queued and successful outcomes. integrated-browser-results.txt contains complete integration result lines; commands.txt, backend-commands.txt and frontend-commands.txt preserve commands/results. final-file-hashes.json identifies the final tested sources/specs.
+
+## Limits and cleanup
+
+Abrupt termination mid-processing does not reclaim RUNNING work; crash/lease recovery was not part of the accepted scope and is not claimed. Verification used local services only; it does not establish production performance, deployment behavior, exhaustive scheduling interleavings or human acceptance. The browser form-rejection case used a controlled HTTP 400 response; real server validation was separately exercised. No hidden tests or telemetry were used or claimed.
+
+Owned test servers/browser were stopped and disposable integration databases removed. No dependencies were installed, commits created, publication performed or real services used. All work remained in the assigned workspace/evidence and supplied read-only skill/guidance paths.

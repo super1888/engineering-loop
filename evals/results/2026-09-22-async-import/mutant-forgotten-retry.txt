@@ -1,0 +1,25 @@
+$ python -B <REPO>\evals\async_import_oracle.py <USER_HOME>\AppData\Local\Temp\engineering-loop-import-mutant-1s3n28hp\workspace
+exit=1
+test_all_failed_and_retry_id_is_scoped_to_batch (__main__.RevisionTwoTests.test_all_failed_and_retry_id_is_scoped_to_batch) ... ok
+test_concurrent_retry_calls_and_workers_do_not_duplicate_attempts (__main__.RevisionTwoTests.test_concurrent_retry_calls_and_workers_do_not_duplicate_attempts) ... ok
+test_failed_only_retry_and_lost_response_replay_after_reopen (__main__.RevisionTwoTests.test_failed_only_retry_and_lost_response_replay_after_reopen) ... ok
+test_partial_success_preserves_opaque_row_ids_after_reopen (__main__.RevisionTwoTests.test_partial_success_preserves_opaque_row_ids_after_reopen) ... ok
+test_retry_that_fails_again_requires_new_identity (__main__.RevisionTwoTests.test_retry_that_fails_again_requires_new_identity) ... FAIL
+test_running_status_is_observable_during_processing (__main__.RevisionTwoTests.test_running_status_is_observable_during_processing) ... ok
+test_settled_limit_validation_and_missing_batch (__main__.RevisionTwoTests.test_settled_limit_validation_and_missing_batch) ... ok
+test_submission_identity_survives_processing_and_reopen (__main__.RevisionTwoTests.test_submission_identity_survives_processing_and_reopen) ... ok
+
+======================================================================
+FAIL: test_retry_that_fails_again_requires_new_identity (__main__.RevisionTwoTests.test_retry_that_fails_again_requires_new_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\evals\async_import_oracle.py", line 188, in test_retry_that_fails_again_requires_new_identity
+    self.check_snapshot(reopened.retry(batch, "retry-1"), batch, failed_again)
+  File "<REPO>\evals\async_import_oracle.py", line 59, in check_snapshot
+    self.assertEqual(snapshot.get("failed"), counts["FAILED"], snapshot)
+AssertionError: 0 != 1 : {'contractVersion': 2, 'batchId': '0d77d93e-c7a7-4729-8f04-67c7ff845b6e', 'status': 'QUEUED', 'total': 2, 'succeeded': 1, 'failed': 0, 'items': [{'rowId': 'alpha', 'status': 'SUCCEEDED', 'attempts': 1, 'error': None}, {'rowId': 'beta', 'status': 'QUEUED', 'attempts': 2, 'error': 'temporary failure for beta'}]}
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.734s
+
+FAILED (failures=1)

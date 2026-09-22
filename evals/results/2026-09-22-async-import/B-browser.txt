@@ -1,0 +1,16 @@
+$ node <REPO>\evals\async_import_browser_oracle.cjs <TRIALS>\B\workspace
+exit=0
+{
+  "passed": true,
+  "batchId": "b4861923c8184527b36b328987607656",
+  "retryPosts": 2,
+  "checks": [
+    "queued acceptance",
+    "partial outcomes",
+    "refresh restoration",
+    "committed response loss",
+    "same-key recovery",
+    "persisted effects",
+    "durable retry replay"
+  ]
+}

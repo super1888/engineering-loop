@@ -1,0 +1,113 @@
+const assert = require('node:assert/strict');
+const {spawn, spawnSync} = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
+const os = require('node:os');
+const {chromium} = require('playwright');
+const workspace = path.resolve(__dirname, '../workspace');
+const output = path.join(__dirname, 'integration-results.txt');
+const evidence = [];
+const log = text => { evidence.push(text); console.log(text); fs.writeFileSync(output, evidence.join('\n') + '\n'); };
+async function start(extra=[]) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'import-a-check-'));
+  const db = path.join(directory, 'test.db');
+  const child = spawn('python', ['-u', 'server.py', '--db', db, '--port', '0', ...extra], {cwd:workspace, stdio:['pipe','pipe','pipe']});
+  child.stderr.on('data', data => log('SERVER STDERR: '+data));
+  const port = await new Promise((resolve,reject) => {
+    let data='';
+    const timer=setTimeout(()=>reject(new Error('server start timeout')),10000);
+    child.stdout.on('data', chunk => { data += chunk; if(data.includes('\n')) {clearTimeout(timer); resolve(JSON.parse(data.split('\n')[0]).port);} });
+    child.once('error',reject);
+  });
+  return {child,db,directory,base:`http://127.0.0.1:${port}`};
+}
+async function stop(server) {
+  server.child.kill();
+  await new Promise(resolve=>server.child.once('exit',resolve));
+  fs.rmSync(server.directory,{recursive:true,force:true});
+}
+async function api(base, route, body) {
+  const response = await fetch(base+route, body === undefined ? {} : {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
+  return {status:response.status,body:await response.json()};
+}
+(async()=>{
+  let manual,automatic,browser;
+  try {
+    manual=await start(['--manual-worker','--fail-once-row','beta']);
+    browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
+    const page=await browser.newPage();
+    const errors=[]; page.on('pageerror',error=>errors.push(error.message));
+    const input=JSON.stringify([{rowId:'0001/<b>中文',name:'Ada'},{rowId:'beta',name:'Ben'}]);
+    await page.goto(manual.base);
+    await page.locator('#rows').fill(input);
+    await page.locator('#submit').click();
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('QUEUED'));
+    assert.match(await page.locator('#results').innerText(), /0001\/<b>中文/);
+    assert.equal(await page.locator('#results b').count(),0);
+    assert.equal(await page.locator('#results tr').count(),2);
+    assert.equal(await page.locator('#results tr').first().locator('td').nth(2).innerText(),'0');
+    const post = await api(manual.base,'/api/batches',{requestId:'http-contract',rows:[{rowId:'x',name:'X'}]});
+    assert.equal(post.status,202); assert.equal(post.body.contractVersion,2); assert.ok(Array.isArray(post.body.items));
+    const duplicate=await api(manual.base,'/api/batches',{requestId:'http-contract',rows:[{rowId:'x',name:'X'}]});
+    assert.equal(duplicate.body.batchId,post.body.batchId);
+    assert.equal((await api(manual.base,'/api/batches',{requestId:'http-contract',rows:[{rowId:'x',name:'Y'}]})).status,409);
+    assert.equal((await api(manual.base,'/api/batches',[])).status,400);
+    assert.equal((await api(manual.base,'/api/batches/missing')).status,404);
+    log('PASS real HTTP: version-2 QUEUED receipt/items, duplicate request identity, 409 payload conflict, 400 non-object JSON, 404 missing batch.');
+    manual.child.stdin.write('process\n');
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('PARTIAL'));
+    assert.match(await page.locator('#results').innerText(),/temporary processor failure/);
+    assert.equal(await page.locator('#retry').isVisible(),true);
+    const beforeRefresh=await page.locator('#results').innerText();
+    await page.reload();
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('PARTIAL'));
+    assert.equal(await page.locator('#results').innerText(),beforeRefresh);
+    log('PASS real browser: asynchronous QUEUED before manual processing, PARTIAL retained-success outcomes, opaque text-safe IDs, per-item attempts/errors, active batch restored on refresh.');
+    const retryBodies=[];
+    let first=true;
+    await page.route('**/api/batches/*/retry',async route=>{
+      retryBodies.push(route.request().postDataJSON());
+      if(first){first=false; const received=await route.fetch(); assert.equal(received.status(),202); await route.abort('failed');}
+      else await route.continue();
+    });
+    await page.locator('#retry').click();
+    await page.waitForFunction(()=>document.querySelector('#message').textContent.length>0);
+    await page.reload();
+    await page.waitForFunction(()=>document.querySelector('#retry').hidden===false && !document.querySelector('#retry').disabled);
+    await page.locator('#retry').click();
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('QUEUED'));
+    assert.equal(retryBodies.length,2);
+    assert.equal(retryBodies[0].requestId,retryBodies[1].requestId);
+    const betaQueued=page.locator('#results tr').filter({hasText:'beta'});
+    assert.equal(await betaQueued.locator('td').nth(2).innerText(),'1');
+    assert.match(await betaQueued.innerText(),/temporary processor failure/);
+    manual.child.stdin.write('process\nprocess\n');
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('SUCCEEDED'));
+    const resultRows=await page.locator('#results tr').allTextContents();
+    assert.equal(await page.locator('#results tr').first().locator('td').nth(2).innerText(),'1');
+    assert.equal(await betaQueued.locator('td').nth(2).innerText(),'2');
+    assert.equal(await betaQueued.locator('td').nth(3).innerText(),'');
+    assert.equal(await page.locator('#retry').isVisible(),false);
+    log('PASS real browser/backend: dropped accepted retry response + page refresh + same-requestId replay, error retained while queued, successful row never rerun, failed row attempts 2 and cleared error after success.');
+    await page.locator('#rows').fill('{bad json'); await page.locator('#submit').click();
+    assert.equal(await page.locator('#rows').inputValue(),'{bad json');
+    assert.ok((await page.locator('#message').innerText()).length>0);
+    assert.deepEqual(errors,[]);
+    await page.screenshot({path:path.join(__dirname,'browser-final.png')});
+    const inspected=spawnSync('python',['-c','import sqlite3,sys,json; c=sqlite3.connect(sys.argv[1]); print(json.dumps({"records":c.execute("select count(*) from records").fetchone()[0],"attempts":c.execute("select row_id,attempts,status,error from items order by rowid").fetchall()}))',manual.db],{cwd:workspace,encoding:'utf8'});
+    assert.equal(inspected.status,0); const stored=JSON.parse(inspected.stdout); assert.equal(stored.records,3);
+    log('PASS persisted inspection: '+JSON.stringify(stored));
+    automatic=await start();
+    const accepted=await api(automatic.base,'/api/batches',{requestId:'auto',rows:[{rowId:'00000000000000000001',name:'Auto'}]});
+    assert.equal(accepted.status,202);
+    let final;
+    for(let n=0;n<100;n++){ final=(await api(automatic.base,'/api/batches/'+accepted.body.batchId)).body; if(final.status==='SUCCEEDED')break; await new Promise(resolve=>setTimeout(resolve,50)); }
+    assert.equal(final.status,'SUCCEEDED');assert.equal(final.items[0].attempts,1);
+    log('PASS real automatic scheduling: accepted batch reaches SUCCEEDED without manual process command.');
+    log('PASS integration completed; local servers and disposable databases cleaned in finally.');
+  } finally {
+    if(browser)await browser.close();
+    if(automatic)await stop(automatic);
+    if(manual)await stop(manual);
+  }
+})().catch(error=>{log('FAIL '+error.stack);process.exitCode=1;});

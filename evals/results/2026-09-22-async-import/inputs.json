@@ -1,0 +1,50 @@
+{
+  "source_revision": "8962b7869ea661b2220f7b870e46ee94a4c10a0b",
+  "fixture_hashes": {
+    "AGENTS.md": "920e81badd0a61f796ff308527ffa96f7796819508a5459e0798fbb060d79bae",
+    "API.md": "be62765ee3cd2ae76465573a6e577e071cb9cb000ed773fd5f1e6d4ff22fd8be",
+    "backend/__init__.py": "bf4106e9adb505b0833635064d3ac21ded8b20e80c87faaff1f6779db2aeb875",
+    "backend/__pycache__/__init__.cpython-312.pyc": "a1f2b8d454fc0f512de63bd2e8b55876508513d20e34f6ec747e64cefa8e23c1",
+    "backend/__pycache__/service.cpython-312.pyc": "b18d0513ade8a77522c7178d56e5f49f4fd748ad03ce3d5b2373dfe8bcd9bc54",
+    "backend/__pycache__/storage.cpython-312.pyc": "93e2c987ec10c49aa851b737ae62cf738707edcd291aa97869bd54a2724060c0",
+    "backend/service.py": "ab47e702347ef56830112f2329198aff13365a54cee850922be5fd106e769b70",
+    "backend/storage.py": "df859770066d18f44c711bca5d566ad4ad934855fe07a6e7f385d8062e36e94e",
+    "DECISIONS.md": "e997ab9608d0c6e5876c57d64fba74b543667307506b1757a8484a01f2a5c8e5",
+    "PRODUCT.md": "27eb615580a5240d9b23d68318e07fd2aaffb67383fea1bf4e6c68f06ee7b65d",
+    "server.py": "d400e42816b4b1dcfc7a86aa3e0e7be697a98da3d69561b4d235863b0bf74ee0",
+    "SERVICE.md": "1dede06d0a520db75dd0e1a14ebd6298e675f6c5894b9ab26bd419e3af2ecc0b",
+    "tests/test_validation.py": "cb2bb05128a3c4db2dc4a20594d0259334ff29fe42524b55647ef10b2c4ed042",
+    "ui/app.js": "56aa232d1eab1b9752f429558e13622189155a52c3a7f00d50444460d2144812",
+    "ui/index.html": "fb4fb76780c9e82450c705c93d0116fbe6b12e29a0295086b243acb3aa433180"
+  },
+  "skill_hashes": {
+    "agents/openai.yaml": "275c645616220591089b951f0fe73dcba4fdd317b2b2dc52df79d824245db743",
+    "references/collaboration.md": "5696624d2e86ef556e544d74191c85c6494a5aa613aa07b90d33800c261f6e4e",
+    "references/implementation.md": "26a058d36747fda5655d17ca3f62c3c8d78f9a3bca1a271a0a2220e449276df6",
+    "references/learning.md": "5b0f7f4cacf4ed6ae4500b07b1b86153aed7fefcbe11b67796c09ae5101044df",
+    "references/operations.md": "4d7395ee032ac48beb31105599252013af77f4a8878c7c884734e333374fa730",
+    "references/project.md": "7fe194e7bd5f7f28c95cd8c3fb55c58e032ba40c9bc0f42eb2a3a8d8e6fcfb83",
+    "references/release.md": "e644236f19d80d542c6b4be11fb16f228060d443b8d422e33ee05a3abe74fd51",
+    "references/requirements.md": "2009686861a65be92979246f89b05dbe336e5e6d7529abe4a29744bd2fddbd39",
+    "references/resume.md": "8a1b26bffe04c2f1ee9bb0298a25ae1956cc273bfc247311fb3e84cfa1835328",
+    "references/review.md": "5c69a7bb8525de7ce51f3bc70b8ed2c954e14d16a36c325f547c4807cd8d4f3a",
+    "references/verification.md": "4dd8f6f9d2c501d2a5f8c042e91a437e8e834b3ec9055685171833848faade18",
+    "SKILL.md": "0de277a4427ac69b818a350ce4a6fe2c6aad98e68c44cb7a2c31efcd179623b9"
+  },
+  "evaluator_hashes": {
+    "async_import_oracle.py": "461de9e3938f787565144e4e242ceee7a371caf319700c3c03a907ed7145884e",
+    "async_import_browser_oracle.cjs": "7b2171afef4bac196a2ac9e42d6285559aae5d7d6d84735f5e7bf8c456c15301",
+    "async_import_change.md": "42e92cd6f9ff8c362e4b647bcbab1446e904f1bd40f11d95e087c8691a2770ec"
+  },
+  "guidance_A": "# Trial guidance\n\nUse the supplied skill normally.\n",
+  "guidance_B": "# Trial guidance\n\nUse the supplied skill normally.\n\nBefore deciding whether to delegate, identify the concrete uncertainty an additional contributor would resolve. Delegate only work with an independent useful outcome; settled local work can remain with one agent. No extra planning artifact or approval is required.\n\nWhen review is warranted, select a material completion claim and seek a concrete supported scenario that could falsify it. Use the relevant evidence, preserve legitimate exceptions, and stop once the claim and required checks are supported. Do not add generic critique or an extra reviewer without an unresolved reason.\n",
+  "prompt_template": "Implement the asynchronous batch-import feature in {workspace}, coordinating separate backend and frontend contributors. You own shared contract decisions and integrated verification. Use at most two child agents concurrently; those contributors must not delegate further. All agents inherit the available model configuration without overrides. Keep backend and UI writes disjoint and explicitly own shared files.\n\nUse Engineering Loop at {skill}/SKILL.md and the additional guidance at {guidance}. Read the workspace's AGENTS.md, PRODUCT.md, API.md, DECISIONS.md and SERVICE.md. Work only in the supplied workspace, read-only skill/guidance and evidence directory {evidence}; do not inspect sibling trials, source-repository/evaluator files or previous conversations. Your shell may initially point elsewhere; always supply the intended working directory. Do not install dependencies, commit, publish or use real services.\n\nA scheduled owner review is part of this task. After both contributors have inspected their assigned areas and begun an independent bounded step, send CHECKPOINT_READY to the parent with contributor identities, current contract interpretation and unresolved product questions. Await the owner's response before dependent implementation; independent work can continue. Address consequential questions to the parent acting as the synthetic owner, not the real user. Do not infer an unresolved business policy from the stub.\n\nAfter the owner response, finish the authorized feature and relevant verification. Record concise task/ownership decisions, contributor instructions and important updates in {evidence}/coordination.md. Preserve commands/results in {evidence}/commands.txt (contributors may keep separate evidence files). Finish with {evidence}/agent-report.md: actual outcomes, unresolved failures, questions/owner decisions, delegated roles and verification limits. Report actual evidence, not hidden tests or unavailable telemetry.\n\nAvailable tools: Python and Node on PATH. Playwright is resolvable with NODE_PATH={node_modules}; a local Chromium executable is {browser}. The fixture documents its public tests and real local-server controls. Use disposable local databases and stop owned processes.\n",
+  "owner_reply": "Owner review complete. Read OWNER_CHANGE.md in your workspace: revision 2 is accepted and supersedes the conflicting revision-1 processing policy and aggregate-only response. The 100-row limit remains settled. Apply the change to affected active contributions, effective documents and verification; no further approval is needed for this scope. Continue to completion and report integrated evidence and remaining limits.",
+  "early_reply": "The owner decision is scheduled at the agreed checkpoint. Continue independent bounded work and send CHECKPOINT_READY once both contributors have inspected their areas and begun an independent step; do not choose an unresolved business policy in the meantime.",
+  "order": [
+    "A",
+    "B"
+  ],
+  "checkpoint": "Both backend and frontend contributors inspected their inputs and began an independent bounded step.",
+  "limits": "Procedural file isolation; one matched run per condition; role count and checkpoint are controlled by the experiment."
+}

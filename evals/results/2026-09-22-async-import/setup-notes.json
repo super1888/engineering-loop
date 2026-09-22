@@ -1,0 +1,17 @@
+{
+  "preparation_amendment": "After dispatching A, evaluator noticed three generated Python bytecode caches in the frozen fixture manifest. Both trial directories had already been copied identically; neither was regenerated or altered. Source inputs and acceptance stayed unchanged. Preparation helper now excludes caches for future runs. Original manifest retained honestly, including cache digests; generated binaries are not published. Replays compare source artifacts excluding runtime caches.",
+  "oracle_amendments": [
+    {
+      "when": "After initial A assessment, before B dispatch",
+      "original_sha256": "7b2171afef4bac196a2ac9e42d6285559aae5d7d6d84735f5e7bf8c456c15301",
+      "revised_sha256": "0b88ce63ada9f0407b0d5258170f80fb2fd4604c99136c3797cceb85bc689700",
+      "reason": "Valid QUEUED status with succeeded counters was falsely rejected by a broad negative word check. Removed that redundant check; require queued state and authoritative per-item outcomes through existing predicate. No candidate code or task changed.",
+      "regressions": [
+        "positive-queued-counts",
+        "mutant-acceptance-completed"
+      ],
+      "comparison": "Assess both A and B with the same revised evaluator; retain A original false-positive result."
+    }
+  ],
+  "control_scope": "Independent temporary positive reference and two deliberate mutants validate selected evaluator distinctions; reference is not a candidate and was not supplied to contributors."
+}
