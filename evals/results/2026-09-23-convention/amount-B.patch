@@ -1,0 +1,6 @@
+--- a/order_constants.py
++++ b/order_constants.py
+@@ -1,2 +1,2 @@
+ # The accounting export field must hold every accepted order amount in cents.
+-MAX_ORDER_TOTAL_CENTS = 10_000
++MAX_ORDER_TOTAL_CENTS = 15_000

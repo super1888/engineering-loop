@@ -1,6 +1,6 @@
 # Compatibility and validation
 
-Last updated: 2026-09-22. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+Last updated: 2026-09-23. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
 
 ## Installation surfaces
 
@@ -47,5 +47,7 @@ Later local trial on Windows (2026-09-21): [receipt/control and copy evidence](.
 CI checks links, package structure, metadata consistency, archive contents, archive path safety and the evaluator's connection-release regression. It does not run models or prove automatic trigger accuracy or instruction compliance. This turn ran local checks; a new remote CI result is not claimed.
 
 Additional Windows trials on 2026-09-22: [list-detail/copy A/B](../evals/results/2026-09-22-local-ui/report.md) and [asynchronous-import/owner-change A/B](../evals/results/2026-09-22-async-import/report.md). The latter used actual backend/frontend contributors, with both candidates passing eight service scenarios and seven sequential browser milestones after an independently checked evaluator correction. These are explicit-file local trials with controlled prompts and roles, not native discovery, full scenario coverage or evidence of lower rework/cost. The two experimental overlay instructions were not promoted to the distributed skill.
+
+The [2026-09-23 convention A/B trial](../evals/results/2026-09-23-convention/report.md) used explicit-file local CLI runs, including a matched Ponytail full-mode pair. Both skill variants preserved the synthetic project's comment and constant and passed the oracle; no added quality benefit was observed. The trial did not test native discovery, automatic routing or the reported HR-project failure, and the CLI did not expose its account-default model identity.
 
 Local personal-folder installation does not imply availability in cloud products or scheduled remote sessions. Follow each host's documentation for those environments. No automatic install, setting mutation, or API call occurs merely from reading this skill.

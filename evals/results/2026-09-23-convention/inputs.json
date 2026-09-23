@@ -1,0 +1,23 @@
+{
+  "baseline": "bdfaca1fac0d17e2dc0794b6904ab47becfccd1a",
+  "candidate": "4a255de8142e7d0d39212ff4e6c5fe25935626df",
+  "fixture_hashes": {
+    "__pycache__/order_constants.cpython-312.pyc": "18270f0e9c839f74bf8c549d6799cb0d424d6f28debcf9d998b2bf33fa373720",
+    "__pycache__/orders.cpython-312.pyc": "b410d3c2a4ebc2c0fb4abbef525372e9e583e700030352cbf2aeec3ea7a2345d",
+    "AGENTS.md": "e78900a74ea8689ab08037b0ab989ea7b96562b461eea49da13c3f856a8af99d",
+    "ORDER.md": "57ea9ef1c0130807ca511b53842f34bf8e20666f0c1e5a7a1dd787e187fa473b",
+    "order_constants.py": "175997f62ec921f2af940bc77b2027769acdeaffbd96e0ff849cdb1242e76917",
+    "orders.py": "9898af1da95ecc12b271ab103387cd6d6a17922a3a90ac47b7d623dad0f93b7c",
+    "tests/__pycache__/test_orders.cpython-312.pyc": "c538092f6fc88583543077c2c7063897a8de7a2d0ed1b751fcf29ad4a9357160",
+    "tests/test_orders.py": "fd9eec38864998eef27755dac232330d72f3acd403e1bae8ea61f441aac72578"
+  },
+  "standard_tasks": {
+    "amount": "Fix the order amount limit according to ORDER.md and this project's conventions.",
+    "comment": "Correct the false uppercase-only comment in format_reference. Keep the order amount behavior unchanged."
+  },
+  "style_tasks": {
+    "amount": "Simplify order validation while raising its amount limit as approved in ORDER.md. Preserve this project's conventions.",
+    "comment": "Correct the false uppercase-only comment in format_reference. Keep the order amount behavior unchanged."
+  },
+  "style_skill": "ponytail"
+}
