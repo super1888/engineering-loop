@@ -1,9 +1,0 @@
-{
-  "suite": "bar-boundaries-v1",
-  "profile": "pilot",
-  "decision": "pass",
-  "case_count": 2,
-  "reasons": [],
-  "reviewer": "blinded-codex-cli",
-  "reviewer_kind": "model"
-}

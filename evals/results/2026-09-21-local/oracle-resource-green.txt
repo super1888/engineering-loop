@@ -1,8 +1,0 @@
-COMMAND: python -m unittest discover -s tests -p test_receipt_oracle.py -v
-EXIT: 0
-test_receipt_inspection_releases_database_connection (test_receipt_oracle.OracleResourceTests.test_receipt_inspection_releases_database_connection) ... ok
-
-----------------------------------------------------------------------
-Ran 1 test in 0.009s
-
-OK

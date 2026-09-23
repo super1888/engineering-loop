@@ -109,7 +109,7 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 ## 如何逐步验证
 
-仓库提供包装检查、离线打包脚本和行为评估场景。行为场景覆盖错误触发、重复提问、旧交接、测试降级、遗漏、权限与恢复等；多数仍待执行。已记录一轮[本地入库对照与文案试跑](evals/results/2026-09-21-local/report.md)，保留产物、独立验收结果及评估工具自身缺陷的修复证据。入库两组均通过，尚未证明 skill 带来质量优势或提速。
+仓库提供包装检查、离线打包脚本和可复用的行为评估场景。多数场景仍待执行；已有本地试跑未证明 skill 带来质量优势或提速。试跑原始输出留在本地，不纳入当前源码树。
 
 ```sh
 python scripts/check.py
@@ -119,17 +119,13 @@ python scripts/package.py --output dist/engineering-loop.zip
 
 Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 本身不需要 Python。CI 执行分发检查和工具单元测试，不运行模型。具体已测范围见[兼容与验证状态](docs/COMPATIBILITY.md)；实际问题的本地沉淀见[项目经验](docs/LESSONS.md)。
 
-新增[小型黄金集与盲评门禁试跑](evals/results/2026-09-23-bar-gate/report.md)，对照两个酒吧点单边界任务。仅由模型完成的盲评认为两版并列；试跑门禁通过，发布门禁因缺少人工盲评而保持关闭。门禁是本地评测命令，不是 CI 模型检查，也未证明新版 skill 质量更高。
+小型黄金集和盲评门禁可用于对照测试；模型试跑不等于人工验收，也不是 CI 中的模型检查。
 
 当前未发布修订明确了受影响返回路径的可见结果、视觉缺陷的实际渲染证据和已知修复回放的结论边界（[三个场景](evals/README.md#unreleased-flow-visual-and-learning-revision)），并补充参考项目继承、有效约定维护、门禁证据、实际使用效果及纠正的跨会话保留（[七个场景](evals/README.md#unreleased-reference-inheritance-and-effective-guidance-revision)）。这十个场景均待执行；历史产品检查不能证明新指导有额外收益。保留现有阶段路由，不强制统一项目架构。
 
 可选的[协作指南](skills/engineering-loop/references/collaboration.md)补充职责归属、规格分歧裁决、已接受变更的同步和独立验证，不要求固定 agent 团队。对应[另四个协作场景](evals/README.md#unreleased-collaboration-revision)也尚未试跑；增加 agent 不代表已经提高准确率。
 
-[2026-09-22 前端 A/B 小型试验](evals/results/2026-09-22-local-ui/report.md)比较了当前指导与两条候选指导，覆盖列表状态恢复和纯文案修改。对应任务的产物字节一致，独立浏览器检查均通过；未观察到额外正确性收益。两组均未委派，因此该轮没有检验真实协作。
-
-后续[异步导入 A/B 试验](evals/results/2026-09-22-async-import/report.md)采用实际前后端子代理、冲突规格及预定的 owner 契约变更。两组均通过八项独立服务场景及七个浏览器流程阶段。期间修正一次验收器误报，并用正反对照确认修复。未证明额外正确性收益或工作量下降，两条候选指导仍保留为实验内容。
-
-[两个场景](evals/README.md#specialist-routing-and-project-convention-trial)分别检验简短用户请求下的专业 skill 路由，以及通用简化建议与项目注释、常量约定冲突时的处理。[合成约定 A/B 试跑](evals/results/2026-09-23-convention/report.md)中两版均通过，未观察到新增指导的质量收益，故移除未证实有效的实现条款。[合成路由 A/B/C 试跑](evals/results/2026-09-23-routing/report.md)中，简短项目路由规则选中了匹配的 skill；把聚焦回归要求写进专属 skill 后，在所测任务里恢复了持久测试。真实子 agent 委派和 HR 项目效果仍未测试。
+[评估协议](evals/README.md)保留可复用的场景、夹具和检查；历史试跑记录可从 Git 历史查阅，不能据此推断普遍收益。
 
 欢迎在 [Issues](https://github.com/super1888/engineering-loop/issues) 提供脱敏反例，在 [Discussions](https://github.com/super1888/engineering-loop/discussions) 讨论流程取舍。重点是实际减少重复沟通、遗漏与返工，不以规则条数或文档数量作为成熟度。
 

@@ -23,8 +23,14 @@ def check(root=ROOT):
     for path in skill.rglob("*"):
         if path.is_symlink():
             errors.append(f"Skill payload must be self-contained: {path.relative_to(root)}")
+    excluded = {".git", ".idea", ".planning", "dist", "node_modules"}
+
+    def is_local_output(path):
+        parts = path.relative_to(root).parts
+        return any(part in excluded for part in parts) or parts[:2] == ("evals", "results")
+
     for path in root.rglob("*.md"):
-        if any(part in {".git", "dist", "node_modules"} for part in path.parts):
+        if is_local_output(path):
             continue
         content = path.read_text(encoding="utf-8")
         for target in re.findall(r"\]\(([^\s)]+)\)", content):
@@ -34,7 +40,7 @@ def check(root=ROOT):
             if target and not (path.parent / target).is_file():
                 errors.append(f"Broken link in {path.relative_to(root)}: {target}")
     for path in root.rglob("*.json"):
-        if not any(part in {".git", "dist", "node_modules"} for part in path.parts):
+        if not is_local_output(path):
             json.loads(path.read_text(encoding="utf-8"))
     plugin = json.loads((root / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))
     market = json.loads((root / ".claude-plugin/marketplace.json").read_text(encoding="utf-8"))

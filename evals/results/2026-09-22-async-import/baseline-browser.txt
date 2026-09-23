@@ -1,9 +1,0 @@
-$ node <REPO>\evals\async_import_browser_oracle.cjs <REPO>\evals\fixtures\async-import
-exit=1
-{
-  "passed": false,
-  "stage": "submit and observe queued acceptance",
-  "error": "AssertionError [ERR_ASSERTION]: Submission response: {\"error\": \"submission persistence is not implemented\"}\n\n501 !== 202\n\n    at main (<REPO>\\evals\\async_import_browser_oracle.cjs:155:10)\n    at async <REPO>\\evals\\async_import_browser_oracle.cjs:285:14",
-  "pageErrors": [],
-  "serverStderr": ""
-}

@@ -1,7 +1,0 @@
-Updated order validation:
-
-- Raised shared limit to 15,000 cents.
-- Reused one validator for API/export checks.
-- Preserved export-storage constraint comment and added boundary coverage.
-
-Passed: `python -m unittest discover -s tests -v` — 2 tests.

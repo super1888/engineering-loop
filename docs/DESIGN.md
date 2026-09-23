@@ -2,8 +2,6 @@
 
 One small router, focused references, and project-owned state. This is a workflow skill, not a replacement for a repository's engineering system.
 
-The [current discussion decisions and pending validation](讨论决策与后续验证.md) preserve the agreed autonomy, scope and effort boundaries without loading the conversation into every project. They are design rationale, not another runtime checklist.
-
 ## Stable core
 
 - Preserve accepted intent and existing authorization.

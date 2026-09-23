@@ -1,3 +1,0 @@
-COMMAND: python <repository>\evals\receipt_oracle.py
-EXIT: 1
-Usage: python evals/receipt_oracle.py CANDIDATE_DIRECTORY (must contain inventory.py)

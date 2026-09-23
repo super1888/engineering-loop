@@ -1,7 +1,0 @@
-Updated [orders.py](<trial-root>/comment-A/workspace/orders.py:13) to state that reference casing is preserved.
-
-Order amount behavior remains unchanged at `10_000` cents.
-
-Verification passed:
-
-`python -m unittest discover -s tests -v` — 2 tests passed.

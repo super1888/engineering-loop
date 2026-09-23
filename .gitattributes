@@ -4,11 +4,7 @@
 *.json text eol=lf
 *.yaml text eol=lf
 *.yml text eol=lf
-# Keep evaluation fixtures/evidence stable; unified-diff blank context carries a space.
+# Keep evaluation fixtures stable.
 evals/fixtures/**/*.html text eol=lf
 evals/fixtures/**/*.js text eol=lf
 evals/**/*.cjs text eol=lf
-evals/results/** text eol=lf
-evals/results/**/*.patch whitespace=-blank-at-eol
-# Preserve mixed source line endings embedded in this trial's replay patches.
-evals/results/2026-09-22-async-import/*.patch -text whitespace=-blank-at-eol,cr-at-eol

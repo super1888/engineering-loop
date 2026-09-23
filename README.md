@@ -162,9 +162,7 @@ python -m unittest discover -s tests -v
 python scripts/package.py --output dist/engineering-loop.zip
 ```
 
-Python 3.10+ is needed only for repository checks/packaging and local evaluation helpers, not to use the skill. CI runs package checks and helper unit tests on Linux, macOS, and Windows; it does not run models. The [behavioral evaluation cases](evals/cases.json) remain a protocol with partial execution: one [local receipt/control and copy trial](evals/results/2026-09-21-local/report.md) is recorded with artifacts, including an evaluator defect and its fix. Both receipt conditions passed; no quality advantage or speedup is established. See [validation status](docs/COMPATIBILITY.md) before making compatibility or performance claims.
-
-A [pilot golden set and blind-review gate](evals/results/2026-09-23-bar-gate/report.md) now compares two bar-boundary tasks. The model-only pilot review tied both variants; the release gate remained closed pending human blinded review. The gate is a local evaluation command, not a model check in CI or evidence that the candidate skill improved quality.
+Python 3.10+ is needed only for repository checks/packaging and local evaluation helpers, not to use the skill. CI runs package checks and helper unit tests on Linux, macOS, and Windows; it does not run models. The [behavioral evaluation cases](evals/cases.json) are only partially exercised, and local trial results have not established a quality advantage or speedup. See [validation status](docs/COMPATIBILITY.md) before making compatibility or performance claims.
 
 We especially want small counterexamples: unnecessary questions, missed decisions, context waste, invalid completion claims, or a project convention the skill accidentally overrides. Use [Issues](https://github.com/super1888/engineering-loop/issues) or [Discussions](https://github.com/super1888/engineering-loop/discussions); remove private code and data first.
 
@@ -172,11 +170,7 @@ The unreleased revisions clarify affected return-path outcomes, rendered evidenc
 
 The optional [collaboration guide](skills/engineering-loop/references/collaboration.md) adds scoped ownership, specification-dispute resolution, accepted-change propagation and independent verification without requiring a fixed agent team. Its [four additional scenarios](evals/README.md#unreleased-collaboration-revision) also remain unrun; additional agents are not evidence of improved accuracy.
 
-The [2026-09-22 UI A/B pilot](evals/results/2026-09-22-local-ui/report.md) compared current guidance with two experimental instructions on list-state repair and a copy-only control. Paired source artifacts were identical and all independent browser checks passed; no incremental correctness benefit was observed. Neither condition delegated, so that pilot did not test live coordination.
-
-The subsequent [asynchronous-import A/B trial](evals/results/2026-09-22-async-import/report.md) used actual backend/frontend contributors, conflicting specifications and a scheduled owner contract change. Both conditions passed eight independent service scenarios and seven browser-flow milestones. An evaluator false positive was corrected with positive and negative controls. No incremental correctness benefit or reduction in work was established; the two candidate instructions remain experimental.
-
-Two [scenarios](evals/README.md#specialist-routing-and-project-convention-trial) probe specialist-skill routing from short requests and preservation of project comments and constants under broad simplification advice. In the [synthetic convention A/B trial](evals/results/2026-09-23-convention/report.md), both variants passed without an incremental quality advantage, so the unproven implementation paragraph was removed. In the [synthetic routing A/B/C trial](evals/results/2026-09-23-routing/report.md), a short project routing rule selected the matching skills, and a focused regression instruction in specialist skills restored persistent tests in the tested tasks. Actual subagent delegation and HR-project outcomes remain untested.
+The [evaluation protocol](evals/README.md) retains reusable fixtures and checks. Raw model transcripts and trial output stay outside the tracked source tree; past trials are available in Git history.
 
 If the workflow helps you, a star helps others discover it. Reproducible feedback helps us improve it.
 

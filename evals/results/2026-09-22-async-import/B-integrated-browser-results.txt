@@ -1,7 +1,0 @@
-PASS real UI submission shows QUEUED with attempts 0; opaque large rowId and entered rows survive refresh.
-PASS real worker produces PARTIAL, retains success, renders both item outcomes/attempts and useful failure.
-PASS lost retry response reached backend; refresh restores batch and reuses same pending retry identity; requeue preserves attempts/errors/success.
-PASS retry succeeds with attempts [1,2], clears error, hides retry; HTTP 100/101 limits, 400/404/409, durable identity/no-op receipts checked.
-PASS request failure retains entered rows; browser had no uncaught page errors.
-PASS default background worker processes accepted work without manual commands.
-ALL INTEGRATED CHECKS PASSED

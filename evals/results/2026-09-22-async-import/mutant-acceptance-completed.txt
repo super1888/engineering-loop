@@ -1,9 +1,0 @@
-$ node <REPO>\evals\async_import_browser_oracle.cjs <USER_HOME>\AppData\Local\Temp\engineering-loop-import-oracle-regression-y8hz_vlb\workspace
-exit=1
-{
-  "passed": false,
-  "stage": "submit and observe queued acceptance",
-  "error": "Error: UI for QUEUED did not settle; last observation: {\"status\":\"Completed\",\"rows\":[[\"alpha\",\"QUEUED\",\"0\",\"\"],[\"beta\",\"QUEUED\",\"0\",\"\"]]}\n    at until (<REPO>\\evals\\async_import_browser_oracle.cjs:39:9)\n    at async uiMatches (<REPO>\\evals\\async_import_browser_oracle.cjs:71:3)\n    at async main (<REPO>\\evals\\async_import_browser_oracle.cjs:162:3)\n    at async <REPO>\\evals\\async_import_browser_oracle.cjs:284:14",
-  "pageErrors": [],
-  "serverStderr": ""
-}

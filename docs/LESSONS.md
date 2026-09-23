@@ -4,7 +4,7 @@ Keep this small. Business/stack defects belong with their executable safeguards;
 
 ## SQLite transaction completion does not release the connection
 
-- **Trigger and evidence:** During the [2026-09-21 trial](../evals/results/2026-09-21-local/report.md), the independent oracle's temporary database cleanup failed on Windows with file-in-use errors for both candidate implementations.
+- **Trigger and evidence:** During the 2026-09-21 trial, the independent oracle's temporary database cleanup failed on Windows with file-in-use errors for both candidate implementations.
 - **Root cause:** The evaluator used an SQLite connection as a transaction context and assumed that leaving it also closed the connection. Its inspection/trigger connections could remain open until collection.
 - **Why checks missed it:** Distribution checks did not execute the oracle. The incomplete receipt fixture failed before many inspection paths, so its initial failures did not establish that the evaluator cleaned up a successful run correctly.
 - **Correction:** The evaluator explicitly closes the connections it creates; transaction contexts remain around its writes. Candidate implementations and accepted business assertions were not changed to hide the failure.
