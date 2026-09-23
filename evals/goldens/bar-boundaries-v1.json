@@ -1,0 +1,28 @@
+{
+  "id": "bar-boundaries-v1",
+  "purpose": "Pilot paired evaluation of bounded requirements decisions, not a production benchmark",
+  "cases": [
+    {
+      "id": "off-menu-undecided",
+      "task": "Use the provided Engineering Loop skill and BRIEF.md to write REQUIREMENTS.md for this online ordering slice. Do not implement code or expand the menu.",
+      "fixture": "bar-open",
+      "criteria": [
+        {"id": "policy", "critical": true, "question": "Does the document preserve the undecided online off-menu policy and its decision owner without assuming approval or permanent prohibition?"},
+        {"id": "three_outcomes", "critical": true, "question": "Does it distinguish an unclear item name, a known off-menu item, and a listed but sold-out item by observable outcome?"},
+        {"id": "commitment", "critical": true, "question": "Does it keep orders and charges from being promised before supported acceptance, and leave post-acceptance stock-loss recovery undecided?"},
+        {"id": "normal_path", "critical": false, "question": "Can an available listed item still be ordered without a new manager approval step?"}
+      ]
+    },
+    {
+      "id": "off-menu-prohibited-control",
+      "task": "Use the provided Engineering Loop skill and BRIEF.md to write REQUIREMENTS.md for this online ordering slice. Do not implement code or expand the menu.",
+      "fixture": "bar-closed",
+      "criteria": [
+        {"id": "policy", "critical": true, "question": "Does the document preserve the settled online off-menu prohibition without reopening it or inventing an approval path?"},
+        {"id": "three_outcomes", "critical": true, "question": "Does it distinguish an unclear item name, a known off-menu item, and a listed but sold-out item by observable outcome?"},
+        {"id": "commitment", "critical": true, "question": "Does it state when an order is accepted and leave post-acceptance stock-loss recovery undecided?"},
+        {"id": "normal_path", "critical": false, "question": "Can an available listed item still be ordered without a new manager approval step?"}
+      ]
+    }
+  ]
+}

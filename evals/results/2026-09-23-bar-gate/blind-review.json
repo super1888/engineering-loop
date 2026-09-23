@@ -1,0 +1,45 @@
+{
+  "suite": "bar-boundaries-v1",
+  "reviewer": "blinded-codex-cli",
+  "reviews": [
+    {
+      "id": "off-menu-undecided",
+      "ratings": {
+        "left": {
+          "policy": "pass",
+          "three_outcomes": "pass",
+          "commitment": "pass",
+          "normal_path": "pass"
+        },
+        "right": {
+          "policy": "pass",
+          "three_outcomes": "pass",
+          "commitment": "pass",
+          "normal_path": "pass"
+        }
+      },
+      "preference": "tie",
+      "reason": "Both preserve the bar manager's undecided online off-menu policy without making rejection permanent, distinguish 星云特调 as unidentified, 蛋炒饭 as known off-menu, and House lager as listed but out of stock, and require reservation before acceptance while leaving later shortage recovery to the operations manager. Both also allow stocked sparkling water through the normal path without manager approval; the left is slightly more explicit about the accepted order remaining in an unresolved fulfillment state, while the right is equally clear that no recovery outcome is prescribed."
+    },
+    {
+      "id": "off-menu-prohibited-control",
+      "ratings": {
+        "left": {
+          "policy": "pass",
+          "three_outcomes": "pass",
+          "commitment": "pass",
+          "normal_path": "pass"
+        },
+        "right": {
+          "policy": "pass",
+          "three_outcomes": "pass",
+          "commitment": "pass",
+          "normal_path": "pass"
+        }
+      },
+      "preference": "tie",
+      "reason": "Both enforce the settled prohibition for online and staff off-menu requests with no manager exception, separately identify 星云特调 as unclear, 蛋炒饭 as prohibited off-menu, and House lager as listed but unreservable, and define acceptance only after stock reservation. Both permit stocked sparkling water without approval and leave cancellation, substitution, or refund after a later shortage undecided under the operations manager; the right adds more explicit observable messaging and commitment states, but not a materially better outcome."
+    }
+  ],
+  "reviewer_kind": "model"
+}

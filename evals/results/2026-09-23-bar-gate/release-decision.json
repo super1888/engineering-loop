@@ -1,0 +1,11 @@
+{
+  "suite": "bar-boundaries-v1",
+  "profile": "release",
+  "decision": "fail",
+  "case_count": 2,
+  "reasons": [
+    "Human blinded review required for release"
+  ],
+  "reviewer": "blinded-codex-cli",
+  "reviewer_kind": "model"
+}

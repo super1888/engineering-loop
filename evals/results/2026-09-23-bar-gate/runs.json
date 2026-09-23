@@ -1,0 +1,21 @@
+{
+  "suite": "bar-boundaries-v1",
+  "arms": {
+    "baseline": {
+      "off-menu-undecided": {
+        "artifact": "off-menu-undecided-baseline.md"
+      },
+      "off-menu-prohibited-control": {
+        "artifact": "off-menu-prohibited-control-baseline.md"
+      }
+    },
+    "candidate": {
+      "off-menu-undecided": {
+        "artifact": "off-menu-undecided-candidate.md"
+      },
+      "off-menu-prohibited-control": {
+        "artifact": "off-menu-prohibited-control-candidate.md"
+      }
+    }
+  }
+}

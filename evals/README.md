@@ -1,6 +1,6 @@
 # Behavioral evaluation protocol
 
-`cases.json` contains scenario specifications, not a model runner or a pass-rate claim. Most descriptions still require a tester to build a fixture. Receipt, copy, list-detail and asynchronous-import fixtures are supplied below. Execution evidence is recorded per trial; a completed trial does not mark all scenarios or all hosts as passed.
+`cases.json` contains scenario specifications, not a model runner or a pass-rate claim. Most descriptions still require a tester to build a fixture. Receipt, copy, list-detail, asynchronous-import and pilot bar-boundary fixtures are supplied below. Execution evidence is recorded per trial; a completed trial does not mark all scenarios or all hosts as passed.
 
 Recorded run: [2026-09-21 local receipt/control and copy trials](results/2026-09-21-local/report.md). Both receipt conditions passed the selected oracle; no skill advantage or speedup was established.
 
@@ -19,6 +19,14 @@ Priority cases: negative-copy, resume-stale, batch-dependent, test-integrity, in
 The unrun `exception-decision-boundary` case probes a narrower requirements risk: treating a menu-external request as automatically prohibited when staff-approved exceptions exist, or adding an approval flow when the business has already forbidden such requests. The unrun `order-boundary-classification` case checks whether an ambiguous name, a known unsupported item and a temporarily unavailable listed item remain distinct while a normal order still works. These need matched fixtures and controls before any model-quality claim.
 
 For scope/effort changes, pair overreach cases with required work that must still be done, and unnecessary questions with material decisions that must be asked. Evaluate compliance separately from usefulness. Where justified, compare no skill, a frozen reduced-guidance variant and the full skill on matched inputs with unchanged acceptance/tools. Record the exact variants and available model identity; remove one component at a time rather than bundling changes. Count observable unnecessary reads, repeated checks, clarification turns and scope additions without inventing a universal tool-call quota or estimating hidden reasoning from response length.
+
+## Pilot golden set, blind review and gate
+
+The small [bar-boundary golden suite](goldens/bar-boundaries-v1.json) freezes two matched requirements tasks and their criteria before execution. It is a visible development set, not a secret holdout or production-quality benchmark. `prepare_bar_trial.py` creates isolated baseline/candidate workspaces; the evaluator keeps the suite rubric outside agent workspaces. After each run writes `REQUIREMENTS.md`, create a `runs.json` like the [recorded run manifest](results/2026-09-23-bar-gate/runs.json), with artifact paths relative to that manifest.
+
+`blind_gate.py prepare --suite <suite.json> --runs <runs.json> --packet <reviewer/packet.json> --key <private/key.json>` randomizes left/right output placement and freezes artifact, packet and rubric hashes with normalized text line endings. Send only the packet to a reviewer. Record every criterion as `pass`, `fail` or `uncertain`, plus a paired preference and evidence-based reason, following the [recorded review format](results/2026-09-23-bar-gate/blind-review.json). `blind_gate.py gate` with the same four paths plus `--review <review.json> --output <decision.json>` exits nonzero on critical failure, regression, uncertainty, baseline preference, changed evidence or absent human review. Add `--pilot` only for exploratory model-only review; it does not authorize release. The current CI runs tool tests, not model trials or this release gate.
+
+The [2026-09-23 pilot](results/2026-09-23-bar-gate/report.md) used four actual CLI runs and a fresh blinded model reviewer. Both cases tied; the pilot gate passed, while the release gate correctly failed because no human reviewed the packet. This does not demonstrate a quality improvement or complete the broader unrun `exception-decision-boundary` and `order-boundary-classification` specifications.
 
 ## Reproducible receipt trial
 
