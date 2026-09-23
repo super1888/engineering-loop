@@ -1,0 +1,81 @@
+{
+  "id": "novice-scope-v3",
+  "purpose": "Independent follow-up after v2 exposed an unrequested month-navigation requirement; test a new small task, a broad legitimate release, and the original failure",
+  "cases": [
+    {
+      "id": "habit-first-step",
+      "turns": [
+        "我是第一次做网页，想做一个习惯打卡网站。请使用 engineering-loop 帮我讨论第一步，这轮不写代码。",
+        "先让我在这台电脑的浏览器里，把今天的喝水标记为完成；明天打开网页，能看到昨天已经完成。提醒、排行榜和连续天数以后再考虑。我不会选技术，请直接定一个能检查的第一步。"
+      ],
+      "criteria": [
+        {
+          "id": "bounded_behavior",
+          "critical": true,
+          "question": "Does it define a checkable mark-today-and-see-yesterday behavior without making reminders, rankings, streaks or a broad habit editor prerequisites?"
+        },
+        {
+          "id": "no_optional_gate",
+          "critical": true,
+          "question": "After the concrete example, does it avoid requiring a decision about optional fields, controls or storage technology before stating the first step?"
+        },
+        {
+          "id": "persistence_truth",
+          "critical": false,
+          "question": "Does it explain how persistence is experienced on reopening and any meaningful current-browser limit without claiming implementation?"
+        }
+      ],
+      "task": "用户：我是第一次做网页，想做一个习惯打卡网站。请使用 engineering-loop 帮我讨论第一步，这轮不写代码。\n用户：先让我在这台电脑的浏览器里，把今天的喝水标记为完成；明天打开网页，能看到昨天已经完成。提醒、排行榜和连续天数以后再考虑。我不会选技术，请直接定一个能检查的第一步。"
+    },
+    {
+      "id": "current-month-release",
+      "turns": [
+        "请使用 engineering-loop 帮我定义个人记账网站的第一版验收。这一版必须能添加收入和支出、修改和删除记录，还要显示本月总收入、总支出和结余。我只在自己的电脑浏览器使用。先讨论，不写代码。",
+        "这些功能我都确认要做。给我能逐项检查的验收说明；不要缩成只记一笔支出。历史月份怎么浏览、预算和图表以后再考虑。"
+      ],
+      "criteria": [
+        {
+          "id": "all_required",
+          "critical": true,
+          "question": "Does the first release retain add income and expense, edit, delete, and this-month income, expense and balance with visible checks?"
+        },
+        {
+          "id": "no_extra_release",
+          "critical": true,
+          "question": "Does it keep history-month navigation, budgets and charts out of required first-release acceptance?"
+        },
+        {
+          "id": "no_reopen",
+          "critical": false,
+          "question": "Does it avoid re-asking whether income or editing belongs in the first release?"
+        }
+      ],
+      "task": "用户：请使用 engineering-loop 帮我定义个人记账网站的第一版验收。这一版必须能添加收入和支出、修改和删除记录，还要显示本月总收入、总支出和结余。我只在自己的电脑浏览器使用。先讨论，不写代码。\n用户：这些功能我都确认要做。给我能逐项检查的验收说明；不要缩成只记一笔支出。历史月份怎么浏览、预算和图表以后再考虑。"
+    },
+    {
+      "id": "single-expense-repeat",
+      "turns": [
+        "我是第一次做网页，想做一个能记账的网站，但不知道从哪开始。请使用 engineering-loop 和我讨论。这一轮先别写代码。",
+        "我不懂那些技术选项。先只在这台电脑的浏览器用；记一笔午餐 20 元，关掉网页再打开还能看到。以后手机能不能同步，我现在不决定。请继续帮我确定第一步。"
+      ],
+      "criteria": [
+        {
+          "id": "single_expense",
+          "critical": true,
+          "question": "Does it define one expense and reopening persistence as a ready first step without requiring income, totals, editing, deletion or categories?"
+        },
+        {
+          "id": "no_optional_gate",
+          "critical": true,
+          "question": "Does it stop scope clarification once this step is defined instead of asking for approval of optional fields or date behavior?"
+        },
+        {
+          "id": "future_sync",
+          "critical": false,
+          "question": "Does it leave phone sync as a future decision and explain the present browser limit?"
+        }
+      ],
+      "task": "用户：我是第一次做网页，想做一个能记账的网站，但不知道从哪开始。请使用 engineering-loop 和我讨论。这一轮先别写代码。\n用户：我不懂那些技术选项。先只在这台电脑的浏览器用；记一笔午餐 20 元，关掉网页再打开还能看到。以后手机能不能同步，我现在不决定。请继续帮我确定第一步。"
+    }
+  ]
+}

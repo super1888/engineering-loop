@@ -1,0 +1,9 @@
+{
+  "suite": "novice-scope-v3",
+  "profile": "pilot",
+  "decision": "pass",
+  "case_count": 3,
+  "reasons": [],
+  "reviewer": "blinded-codex-cli",
+  "reviewer_kind": "model"
+}

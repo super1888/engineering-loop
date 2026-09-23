@@ -1,0 +1,31 @@
+{
+  "suite": "novice-scope-v3",
+  "suite_sha256": "4842671b2d33b32dbd9e38042e258dbd996c8cf2a8c3102e86af0a722f39b6c5",
+  "packet_sha256": "3d35ccf8575bdc407a7b1642362132ad57d4f6857142d5136564dc3f95a3220c",
+  "mapping": {
+    "habit-first-step": {
+      "left": "candidate",
+      "right": "baseline",
+      "hashes": {
+        "candidate": "d9a61291da8414c3a021ccef5fac9fe1b37779b1fec964e614bd14d8d76d6b14",
+        "baseline": "ac57f5a08c057486e21ace7a2d3b8a4100e2ba607d3b2d9e42061eb2a05a6675"
+      }
+    },
+    "current-month-release": {
+      "left": "candidate",
+      "right": "baseline",
+      "hashes": {
+        "candidate": "54bdb17f9c38265dcdcb8b6a397bc72dc78a81920c203a731953c6dd981a49ea",
+        "baseline": "02296af742b41d31334c5d352113561fb2f895c0a8bb1e928b4a0558d6a299eb"
+      }
+    },
+    "single-expense-repeat": {
+      "left": "baseline",
+      "right": "candidate",
+      "hashes": {
+        "baseline": "ba735d49111038717b0f547553cd2877a66f53bee5ea509cdf830ec9a703897d",
+        "candidate": "f54f7727d838aba6e40999397ecc8491e20a16f182bc70b4b7c717d18a0d430c"
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+2026-09-23T04:14:47.485060Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell
+2026-09-23T04:14:47.545323Z  WARN codex_core_skills::loader: ignoring file:///C:/Users/<user>/.agents/skills/content-to-skill/agents/openai.yaml: invalid openai.yaml: deserializing from YAML containing more than one document is not supported
+2026-09-23T04:14:47.566688Z ERROR codex_core::session::session: failed to load skill C:\Users\<user>\.agents\skills\content-to-skill\SKILL.md: missing YAML frontmatter delimited by ---
+2026-09-23T04:14:52.444275Z ERROR codex_models_manager::manager: failed to refresh available models: timeout waiting for child process to exit
+2026-09-23T04:14:52.444926Z  WARN codex_core_plugins::manager: failed to load recommended plugins error=failed to send remote plugin catalog request to https://chatgpt.com/backend-api/ps/plugins/suggested?scope=GLOBAL: error sending request for url (https://chatgpt.com/backend-api/ps/plugins/suggested?scope=GLOBAL)
+2026-09-23T04:14:52.626795Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)
+2026-09-23T04:14:58.854124Z  WARN codex_core_plugins::manager: failed to load recommended plugins error=failed to send remote plugin catalog request to https://chatgpt.com/backend-api/ps/plugins/suggested?scope=GLOBAL: error sending request for url (https://chatgpt.com/backend-api/ps/plugins/suggested?scope=GLOBAL)

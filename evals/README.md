@@ -6,6 +6,8 @@ Recorded run: [2026-09-21 local receipt/control and copy trials](results/2026-09
 
 Exploratory run: [2026-09-23 synthetic novice onboarding](results/2026-09-23-novice-onboarding/report.md). One actual two-turn conversation found that the assistant stated a useful single-expense example but kept adding broader bookkeeping features and another scope question. There was no real novice participant or no-skill comparison.
 
+Follow-up: [2026-09-23 novice-scope iteration trial](results/2026-09-23-novice-scope/report.md) ran 18 fresh two-turn dialogues across two frozen suites and successive requirement-guide revisions. A blinded model pilot preferred the final revision on two of three follow-up cases and tied the third; the original guidance reopened the single-expense scope. A middle revision expanded the full-release scope, motivating a separate control. No real beginner or human blind reviewer participated, so the release gate remains closed.
+
 Earlier run: [2026-09-22 list-detail A/B trial](results/2026-09-22-local-ui/report.md). Current guidance and a two-instruction candidate overlay produced identical paired source artifacts and passed the same browser acceptance. No incremental correctness benefit was observed; no candidate delegated work.
 
 Earlier run: [2026-09-22 asynchronous-import A/B trial](results/2026-09-22-async-import/report.md). Both conditions coordinated live backend/frontend contributors through a scheduled contract change and passed the same independent service and browser checks. An evaluator false positive and its correction are retained. No incremental correctness benefit or work reduction was established.

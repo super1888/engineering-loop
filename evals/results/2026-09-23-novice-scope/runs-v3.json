@@ -1,0 +1,27 @@
+{
+  "arms": {
+    "candidate": {
+      "current-month-release": {
+        "artifact": "artifacts/current-month-release-candidate.md"
+      },
+      "habit-first-step": {
+        "artifact": "artifacts/habit-first-step-candidate.md"
+      },
+      "single-expense-repeat": {
+        "artifact": "artifacts/single-expense-repeat-candidate.md"
+      }
+    },
+    "baseline": {
+      "current-month-release": {
+        "artifact": "artifacts/current-month-release-baseline.md"
+      },
+      "habit-first-step": {
+        "artifact": "artifacts/habit-first-step-baseline.md"
+      },
+      "single-expense-repeat": {
+        "artifact": "artifacts/single-expense-repeat-baseline.md"
+      }
+    }
+  },
+  "suite": "novice-scope-v3"
+}

@@ -119,6 +119,8 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 
 新增[小型黄金集与盲评门禁试跑](evals/results/2026-09-23-bar-gate/report.md)，对照两个酒吧点单边界任务。仅由模型完成的盲评认为两版并列；试跑门禁通过，发布门禁因缺少人工盲评而保持关闭。门禁是本地评测命令，不是 CI 模型检查，也未证明新版 skill 质量更高。
 
+[合成新手需求范围迭代试跑](evals/results/2026-09-23-novice-scope/report.md)用固定的双轮对话比较需求指南的多个版本。最终修订不再重问已由单笔支出示例确定的第一步，同时保留用户明确要求的完整第一版；中间版本曾意外增加历史月份切换要求。模型匿名试跑门禁通过，但没有真实新手或人工盲评，不构成发布质量或普遍收益的证明。
+
 当前未发布修订明确了受影响返回路径的可见结果、视觉缺陷的实际渲染证据和已知修复回放的结论边界（[三个场景](evals/README.md#unreleased-flow-visual-and-learning-revision)），并补充参考项目继承、有效约定维护、门禁证据、实际使用效果及纠正的跨会话保留（[七个场景](evals/README.md#unreleased-reference-inheritance-and-effective-guidance-revision)）。这十个场景均待执行；历史产品检查不能证明新指导有额外收益。保留现有阶段路由，不强制统一项目架构。
 
 可选的[协作指南](skills/engineering-loop/references/collaboration.md)补充职责归属、规格分歧裁决、已接受变更的同步和独立验证，不要求固定 agent 团队。对应[另四个协作场景](evals/README.md#unreleased-collaboration-revision)也尚未试跑；增加 agent 不代表已经提高准确率。

@@ -1,0 +1,6 @@
+Reading additional input from stdin...
+2026-09-23T04:12:32.102067Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell
+2026-09-23T04:12:32.131746Z  WARN codex_core_skills::loader: ignoring file:///C:/Users/<user>/.agents/skills/content-to-skill/agents/openai.yaml: invalid openai.yaml: deserializing from YAML containing more than one document is not supported
+2026-09-23T04:12:32.141257Z ERROR codex_core::session::session: failed to load skill C:\Users\<user>\.agents\skills\content-to-skill\SKILL.md: missing YAML frontmatter delimited by ---
+2026-09-23T04:12:37.105078Z  WARN codex_core_plugins::manager: failed to load recommended plugins error=failed to parse remote plugin catalog response from https://chatgpt.com/backend-api/ps/plugins/suggested?scope=GLOBAL: EOF while parsing a value at line 1 column 0
+2026-09-23T04:12:50.666282Z ERROR codex_core::tools::router: error=`"C:\\Users\\<user>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe" -Command "Get-Content -Raw '.agents/skills/engineering-loop/SKILL.md'; Write-Output \""'`n---WORKSPACE---"; Get-ChildItem -Force | Select-Object Mode,Length,LastWriteTime,Name | Format-Table -AutoSize'` rejected: blocked by policy

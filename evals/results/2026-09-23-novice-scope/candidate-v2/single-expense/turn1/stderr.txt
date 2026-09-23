@@ -1,0 +1,11 @@
+Reading additional input from stdin...
+2026-09-23T04:22:21.876440Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell
+2026-09-23T04:22:21.914851Z  WARN codex_core_skills::loader: ignoring file:///C:/Users/<user>/.agents/skills/content-to-skill/agents/openai.yaml: invalid openai.yaml: deserializing from YAML containing more than one document is not supported
+2026-09-23T04:22:21.929479Z ERROR codex_core::session::session: failed to load skill C:\Users\<user>\.agents\skills\content-to-skill\SKILL.md: missing YAML frontmatter delimited by ---
+2026-09-23T04:22:54.605650Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.5 seconds
+Output:
+
+2026-09-23T04:23:05.293609Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)
+2026-09-23T04:23:06.635538Z ERROR codex_core::tools::router: error=`"C:\\Users\\<user>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe" -Command '$files = rg --files -g '"'"'!*target*'"' -g '"'!*.class'"'; if ("'$LASTEXITCODE -eq 0) { $files | Select-Object -First 80 } elseif ($LASTEXITCODE -eq 1) { Write-Output '"'[empty workspace]' } else { exit "'$LASTEXITCODE }'` rejected: blocked by policy
+2026-09-23T04:23:11.679164Z ERROR codex_core::tools::router: error=`"C:\\Users\\<user>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe" -Command 'Get-ChildItem -Force | Select-Object Name,Mode,Length'` rejected: blocked by policy
