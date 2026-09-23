@@ -1,0 +1,18 @@
+已完成订单创建流程：
+
+- 后端校验商品名和数量，成功保存订单并生成递增编号。
+- 无效请求不会写入存储或消耗编号。
+- 前端校验商品名及 `1–20` 的整数数量。
+- 提交至 `POST /orders`，正确映射字段。
+- 本地校验、后端拒绝及传输异常均保留原始输入。
+
+检查结果：
+
+- Python 后端测试：2/2 通过
+- JavaScript 表单测试：2/2 通过
+- `git diff --check`：通过
+
+修改文件：
+
+- [backend/orders.py](<trial-root>/full-B/workspace/backend/orders.py)
+- [ui/order-form.mjs](<trial-root>/full-B/workspace/ui/order-form.mjs)

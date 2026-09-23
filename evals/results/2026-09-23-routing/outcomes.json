@@ -1,0 +1,148 @@
+{
+  "full-A": {
+    "changed_files": [
+      "backend/orders.py",
+      "backend/tests/test_orders.py",
+      "ui/order-form.mjs",
+      "ui/order-form.test.mjs"
+    ],
+    "untracked_non_cache": [],
+    "skills_read": [
+      "engineering-loop",
+      "order-backend",
+      "order-form"
+    ],
+    "usage": {
+      "input_tokens": 343075,
+      "cached_input_tokens": 310912,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4671,
+      "reasoning_output_tokens": 803
+    },
+    "public_backend_pass": true,
+    "public_form_pass": true,
+    "oracle_backend_pass": true,
+    "oracle_form_pass": true,
+    "completed_commands": 13,
+    "failed_commands": 3
+  },
+  "full-B": {
+    "changed_files": [
+      "backend/orders.py",
+      "ui/order-form.mjs"
+    ],
+    "untracked_non_cache": [],
+    "skills_read": [
+      "order-backend",
+      "order-form"
+    ],
+    "usage": {
+      "input_tokens": 197385,
+      "cached_input_tokens": 185728,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2760,
+      "reasoning_output_tokens": 560
+    },
+    "public_backend_pass": true,
+    "public_form_pass": true,
+    "oracle_backend_pass": true,
+    "oracle_form_pass": true,
+    "completed_commands": 10,
+    "failed_commands": 2
+  },
+  "full-C": {
+    "changed_files": [
+      "backend/orders.py",
+      "backend/tests/test_orders.py",
+      "ui/order-form.mjs",
+      "ui/order-form.test.mjs"
+    ],
+    "untracked_non_cache": [],
+    "skills_read": [
+      "order-backend",
+      "order-form"
+    ],
+    "usage": {
+      "input_tokens": 153492,
+      "cached_input_tokens": 130560,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2741,
+      "reasoning_output_tokens": 477
+    },
+    "public_backend_pass": true,
+    "public_form_pass": true,
+    "oracle_backend_pass": true,
+    "oracle_form_pass": true,
+    "completed_commands": 7,
+    "failed_commands": 2
+  },
+  "backend-A": {
+    "changed_files": [
+      "backend/orders.py",
+      "backend/tests/test_orders.py"
+    ],
+    "untracked_non_cache": [],
+    "skills_read": [
+      "engineering-loop",
+      "order-backend"
+    ],
+    "usage": {
+      "input_tokens": 206519,
+      "cached_input_tokens": 192000,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3125,
+      "reasoning_output_tokens": 592
+    },
+    "public_backend_pass": true,
+    "public_form_pass": null,
+    "oracle_backend_pass": true,
+    "oracle_form_pass": false,
+    "completed_commands": 8,
+    "failed_commands": 2
+  },
+  "backend-B": {
+    "changed_files": [
+      "backend/orders.py"
+    ],
+    "untracked_non_cache": [],
+    "skills_read": [
+      "order-backend"
+    ],
+    "usage": {
+      "input_tokens": 154254,
+      "cached_input_tokens": 144512,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2317,
+      "reasoning_output_tokens": 453
+    },
+    "public_backend_pass": true,
+    "public_form_pass": null,
+    "oracle_backend_pass": true,
+    "oracle_form_pass": false,
+    "completed_commands": 7,
+    "failed_commands": 1
+  },
+  "backend-C": {
+    "changed_files": [
+      "backend/orders.py",
+      "backend/tests/test_orders.py"
+    ],
+    "untracked_non_cache": [],
+    "skills_read": [
+      "order-backend"
+    ],
+    "usage": {
+      "input_tokens": 136727,
+      "cached_input_tokens": 127232,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2253,
+      "reasoning_output_tokens": 475
+    },
+    "public_backend_pass": true,
+    "public_form_pass": null,
+    "oracle_backend_pass": true,
+    "oracle_form_pass": false,
+    "completed_commands": 6,
+    "failed_commands": 2
+  }
+}

@@ -1,0 +1,56 @@
+diff --git a/backend/orders.py b/backend/orders.py
+index e9bf257..67bccc1 100644
+--- a/backend/orders.py
++++ b/backend/orders.py
+@@ -1,2 +1,30 @@
+ def create_order(store: list[dict], payload: dict) -> dict:
+-    raise NotImplementedError
++    """Validate, persist, and return a new order.
++
++    Validation is completed before the store is changed so rejected requests do
++    not consume an order ID.
++    """
++    if not isinstance(payload, dict):
++        raise ValueError("payload must be an object")
++
++    item_name = payload.get("item_name")
++    if not isinstance(item_name, str):
++        raise ValueError("item_name must be a string")
++
++    item_name = item_name.strip()
++    if not item_name:
++        raise ValueError("item_name must not be empty")
++
++    quantity = payload.get("quantity")
++    if isinstance(quantity, bool) or not isinstance(quantity, int):
++        raise ValueError("quantity must be an integer")
++    if not 1 <= quantity <= 20:
++        raise ValueError("quantity must be between 1 and 20")
++
++    order = {
++        "id": len(store) + 1,
++        "item_name": item_name,
++        "quantity": quantity,
++    }
++    store.append(order)
++    return order
+diff --git a/backend/tests/test_orders.py b/backend/tests/test_orders.py
+index 7692d4f..5aa0225 100644
+--- a/backend/tests/test_orders.py
++++ b/backend/tests/test_orders.py
+@@ -16,6 +16,15 @@ class OrderTests(unittest.TestCase):
+             create_order(store, {"item_name": "Pen", "quantity": 0})
+         self.assertEqual(store, [])
+ 
++    def test_rejected_order_does_not_consume_id(self):
++        store = []
++        with self.assertRaises(ValueError):
++            create_order(store, {"item_name": "   ", "quantity": 1})
++
++        order = create_order(store, {"item_name": "Notebook", "quantity": 20})
++
++        self.assertEqual(order["id"], 1)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

@@ -1,0 +1,64 @@
+diff --git a/backend/orders.py b/backend/orders.py
+index e9bf257..638efda 100644
+--- a/backend/orders.py
++++ b/backend/orders.py
+@@ -1,2 +1,23 @@
+ def create_order(store: list[dict], payload: dict) -> dict:
+-    raise NotImplementedError
++    """Validate and append an order to ``store``.
++
++    Validation is completed before the store is changed so rejected requests do
++    not consume an order ID.
++    """
++    item_name = payload.get("item_name")
++    quantity = payload.get("quantity")
++
++    if not isinstance(item_name, str) or not item_name.strip():
++        raise ValueError("item_name must be a non-empty string")
++    if isinstance(quantity, bool) or not isinstance(quantity, int):
++        raise ValueError("quantity must be an integer")
++    if not 1 <= quantity <= 20:
++        raise ValueError("quantity must be between 1 and 20")
++
++    order = {
++        "id": len(store) + 1,
++        "item_name": item_name.strip(),
++        "quantity": quantity,
++    }
++    store.append(order)
++    return order
+diff --git a/backend/tests/test_orders.py b/backend/tests/test_orders.py
+index 7692d4f..f808501 100644
+--- a/backend/tests/test_orders.py
++++ b/backend/tests/test_orders.py
+@@ -16,6 +16,30 @@ class OrderTests(unittest.TestCase):
+             create_order(store, {"item_name": "Pen", "quantity": 0})
+         self.assertEqual(store, [])
+ 
++    def test_rejects_blank_name_without_storage(self):
++        store = []
++        with self.assertRaises(ValueError):
++            create_order(store, {"item_name": "   ", "quantity": 1})
++        self.assertEqual(store, [])
++
++    def test_rejects_noninteger_and_out_of_range_quantities(self):
++        for quantity in ("2", 1.5, True, 21):
++            with self.subTest(quantity=quantity):
++                store = []
++                with self.assertRaises(ValueError):
++                    create_order(store, {"item_name": "Pen", "quantity": quantity})
++                self.assertEqual(store, [])
++
++    def test_rejected_order_does_not_consume_id(self):
++        store = []
++        first = create_order(store, {"item_name": "Pen", "quantity": 1})
++        with self.assertRaises(ValueError):
++            create_order(store, {"item_name": "Notebook", "quantity": 0})
++        second = create_order(store, {"item_name": "Notebook", "quantity": 2})
++
++        self.assertEqual(first["id"], 1)
++        self.assertEqual(second["id"], 2)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

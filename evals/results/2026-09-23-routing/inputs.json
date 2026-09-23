@@ -1,0 +1,39 @@
+{
+  "source_revision": "762b7a8e130675fb3d4d1a8896ff5d49287f6342",
+  "fixture_hashes": {
+    ".agents/skills/order-backend/SKILL.md": "c4e4de4af8d136fd0d96d9f83426f51b8fd128076011e602e6bdb04a7892e4fa",
+    ".agents/skills/order-form/SKILL.md": "11c2189a58feddbdf8a8aa1aa0474ad14c1919336eda20a26df20ec38e205d09",
+    "AGENTS.md": "bfe90870d51101d5aae51833a83a3ab9401ab0f2face263c00add6c556f84396",
+    "API.md": "36f95aad32e2cd0cef0d1b21a703ce81a8d8a781d16b4b30d71c6e19bbbd3478",
+    "backend/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/orders.py": "49bc6b4e4f69224de33b2a3e9c248f6bff25a7333e9de8de9cbcfccd0e8ef815",
+    "backend/tests/test_orders.py": "a4f45a7012e391cc4f7df325e4d5c1cd08817156034efdb128dc884bde631dd3",
+    "PRODUCT.md": "6ca36f0403e63a8ae02bf958b189727c70ea78c37b347513c37b24cd9baf13b4",
+    "ui/order-form.mjs": "430500e5c9a363795e83d6544757109f52a6a2e0921d7d30d57a52a26df3c069",
+    "ui/order-form.test.mjs": "b7b9afe0a6b7f458dedb34d819e7b8fa458d596d334d25298dcd9cb5b4d2be73"
+  },
+  "skill_hashes": {
+    "agents/openai.yaml": "275c645616220591089b951f0fe73dcba4fdd317b2b2dc52df79d824245db743",
+    "references/collaboration.md": "6b6603e8c103d5d86dd4d959248e2b3fc450e37cff685066eb3448ddd6155ab0",
+    "references/implementation.md": "26a058d36747fda5655d17ca3f62c3c8d78f9a3bca1a271a0a2220e449276df6",
+    "references/learning.md": "5b0f7f4cacf4ed6ae4500b07b1b86153aed7fefcbe11b67796c09ae5101044df",
+    "references/operations.md": "4d7395ee032ac48beb31105599252013af77f4a8878c7c884734e333374fa730",
+    "references/project.md": "1fe4ec8825e90fd53d15756661892abfcc3eb1044e54a13bd7fef39866451fbc",
+    "references/release.md": "e644236f19d80d542c6b4be11fb16f228060d443b8d422e33ee05a3abe74fd51",
+    "references/requirements.md": "2009686861a65be92979246f89b05dbe336e5e6d7529abe4a29744bd2fddbd39",
+    "references/resume.md": "8a1b26bffe04c2f1ee9bb0298a25ae1956cc273bfc247311fb3e84cfa1835328",
+    "references/review.md": "5c69a7bb8525de7ce51f3bc70b8ed2c954e14d16a36c325f547c4807cd8d4f3a",
+    "references/verification.md": "4dd8f6f9d2c501d2a5f8c042e91a437e8e834b3ec9055685171833848faade18",
+    "SKILL.md": "0de277a4427ac69b818a350ce4a6fe2c6aad98e68c44cb7a2c31efcd179623b9"
+  },
+  "tasks": {
+    "full": "完成订单创建：表单提交商品和数量，后端保存并返回编号，失败时保留输入。遵循项目约定。",
+    "backend": "实现后端订单创建与校验，遵循项目约定；前端保持原状。"
+  },
+  "routing_rule": "\n- Before implementation, select repository skills by the affected backend/form files. Read only the matching skills; use both when the requested behavior crosses the API and form. The user need not name skills or agent roles.\n",
+  "test_rule": "\nWhen accepted behavior adds or changes a boundary, add or update one focused regression in the existing test file unless it already covers that boundary.\n",
+  "normalized_prompts": {
+    "full": "Complete the user's request in the isolated synthetic workspace <workspace>:\n完成订单创建：表单提交商品和数量，后端保存并返回编号，失败时保留输入。遵循项目约定。\n\nUse normal project instructions and skill discovery; the user has not chosen a skill. Only inspect or edit this workspace. Do not inspect the evaluator, source repository or sibling trials. Do not delegate, commit, publish or install dependencies in this controlled trial. Run applicable project checks and report actual results.\n",
+    "backend": "Complete the user's request in the isolated synthetic workspace <workspace>:\n实现后端订单创建与校验，遵循项目约定；前端保持原状。\n\nUse normal project instructions and skill discovery; the user has not chosen a skill. Only inspect or edit this workspace. Do not inspect the evaluator, source repository or sibling trials. Do not delegate, commit, publish or install dependencies in this controlled trial. Run applicable project checks and report actual results.\n"
+  }
+}

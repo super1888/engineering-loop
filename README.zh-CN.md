@@ -123,7 +123,7 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 
 后续[异步导入 A/B 试验](evals/results/2026-09-22-async-import/report.md)采用实际前后端子代理、冲突规格及预定的 owner 契约变更。两组均通过八项独立服务场景及七个浏览器流程阶段。期间修正一次验收器误报，并用正反对照确认修复。未证明额外正确性收益或工作量下降，两条候选指导仍保留为实验内容。
 
-新增[两个场景](evals/README.md#specialist-routing-and-project-convention-trial)，分别检验简短用户请求下的专业 skill 路由，以及通用简化建议与项目注释、常量约定冲突时的处理。[合成约定 A/B 试跑](evals/results/2026-09-23-convention/report.md)中两版均通过，未观察到新指导带来的额外质量收益，故移除未证实有效的实现条款；自动路由仍待测试。
+[两个场景](evals/README.md#specialist-routing-and-project-convention-trial)分别检验简短用户请求下的专业 skill 路由，以及通用简化建议与项目注释、常量约定冲突时的处理。[合成约定 A/B 试跑](evals/results/2026-09-23-convention/report.md)中两版均通过，未观察到新增指导的质量收益，故移除未证实有效的实现条款。[合成路由 A/B/C 试跑](evals/results/2026-09-23-routing/report.md)中，简短项目路由规则选中了匹配的 skill；把聚焦回归要求写进专属 skill 后，在所测任务里恢复了持久测试。真实子 agent 委派和 HR 项目效果仍未测试。
 
 欢迎在 [Issues](https://github.com/super1888/engineering-loop/issues) 提供脱敏反例，在 [Discussions](https://github.com/super1888/engineering-loop/discussions) 讨论流程取舍。重点是实际减少重复沟通、遗漏与返工，不以规则条数或文档数量作为成熟度。
 

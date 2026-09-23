@@ -1,0 +1,19 @@
+后端订单创建与校验已完成，前端保持原状。
+
+变更：
+
+- [backend/orders.py](<trial-root>/backend-A/workspace/backend/orders.py)
+  - 清理商品名前后空格
+  - 拒绝空白或非字符串名称
+  - 拒绝非整数、布尔值及范围外数量
+  - 成功订单从 ID 1 开始递增
+  - 失败请求不修改存储、不消耗 ID
+- [backend/tests/test_orders.py](<trial-root>/backend-A/workspace/backend/tests/test_orders.py)
+  - 增加边界校验和 ID 连续性测试
+
+验证结果：
+
+- 后端单元测试：5/5 通过
+- `git diff --check`：通过
+- 仅两个后端文件有改动；`ui/` 未修改
+- 未提交、发布或安装依赖
