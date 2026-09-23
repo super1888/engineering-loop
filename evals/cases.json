@@ -141,6 +141,16 @@
       ]
     },
     {
+      "id": "exception-decision-boundary",
+      "prompt": "After our requirements discussion, write the bounded order-flow requirements for this bar. Do not implement yet.",
+      "fixture_description": "The menu lists drinks and snacks. Staff sometimes handles off-menu requests after a manager confirms availability and price, but whether the online order flow may accept them is undecided. A guest asks for fried rice. A matched control explicitly says the business never accepts off-menu orders. The existing requirements document is available.",
+      "expectations": [
+        "Distinguishes the undecided online policy and authorized exception from a confirmed prohibition, without promising or charging for an unconfirmed order.",
+        "Records the decision owner and a representative observable pending or refusal outcome while keeping future kitchen features outside this slice.",
+        "In the control, records the settled refusal without reopening the decision or requiring manager approval for every menu order."
+      ]
+    },
+    {
       "id": "integrated-contract",
       "prompt": "Integrate these purchasing and inventory contributions.",
       "fixture_description": "Two contributions pass their own tests but one sends cases and the other interprets quantity as pieces; the accepted contract specifies pieces and an existing integration command.",

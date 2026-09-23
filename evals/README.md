@@ -16,6 +16,8 @@ Record host/version, model/configuration, skill revision, fixture revision, obse
 
 Priority cases: negative-copy, resume-stale, batch-dependent, test-integrity, inventory-loss, project-adapter. These target the actual risk of an engineering skill taking over unrelated work or creating false confidence.
 
+The unrun `exception-decision-boundary` case probes a narrower requirements risk: treating a menu-external request as automatically prohibited when staff-approved exceptions exist, or adding an approval flow when the business has already forbidden such requests. It needs a matched undecided-policy fixture and settled-prohibition control before any model-quality claim.
+
 For scope/effort changes, pair overreach cases with required work that must still be done, and unnecessary questions with material decisions that must be asked. Evaluate compliance separately from usefulness. Where justified, compare no skill, a frozen reduced-guidance variant and the full skill on matched inputs with unchanged acceptance/tools. Record the exact variants and available model identity; remove one component at a time rather than bundling changes. Count observable unnecessary reads, repeated checks, clarification turns and scope additions without inventing a universal tool-call quota or estimating hidden reasoning from response length.
 
 ## Reproducible receipt trial

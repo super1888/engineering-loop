@@ -95,6 +95,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 按需读取[项目接入指南](skills/engineering-loop/references/project.md)，复用项目已有载体，确认当前功能的业务样例、模块与数据归属、共享契约负责人及验证命令。先完成一个可验收的功能，再扩展类似实现；多人工作集成后验证相互影响。
 
+[需求指南](skills/engineering-loop/references/requirements.md)在相关边界上区分已确认排除、授权例外和尚未决定的政策，用代表性结果和决定人说明处理方式，不把每个假设请求都变成新功能。
+
 问题先进入项目回归或自动检查，技术栈经验进入相应模板或规则，跨项目反复出现的流程问题才进入通用 skill。新项目只选择相关经验并运行防护检查；仅复制文档不能证明问题已被预防。详细示例见[工作流程](examples/workflows.md)。
 
 ## 如何控制上下文
