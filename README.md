@@ -10,6 +10,8 @@
 
 A portable skill for Claude Code and Codex that coordinates a software change from requirements to operations. It keeps human decisions explicit, loads stage guidance only when needed, and ties completion claims to evidence.
 
+**Using it in an existing Git repository?** Copy only the complete [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) directory into that project's skill location. Keep its `references/` and `agents/` subfolders; the rest of this repository is for development and evaluation.
+
 **v0.1 is an experimental workflow draft.** Packaging checks do not prove fewer bugs or faster delivery. We publish behavioral scenarios and welcome reproducible counterexamples before expanding the rules.
 
 ## The problem
@@ -163,8 +165,6 @@ python scripts/package.py --output dist/engineering-loop.zip
 Python 3.10+ is needed only for repository checks/packaging and local evaluation helpers, not to use the skill. CI runs package checks and helper unit tests on Linux, macOS, and Windows; it does not run models. The [behavioral evaluation cases](evals/cases.json) remain a protocol with partial execution: one [local receipt/control and copy trial](evals/results/2026-09-21-local/report.md) is recorded with artifacts, including an evaluator defect and its fix. Both receipt conditions passed; no quality advantage or speedup is established. See [validation status](docs/COMPATIBILITY.md) before making compatibility or performance claims.
 
 A [pilot golden set and blind-review gate](evals/results/2026-09-23-bar-gate/report.md) now compares two bar-boundary tasks. The model-only pilot review tied both variants; the release gate remained closed pending human blinded review. The gate is a local evaluation command, not a model check in CI or evidence that the candidate skill improved quality.
-
-A [synthetic novice-scope iteration trial](evals/results/2026-09-23-novice-scope/report.md) compared frozen two-turn conversations across requirement-guide revisions. The final revision stopped reopening an already defined single-expense step while retaining a broader requested release; a middle revision exposed an unrequested month-navigation requirement. The blinded model pilot passed, but no real beginner or human blind review participated, so this is not a release-quality or general-benefit claim.
 
 We especially want small counterexamples: unnecessary questions, missed decisions, context waste, invalid completion claims, or a project convention the skill accidentally overrides. Use [Issues](https://github.com/super1888/engineering-loop/issues) or [Discussions](https://github.com/super1888/engineering-loop/discussions); remove private code and data first.
 

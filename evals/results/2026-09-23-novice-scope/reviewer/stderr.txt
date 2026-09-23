@@ -1,5 +1,0 @@
-Reading additional input from stdin...
-2026-09-23T04:49:30.326538Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell
-2026-09-23T04:49:30.358001Z  WARN codex_core_skills::loader: ignoring file:///C:/Users/<user>/.agents/skills/content-to-skill/agents/openai.yaml: invalid openai.yaml: deserializing from YAML containing more than one document is not supported
-2026-09-23T04:49:30.367819Z ERROR codex_core::session::session: failed to load skill C:\Users\<user>\.agents\skills\content-to-skill\SKILL.md: missing YAML frontmatter delimited by ---
-2026-09-23T04:50:16.700223Z ERROR codex_core::tools::router: error=`"C:\\Users\\<user>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe" -Command '$p = Get-Content -Raw -LiteralPath .'"\\packet.json | ConvertFrom-Json; "'$c=$p.cases[1]; '"'LEFT_FIRST'; ("'$c.left -split '"'## 助手第二轮')[0]; 'RIGHT_FIRST'; ("'$c.right -split '"'## 助手第二轮')[0]"` rejected: blocked by policy

@@ -1,4 +1,0 @@
-Reading additional input from stdin...
-2026-09-23T04:42:48.657032Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell
-2026-09-23T04:42:48.686244Z  WARN codex_core_skills::loader: ignoring file:///C:/Users/<user>/.agents/skills/content-to-skill/agents/openai.yaml: invalid openai.yaml: deserializing from YAML containing more than one document is not supported
-2026-09-23T04:42:48.696601Z ERROR codex_core::session::session: failed to load skill C:\Users\<user>\.agents\skills\content-to-skill\SKILL.md: missing YAML frontmatter delimited by ---
