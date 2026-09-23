@@ -150,7 +150,7 @@ See [worked examples](examples/workflows.md) and [design boundaries](docs/DESIGN
 
 For a new project, the [project connection guide](skills/engineering-loop/references/project.md) reuses existing requirements, architecture and checks. It does not impose another tracker or ask every project to load every historical lesson. Domain decisions stay with the people responsible for them; mechanically checkable constraints should reach the project's actual gates.
 
-The [requirements guide](skills/engineering-loop/references/requirements.md) distinguishes confirmed exclusions, authorized exceptions and undecided policies at relevant boundaries. It uses representative outcomes and decision owners without turning every hypothetical request into a feature.
+The [requirements guide](skills/engineering-loop/references/requirements.md) distinguishes confirmed exclusions, authorized exceptions and undecided policies at relevant boundaries. It also separates an unclear request, an unsupported one and temporary unavailability when they have different outcomes. The [order-flow example](examples/workflows.md#a-bounded-order-flow-requirement) shows those distinctions without turning every hypothetical request into a feature.
 
 ## Validation and contribution
 

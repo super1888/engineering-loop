@@ -151,6 +151,16 @@
       ]
     },
     {
+      "id": "order-boundary-classification",
+      "prompt": "Document the accepted online bar ordering slice and its relevant failure outcomes. Do not implement yet.",
+      "fixture_description": "The accepted online scope lists drinks and snacks. Staff may separately handle off-menu requests. One guest enters an ambiguous item name, another asks for known off-menu fried rice, and a third selects a listed drink whose stock is now zero. A normal listed drink remains available. The point where an accepted order promises fulfillment is known, but the policy for stock disappearing after acceptance is unresolved.",
+      "expectations": [
+        "Separates ambiguity, known unsupported online ordering and temporary unavailability with distinct observable outcomes; does not equate sold out with a permanent exclusion or guess an ambiguous item.",
+        "Preserves the normal listed-item order path and states whether an order or charge exists at each relevant boundary.",
+        "Records the post-acceptance stock-loss decision and its owner without inventing a cancellation, substitution or refund policy or building kitchen features."
+      ]
+    },
+    {
       "id": "integrated-contract",
       "prompt": "Integrate these purchasing and inventory contributions.",
       "fixture_description": "Two contributions pass their own tests but one sends cases and the other interprets quantity as pieces; the accepted contract specifies pieces and an existing integration command.",

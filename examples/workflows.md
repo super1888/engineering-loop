@@ -12,6 +12,20 @@ Investigate the existing session behavior and tests. Reproduce a rejected logout
 
 Measure queue time versus processing time. Ask about unresolved duplicate and partial-failure behavior in the same round if independent. After that choice, determine the necessary recovery UI. Implement one complete slice before expanding concurrency; verify no duplicate side effects after a lost response. Do not invent a universal thread count.
 
+## A bounded order-flow requirement
+
+**Request:** “Document the online ordering flow for our bar. Do not implement yet.”
+
+Suppose the accepted online scope is listed drinks and snacks; staff may handle off-menu requests separately. Document one successful menu order and three distinct boundaries:
+
+| Guest request | Meaning | Observable outcome before an order or charge |
+|---|---|---|
+| Unclear item name | The product cannot yet be identified | Ask the guest to clarify; do not guess a menu item. |
+| Fried rice, known to be off-menu online | The requested product is identified but unsupported in this flow | Explain the online scope; do not create an online order. Staff handling remains a separate path. |
+| A listed drink now sold out | The item is supported but temporarily unavailable | Show the availability change and let the guest choose again; do not describe it as permanently excluded. |
+
+Define exactly when “order accepted” promises fulfillment and what effects may already have occurred. If stock can disappear after that point, record the unresolved cancellation, substitution or refund decision with its owner before specifying recovery behavior. These examples illustrate the distinction; they are not universal menu or payment rules.
+
 ## Resuming after an architecture replacement
 
 **Request:** “Continue from the handoff.”
