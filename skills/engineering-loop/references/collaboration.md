@@ -13,6 +13,8 @@ Use when concurrent contributors need ownership, disagreement resolution or cont
 
 Give each contributor only the relevant agreement/version, paths and contracts owned, prerequisites, expected result and checks. Agree who owns shared files and integration before overlapping work. Serialize conflicting writes, including specification/test files and shared build or Git state, according to project policy. Do not assign two agents the same repair without a concrete reason.
 
+For a specialist assignment, name the affected stack and applicable project skill or maintained reference when available. A role label alone does not supply project expertise. Let a contributor identify a narrower relevant skill when the environment exposes one, but keep the effective agreement, file ownership and acceptance with the coordinator. Do not load every available skill or add contributors merely to give each skill an owner.
+
 ## Resolve disagreements with evidence
 
 An implementer or reviewer challenging a specification provides the effective rule, a concrete conflicting fact or usage scenario, consequence, proposed correction and affected work. The coordinator distinguishes:

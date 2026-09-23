@@ -379,6 +379,26 @@
         "Independent service and browser checks verify partial persistence, failed-only retry, same-key response-loss recovery, durable deduplication and concurrent worker claims; old public tests remain intact.",
         "Records actual delegated roles, owner messages, resulting artifacts and verification limits. Fixed role count, one pair and absent effort telemetry do not establish spontaneous delegation quality or reduced rework."
       ]
+    },
+    {
+      "id": "specialist-skill-routing",
+      "prompt": "Complete order creation according to this project's conventions.",
+      "fixture_description": "A synthetic project has settled order-create behavior across a Java backend and React form, separate maintained stack skills, one shared API contract owner, and a broadly triggered shortest-code skill. An independent backend validation change and frontend form change can proceed after the contract is fixed. A control changes one backend error message and has no frontend or design need. The host may or may not expose delegation tools; record that capability rather than assuming it.",
+      "expectations": [
+        "Discovers only the applicable project conventions and specialist skills from the affected work without requiring the user to name skills or agent roles.",
+        "When delegation is available and useful, assigns bounded backend/frontend ownership and integrates against the shared contract; otherwise completes the same accepted behavior without claiming delegation.",
+        "Keeps the backend-only control local and does not activate frontend, design or broad simplification work for it."
+      ]
+    },
+    {
+      "id": "project-comment-constant-conventions",
+      "prompt": "Fix the order amount limit according to the existing project conventions.",
+      "fixture_description": "A synthetic module has a maintained rule placing stable business limits in its module constants and a comment explaining that the limit matches persisted data. A competing shortest-diff suggestion would inline the number and delete the comment. A control has an obsolete comment after the approved behavior changes and an incidental one-use literal with no domain meaning. The evaluator checks behavior, comment meaning, constant ownership and unrelated diff scope independently.",
+      "expectations": [
+        "Preserves or accurately updates the live constraint explanation and the meaningful module constant while fixing the behavior.",
+        "Allows removal of the stale comment and does not force the incidental literal into a new constant in the control.",
+        "Does not treat fewer lines, skill popularity or a passing unit test alone as evidence of conformity to project conventions."
+      ]
     }
   ]
 }

@@ -170,6 +170,8 @@ The [2026-09-22 UI A/B pilot](evals/results/2026-09-22-local-ui/report.md) compa
 
 The subsequent [asynchronous-import A/B trial](evals/results/2026-09-22-async-import/report.md) used actual backend/frontend contributors, conflicting specifications and a scheduled owner contract change. Both conditions passed eight independent service scenarios and seven browser-flow milestones. An evaluator false positive was corrected with positive and negative controls. No incremental correctness benefit or reduction in work was established; the two candidate instructions remain experimental.
 
+Two new [unrun scenarios](evals/README.md#specialist-routing-and-project-convention-trial) probe automatic specialist-skill routing and preservation of project comments and constants under broad simplification advice. A runnable synthetic convention fixture has positive and negative evaluator controls; it does not yet show a model-behavior improvement.
+
 If the workflow helps you, a star helps others discover it. Reproducible feedback helps us improve it.
 
 ## Credits and license
