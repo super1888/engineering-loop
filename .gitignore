@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 .env
 .DS_Store
+/.idea/
+/.planning/
+/task_plan.md
+/progress.md
+/findings.md
