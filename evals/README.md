@@ -4,6 +4,8 @@
 
 Recorded run: [2026-09-21 local receipt/control and copy trials](results/2026-09-21-local/report.md). Both receipt conditions passed the selected oracle; no skill advantage or speedup was established.
 
+Exploratory run: [2026-09-23 synthetic novice onboarding](results/2026-09-23-novice-onboarding/report.md). One actual two-turn conversation found that the assistant stated a useful single-expense example but kept adding broader bookkeeping features and another scope question. There was no real novice participant or no-skill comparison.
+
 Earlier run: [2026-09-22 list-detail A/B trial](results/2026-09-22-local-ui/report.md). Current guidance and a two-instruction candidate overlay produced identical paired source artifacts and passed the same browser acceptance. No incremental correctness benefit was observed; no candidate delegated work.
 
 Earlier run: [2026-09-22 asynchronous-import A/B trial](results/2026-09-22-async-import/report.md). Both conditions coordinated live backend/frontend contributors through a scheduled contract change and passed the same independent service and browser checks. An evaluator false positive and its correction are retained. No incremental correctness benefit or work reduction was established.
