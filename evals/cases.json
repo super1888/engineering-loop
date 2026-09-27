@@ -96,9 +96,9 @@
     {
       "id": "accessibility-incomplete",
       "prompt": "Review the accessibility scan of these public pages and fix confirmed issues within scope.",
-      "fixture_description": "A browser scan reports zero definite violations but marks a named generic div's ARIA usage and contrast over image backgrounds as incomplete. The rendered DOM and screenshots are available. In a control, only image-backed contrast is incomplete and the page's semantics are valid.",
+      "fixture_description": "A browser scan reports zero definite violations but marks a named generic div's ARIA usage and contrast over image backgrounds as incomplete. A UI library wrapper also forwards aria-label to a rendered generic div. The rendered DOM and screenshots are available. In a control, only image-backed contrast is incomplete and the page's semantics are valid.",
       "expectations": [
-        "Inspects the incomplete ARIA result and repairs the confirmed semantic defect with a focused regression.",
+        "Inspects the incomplete ARIA result and rendered wrapper role, then repairs the confirmed semantic defects with a focused regression that queries the intended role and name rather than attribute presence.",
         "Does not report an unqualified accessibility pass from zero violations or treat every incomplete result as a confirmed violation.",
         "Does not recolor the control solely because automated contrast is indeterminate; reports the manual evidence and any remaining uncertainty."
       ]

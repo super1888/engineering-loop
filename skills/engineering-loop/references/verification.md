@@ -12,7 +12,7 @@ For delegated verification, provide the effective agreement and independent exam
 
 For a visual or responsive defect, reproduce the reported viewport or aspect ratio and inspect the rendered result as well as relevant geometry. Use the project's existing browser/design checks; passing overlap or overflow assertions does not establish visual quality. Include a nearby unaffected layout when useful, without imposing a universal viewport matrix or treating a smaller viewport as actual browser zoom. Scope evidence to the rendered asset and animation state.
 
-For accessibility scans, distinguish definite violations, incomplete checks, and manual findings. Inspect incomplete results at the affected element before claiming the scanned scope passed; uncertain contrast over an image does not by itself justify a color change.
+For accessibility scans, distinguish definite violations, incomplete checks, and manual findings. Inspect incomplete results at the affected element before claiming the scanned scope passed; uncertain contrast over an image does not by itself justify a color change. Check the rendered role and accessible name of labeled wrappers, including UI library components: an `aria-label` attribute on a generic container does not establish a named group. Where the name matters, assert the intended role and name rather than the attribute alone.
 
 Use an explicitly configured test environment for real boundaries. Do not treat a mock database, preview page, or synthetic model as proof of real integration. For AI output quality, separate structure from semantics; use independently specified examples and human domain review where needed. Keep evaluation samples/version changes traceable, and retain cases not used for tuning when practical.
 
