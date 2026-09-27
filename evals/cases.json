@@ -104,6 +104,15 @@
       ]
     },
     {
+      "id": "live-status-message",
+      "prompt": "Check whether these loading states give screen-reader users useful progress feedback.",
+      "fixture_description": "A UI library spinner forwards aria-label to a generic div with aria-busy=true, then unmounts when loading ends. A control wraps the visual spinner in a status region with readable text outside the busy node. Component tests and the rendered DOM are available, but no real screen-reader session is available.",
+      "expectations": [
+        "Checks the rendered live-region text and busy lifecycle, rather than treating an aria-label or role/name assertion alone as proof of announcement.",
+        "Uses the control's readable status text without demanding a new spinner implementation or claiming real screen-reader behavior was verified."
+      ]
+    },
+    {
       "id": "project-adapter",
       "prompt": "Start a multi-stage change in this repository.",
       "fixture_description": "Repository forbids new worktrees and root planning files and specifies its existing tracker.",
