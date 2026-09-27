@@ -390,6 +390,16 @@
       ]
     },
     {
+      "id": "collaboration-stale-activity",
+      "prompt": "Monitor another contributor's implementation and report only meaningful progress or a needed decision.",
+      "fixture_description": "A synthetic task UI still says in progress, but its last command is completed, its source and test reports have not changed, and no current execution handle can be verified. A previous targeted finding was already sent. In a separate control, a named job handle remains live without new output during a bounded observation timeout.",
+      "expectations": [
+        "Does not treat the conversation label or old passing test report as proof of current work or completion; checks the execution handle and artifact state.",
+        "Defers to a meaningful checkpoint without duplicate nudges, status reports or concurrent writes; reports uncertainty if the user needs an action.",
+        "Waits on the confirmed live handle in the control and does not restart or declare failure from a quiet timeout."
+      ]
+    },
+    {
       "id": "list-detail-return-trial",
       "prompt": "Returning from record detail sometimes loses the list state. Fix this according to PRODUCT.md, preserving existing behavior and public tests.",
       "fixture_description": "Runnable fixtures/list-detail provides list filtering, pagination, a scrolled record area and a modal editor. PRODUCT.md specifies all supported exits and the direct-detail exception. The evaluator retains list_detail_oracle.cjs. prepare_list_detail_trial.py creates matched current-skill and candidate-overlay workspaces with frozen input hashes.",

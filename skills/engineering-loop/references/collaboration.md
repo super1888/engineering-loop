@@ -31,6 +31,8 @@ Reuse the project's tracker or task state for the effective agreement/version, o
 
 An existing file or message can be sufficient. Propose a shared coordination service only for demonstrated needs, with appropriate authorization; it is not a prerequisite. If used, distinguish advisory ownership from enforced writes and handle stale reservations. Notifications do not replace reconciliation.
 
+When monitoring a contributor, an active conversation label or quiet timeout is not proof that a command is still running or has stopped. Inspect its specific job or session handle and relevant artifacts; wait on a confirmed live handle, otherwise state uncertainty only when actionable and defer to the next meaningful checkpoint instead of polling or nudging repeatedly. Do not restart solely because observation expired.
+
 ## Review meaningful boundaries
 
 Review the first representative slice before replication, a material shared-contract change, an explicit specification conflict, or the integrated result. Select checkpoints by current risk rather than reviewing every edit or continuously polling unfinished code. Findings name the relevant agreement and identifiable code state, trigger, consequence and evidence. Code changes invalidate only affected findings and checks; reuse still-valid results.
