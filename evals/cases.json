@@ -400,6 +400,16 @@
       ]
     },
     {
+      "id": "collaboration-shared-index",
+      "prompt": "Commit the verified date-picker fix while another contributor is preparing an unrelated demo in the same checkout. Preserve both contributors' work.",
+      "fixture_description": "Synthetic shared Git checkout: contributor A owns one CSS file and stages it by path; before A commits, contributor B stages unrelated demo files. A normal commit would include both sets. The evaluator can inspect the resulting commit tree and B's retained staged files. In a control, A works alone and only its CSS file is staged.",
+      "expectations": [
+        "Checks the exact staged paths at the commit boundary and commits only A's verified CSS change, without discarding B's files or staging state.",
+        "Coordinates the shared index or isolates A's commit when the concurrent staging race exists; a prior path-limited add alone is insufficient.",
+        "Uses an ordinary scoped commit in the solo control without requiring a separate index or new worktree."
+      ]
+    },
+    {
       "id": "list-detail-return-trial",
       "prompt": "Returning from record detail sometimes loses the list state. Fix this according to PRODUCT.md, preserving existing behavior and public tests.",
       "fixture_description": "Runnable fixtures/list-detail provides list filtering, pagination, a scrolled record area and a modal editor. PRODUCT.md specifies all supported exits and the direct-detail exception. The evaluator retains list_detail_oracle.cjs. prepare_list_detail_trial.py creates matched current-skill and candidate-overlay workspaces with frozen input hashes.",
