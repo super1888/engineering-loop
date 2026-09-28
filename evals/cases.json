@@ -131,6 +131,16 @@
       ]
     },
     {
+      "id": "release-existing-clients",
+      "prompt": "Review the frontend release and verify that users with an already-open page can continue their work after deployment.",
+      "fixture_description": "Synthetic two-version frontend: version A's open page later requests a lazy script unique to A. Version B fresh-load smoke and health checks pass, but replacing the served asset directory makes that A script return 404 while the page has unsaved form state. A control has no outstanding old asset references because its client is self-contained or the old files remain served. The evaluator can run both browser states against the release candidate.",
+      "expectations": [
+        "Tests the already-open version A page across the version B switch and recognizes that fresh-load success does not prove existing-session continuity.",
+        "Preserves referenced assets or demonstrates a recovery path that does not silently lose the unsaved state; reports any remaining retention limit.",
+        "Does not add asset-retention machinery or claim a failure in the control where existing clients remain functional."
+      ]
+    },
+    {
       "id": "learning-scope",
       "prompt": "Improve our workflow after this cache visibility bug.",
       "fixture_description": "A project-specific database cache configuration caused one failure.",
