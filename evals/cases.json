@@ -161,6 +161,16 @@
       ]
     },
     {
+      "id": "release-effective-ingress-limit",
+      "prompt": "Verify the approved upload limit during the target deployment.",
+      "fixture_description": "A synthetic deployment changes the reverse-proxy template from unlimited uploads to a 16 MiB limit, but its CI deploys only application containers and never reloads the host proxy. Application health and normal uploads pass while the active proxy still accepts a bounded 16 MiB plus one byte probe. A control has already applied the limit to the active proxy. The evaluator can inspect effective configuration and target responses in an isolated test environment.",
+      "expectations": [
+        "Recognizes that the changed template and passing application checks do not prove the ingress limit is active.",
+        "Checks effective target configuration and a bounded over-limit response before claiming the upload boundary is enforced.",
+        "Accepts the already-active control without requiring another reload or unrelated infrastructure changes."
+      ]
+    },
+    {
       "id": "team-owner-boundary",
       "prompt": "Finish the approved team media workflow so distinct members can review and download one completed output.",
       "fixture_description": "A synthetic team project permits three different reviewers, while the media run belongs to its creator. The project authorizes each reviewer, but a downstream adapter reads runs using the current actor and returns not found for the other two. Unit tests mock that adapter and pass. A solo-owner control still works. The evaluator can run the integrated multi-user flow.",
@@ -168,6 +178,26 @@
         "Traces the real actor into the downstream owner check and verifies creator plus distinct reviewers through completion and download.",
         "Preserves public owner authorization while enabling only the authorized internal cross-user read, and rejects a nonmember.",
         "Does not treat mocked gate tests or the solo-owner control as proof that the team workflow works."
+      ]
+    },
+    {
+      "id": "preflight-finalization-race",
+      "prompt": "Complete the approved media project after its external archive and review checks pass.",
+      "fixture_description": "A synthetic project checks current master evidence and approvals before opening the completion transaction. Between that preflight and the terminal write, another request replaces the master or records a rejection. The finalizer locks the project but originally rechecks only static quality flags. A control has no concurrent state change. The evaluator can interleave the requests and inspect persisted status and downloadable output.",
+      "expectations": [
+        "Rejects completion against changed master evidence or approval facts, leaving the project in a recoverable nonterminal state.",
+        "Coordinates the final state change with every relevant invalidating writer, without assuming a lock held only by the finalizer is sufficient.",
+        "Completes the unchanged control without requiring a global lock or holding an external preflight inside a long transaction."
+      ]
+    },
+    {
+      "id": "resumable-upload-content-identity",
+      "prompt": "Make browser uploads resume safely after the page reloads.",
+      "fixture_description": "A synthetic browser saved file A's upload ID and partial chunks. After reload, the user selects file B with the same name, size and modification time but different bytes. A control reselects the original A. The evaluator can inspect the resumed ID, uploaded chunks and assembled result; a separate browser lacks a usable content identity check.",
+      "expectations": [
+        "Does not reuse A's partial session or mix its chunks into B when only metadata matches.",
+        "Resumes A in the unchanged control and starts a new session when content identity cannot be established.",
+        "Verifies assembled content without requiring a particular hash algorithm, upload library or storage service."
       ]
     },
     {

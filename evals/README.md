@@ -12,6 +12,10 @@ The unrun `feature-replacement-artifacts` case checks whether replacing an edito
 
 The unrun `release-drain-timeout` case tests whether an expiring write-link drain fits the actual CI job budget and has a recovery path if the runner stops, including schema-safe manual rollback. Its control needs no drain. The unrun `team-owner-boundary` case tests a real multi-user approval and download path where a mocked downstream owner check would miss failure for other authorized members; its solo-owner control must keep working. These scenarios capture observed failure modes, not measured improvements from the guidance.
 
+The unrun `release-effective-ingress-limit` case tests a changed proxy template whose active target configuration still accepts an over-limit request; its control already enforces the limit. It isolates live ingress evidence from application health and template checks, without claiming a measured skill effect.
+
+The unrun `preflight-finalization-race` case tests a state change between external preflight and the terminal write, with an unchanged control. The unrun `resumable-upload-content-identity` case tests same-metadata files with different bytes, with an original-file resume control. These distinguish stale finalization and mixed-file upload failures without prescribing locks or a hash algorithm; no skill effect has been measured.
+
 For each case, build the minimal isolated fixture, provide the user's request and the skill to the host, and retain the actual transcript/artifacts. Keep expected outcomes with the evaluator, not in the implementation prompt. Use the same starting state and acceptance for a no-skill baseline when comparing outcomes. Do not run production operations or publish user data.
 
 Record host/version, model/configuration, skill revision, fixture revision, observed tool effects, findings, unnecessary questions/reads, relevant cost/time, and passed/failed/unrun expectations. Judge behavior and artifacts, not phrase matching. Repeat before generalizing; include failures and relevant counterexamples.

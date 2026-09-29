@@ -16,6 +16,8 @@ When replacing a feature or removing its routes, inventory existing user artifac
 
 Prepare the release scope, required configuration, migration order, artifact identity, smoke checks, and recovery decision. Reuse existing runbooks. Execute authorized steps and then verify the deployed version, essential user path, and relevant error signals. A successful upload or health endpoint alone is not a full release acceptance.
 
+When a release relies on a limit enforced by an external ingress or proxy, verify its effective configuration and a bounded over-limit probe in the target environment; changing a template does not activate the limit.
+
 If a new frontend build replaces versioned assets, check whether already-open pages can still fetch the files they reference, especially lazy-loaded code. Preserve those files or verify a recovery path appropriate to the project's state; a fresh-page smoke check does not cover existing sessions.
 
 Record actual outcome and untested boundaries. Never convert a skipped external check into a success claim.

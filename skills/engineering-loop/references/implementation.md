@@ -14,6 +14,8 @@ For testable behavior changes, use red → green → refactor where it provides 
 
 For stateful or asynchronous changes, identify operation ownership, transitions, idempotency, result-unknown behavior, and recovery. Consider real boundary behavior when transactions, caches, queues, authentication, or external services interact. Verify actual scheduling rather than equating configured threads with throughput.
 
+When mutable facts are checked before a transaction, validate them again at the final state change and coordinate writers that can invalidate them; locking only the finalizer does not close the race. Before reusing a resumable upload session, establish that the selected file has the original content; matching name, size and modification time is insufficient. Start a new session when content identity cannot be established.
+
 Explain justified redundancy by the failure it addresses and its maintenance cost. Preserve required recovery and authorization behavior when simplifying. Reconcile source inventories for broad replacements. Raise material contract or data-impact changes as concrete deltas; continue authorized work elsewhere.
 
 For an accepted deferral with meaningful future cost, record its reason, affected behavior and a condition for revisiting it in the existing tracker. Do not label incomplete acceptance as harmless debt or create a debt entry for every minor imperfection.
