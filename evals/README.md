@@ -18,6 +18,10 @@ The unrun `release-runbook-copy-syntax` case tests whether a maintenance command
 
 The unrun `release-effective-ingress-limit` case tests a changed proxy template whose active target configuration still accepts an over-limit request; its control already enforces the limit. It isolates live ingress evidence from application health and template checks, without claiming a measured skill effect.
 
+The unrun `release-spa-fallback-evidence` case tests whether a public HTTP 200 is mistaken for a service response when an SPA serves its index for unknown paths. Its control returns the intended service's documented response. It separates route identity from status code and template presence; no skill effect has been measured.
+
+The unrun `release-hidden-feature-runtime` case tests a hidden UI whose active gateway still permits anonymous jobs and WebSocket access. Its control enforces authorization while keeping an intended public health path. It separates build visibility from effective server access; no skill effect has been measured.
+
 The unrun `direct-upload-quota-boundary` case tests delegated uploads whose actual temporary-object bytes exceed the declared quota despite a per-request proxy limit. Its control bounds actual writes and unfinished objects. This distinguishes storage use from request size without prescribing an upload service; no skill effect has been measured.
 
 The unrun `cross-runtime-id-precision` case tests a large backend asset ID passed through a browser widget and starter workflow. Its small-ID control keeps ordinary numeric inputs valid. This distinguishes exact identity and usable starter data from a green create response; no skill effect has been measured.

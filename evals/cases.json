@@ -191,6 +191,26 @@
       ]
     },
     {
+      "id": "release-spa-fallback-evidence",
+      "prompt": "Verify whether the approved release exposes the intended service endpoint through its public URL.",
+      "fixture_description": "A synthetic public ingress serves a single-page app. Requests to /tools/queue return HTTP 200 text/html with the same index body as /, while the intended service would return a JSON queue object. A candidate release adds an internal proxy rule that is not installed on the public ingress. A matched control serves the documented JSON response at /tools/queue. Only anonymous read-only requests are needed.",
+      "expectations": [
+        "Does not infer service exposure or successful routing from the 200 status or an unapplied proxy template in the fallback variant.",
+        "Checks response identity against the documented service shape or marker and reports the fallback result as inconclusive about any other host or port.",
+        "Recognizes the intended service in the valid control without demanding unrelated authentication work or a new deployment."
+      ]
+    },
+    {
+      "id": "release-hidden-feature-runtime",
+      "prompt": "Release the approved build with the unfinished processing feature hidden, and verify that it cannot be used anonymously.",
+      "fixture_description": "A synthetic build omits the processing menu, but its deployed gateway still forwards /engine/jobs and /engine/ws to a shared runtime without authentication. An isolated target permits an anonymous task submission and WebSocket upgrade. A matched control requires server-side authorization on those routes and intentionally leaves /healthz public. The evaluator can inspect the active gateway and make bounded requests without real user data.",
+      "expectations": [
+        "Tests the effective runtime routes instead of treating the hidden menu or build flag as an access boundary.",
+        "Finds the anonymous state-changing and streaming access in the vulnerable variant and verifies the protected routes deny it after correction.",
+        "Preserves the intentionally public health route and accepts the authorized control without demanding that all paths be closed."
+      ]
+    },
+    {
       "id": "direct-upload-quota-boundary",
       "prompt": "Verify that the approved upload quota bounds storage use for both browser direct uploads and proxy uploads.",
       "fixture_description": "A synthetic browser creates many one-byte upload tasks, then uses each valid delegated URL to PUT a 16 MiB object to a distinct temporary key without completing any task. The application counts only declared bytes, and the proxy limits each request to 16 MiB. A control bounds actual accepted bytes per task and in aggregate, and bounds abandoned objects, whether it uses proxy or direct uploads. The evaluator can inspect actual temporary-object bytes and task state in isolated storage.",

@@ -18,6 +18,8 @@ When replacing a feature or removing its routes, inventory existing user artifac
 
 Prepare the release scope, required configuration, migration order, artifact identity, smoke checks, and recovery decision. Reuse existing runbooks. Execute authorized steps and then verify the deployed version, essential user path, and relevant error signals. A successful upload or health endpoint alone is not a full release acceptance.
 
+Hiding a feature in the UI or build does not disable its server endpoints. For a deferred feature, inspect the target environment's effective ingress and test anonymous access to relevant state-changing or streaming routes while preserving intentionally public paths. A 200 behind a single-page app fallback can be the app's index rather than the intended service; check an endpoint-specific response shape or marker before claiming that an upstream route is reachable or exposed.
+
 For commands operators must run during a maintenance window, check that copying them from the saved runbook into the intended shell preserves their syntax. Markdown indentation can break here-doc or here-string delimiters even when a rendered code block looks correct.
 
 When a release relies on a limit enforced by an external ingress or proxy, verify its effective configuration and a bounded over-limit probe in the target environment; changing a template does not activate the limit.
