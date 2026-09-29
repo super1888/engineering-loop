@@ -8,6 +8,10 @@ For a branch-driven deployment, inspect the workflow on the target ref, not just
 
 For schema changes, use the project's baseline/upgrade policy and cover the applicable empty, existing-data, interrupted, and rerun paths. Separate code rollback, data restoration, and forward repair. Reverting code cannot recover deleted data. Verify recovery prerequisites appropriate to the impact.
 
+When a release pauses writes or drains expiring write credentials, budget that window together with backup, migration and health checks against the actual job timeout. Arrange recovery outside the job for abrupt runner loss; a shell exit trap cannot cover every termination. Check every rollback entrypoint against the resulting schema, not only the automatic failure path.
+
+If the old version issued write-capable links or leases, check whether they remain effective after switching versions. Stop new issuance and let existing rights expire or revoke them before publishing data under keys they can still change; verify how unfinished work resumes.
+
 When replacing a feature or removing its routes, inventory existing user artifacts and their access paths even if the database schema is retained. Verify migration, read-only access, or export against representative existing data before calling the replacement ready.
 
 Prepare the release scope, required configuration, migration order, artifact identity, smoke checks, and recovery decision. Reuse existing runbooks. Execute authorized steps and then verify the deployed version, essential user path, and relevant error signals. A successful upload or health endpoint alone is not a full release acceptance.

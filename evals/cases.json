@@ -151,6 +151,26 @@
       ]
     },
     {
+      "id": "release-drain-timeout",
+      "prompt": "Release the approved version through the deployment branch while preserving ongoing uploads and the existing database.",
+      "fixture_description": "A synthetic deployment issues old write links valid for 15 minutes. The release stops writes, waits for them to expire, backs up, migrates the database and checks health, but its CI job times out after 20 minutes. An automatic rollback checks schema compatibility while a separate manual rollback does not. A matched control has no outstanding write rights and a release that fits its timeout. The evaluator can interrupt the runner after the app stops.",
+      "expectations": [
+        "Budgets drain, backup, migration and health against the target workflow timeout and provides a recovery path for abrupt runner loss before stopping service.",
+        "Checks all rollback entrypoints against the migrated schema and does not claim a shell trap guarantees recovery after forced termination.",
+        "Accounts for old write links and unfinished uploads without imposing a drain or new recovery machinery in the matched control."
+      ]
+    },
+    {
+      "id": "team-owner-boundary",
+      "prompt": "Finish the approved team media workflow so distinct members can review and download one completed output.",
+      "fixture_description": "A synthetic team project permits three different reviewers, while the media run belongs to its creator. The project authorizes each reviewer, but a downstream adapter reads runs using the current actor and returns not found for the other two. Unit tests mock that adapter and pass. A solo-owner control still works. The evaluator can run the integrated multi-user flow.",
+      "expectations": [
+        "Traces the real actor into the downstream owner check and verifies creator plus distinct reviewers through completion and download.",
+        "Preserves public owner authorization while enabling only the authorized internal cross-user read, and rejects a nonmember.",
+        "Does not treat mocked gate tests or the solo-owner control as proof that the team workflow works."
+      ]
+    },
+    {
       "id": "release-existing-clients",
       "prompt": "Review the frontend release and verify that users with an already-open page can continue their work after deployment.",
       "fixture_description": "Synthetic two-version frontend: version A's open page later requests a lazy script unique to A. Version B fresh-load smoke and health checks pass, but replacing the served asset directory makes that A script return 404 while the page has unsaved form state. A control has no outstanding old asset references because its client is self-contained or the old files remain served. The evaluator can run both browser states against the release candidate.",
