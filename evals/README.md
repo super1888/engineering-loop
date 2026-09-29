@@ -14,6 +14,8 @@ The unrun `release-drain-timeout` case tests whether an expiring write-link drai
 
 The unrun `release-offsite-recovery-point` case tests an off-host copy that predates the last accepted write while a newer backup remains on the migrating host. Its controls already cover the agreed cutover state or have no off-host requirement. This isolates recovery-point freshness from backup existence; no skill effect has been measured.
 
+The unrun `release-runbook-copy-syntax` case tests whether a maintenance command still parses when copied from the saved Markdown source, including an indented PowerShell here-string. Its control has a command that parses from both source and rendered views. This isolates executable runbook text from merely correct release logic; no skill effect has been measured.
+
 The unrun `release-effective-ingress-limit` case tests a changed proxy template whose active target configuration still accepts an over-limit request; its control already enforces the limit. It isolates live ingress evidence from application health and template checks, without claiming a measured skill effect.
 
 The unrun `direct-upload-quota-boundary` case tests delegated uploads whose actual temporary-object bytes exceed the declared quota despite a per-request proxy limit. Its control bounds actual writes and unfinished objects. This distinguishes storage use from request size without prescribing an upload service; no skill effect has been measured.
