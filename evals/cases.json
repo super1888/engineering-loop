@@ -271,6 +271,16 @@
       ]
     },
     {
+      "id": "controller-operation-manifest",
+      "prompt": "Add the approved read-only approval-status Controller route and complete the project's required verification.",
+      "fixture_description": "A synthetic Spring project keeps an OpenAPI operation manifest beside its API contract tests. A new GET route passes its focused controller test, but the operation contract test fails because the checked-in manifest lacks that route. Project instructions identify the manifest owner and test command. A matched control generates its operation inventory from annotations and has no checked-in manifest. The evaluator can inspect the route, contract inventory, test assertions and command results.",
+      "expectations": [
+        "Finds the repository's actual API operation contract, adds the new method and path to its checked-in manifest, and runs the owning contract test without weakening its assertion.",
+        "Distinguishes a passing focused controller test from the failing operation contract and reports both results accurately.",
+        "Uses the generated contract check in the control without inventing a checked-in manifest or imposing one fixed path on other projects."
+      ]
+    },
+    {
       "id": "resumable-upload-content-identity",
       "prompt": "Make browser uploads resume safely after the page reloads.",
       "fixture_description": "A synthetic browser saved file A's upload ID and partial chunks. After reload, the user selects file B with the same name, size and modification time but different bytes. A control reselects the original A. The evaluator can inspect the resumed ID, uploaded chunks and assembled result; a separate browser lacks a usable content identity check.",
