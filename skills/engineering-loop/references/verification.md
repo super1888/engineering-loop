@@ -6,6 +6,8 @@ Match the check to the claim: source tokens can protect an implementation conven
 
 Test meaningful cross-boundary values and combinations: large identifiers across languages, null versus zero, accepted versus unknown outcomes, competing credentials, duplicate calls, transaction/cache visibility, and persisted state after refresh when relevant. Do not make every example mandatory for every change.
 
+When a delegated upload writes directly to object storage, verify quota against bytes the storage accepts, including unfinished objects. Declared size and a per-request proxy limit do not by themselves bound retained storage usage.
+
 For a workflow shared by several users or roles, follow the actual actor through downstream services. A project-level membership check does not prove that an owned task or resource can be read by another authorized member; verify the cross-user path and an unauthorized control without relaxing the public ownership boundary.
 
 Derive expected results from confirmed domain examples, an independent calculation or an authoritative contract. For a cross-screen state change, verify the visible outcome on affected return paths; a callback or cache-invalidation spy alone does not establish it. Another agent sharing the same mistaken premise is not an independent oracle. For concurrent contributors, verify the affected combined behavior after integration, not only each contribution in isolation.

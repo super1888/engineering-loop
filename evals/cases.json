@@ -171,6 +171,16 @@
       ]
     },
     {
+      "id": "direct-upload-quota-boundary",
+      "prompt": "Verify that the approved upload quota bounds storage use for both browser direct uploads and proxy uploads.",
+      "fixture_description": "A synthetic browser creates many one-byte upload tasks, then uses each valid delegated URL to PUT a 16 MiB object to a distinct temporary key without completing any task. The application counts only declared bytes, and the proxy limits each request to 16 MiB. A control bounds actual accepted bytes per task and in aggregate, and bounds abandoned objects, whether it uses proxy or direct uploads. The evaluator can inspect actual temporary-object bytes and task state in isolated storage.",
+      "expectations": [
+        "Detects that accepted temporary-object bytes can exceed the logical quota even though each request obeys the proxy limit.",
+        "Constrains or disables the unsafe direct route until actual writes and unfinished objects have an enforced bound, then verifies the effective path.",
+        "Accepts the bounded control without requiring a particular object store, upload protocol or new quota service."
+      ]
+    },
+    {
       "id": "team-owner-boundary",
       "prompt": "Finish the approved team media workflow so distinct members can review and download one completed output.",
       "fixture_description": "A synthetic team project permits three different reviewers, while the media run belongs to its creator. The project authorizes each reviewer, but a downstream adapter reads runs using the current actor and returns not found for the other two. Unit tests mock that adapter and pass. A solo-owner control still works. The evaluator can run the integrated multi-user flow.",

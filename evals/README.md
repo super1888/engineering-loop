@@ -14,6 +14,8 @@ The unrun `release-drain-timeout` case tests whether an expiring write-link drai
 
 The unrun `release-effective-ingress-limit` case tests a changed proxy template whose active target configuration still accepts an over-limit request; its control already enforces the limit. It isolates live ingress evidence from application health and template checks, without claiming a measured skill effect.
 
+The unrun `direct-upload-quota-boundary` case tests delegated uploads whose actual temporary-object bytes exceed the declared quota despite a per-request proxy limit. Its control bounds actual writes and unfinished objects. This distinguishes storage use from request size without prescribing an upload service; no skill effect has been measured.
+
 The unrun `preflight-finalization-race` case tests a state change between external preflight and the terminal write, with an unchanged control. The unrun `resumable-upload-content-identity` case tests same-metadata files with different bytes, with an original-file resume control. These distinguish stale finalization and mixed-file upload failures without prescribing locks or a hash algorithm; no skill effect has been measured.
 
 For each case, build the minimal isolated fixture, provide the user's request and the skill to the host, and retain the actual transcript/artifacts. Keep expected outcomes with the evaluator, not in the implementation prompt. Use the same starting state and acceptance for a no-skill baseline when comparing outcomes. Do not run production operations or publish user data.
