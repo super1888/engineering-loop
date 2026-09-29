@@ -170,6 +170,8 @@ The unreleased revisions clarify affected return-path outcomes, rendered evidenc
 
 The optional [collaboration guide](skills/engineering-loop/references/collaboration.md) adds scoped ownership, specification-dispute resolution, accepted-change propagation and independent verification without requiring a fixed agent team. Its [four additional scenarios](evals/README.md#unreleased-collaboration-revision) also remain unrun; additional agents are not evidence of improved accuracy.
 
+The [release guide](skills/engineering-loop/references/release.md) now checks new preflights against existing isolated CI fixtures and identifies artifact bytes and host-specific permission evidence. Its [portability scenario](evals/README.md) remains unrun.
+
 The [evaluation protocol](evals/README.md) retains reusable fixtures and checks. Raw model transcripts and trial output stay outside the tracked source tree; past trials are available in Git history.
 
 If the workflow helps you, a star helps others discover it. Reproducible feedback helps us improve it.

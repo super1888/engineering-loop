@@ -22,6 +22,8 @@ The unrun `release-spa-fallback-evidence` case tests whether a public HTTP 200 i
 
 The unrun `release-hidden-feature-runtime` case tests a hidden UI whose active gateway still permits anonymous jobs and WebSocket access. Its control enforces authorization while keeping an intended public health path. It separates build visibility from effective server access; no skill effect has been measured.
 
+The unrun `release-preflight-fixture-portability` case tests a new migration gate against existing isolated CI fixtures, including release-artifact line endings and Unix file modes. Its control has matching bytes and Linux CI evidence. It separates gate correctness from a pass on one checkout; no skill effect has been measured.
+
 The unrun `direct-upload-quota-boundary` case tests delegated uploads whose actual temporary-object bytes exceed the declared quota despite a per-request proxy limit. Its control bounds actual writes and unfinished objects. This distinguishes storage use from request size without prescribing an upload service; no skill effect has been measured.
 
 The unrun `cross-runtime-id-precision` case tests a large backend asset ID passed through a browser widget and starter workflow. Its small-ID control keeps ordinary numeric inputs valid. This distinguishes exact identity and usable starter data from a green create response; no skill effect has been measured.

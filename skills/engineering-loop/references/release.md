@@ -4,6 +4,8 @@ First determine whether the request authorizes preparation, staging, or actual p
 
 Follow the project's release process. Tie the build artifact to the verified source and configuration, including uncommitted-state evidence when relevant. Coordinate edits/builds so the artifact under test is not silently replaced; avoid repackaging a file an active process is still using.
 
+Before adding a release preflight to CI, run it against the existing isolated CI fixtures as well as the intended release artifact. For byte or permission checks, identify what the target actually uses: Git object contents can differ from a Windows checkout or archive after line-ending conversion, and Windows Git Bash does not establish Unix file-mode behavior. Compare checksums on the relevant bytes and use a Linux fixture or CI run for Unix permissions; preserve a valid failing gate until its cause is known.
+
 For a branch-driven deployment, inspect the workflow on the target ref, not just the current checkout. Confirm what update actually triggers publication, which environment it reaches, and the effects of its smoke checks. Apply each repository's rules to its own work; an authorized deployment-triggering push in one repository is not barred or permitted by another repository's local push policy.
 
 For schema changes, use the project's baseline/upgrade policy and cover the applicable empty, existing-data, interrupted, and rerun paths. Separate code rollback, data restoration, and forward repair. Reverting code cannot recover deleted data. Verify recovery prerequisites appropriate to the impact.
