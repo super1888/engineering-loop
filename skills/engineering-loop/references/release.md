@@ -8,6 +8,8 @@ For a branch-driven deployment, inspect the workflow on the target ref, not just
 
 For schema changes, use the project's baseline/upgrade policy and cover the applicable empty, existing-data, interrupted, and rerun paths. Separate code rollback, data restoration, and forward repair. Reverting code cannot recover deleted data. Verify recovery prerequisites appropriate to the impact.
 
+When replacing a feature or removing its routes, inventory existing user artifacts and their access paths even if the database schema is retained. Verify migration, read-only access, or export against representative existing data before calling the replacement ready.
+
 Prepare the release scope, required configuration, migration order, artifact identity, smoke checks, and recovery decision. Reuse existing runbooks. Execute authorized steps and then verify the deployed version, essential user path, and relevant error signals. A successful upload or health endpoint alone is not a full release acceptance.
 
 If a new frontend build replaces versioned assets, check whether already-open pages can still fetch the files they reference, especially lazy-loaded code. Preserve those files or verify a recovery path appropriate to the project's state; a fresh-page smoke check does not cover existing sessions.

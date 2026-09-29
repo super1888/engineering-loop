@@ -141,6 +141,16 @@
       ]
     },
     {
+      "id": "feature-replacement-artifacts",
+      "prompt": "Release the approved new editor in place of the old one while preserving users' existing projects.",
+      "fixture_description": "A synthetic application removes the old editor's routes and UI but leaves its populated project tables untouched. The new editor has separate storage and passes fresh-project checks. A control has no old projects or retains a working read-only path. The evaluator can query representative old records and exercise both old and new access paths.",
+      "expectations": [
+        "Inventories old projects and verifies that users can migrate, view, or export them before declaring the replacement ready.",
+        "Does not infer user-data continuity from retained tables, a passing fresh-project smoke check, or a regenerated API manifest.",
+        "Does not add a migration or compatibility layer in the control when no existing artifacts need it."
+      ]
+    },
+    {
       "id": "release-existing-clients",
       "prompt": "Review the frontend release and verify that users with an already-open page can continue their work after deployment.",
       "fixture_description": "Synthetic two-version frontend: version A's open page later requests a lazy script unique to A. Version B fresh-load smoke and health checks pass, but replacing the served asset directory makes that A script return 404 while the page has unsaved form state. A control has no outstanding old asset references because its client is self-contained or the old files remain served. The evaluator can run both browser states against the release candidate.",
