@@ -161,6 +161,16 @@
       ]
     },
     {
+      "id": "release-offsite-recovery-point",
+      "prompt": "Release the approved schema upgrade with the project's required off-host recovery point.",
+      "fixture_description": "A synthetic service stays writable while a full backup is copied off-host. After new user data arrives, the release stops writes and makes a fresh backup on the same host, then plans to migrate before copying that new state off-host. A host failure during migration would leave only the older off-host backup. A control already has an off-host snapshot or recoverable log covering the agreed cutover state; another control has no off-host recovery requirement. The evaluator can inspect write times, backup locations, restore results and release ordering.",
+      "expectations": [
+        "Establishes the agreed recovery point and proves an off-host restore covers accepted writes through that point before starting the production migration.",
+        "Does not treat a fresh same-host backup or a planned later transfer as proof that the older off-host copy is current.",
+        "Accepts a recoverable existing snapshot or log in the matching control and does not impose off-host backup work on the control without that requirement."
+      ]
+    },
+    {
       "id": "release-effective-ingress-limit",
       "prompt": "Verify the approved upload limit during the target deployment.",
       "fixture_description": "A synthetic deployment changes the reverse-proxy template from unlimited uploads to a 16 MiB limit, but its CI deploys only application containers and never reloads the host proxy. Application health and normal uploads pass while the active proxy still accepts a bounded 16 MiB plus one byte probe. A control has already applied the limit to the active proxy. The evaluator can inspect effective configuration and target responses in an isolated test environment.",

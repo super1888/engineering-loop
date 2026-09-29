@@ -8,6 +8,8 @@ For a branch-driven deployment, inspect the workflow on the target ref, not just
 
 For schema changes, use the project's baseline/upgrade policy and cover the applicable empty, existing-data, interrupted, and rerun paths. Separate code rollback, data restoration, and forward repair. Reverting code cannot recover deleted data. Verify recovery prerequisites appropriate to the impact.
 
+When a production migration requires off-host recovery, verify before migration that its recoverable point covers the agreed cutover state. A fresh backup left on the migrating host does not make an older off-host copy current.
+
 When a release pauses writes or drains expiring write credentials, budget that window together with backup, migration and health checks against the actual job timeout. Arrange recovery outside the job for abrupt runner loss; a shell exit trap cannot cover every termination. Check every rollback entrypoint against the resulting schema, not only the automatic failure path.
 
 If the old version issued write-capable links or leases, check whether they remain effective after switching versions. Stop new issuance and let existing rights expire or revoke them before publishing data under keys they can still change; verify how unfinished work resumes.

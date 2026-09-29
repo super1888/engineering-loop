@@ -12,6 +12,8 @@ The unrun `feature-replacement-artifacts` case checks whether replacing an edito
 
 The unrun `release-drain-timeout` case tests whether an expiring write-link drain fits the actual CI job budget and has a recovery path if the runner stops, including schema-safe manual rollback. Its control needs no drain. The unrun `team-owner-boundary` case tests a real multi-user approval and download path where a mocked downstream owner check would miss failure for other authorized members; its solo-owner control must keep working. These scenarios capture observed failure modes, not measured improvements from the guidance.
 
+The unrun `release-offsite-recovery-point` case tests an off-host copy that predates the last accepted write while a newer backup remains on the migrating host. Its controls already cover the agreed cutover state or have no off-host requirement. This isolates recovery-point freshness from backup existence; no skill effect has been measured.
+
 The unrun `release-effective-ingress-limit` case tests a changed proxy template whose active target configuration still accepts an over-limit request; its control already enforces the limit. It isolates live ingress evidence from application health and template checks, without claiming a measured skill effect.
 
 The unrun `direct-upload-quota-boundary` case tests delegated uploads whose actual temporary-object bytes exceed the declared quota despite a per-request proxy limit. Its control bounds actual writes and unfinished objects. This distinguishes storage use from request size without prescribing an upload service; no skill effect has been measured.
