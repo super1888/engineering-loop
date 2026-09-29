@@ -6,6 +6,8 @@ Raw trial outputs stay in the ignored `results/` directory. Earlier tracked tria
 
 The unrun `release-existing-clients` case tests an open page that requests an old lazy asset after a frontend switch, plus a control whose old page remains functional. It is motivated by an observed old-script 404 that was repaired and checked against retained image contents; that project result does not establish the skill's behavioral effect or require one retention mechanism everywhere.
 
+The unrun `deployment-target-ref` case tests a deployment branch whose push workflow differs from the checked-out development ref, with repository-specific push rules and shared-environment smoke effects. It is motivated by a real inspection where reading only the current ref initially contradicted the user's accurate deployment description. The existing `release-scope` case remains the prepare-only control. This observation does not establish that the revised guidance improves model behavior.
+
 For each case, build the minimal isolated fixture, provide the user's request and the skill to the host, and retain the actual transcript/artifacts. Keep expected outcomes with the evaluator, not in the implementation prompt. Use the same starting state and acceptance for a no-skill baseline when comparing outcomes. Do not run production operations or publish user data.
 
 Record host/version, model/configuration, skill revision, fixture revision, observed tool effects, findings, unnecessary questions/reads, relevant cost/time, and passed/failed/unrun expectations. Judge behavior and artifacts, not phrase matching. Repeat before generalizing; include failures and relevant counterexamples.
