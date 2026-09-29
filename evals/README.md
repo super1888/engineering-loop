@@ -30,6 +30,8 @@ The unrun `cross-runtime-id-precision` case tests a large backend asset ID passe
 
 The unrun `preflight-finalization-race` case tests a state change between external preflight and the terminal write, with an unchanged control. The unrun `resumable-upload-content-identity` case tests same-metadata files with different bytes, with an original-file resume control. These distinguish stale finalization and mixed-file upload failures without prescribing locks or a hash algorithm; no skill effect has been measured.
 
+The unrun `sequential-stale-editor-save` case tests two pages that loaded the same draft, then saved in sequence. Database row optimistic locking alone misses the stale second page; the controls already use conditional updates or only append independent comments. It tests rejection of the stale save and preservation of unsaved input without prescribing a particular API version format. The motivating project repair passed targeted integration and frontend checks, but this skill scenario has not been executed and no skill effect has been measured.
+
 For each case, build the minimal isolated fixture, provide the user's request and the skill to the host, and retain the actual transcript/artifacts. Keep expected outcomes with the evaluator, not in the implementation prompt. Use the same starting state and acceptance for a no-skill baseline when comparing outcomes. Do not run production operations or publish user data.
 
 Record host/version, model/configuration, skill revision, fixture revision, observed tool effects, findings, unnecessary questions/reads, relevant cost/time, and passed/failed/unrun expectations. Judge behavior and artifacts, not phrase matching. Repeat before generalizing; include failures and relevant counterexamples.

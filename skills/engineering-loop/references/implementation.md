@@ -18,6 +18,8 @@ For stateful or asynchronous changes, identify operation ownership, transitions,
 
 When mutable facts are checked before a transaction, validate them again at the final state change and coordinate writers that can invalidate them; locking only the finalizer does not close the race. Before reusing a resumable upload session, establish that the selected file has the original content; matching name, size and modification time is insufficient. Start a new session when content identity cannot be established.
 
+When clients can edit the same persisted resource, check whether a later save from an older page can replace a newer one. Carry the revision observed when editing began into the update boundary (for example, an existing ETag or version field), atomically reject a stale update, and leave the user's unsaved input available to reconcile. Database optimistic locking between concurrent transactions alone does not detect this sequential stale-page save. Do not add a second version protocol to an already protected update or require one for append-only operations.
+
 Explain justified redundancy by the failure it addresses and its maintenance cost. Preserve required recovery and authorization behavior when simplifying. Reconcile source inventories for broad replacements. Raise material contract or data-impact changes as concrete deltas; continue authorized work elsewhere.
 
 For an accepted deferral with meaningful future cost, record its reason, affected behavior and a condition for revisiting it in the existing tracker. Do not label incomplete acceptance as harmless debt or create a debt entry for every minor imperfection.

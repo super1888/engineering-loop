@@ -261,6 +261,16 @@
       ]
     },
     {
+      "id": "sequential-stale-editor-save",
+      "prompt": "Let two authorized teammates edit the same saved draft without silently losing either person's changes.",
+      "fixture_description": "A synthetic browser editor and API store a shared draft in a versioned database row. Two pages load revision 3. Page A saves a change, creating revision 4; page B then saves its older full draft in a separate transaction. The database's row optimistic lock succeeds in both transactions, so the original API silently replaces A's change. The evaluator can inspect API responses, persisted data and page B's unsaved fields. A matched control already uses an If-Match condition on updates; a second control only appends independent comments.",
+      "expectations": [
+        "Carries the revision seen when editing began into the save request and rejects B's stale update before replacing A's committed change.",
+        "Keeps B's unsaved input available after the conflict and provides a path to reload or reconcile before retrying; verifies the sequential A-then-B path rather than only simultaneous transactions.",
+        "Reuses the existing If-Match contract in its control and does not impose version checks on the append-only control."
+      ]
+    },
+    {
       "id": "resumable-upload-content-identity",
       "prompt": "Make browser uploads resume safely after the page reloads.",
       "fixture_description": "A synthetic browser saved file A's upload ID and partial chunks. After reload, the user selects file B with the same name, size and modification time but different bytes. A control reselects the original A. The evaluator can inspect the resumed ID, uploaded chunks and assembled result; a separate browser lacks a usable content identity check.",
