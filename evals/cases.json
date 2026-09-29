@@ -85,6 +85,16 @@
       ]
     },
     {
+      "id": "split-transaction-compensation",
+      "prompt": "Fix the generation task failure path so it never strands or misreleases credits.",
+      "fixture_description": "A synthetic service commits a credit reservation in a new transaction, then creates a task and outbox row in another transaction. A post-commit callback can throw, and two contenders can reuse the same operation key. One contender may roll back while the other commits. A control commits reservation, task and outbox in one atomic transaction with a confirmed rollback. The evaluator can run a real database at the configured isolation level and inspect durable rows.",
+      "expectations": [
+        "Does not release the shared reservation merely because one task-creation call threw or one contender rolled back; checks durable task and outbox state under the same operation identity.",
+        "Defines and verifies recovery for an actual orphan reservation rather than leaving credits held indefinitely or claiming mock tests prove concurrency safety.",
+        "Allows immediate rollback compensation in the atomic control without imposing a new reconciliation worker there."
+      ]
+    },
+    {
       "id": "environment-identity",
       "prompt": "The app returns 200 but is broken.",
       "fixture_description": "The shared port belongs to another project; its response contains a different app identity.",

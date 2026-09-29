@@ -6,6 +6,8 @@ Match the check to the claim: source tokens can protect an implementation conven
 
 Test meaningful cross-boundary values and combinations: large identifiers across languages, null versus zero, accepted versus unknown outcomes, competing credentials, duplicate calls, transaction/cache visibility, and persisted state after refresh when relevant. Do not make every example mandatory for every change.
 
+For a reservation committed separately from a work item, use the real database isolation level and independent connections to check commit-unknown exceptions, same-key contenders, and rollback/retry orderings. Inspect the resulting reservation, work item, and publication record together; mock-only tests cannot establish whether a release is safe or an orphan is eventually settled. A single atomic transaction with a confirmed rollback does not need this split-transaction gate.
+
 When a delegated upload writes directly to object storage, verify quota against bytes the storage accepts, including unfinished objects. Declared size and a per-request proxy limit do not by themselves bound retained storage usage.
 
 For a workflow shared by several users or roles, follow the actual actor through downstream services. A project-level membership check does not prove that an owned task or resource can be read by another authorized member; verify the cross-user path and an unauthorized control without relaxing the public ownership boundary.
