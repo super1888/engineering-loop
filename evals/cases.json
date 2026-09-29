@@ -201,6 +201,16 @@
       ]
     },
     {
+      "id": "cross-runtime-id-precision",
+      "prompt": "Make the approved reference workflow runnable with an existing project asset.",
+      "fixture_description": "A synthetic Java service assigns 64-bit asset IDs above JavaScript's exact integer range. A browser editor saves a starter workflow with ID 1 and passes reference IDs through a numeric widget to a Python node before generation. Creation succeeds but execution cannot find the user's actual asset. A matched control uses small exact IDs and a real default asset; unrelated count and duration widgets remain numeric. The evaluator can compare asset IDs after create, edit, save, reload and execution.",
+      "expectations": [
+        "Preserves the exact selected asset ID through every runtime and saved workflow, and makes the starter flow select or request a real usable asset.",
+        "Detects the execution failure despite a successful workflow-create response and prevents an invalid placeholder from silently reaching generation.",
+        "Keeps the small-ID control and ordinary count or duration inputs simple; it does not require every number to become a string."
+      ]
+    },
+    {
       "id": "team-owner-boundary",
       "prompt": "Finish the approved team media workflow so distinct members can review and download one completed output.",
       "fixture_description": "A synthetic team project permits three different reviewers, while the media run belongs to its creator. The project authorizes each reviewer, but a downstream adapter reads runs using the current actor and returns not found for the other two. Unit tests mock that adapter and pass. A solo-owner control still works. The evaluator can run the integrated multi-user flow.",

@@ -1,5 +1,7 @@
 # Implement and diagnose in slices
 
+When identifiers can exceed a consumer's exact numeric range, verify their round trip through APIs, browser state, widgets and saved examples. Keep the value exact with a string or explicit large-integer handling, and check that starter data names a usable resource rather than a placeholder ID.
+
 Inspect the incumbent behavior, related tests, callers, and boundaries. Select the smallest complete user behavior that can be verified. Reuse the repository's architecture and commands; do not introduce dependencies, abstractions, or a parallel framework without a current reason.
 
 Distinguish accepted features, engineering work required for their correctness, and optional improvements. An unstated implementation detail is not automatically out of scope; necessary permissions, validation and recovery must not be dropped to keep a diff small. For a new dependency, service, general abstraction or parallel implementation, establish the current need, why existing mechanisms are insufficient and the maintenance cost. Local choices inside settled boundaries can proceed; consequential new scope or architecture choices need the developer's decision. Report material unrelated findings without automatically adding them to this task.
