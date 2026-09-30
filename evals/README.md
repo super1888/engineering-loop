@@ -20,6 +20,8 @@ The unrun `release-offsite-recovery-point` case tests an off-host copy that pred
 
 The unrun `release-runbook-copy-syntax` case tests whether a maintenance command still parses when copied from the saved Markdown source, including an indented PowerShell here-string. Its control has a command that parses from both source and rendered views. This isolates executable runbook text from merely correct release logic; no skill effect has been measured.
 
+The unrun `cross-host-script-transport` case isolates a Windows text-mode stdin conversion that changes an LF script before a Linux shell receives it. Its text-payload and already-preserving controls protect legitimate transports. An observed receiver-side syntax failure passed after switching the affected local helper to byte-preserving input; that observation is not a model evaluation, a maintenance mutation, or evidence for a universal binary-mode rule. No new general workflow guidance has been promoted from it.
+
 The unrun `release-effective-ingress-limit` case tests a changed proxy template whose active target configuration still accepts an over-limit request; its control already enforces the limit. It isolates live ingress evidence from application health and template checks, without claiming a measured skill effect.
 
 The unrun `release-spa-fallback-evidence` case tests whether a public HTTP 200 is mistaken for a service response when an SPA serves its index for unknown paths. Its control returns the intended service's documented response. It separates route identity from status code and template presence; no skill effect has been measured.

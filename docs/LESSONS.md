@@ -2,6 +2,13 @@
 
 Keep this small. Business/stack defects belong with their executable safeguards; a local incident is not automatically a generic skill rule.
 
+## Cross-host script transport candidate (2026-10-01; not behavior-evaluated)
+
+- **Trigger and environment:** A Windows/CPython3.12.3 maintenance helper sent an LF Bash script to Linux through a text-mode subprocess. Receiver-side syntax checking rejected a carriage return after `case ... in`; inspecting the local string alone showed valid LF content.
+- **Cause and evidence:** The text-mode stdin transport changed line endings. The same script sent as explicit UTF-8 bytes passed receiver-side syntax validation and a read-only runtime check. Invalid operation and release-identity controls still failed before mutation. This is transport evidence, not a model evaluation or proof that a maintenance action was executed.
+- **Correction and candidate:** The local helper preserves script bytes and validates the intended receiver before any maintenance mutation. No generic workflow paragraph was added from this one incident. Expected benefit is distinguishing transport damage from invalid source or a broken remote runtime; cost is inspecting that boundary when the evidence conflicts.
+- **Counterexample and owner:** Ordinary text payloads whose contract tolerates native newline conversion, and an already byte-preserving transport, should remain unchanged. Maintainers own the synthetic `cross-host-script-transport` case. It is unrun; evaluate it and those controls before promoting guidance or claiming transferable benefit. Retire the candidate if existing verification guidance already handles the boundary reliably.
+
 ## Read-only delegation candidate (2026-10-01; not behavior-evaluated)
 
 - **Trigger:** A cost estimate intended to be read-only reused an archive inspection that first refreshed a run. The downstream refresh could reconcile status and register a resource; a reference-resolution query also wrote registrations. This was found by tracing implementation before release on Windows with Java21.
