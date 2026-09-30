@@ -22,6 +22,8 @@ The unrun `release-effective-ingress-limit` case tests a changed proxy template 
 
 The unrun `release-spa-fallback-evidence` case tests whether a public HTTP 200 is mistaken for a service response when an SPA serves its index for unknown paths. Its control returns the intended service's documented response. It separates route identity from status code and template presence; no skill effect has been measured.
 
+The unrun `api-envelope-status-boundary` case tests whether an HTTP 400 response with a 404-like application code is mistaken for a missing route despite successful resource and route-method controls. Its true HTTP 404 control should remain a normal missing-path diagnosis. The protected configuration lookup requires authorized evidence; an ordinary user's HTTP 403 cannot establish that a binding is absent. This anonymized specification has not been executed or shown to improve model behavior.
+
 The unrun `release-hidden-feature-runtime` case tests a hidden UI whose active gateway still permits anonymous jobs and WebSocket access. Its control enforces authorization while keeping an intended public health path. It separates build visibility from effective server access; no skill effect has been measured.
 
 The unrun `release-preflight-fixture-portability` case tests a new migration gate against existing isolated CI fixtures, including release-artifact line endings and Unix file modes. Its control has matching bytes and Linux CI evidence. It separates gate correctness from a pass on one checkout; no skill effect has been measured.

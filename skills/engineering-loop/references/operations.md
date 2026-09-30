@@ -4,6 +4,8 @@ Identify observed symptom, time window, affected users/jobs, environment, and cu
 
 Form a hypothesis and collect the least invasive discriminating evidence. Check service identity, business prerequisites, and dependencies before changing code. An unavailable price/configuration, an authentication mismatch, and a transport timeout are different failures even if the UI labels them alike.
 
+For an API failure, record the actual HTTP status and any application response code separately from the same request. A response-body code resembling 404 does not prove that the HTTP route or resource is missing. Check a successful request to the same resource and route/method evidence where available before classifying the failure. Inspect protected runtime configuration only through an authorized read path; lack of access under an ordinary user account does not establish that configuration is absent. Keep the cause unconfirmed until discriminating evidence is available.
+
 Run only authorized operational actions. Bound retries and their side effects; a timeout may mean an unknown result, not a safe-to-repeat failure. On repeated failure without new information, change the hypothesis or present a concrete blocker and options.
 
 Verify both service recovery and the affected behavior. Record the triggering condition, cause where established, fix/recovery, evidence, and remaining uncertainty. Feed a demonstrated recurring error into an appropriate regression, check, runbook correction, or scoped lesson. Do not create recurring monitoring or external notifications unless requested.
