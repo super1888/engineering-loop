@@ -2,6 +2,13 @@
 
 Keep this small. Business/stack defects belong with their executable safeguards; a local incident is not automatically a generic skill rule.
 
+## Read-only delegation candidate (2026-10-01; not behavior-evaluated)
+
+- **Trigger:** A cost estimate intended to be read-only reused an archive inspection that first refreshed a run. The downstream refresh could reconcile status and register a resource; a reference-resolution query also wrote registrations. This was found by tracing implementation before release on Windows with Java21.
+- **Correction and evidence:** The application reused its owner-checked archive projection through a separate read boundary. A local regression checked the projection, ownership rejection, output mismatch and absence of lifecycle/registration calls; existing execution inspection kept its refresh behavior. This is application evidence, not an engineering-loop model evaluation.
+- **Candidate:** `implementation.md` makes downstream side effects explicit only when the accepted flow promises read-only behavior. Expected benefit is avoiding an accidental write behind a query name; cost is inspecting that boundary. Approved reconciliation and registration are the counterexample, and must remain available.
+- **Evaluation and owner:** Maintainers own the synthetic `read-only-delegation-side-effects` case in `evals/cases.json`. It has not been run. Evaluate that case and its execution control before claiming transferable benefit; retire the added guidance if it merely repeats effective project checks without improving behavior.
+
 ## SQLite transaction completion does not release the connection
 
 - **Trigger and evidence:** During the 2026-09-21 trial, the independent oracle's temporary database cleanup failed on Windows with file-in-use errors for both candidate implementations.

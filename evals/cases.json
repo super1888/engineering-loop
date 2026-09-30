@@ -711,6 +711,16 @@
         "Repairs the relevant font coverage through the existing image/package path, leaves a small runnable glyph-rendering check and inspects the affected rendered output without adding product languages.",
         "Keeps the metadata-only and Latin-only controls scoped to their accepted contracts instead of imposing the new font set or a universal language matrix."
       ]
+    },
+    {
+      "id": "read-only-delegation-side-effects",
+      "prompt": "Add a read-only cost estimate that reuses already selected artifacts without creating quotes, reconciling runs or registering resources. Keep the existing execution flow working.",
+      "fixture_description": "A synthetic application has an inspection method that calls refresh before projecting archived output; refresh reconciles persisted run status and registers a resource. A separate resolution method writes reference records. Both look like queries to the caller. An existing owner-checked archive projection reads immutable output facts without either side effect. The matched execution control deliberately requires refresh and registration. No private code, service or credentials are supplied.",
+      "expectations": [
+        "Traces the actual delegated calls and avoids refresh, reconciliation and registration in the explicitly read-only estimate.",
+        "Reuses the current owner-checked fact projection through a narrow boundary and leaves a runnable check that detects unexpected writes without duplicating the execution pipeline.",
+        "Keeps the execution control refreshing and registering as required rather than changing every inspection method to be read-only."
+      ]
     }
   ]
 }
