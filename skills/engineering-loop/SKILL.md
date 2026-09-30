@@ -49,6 +49,8 @@ For enumerable work, reconcile the source inventory with implemented, explicitly
 
 Evidence belongs to the relevant code, configuration, data, and environment state. Reuse inspectable evidence when those remain unchanged; rerun affected checks when they change. Completion language must distinguish static checks, runtime checks, and user acceptance.
 
+For temporary branch/worktree integration and cleanup, use [collaboration.md](references/collaboration.md).
+
 ## Bound the agent's own work
 
 Do not preload the lifecycle references or the whole repository. Read an index, then relevant sections. Once information is sufficient for the next authorized action, act; do not search for hypothetical blockers. Reuse settled decisions unless new facts or changed conditions invalidate them.

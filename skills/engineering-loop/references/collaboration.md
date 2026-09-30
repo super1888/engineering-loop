@@ -1,6 +1,6 @@
 # Coordinate implementation, specification and verification
 
-Use when concurrent contributors need ownership, disagreement resolution or contract-change coordination. Delegate only when available, authorized and useful. Roles are responsibilities, not a required agent count: a coordinator, implementer and verifier may suffice; separate specification and test work only when their scope justifies it. A small local task needs no agent team or coordination service.
+Use when concurrent contributors need ownership, disagreement resolution or contract-change coordination, or when temporary branches/worktrees need integration and cleanup. Delegate only when available, authorized and useful. Roles are responsibilities, not a required agent count: a coordinator, implementer and verifier may suffice; separate specification and test work only when their scope justifies it. A small local task needs no agent team or coordination service.
 
 ## Assign bounded ownership
 
@@ -40,3 +40,9 @@ Review the first representative slice before replication, a material shared-cont
 For critical behavior, establish test expectations from accepted scenarios before or alongside implementation where useful. A verifier may inspect code for risks, but expected results need an independent basis. Preserve legitimate alternative implementations and exceptions. Source conformance, observable behavior and task usefulness require different evidence; use [verification.md](verification.md).
 
 The coordinator reconciles findings, accepted specification changes and affected contributor results, then verifies combined behavior at an identifiable integrated state. Separate green checks or a clean merge are insufficient. Report passed, failed and unrun evidence and any remaining decision. Stop when the requested result and required checks are complete; extra reviewers need a current unresolved reason.
+
+## Retire temporary branches after integration
+
+When temporary branches or worktrees feed one delivery, identify the target and account for each contribution before calling the result complete. Show that its required work is present by ancestry, an equivalent patch, or evidence that a later change supersedes it; integrate unique required work and verify the resulting target state. Retain any branch with unique unintegrated work.
+
+After integrated verification, remove only safe, agent-created temporary worktrees and local refs, plus remote refs when authorized. Preserve uncommitted or untracked work and checkouts still in use. Integration and cleanup do not authorize a push or deployment.
