@@ -2,6 +2,8 @@
 
 `cases.json` contains scenario specifications, not a model runner or a pass-rate claim. Most descriptions still require a tester to build a fixture. Receipt, copy, list-detail, asynchronous-import and pilot bar-boundary fixtures are supplied below. Execution evidence is recorded per trial; a completed trial does not mark all scenarios or all hosts as passed.
 
+The artifact-retention extension of `multimodal-schema-activation` and the `generated-artifact-runtime-properties` scenario added on 2026-10-01 are unrun. Their motivating artifact failures were reproduced, but this is not evidence of improved skill behavior or transfer.
+
 Raw trial outputs stay in the ignored `results/` directory. Earlier tracked trials remain recoverable from Git history through commit `eacbca4`; they did not establish a general skill advantage or speedup. Historical runs do not validate later guidance revisions, and scenario specifications remain unrun unless covered by explicit execution evidence.
 
 The unrun `release-existing-clients` case tests an open page that requests an old lazy asset after a frontend switch, plus a control whose old page remains functional. It is motivated by an observed old-script 404 that was repaired and checked against retained image contents; that project result does not establish the skill's behavioral effect or require one retention mechanism everywhere.
