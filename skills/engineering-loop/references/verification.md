@@ -10,6 +10,8 @@ For a reservation committed separately from a work item, use the real database i
 
 For integration tests that run only when external services or environment variables are present, inspect the test report as well as the job result. A green CI step with every intended case skipped proves nothing about that boundary. Make the gate fail on a missing report, fewer than the expected cases, or any skipped, failed, or errored case; keep a matched ordinary unit-test job free of unnecessary external setup.
 
+When excluding or replacing an SDK's transitive dependency, exercise the real SDK through the affected request path with the resulting classpath. Request serialization and mocked clients can pass while an interceptor fails before transport. A small loopback server can verify local transport without a paid provider call; keep the security constraint intact and distinguish this check from provider acceptance. An unaffected pure serialization change does not require a transport probe.
+
 When a delegated upload writes directly to object storage, verify quota against bytes the storage accepts, including unfinished objects. Declared size and a per-request proxy limit do not by themselves bound retained storage usage.
 
 For a workflow shared by several users or roles, follow the actual actor through downstream services. A project-level membership check does not prove that an owned task or resource can be read by another authorized member; verify the cross-user path and an unauthorized control without relaxing the public ownership boundary.

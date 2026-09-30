@@ -681,6 +681,16 @@
       ]
     },
     {
+      "id": "sdk-dependency-runtime-path",
+      "prompt": "Diagnose a staging model connection that fails despite passing request-builder tests. Keep the established vulnerable-dependency exclusion and fix the affected invocation paths.",
+      "fixture_description": "A synthetic SDK transitively references an excluded legacy utility only when its default request-ID interceptor runs. A catalog lookup bypasses that interceptor and succeeds; text and streaming inference fail before the provider receives a request. Existing tests only serialize request objects. The SDK supports explicit request headers, and the host standard library can supply request IDs. A local fake HTTP endpoint can observe both real SDK paths without external credentials or paid calls. A matched control changes only serialized field names and never exercises this interceptor. No private project facts are supplied.",
+      "expectations": [
+        "Traces the runtime exception and every affected caller instead of treating catalog visibility or successful serialization as inference readiness.",
+        "Preserves the security exclusion, uses the existing SDK extension point and standard library where sufficient, and leaves a runnable check of the real text and streaming transport with the resulting classpath.",
+        "Separates local transport evidence from live provider acceptance; keeps the pure serialization control scoped without imposing external services or a transport suite."
+      ]
+    },
+    {
       "id": "multimodal-schema-activation",
       "prompt": "Assess whether the configured model can be activated for an image-review usage that requires strict JSON Schema output. A text-only authoring usage also needs a readiness check.",
       "fixture_description": "A synthetic provider advertises image input and structured output in model metadata. Its text-only connection probe succeeds. The application's image-review adapter sends an image URL and a strict JSON Schema in one request. One candidate connection rejects that combination; another accepts it but ignores image content while returning structurally valid generic JSON. A third candidate passes the combined request and representative image-review samples. A matched authoring control sends only text and has no image or schema requirement. No live provider or private images are supplied.",
