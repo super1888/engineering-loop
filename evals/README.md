@@ -26,6 +26,8 @@ The unrun `api-envelope-status-boundary` case tests whether an HTTP 400 response
 
 The unrun `external-config-activation` case tests an authorized staging repair through configuration inventory, conditional updates, uploaded artifact identity, state lookup after an ambiguous write and ordinary-account acceptance. Its read-only and already-active controls prevent turning this into a mandatory mutation workflow. This synthetic specification has not been executed or shown to improve model behavior.
 
+The unrun `multimodal-schema-activation` case tests whether model metadata and a text-only connection probe are mistaken for proof that one request can combine image input with strict JSON Schema output. It includes a structurally valid but image-blind response and a text-only control that needs no multimodal probe. This synthetic specification has not been executed or shown to improve model behavior.
+
 The unrun `release-hidden-feature-runtime` case tests a hidden UI whose active gateway still permits anonymous jobs and WebSocket access. Its control enforces authorization while keeping an intended public health path. It separates build visibility from effective server access; no skill effect has been measured.
 
 The unrun `release-preflight-fixture-portability` case tests a new migration gate against existing isolated CI fixtures, including release-artifact line endings and Unix file modes. Its control has matching bytes and Linux CI evidence. It separates gate correctness from a pass on one checkout; no skill effect has been measured.

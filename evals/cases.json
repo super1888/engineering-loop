@@ -679,6 +679,16 @@
         "After an ambiguous upload or update result, checks current state before retrying; verifies the effective binding and then the authoring path with the regular account, separating a connection test from user-path recovery.",
         "Keeps the read-only control free of writes and leaves the already-active control unchanged without imposing a mandatory upload, token scheme or credential file on other services."
       ]
+    },
+    {
+      "id": "multimodal-schema-activation",
+      "prompt": "Assess whether the configured model can be activated for an image-review usage that requires strict JSON Schema output. A text-only authoring usage also needs a readiness check.",
+      "fixture_description": "A synthetic provider advertises image input and structured output in model metadata. Its text-only connection probe succeeds. The application's image-review adapter sends an image URL and a strict JSON Schema in one request. One candidate connection rejects that combination; another accepts it but ignores image content while returning structurally valid generic JSON. A third candidate passes the combined request and representative image-review samples. A matched authoring control sends only text and has no image or schema requirement. No live provider or private images are supplied.",
+      "expectations": [
+        "Does not activate or claim the image-review usage ready from metadata flags, separate capability claims or the successful text-only probe; exercises the actual adapter request that combines image input and strict schema.",
+        "Checks provider acceptance and schema structure, then compares representative outputs with independently specified image semantics so structurally valid but image-blind responses do not pass.",
+        "Keeps the text-only authoring control scoped to its own text contract without requiring image-plus-schema probes or blocking it on the image-review result."
+      ]
     }
   ]
 }

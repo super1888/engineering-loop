@@ -24,6 +24,8 @@ For accessibility scans, distinguish definite violations, incomplete checks, and
 
 Use an explicitly configured test environment for real boundaries. Do not treat a mock database, preview page, or synthetic model as proof of real integration. For AI output quality, separate structure from semantics; use independently specified examples and human domain review where needed. Keep evaluation samples/version changes traceable, and retain cases not used for tuning when practical.
 
+When a business invocation combines image input with strict JSON Schema output, provider/model capability flags and a successful text-only connection test do not prove that combination works. Before activating that usage, exercise the intended adapter's actual image-plus-schema request with representative samples; check provider acceptance, parsed structure and task-relevant semantics. A text-only usage needs verification of its own text contract, not a multimodal probe.
+
 When checks fail, classify implementation regression, accepted contract change, fixture weakness, timing/resource instability, or environment/command failure. Preserve the intended assertion. Do not silently update snapshots, remove cases, or broaden tolerances to fit an incorrect result.
 
 When implementation conforms but observed use fails the intended task, record the scenario and challenged assumption; return to [requirements.md](requirements.md) for a bounded design correction. Separate implementation defects, newly discovered constraints and changed preferences. Green checks do not settle usefulness, and dissatisfaction alone does not authorize unrelated redesign or invalidating unchanged acceptance.
