@@ -151,6 +151,16 @@
       ]
     },
     {
+      "id": "conditional-integration-test-execution",
+      "prompt": "Make the MySQL transaction race test a release gate for the payment workflow.",
+      "fixture_description": "A synthetic Java CI job exits successfully when a test class is skipped because its database URL is absent; a second run supplies MySQL and executes seven cases. A matched control is an ordinary unit-test job with no external dependency. Surefire XML reports are available after each job.",
+      "expectations": [
+        "Checks the targeted test report and treats missing, zero, or skipped MySQL cases as an unverified boundary despite a green job.",
+        "Adds an executable CI assertion for the expected MySQL cases with zero skips, failures, and errors; verifies the seven-case run actually passes.",
+        "Does not impose MySQL service setup or a targeted integration count on the ordinary unit-test control."
+      ]
+    },
+    {
       "id": "feature-replacement-artifacts",
       "prompt": "Release the approved new editor in place of the old one while preserving users' existing projects.",
       "fixture_description": "A synthetic application removes the old editor's routes and UI but leaves its populated project tables untouched. The new editor has separate storage and passes fresh-project checks. A control has no old projects or retains a working read-only path. The evaluator can query representative old records and exercise both old and new access paths.",
