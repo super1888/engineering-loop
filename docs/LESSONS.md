@@ -2,6 +2,14 @@
 
 Keep this small. Business/stack defects belong with their executable safeguards; a local incident is not automatically a generic skill rule.
 
+## Saved instructions overwritten by presentation defaults (2026-10-01; not behavior-evaluated)
+
+- **Trigger and environment:** In a Windows/Vue/TypeScript application, an already rendered media artifact became stale when the user clicked Next without editing its instructions. The page shared a payload constructor between rendering and stage navigation.
+- **Cause and missed check:** The constructor always wrote the current UI language's defaults over four saved instructions. The backend correctly rejected the changed source digest; compilation and new-project checks did not exercise a saved custom instruction or a language change. Disabling invalidation would have hidden a real source change.
+- **Correction and evidence:** The shared constructor preserves saved strings, including explicit empty strings, and fills only absent fields. Local regression cases covered retained instructions, another language's defaults and missing fields. After deployment, actual navigation retained the same artifact digest and report. Restoring the original test settings also recovered that artifact without rerendering. These are application observations, not measured skill behavior.
+- **Applicability, cost and controls:** Useful when presentation defaults feed persisted inputs tied to downstream evidence. Inspect all callers of the shared constructor; do not impose a new state layer. Explicit user edits must still change the source and invalidate dependent evidence, and a new object must still receive its defaults.
+- **Owner and review:** Maintainers own the synthetic `presentation-defaults-saved-evidence` case. It remains unrun; no general skill paragraph or transferable benefit is claimed from this incident. Evaluate the preserved-input and legitimate-edit controls before promotion; retire the candidate if current implementation and verification guidance already catches it reliably.
+
 ## Cross-host script transport candidate (2026-10-01; not behavior-evaluated)
 
 - **Trigger and environment:** A Windows/CPython3.12.3 maintenance helper sent an LF Bash script to Linux through a text-mode subprocess. Receiver-side syntax checking rejected a carriage return after `case ... in`; inspecting the local string alone showed valid LF content.

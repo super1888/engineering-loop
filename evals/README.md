@@ -2,6 +2,8 @@
 
 `cases.json` contains scenario specifications, not a model runner or a pass-rate claim. Most descriptions still require a tester to build a fixture. Receipt, copy, list-detail, asynchronous-import and pilot bar-boundary fixtures are supplied below. Execution evidence is recorded per trial; a completed trial does not mark all scenarios or all hosts as passed.
 
+The unrun `presentation-defaults-saved-evidence` case checks a page whose Next and render actions share a payload constructor that overwrites saved custom instructions with localized defaults, invalidating an existing artifact. Its new-object and explicit-edit controls must retain their legitimate defaults and invalidation. Actual application navigation was repaired and verified; no new general guidance or model-evaluation result is claimed.
+
 The artifact-retention extension of `multimodal-schema-activation` and the `generated-artifact-runtime-properties` scenario added on 2026-10-01 are unrun. Their motivating artifact failures were reproduced, but this is not evidence of improved skill behavior or transfer.
 
 Raw trial outputs stay in the ignored `results/` directory. Earlier tracked trials remain recoverable from Git history through commit `eacbca4`; they did not establish a general skill advantage or speedup. Historical runs do not validate later guidance revisions, and scenario specifications remain unrun unless covered by explicit execution evidence.
