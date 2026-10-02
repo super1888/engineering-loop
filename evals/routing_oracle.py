@@ -58,6 +58,8 @@ for (const invalid of [
   const count = calls.length;
   const bad = await submitOrder(invalid, async () => { calls.push('unexpected'); });
   assert.equal(bad.ok, false);
+  assert.equal(typeof bad.error, "string");
+  assert.ok(bad.error.trim());
   assert.deepEqual(bad.fields, invalid);
   assert.equal(calls.length, count);
 }

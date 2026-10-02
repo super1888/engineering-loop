@@ -74,6 +74,21 @@ class RoutingOracleTests(unittest.TestCase):
         self._write_valid_implementation()
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_form_oracle_requires_an_error_on_local_validation_failure(self):
+        self._write_valid_implementation()
+        form = self.workspace / "ui/order-form.mjs"
+        valid = form.read_text(encoding="utf-8")
+        for replacement in ('return { ok: false, fields };',
+                            'return { ok: false, error: "", fields };'):
+            with self.subTest(local_failure=replacement):
+                form.write_text(valid.replace('return { ok: false, error: "invalid order", fields };',
+                                               replacement), encoding="utf-8")
+                result = assess(self.workspace)
+                self.assertIsNone(result["backend"])
+                self.assertIn("AssertionError", result["form"] or "")
+        form.write_text(valid, encoding="utf-8")
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_backend_oracle_rejects_silent_coercion_of_contract_input_types(self):
         self._write_valid_implementation()
         orders = self.workspace / "backend/orders.py"
