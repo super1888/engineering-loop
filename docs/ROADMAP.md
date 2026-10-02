@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.8: unreleased empty-scalar description protection
+
+- Reject empty or blank quoted descriptions and unquoted YAML null values, including an inline comment after a null value.
+- Reuse the existing metadata regression; preserve quoted null words, literal hashes and comments after a nonempty value. The check still targets this repository's single-line frontmatter layout, not general YAML validation.
+
+This is a local distribution-check correction, not a published release or a model-behavior improvement.
+
 ## v0.1.7: unreleased comment-only description protection
 
 - Reject a description whose first nonblank character starts a YAML comment inside the actual frontmatter; a body example cannot supply the missing value.

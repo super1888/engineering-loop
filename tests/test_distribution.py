@@ -35,12 +35,14 @@ class DistributionTests(unittest.TestCase):
             missing_description = original.replace("description: Metadata fixture.\n", "", 1)
             entry.write_text(missing_description + "\ndescription: Documentation example.\n", encoding="utf-8")
             self.assertIn("Missing skill description", check(root))
-            for empty_value in ("", " ", "   ", "\t ", "# metadata note", "  # metadata note", "\t # metadata note"):
+            for empty_value in ("", " ", "   ", "\t ", "# metadata note", "  # metadata note", "\t # metadata note",
+                                '""', "''", '" \t "', "' \t '", "~", "null", "Null", "NULL", "null # missing value"):
                 with self.subTest(description_value=empty_value):
                     blank_description = original.replace("Metadata fixture.", empty_value, 1)
                     entry.write_text(blank_description + "\ndescription: Documentation example.\n", encoding="utf-8")
                     self.assertIn("Missing skill description", check(root))
-            for description in ("  Metadata fixture.", "'# useful description'", '"# useful description"'):
+            for description in ("  Metadata fixture.", "'# useful description'", '"# useful description"',
+                                '"null"', "'~'", "null#literal", "Metadata fixture. # inline comment"):
                 with self.subTest(valid_description=description):
                     entry.write_text(original.replace("Metadata fixture.", description, 1), encoding="utf-8")
                     self.assertEqual(check(root), [])
