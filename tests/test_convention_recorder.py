@@ -1,4 +1,5 @@
 from pathlib import Path
+import hashlib
 import json
 import os
 import shutil
@@ -24,12 +25,17 @@ class ConventionRecorderTests(unittest.TestCase):
                 root = Path(directory) / ancestor / "inputs"
                 root.mkdir(parents=True)
                 (root / "context.md").write_bytes(b"Frozen context.\n")
+                (root / "documents").mkdir()
+                (root / "documents/__pycache__").write_bytes(b"Ordinary input file.\n")
                 (root / "__pycache__").mkdir()
                 (root / "__pycache__/cached.md").write_bytes(b"Disposable cache.\n")
                 (root / "local.pyc").write_bytes(b"Disposable bytecode.\n")
                 for module in (prepare_convention_trial, prepare_bar_trial, prepare_routing_trial):
                     with self.subTest(ancestor=ancestor, preparer=module.__name__):
-                        self.assertEqual(list(module.hashes(root)), ["context.md"])
+                        self.assertEqual(module.hashes(root), {
+                            "context.md": hashlib.sha256(b"Frozen context.\n").hexdigest(),
+                            "documents/__pycache__": hashlib.sha256(b"Ordinary input file.\n").hexdigest(),
+                        })
 
     def test_skill_snapshot_preserves_native_paths_and_committed_bytes(self):
         with tempfile.TemporaryDirectory() as directory:

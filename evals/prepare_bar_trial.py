@@ -18,7 +18,7 @@ def hashes(directory: Path) -> dict[str, str]:
     return {path.relative_to(directory).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
             for path in sorted(directory.rglob("*")) if path.is_file()
             and ".git" not in path.relative_to(directory).parts
-            and "__pycache__" not in path.relative_to(directory).parts and path.suffix != ".pyc"}
+            and "__pycache__" not in path.relative_to(directory).parts[:-1] and path.suffix != ".pyc"}
 
 
 def main() -> None:
