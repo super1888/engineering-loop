@@ -330,7 +330,10 @@ def main():
         parser.error("candidate must contain backend/service.py")
     sys.path.insert(0, str(candidate))
     global SERVICE
-    module = importlib.import_module("backend.service")
+    try:
+        module = importlib.import_module("backend.service")
+    except SystemExit as error:
+        raise RuntimeError("Candidate import exited before checks") from error
     if not Path(module.__file__).resolve().is_relative_to(candidate):
         raise RuntimeError("Imported backend.service did not come from the candidate directory")
     SERVICE = module.ImportService

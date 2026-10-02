@@ -30,6 +30,7 @@ This is a local packaging correction, not a published release or a model-behavio
 - Require nonempty, unskipped native public-test reports in routing records and the convention comment control; the form report must execute at least the fixture's two cases.
 - Build convention-trial patches from each workspace's frozen Git baseline, so later repository template changes are not attributed to the implementing agent.
 - Record routing-trial file lists and patches against the prepared Git baseline, retaining staged changes alongside unstaged edits.
+- Reject `SystemExit` during candidate imports in the receipt and asynchronous-import oracles, so an early zero exit cannot bypass their checks; preserve the original exit in the diagnostic cause.
 
 These are regression-tested evaluator corrections, not changes to the distributed skill or evidence of model-quality improvement.
 

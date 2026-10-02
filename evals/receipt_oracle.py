@@ -118,6 +118,9 @@ if __name__ == "__main__":
     candidate = Path(sys.argv.pop()).resolve() / "inventory.py"
     spec = importlib.util.spec_from_file_location("receipt_candidate", candidate)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    try:
+        spec.loader.exec_module(module)
+    except SystemExit as error:
+        raise RuntimeError("Candidate import exited before checks") from error
     Inventory = module.Inventory
     unittest.main(verbosity=2)
