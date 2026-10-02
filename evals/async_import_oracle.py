@@ -16,6 +16,8 @@ import tempfile
 import threading
 import unittest
 
+from python_source import fresh_python
+
 
 SERVICE = None
 
@@ -330,15 +332,16 @@ def main():
         parser.error("candidate must contain backend/service.py")
     sys.path.insert(0, str(candidate))
     global SERVICE
-    try:
-        module = importlib.import_module("backend.service")
-    except SystemExit as error:
-        raise RuntimeError("Candidate import exited before checks") from error
-    if not Path(module.__file__).resolve().is_relative_to(candidate):
-        raise RuntimeError("Imported backend.service did not come from the candidate directory")
-    SERVICE = module.ImportService
-    result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(RevisionTwoTests))
-    return 0 if result.wasSuccessful() else 1
+    with fresh_python():
+        try:
+            module = importlib.import_module("backend.service")
+        except SystemExit as error:
+            raise RuntimeError("Candidate import exited before checks") from error
+        if not Path(module.__file__).resolve().is_relative_to(candidate):
+            raise RuntimeError("Imported backend.service did not come from the candidate directory")
+        SERVICE = module.ImportService
+        result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(RevisionTwoTests))
+        return 0 if result.wasSuccessful() else 1
 
 
 if __name__ == "__main__":

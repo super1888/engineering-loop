@@ -45,6 +45,7 @@ This is a local packaging correction, not a published release or a model-behavio
 
 ## Unreleased evaluation tooling correction
 
+- Execute candidate Python sources and public tests with an isolated bytecode path and writes disabled; timestamp/size collisions cannot reuse an earlier candidate's cache. Preserve workspace source/cache bytes, including native receipt/import oracles and the browser evaluator's server launch.
 - Verify the unchanged 10,000-cent order and export boundary in a fresh process for the comment-only control; stale declaration text cannot mask a changed value or inlined limit, and equivalent annotated declarations remain valid.
 - Resolve relative trial directories in routing and convention recorders; preserve prompt mismatch rejection, remove local directory prefixes, and retain ordinary final-message words and punctuation.
 - Accept annotated constant assignments in the convention amount check; reject a wrong value or a declaration without a value assignment.

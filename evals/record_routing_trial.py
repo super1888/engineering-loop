@@ -5,10 +5,10 @@ import json
 from pathlib import Path
 import re
 import subprocess
-import sys
 
 from routing_oracle import assess
 from public_test_results import node_tap_passed, unittest_passed
+from python_source import fresh_python
 
 
 TRIALS = ("full-A", "full-B", "full-C", "backend-A", "backend-B", "backend-C")
@@ -35,9 +35,10 @@ def record(directory: Path, output: Path, name: str) -> dict:
     for path in (str(directory.parent), str(directory.parent).replace("\\", "/")):
         final = final.replace(path, "<trial-root>")
     (output / f"{name}-final.txt").write_text(final + "\n", encoding="utf-8")
-    backend = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "backend/tests", "-v"],
-                             cwd=workspace, capture_output=True, text=True, encoding="utf-8",
-                             errors="replace", timeout=30)
+    with fresh_python() as python:
+        backend = subprocess.run([*python, "-m", "unittest", "discover", "-s", "backend/tests", "-v"],
+                                 cwd=workspace, capture_output=True, text=True, encoding="utf-8",
+                                 errors="replace", timeout=30)
     form = None
     if name.startswith("full"):
         form = subprocess.run(["node", "--test", "--test-reporter=tap", "ui/order-form.test.mjs"],

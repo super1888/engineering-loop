@@ -3,7 +3,8 @@
 import argparse
 from pathlib import Path
 import subprocess
-import sys
+
+from python_source import fresh_python
 
 
 BACKEND = """from backend.orders import create_order
@@ -59,19 +60,20 @@ console.log('routing-oracle-complete:form');
 
 
 def assess(workspace: Path) -> dict[str, str | None]:
-    commands = {
-        "backend": [sys.executable, "-c", BACKEND],
-        "form": ["node", "--input-type=module", "-e", FORM],
-    }
     results = {}
-    for name, command in commands.items():
-        result = subprocess.run(command, cwd=workspace, capture_output=True, text=True, timeout=15)
-        if result.returncode:
-            results[name] = result.stderr.strip() or result.stdout.strip() or f"Process exited with code {result.returncode}"
-        elif f"routing-oracle-complete:{name}" not in result.stdout.splitlines():
-            results[name] = "Behavior checks did not reach completion"
-        else:
-            results[name] = None
+    with fresh_python() as python:
+        commands = {
+            "backend": [*python, "-c", BACKEND],
+            "form": ["node", "--input-type=module", "-e", FORM],
+        }
+        for name, command in commands.items():
+            result = subprocess.run(command, cwd=workspace, capture_output=True, text=True, timeout=15)
+            if result.returncode:
+                results[name] = result.stderr.strip() or result.stdout.strip() or f"Process exited with code {result.returncode}"
+            elif f"routing-oracle-complete:{name}" not in result.stdout.splitlines():
+                results[name] = "Behavior checks did not reach completion"
+            else:
+                results[name] = None
     return results
 
 

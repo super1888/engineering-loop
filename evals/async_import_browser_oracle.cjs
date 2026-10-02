@@ -111,7 +111,8 @@ async function main() {
   const db = path.join(temporary, 'state.sqlite');
   stage = 'launch actual candidate server';
   let output = '';
-  server = spawn(python, ['server.py', '--db', db, '--port', '0', '--manual-worker', '--fail-once-row', 'beta'], {
+  server = spawn(python, ['-B', '-X', `pycache_prefix=${path.join(temporary, 'pycache')}`,
+    'server.py', '--db', db, '--port', '0', '--manual-worker', '--fail-once-row', 'beta'], {
     cwd: candidate, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true,
     env: { ...process.env, PYTHONUNBUFFERED: '1' },
   });

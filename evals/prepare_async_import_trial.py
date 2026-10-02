@@ -35,7 +35,8 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     if (output / 'inputs.json').exists():
         parser.error('Frozen input manifest already exists; choose a new result directory.')
-    evaluators = ['async_import_oracle.py', 'async_import_browser_oracle.cjs', 'async_import_change.md']
+    evaluators = ['async_import_oracle.py', 'async_import_browser_oracle.cjs', 'async_import_change.md',
+                  'python_source.py']
     evaluator_hashes = {name: hashlib.sha256((ROOT / 'evals' / name).read_bytes()).hexdigest()
                         for name in evaluators}
     scratch = Path(tempfile.mkdtemp(prefix='engineering-loop-import-ab-'))

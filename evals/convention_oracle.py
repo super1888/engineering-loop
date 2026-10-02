@@ -4,9 +4,9 @@ import argparse
 import ast
 from pathlib import Path
 import subprocess
-import sys
 
 from public_test_results import unittest_passed
+from python_source import fresh_python
 
 
 def assess(workspace: Path) -> list[str]:
@@ -42,8 +42,9 @@ for accepts in (accepts_order_total, accepts_export_total):
 assert format_reference('ab12') == 'ab12'
 print('convention-oracle-complete')
 """
-    result = subprocess.run([sys.executable, "-c", snippet], cwd=workspace,
-                            capture_output=True, text=True, timeout=15)
+    with fresh_python() as python:
+        result = subprocess.run([*python, "-c", snippet], cwd=workspace,
+                                capture_output=True, text=True, timeout=15)
     if result.returncode:
         failures.append("Behavior check failed: " + (result.stderr.strip() or str(result.returncode)))
     elif "convention-oracle-complete" not in result.stdout.splitlines():
@@ -56,8 +57,9 @@ for accepts in (accepts_order_total, accepts_export_total):
     assert not accepts(12_346)
 print('convention-owner-complete')
 """
-    result = subprocess.run([sys.executable, "-c", ownership], cwd=workspace,
-                            capture_output=True, text=True, timeout=15)
+    with fresh_python() as python:
+        result = subprocess.run([*python, "-c", ownership], cwd=workspace,
+                                capture_output=True, text=True, timeout=15)
     if result.returncode or "convention-owner-complete" not in result.stdout.splitlines():
         failures.append("Order behavior must use the module-owned constant.")
     return failures
@@ -82,12 +84,14 @@ for accepts in (accepts_order_total, accepts_export_total):
     assert not accepts(10_001)
 print('convention-comment-boundary-complete')
 """
-    result = subprocess.run([sys.executable, "-c", snippet], cwd=workspace,
-                            capture_output=True, text=True, timeout=15)
+    with fresh_python() as python:
+        result = subprocess.run([*python, "-c", snippet], cwd=workspace,
+                                capture_output=True, text=True, timeout=15)
     if result.returncode or "convention-comment-boundary-complete" not in result.stdout.splitlines():
         failures.append("The unrelated order amount boundary changed.")
-    result = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"],
-                            cwd=workspace, capture_output=True, text=True, timeout=15)
+    with fresh_python() as python:
+        result = subprocess.run([*python, "-m", "unittest", "discover", "-s", "tests", "-v"],
+                                cwd=workspace, capture_output=True, text=True, timeout=15)
     if not unittest_passed(result):
         failures.append("Public behavior failed: " + (result.stderr.strip() or str(result.returncode)))
     return failures

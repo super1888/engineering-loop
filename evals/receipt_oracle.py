@@ -14,6 +14,8 @@ import tempfile
 import threading
 import unittest
 
+from python_source import fresh_python
+
 
 class ReceiptContractTests(unittest.TestCase):
     def setUp(self):
@@ -118,9 +120,10 @@ if __name__ == "__main__":
     candidate = Path(sys.argv.pop()).resolve() / "inventory.py"
     spec = importlib.util.spec_from_file_location("receipt_candidate", candidate)
     module = importlib.util.module_from_spec(spec)
-    try:
-        spec.loader.exec_module(module)
-    except SystemExit as error:
-        raise RuntimeError("Candidate import exited before checks") from error
-    Inventory = module.Inventory
-    unittest.main(verbosity=2)
+    with fresh_python():
+        try:
+            spec.loader.exec_module(module)
+        except SystemExit as error:
+            raise RuntimeError("Candidate import exited before checks") from error
+        Inventory = module.Inventory
+        unittest.main(verbosity=2)
