@@ -1,5 +1,12 @@
 # Roadmap
 
+## Unreleased evaluation tooling correction
+
+- Invalidate a blinded review when its referenced task context changes; reuse the context frozen in the packet and preserve line-ending-only conversions.
+- Reject private arm mappings inside the review directory or its descendants during preparation and gating.
+
+These are regression-tested evaluator corrections, not changes to the distributed skill or evidence of model-quality improvement.
+
 ## v0.1.3: unreleased description gate correction
 
 - Reuse the frontmatter boundary for description validation; a documentation example cannot substitute for a missing skill description.

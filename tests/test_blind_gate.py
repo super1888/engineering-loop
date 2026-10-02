@@ -77,6 +77,40 @@ class BlindGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Review packet changed"):
             gate(self.suite, self.runs, self.packet, self.key, self.review)
 
+    def test_fixture_context_mutation_invalidates_review(self):
+        fixture = self.root / "fixture"
+        fixture.mkdir()
+        brief = fixture / "BRIEF.md"
+        brief.write_bytes(b"Accepted task context\n")
+        suite = read_json(self.suite)
+        suite["cases"][0]["fixture"] = "fixture"
+        write_json(self.suite, suite)
+        packet = self.root / "fixture-reviewer/packet.json"
+        key = self.root / "fixture-private/key.json"
+        prepare(self.suite, self.runs, packet, key, seed=1)
+        self.packet, self.key = packet, key
+        self.submit("pass", "pass")
+        brief.write_bytes(b"Accepted task context\r\n")
+        self.assertEqual(gate(self.suite, self.runs, packet, key, self.review)["decision"], "pass")
+        brief.write_bytes(b"Changed task context\n")
+        with self.assertRaisesRegex(ValueError, "case context changed"):
+            gate(self.suite, self.runs, packet, key, self.review)
+
+    def test_private_mapping_cannot_be_nested_under_review_directory(self):
+        packet = self.root / "reviewer/another-packet.json"
+        key = self.root / "reviewer/private/key.json"
+        with self.assertRaisesRegex(ValueError, "outside the review-packet directory"):
+            prepare(self.suite, self.runs, packet, key, seed=1)
+        self.assertFalse(packet.exists())
+        self.assertFalse(key.exists())
+
+    def test_gate_rejects_private_mapping_inside_review_directory(self):
+        self.submit("pass", "pass")
+        key = self.root / "reviewer/private/key.json"
+        write_json(key, read_json(self.key))
+        with self.assertRaisesRegex(ValueError, "outside the review-packet directory"):
+            gate(self.suite, self.runs, self.packet, key, self.review)
+
     def test_model_review_can_pass_pilot_but_not_release(self):
         self.submit("pass", "pass")
         review = read_json(self.review)

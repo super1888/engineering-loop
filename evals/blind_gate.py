@@ -34,6 +34,16 @@ def artifact(runs_path: Path, entry: dict) -> tuple[str, str]:
     return content.decode("utf-8"), digest(content)
 
 
+def case_context(suite_path: Path, case: dict) -> str:
+    return ((suite_path.parent / case["fixture"] / "BRIEF.md").read_text(encoding="utf-8")
+            if "fixture" in case else case.get("context", ""))
+
+
+def check_private_key_location(packet_path: Path, key_path: Path) -> None:
+    if packet_path.resolve().parent in key_path.resolve().parents:
+        raise ValueError("Keep the private key outside the review-packet directory")
+
+
 def validate_suite(suite: dict, runs: dict) -> None:
     cases = suite["cases"]
     ids = [case["id"] for case in cases]
@@ -52,8 +62,7 @@ def validate_suite(suite: dict, runs: dict) -> None:
 
 def prepare(suite_path: Path, runs_path: Path, packet_path: Path, key_path: Path,
             seed: int | None = None) -> None:
-    if packet_path.resolve() == key_path.resolve() or packet_path.resolve().parent == key_path.resolve().parent:
-        raise ValueError("Keep the private key outside the review-packet directory")
+    check_private_key_location(packet_path, key_path)
     if packet_path.exists() or key_path.exists():
         raise ValueError("Do not overwrite a frozen review packet or private mapping")
     suite, runs = read_json(suite_path), read_json(runs_path)
@@ -66,8 +75,7 @@ def prepare(suite_path: Path, runs_path: Path, packet_path: Path, key_path: Path
         right_arm = "candidate" if left_arm == "baseline" else "baseline"
         left, left_hash = artifact(runs_path, runs["arms"][left_arm][case_id])
         right, right_hash = artifact(runs_path, runs["arms"][right_arm][case_id])
-        context = ((suite_path.parent / case["fixture"] / "BRIEF.md").read_text(encoding="utf-8")
-                   if "fixture" in case else case.get("context", ""))
+        context = case_context(suite_path, case)
         packets.append({"id": case_id, "task": case["task"], "context": context,
                         "criteria": case["criteria"],
                         "left": left, "right": right})
@@ -82,6 +90,7 @@ def prepare(suite_path: Path, runs_path: Path, packet_path: Path, key_path: Path
 
 def gate(suite_path: Path, runs_path: Path, packet_path: Path, key_path: Path,
          review_path: Path, require_human: bool = True) -> dict:
+    check_private_key_location(packet_path, key_path)
     suite, runs = read_json(suite_path), read_json(runs_path)
     validate_suite(suite, runs)
     key, packet, review = read_json(key_path), read_json(packet_path), read_json(review_path)
@@ -107,6 +116,8 @@ def gate(suite_path: Path, runs_path: Path, packet_path: Path, key_path: Path,
         failures.append("Human blinded review required for release")
     for case in suite["cases"]:
         case_id = case["id"]
+        if packet_by_id[case_id]["context"] != case_context(suite_path, case):
+            raise ValueError(f"Golden case context changed after blinding: {case_id}")
         mapping = key["mapping"][case_id]
         if set((mapping["left"], mapping["right"])) != {"baseline", "candidate"}:
             raise ValueError(f"Invalid arm mapping: {case_id}")
