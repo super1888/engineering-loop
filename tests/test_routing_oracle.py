@@ -74,6 +74,20 @@ class RoutingOracleTests(unittest.TestCase):
         self._write_valid_implementation()
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_non_ascii_form_output_keeps_independent_results(self):
+        self._write_valid_implementation()
+        form = self.workspace / "ui/order-form.mjs"
+        valid = form.read_text(encoding="utf-8")
+        for prefix, passing in (('console.log("验");\n', True), ('throw new Error("验");\n', False)):
+            with self.subTest(passing=passing):
+                form.write_text(prefix + valid, encoding="utf-8")
+                result = assess(self.workspace)
+                self.assertIsNone(result["backend"])
+                if passing:
+                    self.assertIsNone(result["form"])
+                else:
+                    self.assertIn("验", result["form"] or "")
+
     def test_form_oracle_requires_an_error_on_local_validation_failure(self):
         self._write_valid_implementation()
         form = self.workspace / "ui/order-form.mjs"

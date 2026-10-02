@@ -103,7 +103,8 @@ def assess(workspace: Path) -> dict[str, str | None]:
             "form": ["node", "--input-type=module", "-e", FORM],
         }
         for name, command in commands.items():
-            result = subprocess.run(command, cwd=workspace, capture_output=True, text=True, timeout=15)
+            result = subprocess.run(command, cwd=workspace, capture_output=True, text=True,
+                                    encoding="utf-8", errors="replace", timeout=15)
             if result.returncode:
                 results[name] = result.stderr.strip() or result.stdout.strip() or f"Process exited with code {result.returncode}"
             elif f"routing-oracle-complete:{name}" not in result.stdout.splitlines():
