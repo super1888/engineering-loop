@@ -61,6 +61,7 @@ for (const invalid of [
   { itemName: 'Pen', quantity: '0' },
   { itemName: 'Pen', quantity: '21' },
   { itemName: 'Pen', quantity: '1.5' },
+  { itemName: 'Pen', quantity: '2x' },
 ]) {
   const count = calls.length;
   const original = { ...invalid };

@@ -100,6 +100,18 @@ class RoutingOracleTests(unittest.TestCase):
         form.write_text(valid, encoding="utf-8")
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_form_oracle_rejects_partial_quantity_parsing(self):
+        self._write_valid_implementation()
+        form = self.workspace / "ui/order-form.mjs"
+        valid = form.read_text(encoding="utf-8")
+        form.write_text(valid.replace('Number(fields.quantity)', 'parseFloat(fields.quantity)'),
+                        encoding="utf-8")
+        result = assess(self.workspace)
+        self.assertIsNone(result["backend"])
+        self.assertIsNotNone(result["form"])
+        form.write_text(valid, encoding="utf-8")
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_form_oracle_preserves_original_fields_on_each_failure_path(self):
         self._write_valid_implementation()
         form = self.workspace / "ui/order-form.mjs"
