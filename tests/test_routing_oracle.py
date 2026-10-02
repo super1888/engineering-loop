@@ -104,11 +104,15 @@ class RoutingOracleTests(unittest.TestCase):
 
     def test_recording_keeps_staged_and_unstaged_changes_against_baseline(self):
         subprocess.run(["git", "init", "--quiet"], cwd=self.workspace, check=True, capture_output=True)
+        subprocess.run(["git", "config", "core.autocrlf", "false"],
+                       cwd=self.workspace, check=True, capture_output=True)
         subprocess.run(["git", "add", "."], cwd=self.workspace, check=True, capture_output=True)
         subprocess.run(["git", "-c", "user.name=Eval Test", "-c", "user.email=eval@example.invalid",
                         "commit", "--quiet", "-m", "Baseline"], cwd=self.workspace,
                        check=True, capture_output=True)
         self._write_valid_implementation()
+        for path in (self.workspace / "backend/orders.py", self.workspace / "ui/order-form.mjs"):
+            path.write_text(path.read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
         trial = self.workspace.parent
         (trial / "evidence").mkdir()
         (trial / "evidence/events.jsonl").write_text(
@@ -131,6 +135,13 @@ class RoutingOracleTests(unittest.TestCase):
         self.assertIn('+    order = {"id": len(store) + 1', mixed_patch)
         self.assertIn("+  const response = await postJson", mixed_patch)
         self.assertIn("+# Unstaged follow-up", mixed_patch)
+        native_diff = subprocess.check_output(
+            ["git", "diff", "HEAD", "--", *mixed["changed_files"]], cwd=self.workspace)
+        self.assertEqual((output / "full-A.patch").read_bytes(), native_diff)
+        reverse_check = subprocess.run(
+            ["git", "apply", "--reverse", "--check", str(output / "full-A.patch")],
+            cwd=self.workspace, capture_output=True, text=True)
+        self.assertEqual(reverse_check.returncode, 0, reverse_check.stderr)
 
 
 if __name__ == "__main__":

@@ -26,9 +26,8 @@ def record(directory: Path, output: Path, name: str) -> dict:
                      re.findall(r"skills[\\/]+([a-z-]+)[\\/]+SKILL\.md", command.get("command", ""), re.I)})
     changed = subprocess.check_output(["git", "diff", "HEAD", "--name-only"], cwd=workspace,
                                       text=True, encoding="utf-8").splitlines()
-    patch = subprocess.check_output(["git", "diff", "HEAD", "--", *changed], cwd=workspace,
-                                    text=True, encoding="utf-8")
-    (output / f"{name}.patch").write_text(patch, encoding="utf-8")
+    patch = subprocess.check_output(["git", "diff", "HEAD", "--", *changed], cwd=workspace)
+    (output / f"{name}.patch").write_bytes(patch)
     messages = [event["item"]["text"] for event in events if event.get("type") == "item.completed"
                 and event.get("item", {}).get("type") == "agent_message"]
     final = messages[-1] if messages else ""
