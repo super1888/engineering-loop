@@ -13,6 +13,8 @@ first = create_order(store, {'item_name': ' Pen ', 'quantity': 20})
 assert first == {'id': 1, 'item_name': 'Pen', 'quantity': 20}
 for payload in (
     {'item_name': '  ', 'quantity': 1},
+    {'item_name': 123, 'quantity': 1},
+    {'item_name': 'Pen', 'quantity': '2'},
     {'item_name': 'Pen', 'quantity': 0},
     {'item_name': 'Pen', 'quantity': 21},
     {'item_name': 'Pen', 'quantity': 1.5},

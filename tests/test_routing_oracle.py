@@ -74,6 +74,22 @@ class RoutingOracleTests(unittest.TestCase):
         self._write_valid_implementation()
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_backend_oracle_rejects_silent_coercion_of_contract_input_types(self):
+        self._write_valid_implementation()
+        orders = self.workspace / "backend/orders.py"
+        valid = orders.read_text(encoding="utf-8")
+        for old, new in ((
+                'name = payload.get("item_name")', 'name = str(payload.get("item_name"))'), (
+                'quantity = payload.get("quantity")',
+                'quantity = payload.get("quantity")\n    if isinstance(quantity, str):\n        quantity = int(quantity)')):
+            with self.subTest(coercion=new):
+                orders.write_text(valid.replace(old, new), encoding="utf-8")
+                result = assess(self.workspace)
+                self.assertIn("Accepted invalid payload", result["backend"] or "")
+                self.assertIsNone(result["form"])
+        orders.write_text(valid, encoding="utf-8")
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_optimization_environment_cannot_disable_independent_assertions(self):
         self._write_valid_implementation()
         orders = self.workspace / "backend/orders.py"
