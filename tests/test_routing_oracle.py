@@ -103,14 +103,20 @@ class RoutingOracleTests(unittest.TestCase):
                     self.assertFalse(result[f"public_{arm}_pass"])
 
     def test_recording_keeps_staged_and_unstaged_changes_against_baseline(self):
+        tracked_name = "后端 说明.md"
+        untracked_name = "审阅 结论.md"
+        (self.workspace / tracked_name).write_text("Baseline note.\n", encoding="utf-8", newline="\n")
         subprocess.run(["git", "init", "--quiet"], cwd=self.workspace, check=True, capture_output=True)
         subprocess.run(["git", "config", "core.autocrlf", "false"],
+                       cwd=self.workspace, check=True, capture_output=True)
+        subprocess.run(["git", "config", "core.quotepath", "true"],
                        cwd=self.workspace, check=True, capture_output=True)
         subprocess.run(["git", "add", "."], cwd=self.workspace, check=True, capture_output=True)
         subprocess.run(["git", "-c", "user.name=Eval Test", "-c", "user.email=eval@example.invalid",
                         "commit", "--quiet", "-m", "Baseline"], cwd=self.workspace,
                        check=True, capture_output=True)
         self._write_valid_implementation()
+        (self.workspace / tracked_name).write_text("Changed note.\n", encoding="utf-8", newline="\n")
         for path in (self.workspace / "backend/orders.py", self.workspace / "ui/order-form.mjs"):
             path.write_text(path.read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
         trial = self.workspace.parent
@@ -121,20 +127,23 @@ class RoutingOracleTests(unittest.TestCase):
         output.mkdir()
         before = record(trial, output, "full-A")
         patch = (output / "full-A.patch").read_text(encoding="utf-8")
-        subprocess.run(["git", "add", "backend/orders.py", "ui/order-form.mjs"],
+        subprocess.run(["git", "add", "backend/orders.py", "ui/order-form.mjs", tracked_name],
                        cwd=self.workspace, check=True, capture_output=True)
         staged = record(trial, output, "full-A")
-        self.assertCountEqual(staged["changed_files"], ["backend/orders.py", "ui/order-form.mjs"])
+        self.assertCountEqual(staged["changed_files"], ["backend/orders.py", "ui/order-form.mjs", tracked_name])
         self.assertEqual(staged["changed_files"], before["changed_files"])
         self.assertEqual((output / "full-A.patch").read_text(encoding="utf-8"), patch)
         with (self.workspace / "backend/orders.py").open("a", encoding="utf-8") as source:
             source.write("# Unstaged follow-up\n")
+        (self.workspace / untracked_name).write_text("Untracked note.\n", encoding="utf-8")
         mixed = record(trial, output, "full-A")
         mixed_patch = (output / "full-A.patch").read_text(encoding="utf-8")
         self.assertCountEqual(mixed["changed_files"], staged["changed_files"])
+        self.assertEqual(mixed["untracked_non_cache"], [untracked_name])
         self.assertIn('+    order = {"id": len(store) + 1', mixed_patch)
         self.assertIn("+  const response = await postJson", mixed_patch)
         self.assertIn("+# Unstaged follow-up", mixed_patch)
+        self.assertIn("+Changed note.", mixed_patch)
         native_diff = subprocess.check_output(
             ["git", "diff", "HEAD", "--", *mixed["changed_files"]], cwd=self.workspace)
         self.assertEqual((output / "full-A.patch").read_bytes(), native_diff)

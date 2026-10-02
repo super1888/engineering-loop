@@ -24,9 +24,9 @@ def record(directory: Path, output: Path, name: str) -> dict:
                 and event.get("item", {}).get("type") == "command_execution"]
     skills = sorted({match for command in commands for match in
                      re.findall(r"skills[\\/]+([a-z-]+)[\\/]+SKILL\.md", command.get("command", ""), re.I)})
-    changed = subprocess.check_output(["git", "diff", "HEAD", "--name-only"], cwd=workspace,
-                                      text=True, encoding="utf-8").splitlines()
-    patch = subprocess.check_output(["git", "diff", "HEAD", "--", *changed], cwd=workspace)
+    changed = subprocess.check_output(["git", "diff", "HEAD", "--name-only", "-z"],
+                                      cwd=workspace).decode("utf-8").split("\0")[:-1]
+    patch = subprocess.check_output(["git", "diff", "HEAD", "--"], cwd=workspace)
     (output / f"{name}.patch").write_bytes(patch)
     messages = [event["item"]["text"] for event in events if event.get("type") == "item.completed"
                 and event.get("item", {}).get("type") == "agent_message"]
@@ -43,8 +43,8 @@ def record(directory: Path, output: Path, name: str) -> dict:
                               cwd=workspace, capture_output=True, text=True, encoding="utf-8",
                               errors="replace", timeout=30)
     oracle = assess(workspace)
-    untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard"],
-                                        cwd=workspace, text=True, encoding="utf-8").splitlines()
+    untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard", "-z"],
+                                        cwd=workspace).decode("utf-8").split("\0")[:-1]
     return {"changed_files": changed, "untracked_non_cache": [file for file in untracked
             if "__pycache__" not in file and not file.endswith(".pyc")],
             "skills_read": skills, "usage": completed[0].get("usage"),
