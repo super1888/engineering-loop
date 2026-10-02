@@ -102,6 +102,35 @@ class ConventionOracleTests(unittest.TestCase):
         self.assertTrue(any("Public behavior failed" in failure
                             for failure in assess_comment_control(self.workspace)))
 
+    def test_comment_control_checks_actual_unchanged_amount_boundary(self):
+        for name, declaration, inlined_scope, valid in (
+                ("plain", "MAX_ORDER_TOTAL_CENTS = 10_000", None, True),
+                ("annotated", "MAX_ORDER_TOTAL_CENTS: int = 10000", None, True),
+                ("stale-text", "# MAX_ORDER_TOTAL_CENTS = 10_000\nMAX_ORDER_TOTAL_CENTS = 15_000", None, False),
+                ("order-inline", "MAX_ORDER_TOTAL_CENTS = 10_000", "order", False),
+                ("export-inline", "MAX_ORDER_TOTAL_CENTS = 10_000", "export", False)):
+            with self.subTest(name=name):
+                workspace = self.workspace.parent / name
+                shutil.copytree(self.workspace, workspace,
+                                ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+                constants = workspace / "order_constants.py"
+                constants.write_text(constants.read_text(encoding="utf-8").replace(
+                    "MAX_ORDER_TOTAL_CENTS = 10_000", declaration), encoding="utf-8")
+                orders = workspace / "orders.py"
+                source = orders.read_text(encoding="utf-8").replace(
+                    "    # References are always uppercase.\n", "")
+                if inlined_scope:
+                    order, export = source.split("\ndef accepts_export_total", 1)
+                    if inlined_scope == "order":
+                        order = order.replace("<= MAX_ORDER_TOTAL_CENTS", "<= 15_000")
+                    else:
+                        export = export.replace("<= MAX_ORDER_TOTAL_CENTS", "<= 15_000")
+                    source = order + "\ndef accepts_export_total" + export
+                orders.write_text(source, encoding="utf-8")
+                failures = assess_comment_control(workspace)
+                self.assertEqual(failures, [] if valid else
+                                 ["The unrelated order amount boundary changed."])
+
 
 if __name__ == "__main__":
     unittest.main()

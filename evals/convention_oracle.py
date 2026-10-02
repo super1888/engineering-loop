@@ -67,10 +67,25 @@ def assess_comment_control(workspace: Path) -> list[str]:
     failures = []
     constants_text = (workspace / "order_constants.py").read_text(encoding="utf-8")
     orders_text = (workspace / "orders.py").read_text(encoding="utf-8")
-    if "MAX_ORDER_TOTAL_CENTS = 10_000" not in constants_text or "accounting export field" not in constants_text.lower():
-        failures.append("The unrelated order limit or its explanation changed.")
+    if "accounting export field" not in constants_text.lower():
+        failures.append("The unrelated order-limit explanation changed.")
     if "References are always uppercase" in orders_text:
         failures.append("The obsolete uppercase-only comment remains.")
+    snippet = """from order_constants import MAX_ORDER_TOTAL_CENTS
+from orders import accepts_order_total, accepts_export_total
+assert MAX_ORDER_TOTAL_CENTS == 10_000
+for accepts in (accepts_order_total, accepts_export_total):
+    assert not accepts(-1)
+    assert not accepts(0)
+    assert accepts(1)
+    assert accepts(10_000)
+    assert not accepts(10_001)
+print('convention-comment-boundary-complete')
+"""
+    result = subprocess.run([sys.executable, "-c", snippet], cwd=workspace,
+                            capture_output=True, text=True, timeout=15)
+    if result.returncode or "convention-comment-boundary-complete" not in result.stdout.splitlines():
+        failures.append("The unrelated order amount boundary changed.")
     result = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"],
                             cwd=workspace, capture_output=True, text=True, timeout=15)
     if not unittest_passed(result):

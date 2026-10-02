@@ -45,6 +45,7 @@ This is a local packaging correction, not a published release or a model-behavio
 
 ## Unreleased evaluation tooling correction
 
+- Verify the unchanged 10,000-cent order and export boundary in a fresh process for the comment-only control; stale declaration text cannot mask a changed value or inlined limit, and equivalent annotated declarations remain valid.
 - Resolve relative trial directories in routing and convention recorders; preserve prompt mismatch rejection, remove local directory prefixes, and retain ordinary final-message words and punctuation.
 - Accept annotated constant assignments in the convention amount check; reject a wrong value or a declaration without a value assignment.
 - Verify the order and export limits against the module constant in a fresh process; unused references cannot hide an inlined limit in either behavior.
