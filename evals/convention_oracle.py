@@ -28,12 +28,17 @@ def assess(workspace: Path) -> list[str]:
         failures.append("The module-owned amount constant must be 15,000 cents.")
     if "accounting export field" not in constants_text.lower():
         failures.append("The accepted export-storage explanation is missing; inspect any rewritten explanation manually.")
-    imported = any(isinstance(node, ast.ImportFrom) and node.module == "order_constants"
-                   and any(alias.name == "MAX_ORDER_TOTAL_CENTS" for alias in node.names)
-                   for node in orders.body)
-    used = any(isinstance(node, ast.Name) and node.id == "MAX_ORDER_TOTAL_CENTS"
+    constant_names = {alias.asname or alias.name for node in orders.body
+                      if isinstance(node, ast.ImportFrom) and node.module == "order_constants"
+                      for alias in node.names if alias.name == "MAX_ORDER_TOTAL_CENTS"}
+    module_names = {alias.asname or alias.name for node in orders.body
+                    if isinstance(node, ast.Import)
+                    for alias in node.names if alias.name == "order_constants"}
+    used = any((isinstance(node, ast.Name) and node.id in constant_names
+                or isinstance(node, ast.Attribute) and node.attr == "MAX_ORDER_TOTAL_CENTS"
+                and isinstance(node.value, ast.Name) and node.value.id in module_names)
                and isinstance(node.ctx, ast.Load) for node in ast.walk(orders))
-    if not imported or not used:
+    if not used:
         failures.append("Order behavior must use the module-owned constant.")
     snippet = """from orders import accepts_order_total, accepts_export_total, format_reference
 for accepts in (accepts_order_total, accepts_export_total):

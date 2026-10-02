@@ -24,7 +24,21 @@ class ConventionOracleTests(unittest.TestCase):
     def test_valid_change_preserves_reason_and_owner(self):
         constants = self.workspace / "order_constants.py"
         constants.write_text(constants.read_text(encoding="utf-8").replace("10_000", "15_000"), encoding="utf-8")
-        self.assertEqual(assess(self.workspace), [])
+        orders = self.workspace / "orders.py"
+        original = orders.read_text(encoding="utf-8")
+        for statement, reference in (
+                ("from order_constants import MAX_ORDER_TOTAL_CENTS", "MAX_ORDER_TOTAL_CENTS"),
+                ("from order_constants import MAX_ORDER_TOTAL_CENTS as MAX_ACCEPTED_ORDER_TOTAL_CENTS",
+                 "MAX_ACCEPTED_ORDER_TOTAL_CENTS"),
+                ("import order_constants", "order_constants.MAX_ORDER_TOTAL_CENTS"),
+                ("import order_constants as order_limits", "order_limits.MAX_ORDER_TOTAL_CENTS")):
+            updated = original.replace("from order_constants import MAX_ORDER_TOTAL_CENTS", statement)
+            with self.subTest(statement=statement, used=True):
+                orders.write_text(updated.replace("<= MAX_ORDER_TOTAL_CENTS", "<= " + reference), encoding="utf-8")
+                self.assertEqual(assess(self.workspace), [])
+            with self.subTest(statement=statement, used=False):
+                orders.write_text(updated.replace("<= MAX_ORDER_TOTAL_CENTS", "<= 15_000"), encoding="utf-8")
+                self.assertIn("Order behavior must use the module-owned constant.", assess(self.workspace))
 
     def test_early_zero_exit_cannot_skip_behavior_checks(self):
         constants = self.workspace / "order_constants.py"
