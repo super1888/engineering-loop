@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 import sqlite3
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -15,6 +16,61 @@ spec.loader.exec_module(oracle)
 
 
 class OracleResourceTests(unittest.TestCase):
+    def test_oracle_rejects_a_full_receipt_without_persisted_effects(self):
+        baseline = (ROOT / "evals/fixtures/receipt/inventory.py").read_text(encoding="utf-8")
+        start = baseline.index("    def receive(")
+        end = baseline.index("    def close(", start)
+        receive = '''    def receive(self, order_id, quantity, request_id):
+        if type(quantity) is not int or quantity <= 0:
+            raise ValueError("invalid quantity")
+        with self.db:
+            self.db.execute("BEGIN IMMEDIATE")
+            receipt = self.db.execute(
+                "SELECT order_id, quantity, result FROM receipts WHERE request_id = ?",
+                (request_id,)).fetchone()
+            if receipt is not None:
+                if receipt[:2] != (order_id, quantity):
+                    raise ValueError("conflicting receipt")
+                return receipt[2]
+            order = self.db.execute(
+                "SELECT ordered, received FROM orders WHERE order_id = ?",
+                (order_id,)).fetchone()
+            if order is None:
+                raise KeyError(order_id)
+            ordered, received = order
+            result = received + quantity
+            if result > ordered:
+                raise ValueError("excessive receipt")
+            self.db.execute("UPDATE orders SET received = ? WHERE order_id = ?",
+                            (result, order_id))
+            self.db.execute("INSERT INTO receipts VALUES (?, ?, ?, ?)",
+                            (request_id, order_id, quantity, result))
+            return result
+
+'''
+        broken = receive.replace(
+            '            self.db.execute("UPDATE orders',
+            '            if result == ordered:\n                return result\n'
+            '            self.db.execute("UPDATE orders')
+        missing_receipt = receive.replace(
+            '            self.db.execute("INSERT INTO receipts',
+            '            if result == ordered:\n                return result\n'
+            '            self.db.execute("INSERT INTO receipts')
+        with tempfile.TemporaryDirectory() as directory:
+            candidate = Path(directory)
+            for name, implementation, expected_exit in (
+                    ("valid", receive, 0), ("missing writes", broken, 1), ("missing receipt", missing_receipt, 1)):
+                with self.subTest(candidate=name):
+                    source = baseline[:start] + implementation + baseline[end:]
+                    inventory = candidate / "inventory.py"
+                    inventory.write_text(source, encoding="utf-8")
+                    result = subprocess.run(
+                        [sys.executable, str(ROOT / "evals/receipt_oracle.py"), str(candidate)],
+                        capture_output=True, text=True, timeout=30)
+                    self.assertIn("Ran 7 tests", result.stderr)
+                    self.assertEqual(result.returncode, expected_exit, result.stderr)
+                    self.assertEqual(inventory.read_text(encoding="utf-8"), source)
+
     def test_receipt_inspection_releases_database_connection(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "stock.db"
