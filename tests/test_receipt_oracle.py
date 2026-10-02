@@ -62,11 +62,15 @@ class OracleResourceTests(unittest.TestCase):
             '            if type(quantity) is not int or quantity <= 0:\n'
             '                raise ValueError("invalid quantity")\n'
             '            order = self.db.execute(')
+        nullable_validation = receive.replace(
+            'if type(quantity) is not int or quantity <= 0:',
+            'if quantity is not None and (type(quantity) is not int or quantity <= 0):')
         with tempfile.TemporaryDirectory() as directory:
             candidate = Path(directory)
             for name, implementation, expected_exit in (
                     ("valid", receive, 0), ("missing writes", broken, 1), ("missing receipt", missing_receipt, 1),
-                    ("validation after replay", late_validation, 1)):
+                    ("validation after replay", late_validation, 1),
+                    ("nullable quantity", nullable_validation, 1)):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]
                     inventory = candidate / "inventory.py"
