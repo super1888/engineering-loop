@@ -100,6 +100,21 @@ class RoutingOracleTests(unittest.TestCase):
         form.write_text(valid, encoding="utf-8")
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_form_oracle_preserves_original_fields_on_each_failure_path(self):
+        self._write_valid_implementation()
+        form = self.workspace / "ui/order-form.mjs"
+        valid = form.read_text(encoding="utf-8")
+        for error in ('"invalid order"', 'response.body.error'):
+            with self.subTest(failure=error):
+                statement = f'return {{ ok: false, error: {error}, fields }};'
+                form.write_text(valid.replace(statement, 'fields.quantity = "";\n    ' + statement),
+                                encoding="utf-8")
+                result = assess(self.workspace)
+                self.assertIsNone(result["backend"])
+                self.assertIn("AssertionError", result["form"] or "")
+        form.write_text(valid, encoding="utf-8")
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_backend_oracle_rejects_silent_coercion_of_contract_input_types(self):
         self._write_valid_implementation()
         orders = self.workspace / "backend/orders.py"

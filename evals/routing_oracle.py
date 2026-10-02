@@ -63,15 +63,17 @@ for (const invalid of [
   { itemName: 'Pen', quantity: '1.5' },
 ]) {
   const count = calls.length;
+  const original = { ...invalid };
   const bad = await submitOrder(invalid, async () => { calls.push('unexpected'); });
   assert.equal(bad.ok, false);
   assert.equal(typeof bad.error, "string");
   assert.ok(bad.error.trim());
-  assert.deepEqual(bad.fields, invalid);
+  assert.deepEqual(bad.fields, original);
   assert.equal(calls.length, count);
 }
+const originalFields = { ...fields };
 const rejected = await submitOrder(fields, async () => ({ status: 400, body: { error: 'closed' } }));
-assert.deepEqual(rejected, { ok: false, error: 'closed', fields });
+assert.deepEqual(rejected, { ok: false, error: 'closed', fields: originalFields });
 console.log('routing-oracle-complete:form');
 """
 
