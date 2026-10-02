@@ -301,6 +301,25 @@ class RoutingOracleTests(unittest.TestCase):
             outcomes = json.loads((output / "outcomes.json").read_text(encoding="utf-8"))
             self.assertTrue(all(not trial["public_backend_pass"] for trial in outcomes.values()))
         self.assertEqual(inputs[0], inputs[1])
+        output = parent / "relative"
+        before = {p.name: p.read_bytes() for p in output.iterdir()}
+        for task in ("full", "backend"):
+            for variant in ("A", "B", "C"):
+                with self.subTest(changed_skill=f"{task}-{variant}"):
+                    trial = parent / ("c" if variant == "C" else "ab") / f"{task}-{variant}"
+                    skill = trial / "workspace/.agents/skills/engineering-loop/SKILL.md"
+                    original = skill.read_bytes()
+                    try:
+                        skill.write_bytes(original + b"\nChanged frozen instruction.\n")
+                        drift = subprocess.run([sys.executable, str(ROOT / "evals/record_routing_trial.py"),
+                                                "--ab-root", "../ab", "--c-root", "../c",
+                                                "--output", str(output)], cwd=runner,
+                                               capture_output=True, text=True, timeout=40)
+                        self.assertEqual(drift.returncode, 1, drift.stdout + drift.stderr)
+                        self.assertIn("Trial skill changed after preparation", drift.stderr)
+                        self.assertEqual({p.name: p.read_bytes() for p in output.iterdir()}, before)
+                    finally:
+                        skill.write_bytes(original)
         prompt = parent / "c/full-C/prompt.txt"
         prompt.write_text(prompt.read_text(encoding="utf-8") + "\nDifferent approved task.\n", encoding="utf-8")
         rejected = subprocess.run([sys.executable, str(ROOT / "evals/record_routing_trial.py"),

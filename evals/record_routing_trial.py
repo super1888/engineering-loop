@@ -8,6 +8,7 @@ import re
 import subprocess
 
 from routing_oracle import assess
+from prepare_routing_trial import hashes
 from public_test_results import node_tap_passed, unittest_passed
 from python_source import fresh_python
 
@@ -95,6 +96,12 @@ def main() -> None:
         manifest = c if name.endswith("-C") else ab
         if hashlib.sha256(prompt.encode("utf-8")).hexdigest() != manifest["trials"][name]["prompt_sha256"]:
             raise ValueError(f"Trial prompt changed after preparation: {name}")
+    for name in TRIALS:
+        root = args.c_root if name.endswith("-C") else args.ab_root
+        manifest = c if name.endswith("-C") else ab
+        snapshot = root / name / "workspace/.agents/skills/engineering-loop"
+        if hashes(snapshot) != manifest["skill_hashes"]:
+            raise ValueError(f"Trial skill changed after preparation: {name}")
     args.output.mkdir(parents=True, exist_ok=True)
     inputs = {field: ab[field] for field in ("source_revision", "fixture_hashes", "skill_hashes", "tasks", "routing_rule")}
     inputs["test_rule"] = c["test_rule"]
