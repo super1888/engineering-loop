@@ -74,9 +74,14 @@ class DistributionTests(unittest.TestCase):
             source = Path(directory) / "source"
             shutil.copytree(ROOT / "skills/engineering-loop", source)
             before = (source / "SKILL.md").read_bytes()
-            with self.assertRaises(ValueError):
-                build_archive(source, source / "SKILL.md", ROOT / "LICENSE")
+            license_path = Path(directory) / "LICENSE"
+            license_bytes = (ROOT / "LICENSE").read_bytes()
+            license_path.write_bytes(license_bytes)
+            for output in (source / "SKILL.md", license_path):
+                with self.subTest(output=output), self.assertRaises(ValueError):
+                    build_archive(source, output, license_path)
             self.assertEqual((source / "SKILL.md").read_bytes(), before)
+            self.assertEqual(license_path.read_bytes(), license_bytes)
 
     def test_external_symlink_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -11,8 +11,8 @@ def build_archive(source, output, license_path):
     source = Path(source).resolve()
     output = Path(output).resolve()
     license_path = Path(license_path).resolve()
-    if output == source or source in output.parents:
-        raise ValueError("Archive output must be outside the skill source")
+    if output == source or source in output.parents or output == license_path:
+        raise ValueError("Archive output must be outside the skill source and must not overwrite the license")
     if not (source / "SKILL.md").is_file():
         raise ValueError("Source is not a skill directory")
     payload = []

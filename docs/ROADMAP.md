@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.4: unreleased archive input protection
+
+- Reject an archive output that resolves to the supplied license, alongside the existing skill-source protection.
+- Extend the source-preservation regression to the external license; normal complete and deterministic archive checks remain in place.
+
+This is a local packaging correction, not a published release or a model-behavior improvement.
+
 ## Unreleased evaluation tooling correction
 
 - Invalidate a blinded review when its referenced task context changes; reuse the context frozen in the packet and preserve line-ending-only conversions.
