@@ -13,9 +13,10 @@ def check(root=ROOT):
     skill = root / "skills/engineering-loop"
     entry = skill / "SKILL.md"
     text = entry.read_text(encoding="utf-8")
+    header, boundary, _ = text.partition("\n---\n")
     if not text.startswith("---\nname: engineering-loop\n"):
         errors.append("Missing expected skill name/frontmatter")
-    if not re.search(r"^description: .+", text, re.M):
+    if not re.search(r"^description: .+", header if boundary else "", re.M):
         errors.append("Missing skill description")
     # A packaging budget, not a token estimate or a runtime guarantee.
     if len(text.encode("utf-8")) > 7000:
@@ -46,7 +47,6 @@ def check(root=ROOT):
     market = json.loads((root / ".claude-plugin/marketplace.json").read_text(encoding="utf-8"))
     if plugin["name"] != "engineering-loop" or market["plugins"][0]["name"] != plugin["name"]:
         errors.append("Plugin and marketplace names disagree")
-    header, boundary, _ = text.partition("\n---\n")
     # ponytail: check this repo's YAML layout; use a YAML parser if supported formats expand.
     metadata_blocks = re.findall(r"^metadata:\n((?:[ \t]+[^\n]*(?:\n|$))*)", header if boundary else "", re.M)
     versions = re.findall(r'^  version: "([^"\n]+)"[ \t]*(?:#.*)?$', metadata_blocks[0], re.M) if len(metadata_blocks) == 1 else []

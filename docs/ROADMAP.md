@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.3: unreleased description gate correction
+
+- Reuse the frontmatter boundary for description validation; a documentation example cannot substitute for a missing skill description.
+- Preserve the valid-header control and version-mismatch regressions in the same focused distribution check.
+
+This is a local packaging correction, not a published release or a model-behavior improvement.
+
 ## v0.1.2: unreleased metadata gate correction
 
 - Compare the plugin version with the skill's actual `metadata.version` in the repository's YAML layout; body examples and description text cannot satisfy the gate.

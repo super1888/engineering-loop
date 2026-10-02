@@ -17,7 +17,7 @@ class DistributionTests(unittest.TestCase):
     def test_local_links_and_metadata(self):
         self.assertEqual(check(), [])
 
-    def test_skill_version_comes_from_metadata_not_documentation(self):
+    def test_skill_frontmatter_cannot_be_supplied_by_documentation(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for name in ("skills", ".claude-plugin"):
@@ -32,6 +32,9 @@ class DistributionTests(unittest.TestCase):
             valid = valid.replace(f'  version: "{version}"', f'  version: "{version}" # local version', 1)
             entry.write_text(valid + '\nExample version: "999.0.0"\n', encoding="utf-8")
             self.assertEqual(check(root), [])
+            missing_description = original.replace("description: Metadata fixture.\n", "", 1)
+            entry.write_text(missing_description + "\ndescription: Documentation example.\n", encoding="utf-8")
+            self.assertIn("Missing skill description", check(root))
             mismatch = original.replace(f'  version: "{version}"', '  version: "999.0.0"', 1)
             for location in ("body", "description"):
                 with self.subTest(location=location):
