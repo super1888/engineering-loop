@@ -65,7 +65,7 @@ class ReceiptContractTests(unittest.TestCase):
         self.assertEqual(self.receipt_rows(), [("R1", "A", 60, 60), ("R2", "A", 40, 100)])
 
     def test_invalid_quantity_and_unknown_order_leave_no_receipt(self):
-        for quantity in [None, 0, -1, 1.5, True, "2"]:
+        for quantity in [None, 0, -1, 1.5, 1.0, True, "2"]:
             with self.subTest(quantity=quantity):
                 with self.assertRaises(ValueError):
                     self.inventory.receive("A", quantity, "invalid")

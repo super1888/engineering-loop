@@ -65,12 +65,20 @@ class OracleResourceTests(unittest.TestCase):
         nullable_validation = receive.replace(
             'if type(quantity) is not int or quantity <= 0:',
             'if quantity is not None and (type(quantity) is not int or quantity <= 0):')
+        initial_integral_float = receive.replace(
+            'if type(quantity) is not int or quantity <= 0:',
+            'if type(quantity) not in (int, float) or quantity <= 0 or int(quantity) != quantity:').replace(
+            '            if receipt is not None:\n',
+            '            if receipt is not None:\n'
+            '                if type(quantity) is not int:\n'
+            '                    raise ValueError("invalid replay quantity")\n')
         with tempfile.TemporaryDirectory() as directory:
             candidate = Path(directory)
             for name, implementation, expected_exit in (
                     ("valid", receive, 0), ("missing writes", broken, 1), ("missing receipt", missing_receipt, 1),
                     ("validation after replay", late_validation, 1),
-                    ("nullable quantity", nullable_validation, 1)):
+                    ("nullable quantity", nullable_validation, 1),
+                    ("initial integral float", initial_integral_float, 1)):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]
                     inventory = candidate / "inventory.py"
