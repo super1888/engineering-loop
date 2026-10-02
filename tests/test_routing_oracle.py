@@ -100,6 +100,18 @@ class RoutingOracleTests(unittest.TestCase):
         form.write_text(valid, encoding="utf-8")
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_form_oracle_maps_a_second_product_name(self):
+        self._write_valid_implementation()
+        form = self.workspace / "ui/order-form.mjs"
+        valid = form.read_text(encoding="utf-8")
+        form.write_text(valid.replace('item_name: name, quantity', 'item_name: "Pen", quantity'),
+                        encoding="utf-8")
+        result = assess(self.workspace)
+        self.assertIsNone(result["backend"])
+        self.assertIn("AssertionError", result["form"] or "")
+        form.write_text(valid, encoding="utf-8")
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_form_oracle_rejects_partial_quantity_parsing(self):
         self._write_valid_implementation()
         form = self.workspace / "ui/order-form.mjs"
