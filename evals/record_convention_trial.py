@@ -90,6 +90,9 @@ def main() -> None:
                                                cwd=root / trial_id / "workspace", text=True).strip()
             if revision != manifest["trials"][trial_id].get("baseline_revision"):
                 raise ValueError(f"Trial baseline changed after preparation: {root.name}/{trial_id}")
+            instructions = root / trial_id / "workspace/AGENTS.md"
+            if hashlib.sha256(instructions.read_bytes()).hexdigest() != manifest["fixture_hashes"]["AGENTS.md"]:
+                raise ValueError(f"Trial project instructions changed after preparation: {root.name}/{trial_id}")
     args.output.mkdir(parents=True, exist_ok=True)
     inputs = {"baseline": manifests[0]["baseline"], "candidate": manifests[0]["candidate"],
               "fixture_hashes": manifests[0]["fixture_hashes"],

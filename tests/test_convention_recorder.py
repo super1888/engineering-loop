@@ -30,13 +30,17 @@ class ConventionRecorderTests(unittest.TestCase):
             for group, task in (("amount", "amount"), ("comment", "comment"), ("style", "amount")):
                 root = parent / group
                 roots.append(root)
-                manifest = {"baseline": "old", "candidate": "new", "fixture_hashes": {},
+                manifest = {"baseline": "old", "candidate": "new",
+                            "fixture_hashes": {"AGENTS.md": hashlib.sha256(b"Project instructions.\n").hexdigest()},
                             "tasks": {task: "Frozen request"}, "style_skill": None, "trials": {}}
                 for variant in ("A", "B"):
                     trial_id = f"{task}-{variant}"
                     prompt = root / trial_id / "prompt.txt"
                     prompt.parent.mkdir(parents=True)
                     prompt.write_bytes(b"Frozen request.\r\n")
+                    workspace = prompt.parent / "workspace"
+                    workspace.mkdir()
+                    (workspace / "AGENTS.md").write_bytes(b"Project instructions.\n")
                     prompts.append(prompt)
                     manifest["trials"][trial_id] = {
                         "baseline_revision": "baseline",
@@ -155,6 +159,8 @@ class ConventionRecorderTests(unittest.TestCase):
                                                  ("references/added.md", b"Added frozen instruction.\n"))]
             changes += [(scratch / trial_id / "skill/SKILL.md", b"Changed frozen entry.\n",
                          "Trial skill changed after preparation") for trial_id in manifest["trials"]]
+            changes += [(scratch / trial_id / "workspace/AGENTS.md", b"Changed project instructions.\n",
+                         "Trial project instructions changed after preparation") for trial_id in manifest["trials"]]
             for path, replacement, diagnostic in changes:
                 with self.subTest(snapshot_change=path.relative_to(scratch)):
                     original = path.read_bytes() if path.exists() else None
@@ -163,6 +169,13 @@ class ConventionRecorderTests(unittest.TestCase):
                     else:
                         path.write_bytes(replacement)
                     try:
+                        if path.name == "AGENTS.md":
+                            result = subprocess.run([sys.executable, str(ROOT / "evals/record_convention_trial.py"),
+                                                     "--amount-root", str(scratch), "--comment-root", str(scratch),
+                                                     "--style-root", str(scratch), "--output", str(output)],
+                                                    capture_output=True, text=True, timeout=40)
+                            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                            self.assertIn(diagnostic, result.stderr)
                         with patch.object(sys, "argv", ["record", "--amount-root", str(scratch),
                                 "--comment-root", str(scratch), "--style-root", str(scratch),
                                 "--output", str(output)]), \
@@ -176,6 +189,8 @@ class ConventionRecorderTests(unittest.TestCase):
                             path.unlink()
                         else:
                             path.write_bytes(original)
+                        for name, content in recorded.items():
+                            (output / name).write_bytes(content)
             del manifest["style_skill_hashes"]
             (scratch / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
             with patch.object(sys, "argv", ["record", "--amount-root", str(scratch),
