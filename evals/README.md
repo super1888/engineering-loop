@@ -94,6 +94,8 @@ The 2026-09-23 pilot used four actual CLI runs and a fresh blinded model reviewe
 
 The [receipt fixture](fixtures/receipt/RULES.md) is a synthetic SQLite exercise with a deliberately incomplete implementation. It is not production ERP code or a live domain-expert acceptance. It supplies approved behavior, existing project instructions, and a failing public retry test. The evaluator retains [receipt_oracle.py](receipt_oracle.py), which independently checks persisted identities/results, conflicts, rejection, competing connections and storage failure rollback.
 
+The distinct-request competition check matches the complete persisted receipt to the successful request, without requiring either contender to win. Native regressions reject candidates that preserve the outcomes, stock and receipt count but corrupt the stored quantity or original result; these are evaluator checks, not model-quality measurements.
+
 The receipt and asynchronous-import service oracles reject `SystemExit` while importing a candidate module, including an early zero exit, with the original exit retained as the diagnostic cause. The regression also confirms their incomplete baseline fixtures still execute all seven/eight checks and fail acceptance. This is an import-boundary correction for trusted exercise code, not a sandbox or protection against arbitrary process termination.
 
 1. Copy `fixtures/receipt` to a new isolated directory. Give the implementing agent only that directory and the task below. For a skill trial, also provide a snapshot of `skills/engineering-loop`. Keep evaluator materials outside the supplied workspace; this is a procedural separation, not a security sandbox.

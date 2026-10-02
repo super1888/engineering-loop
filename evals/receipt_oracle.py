@@ -110,7 +110,8 @@ class ReceiptContractTests(unittest.TestCase):
         results = self.compete([(60, "R1"), (60, "R2")])
         self.assertCountEqual(results, [("accepted", 60), ("rejected", None)])
         self.assertEqual(self.inventory.received("A"), 60)
-        self.assertEqual(len(self.receipt_rows()), 1)
+        winner = "R1" if results[0][0] == "accepted" else "R2"
+        self.assertEqual(self.receipt_rows(), [(winner, "A", 60, 60)])
 
     def test_storage_failure_rolls_back_inventory_and_identity(self):
         with closing(sqlite3.connect(self.path)) as connection, connection:

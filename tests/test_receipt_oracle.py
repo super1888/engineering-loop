@@ -67,6 +67,16 @@ class OracleResourceTests(unittest.TestCase):
                              ("recovery missing receipt", '            try:\n')):
             recovery_mutants.append((name, tracked_failure.replace(anchor,
                 '            if getattr(self, "storage_failed", False):\n                return result\n' + anchor), 1))
+        competing_mutants = []
+        for field in ("quantity", "result"):
+            wrapper = (receive.replace('    def receive(', '    def _receive(') +
+                '    def receive(self, order_id, quantity, request_id):\n'
+                '        try:\n            return self._receive(order_id, quantity, request_id)\n'
+                '        finally:\n'
+                '            if request_id == "R2" and quantity == 60:\n'
+                '                with self.db:\n'
+                f'                    self.db.execute("UPDATE receipts SET {field} = {field} + 1")\n\n')
+            competing_mutants.append((f"competing wrong {field}", wrapper, 1))
         validation = '        if type(quantity) is not int or quantity <= 0:\n            raise ValueError("invalid quantity")\n'
         late_validation = receive.replace(validation, '').replace(
             '            order = self.db.execute(',
@@ -109,7 +119,8 @@ class OracleResourceTests(unittest.TestCase):
                     ("valid", receive, 0), ("missing writes", broken, 1), ("missing receipt", missing_receipt, 1),
                     ("validation after replay", late_validation, 1),
                     ("nullable quantity", nullable_validation, 1),
-                    ("initial integral float", initial_integral_float, 1), *restored_rejections, *recovery_mutants):
+                    ("initial integral float", initial_integral_float, 1), *restored_rejections, *recovery_mutants,
+                    *competing_mutants):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]
                     inventory = candidate / "inventory.py"
