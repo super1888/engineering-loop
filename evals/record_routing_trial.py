@@ -102,6 +102,12 @@ def main() -> None:
         snapshot = root / name / "workspace/.agents/skills/engineering-loop"
         if hashes(snapshot) != manifest["skill_hashes"]:
             raise ValueError(f"Trial skill changed after preparation: {name}")
+        prefix = ".agents/skills/"
+        prepared = {path.removeprefix(prefix): digest
+                    for path, digest in manifest["trials"][name]["input_hashes"].items()
+                    if path.startswith(prefix)}
+        if hashes(root / name / "workspace/.agents/skills") != prepared:
+            raise ValueError(f"Trial skill changed after preparation: {name}")
     args.output.mkdir(parents=True, exist_ok=True)
     inputs = {field: ab[field] for field in ("source_revision", "fixture_hashes", "skill_hashes", "tasks", "routing_rule")}
     inputs["test_rule"] = c["test_rule"]
