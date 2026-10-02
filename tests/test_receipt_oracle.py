@@ -16,7 +16,7 @@ spec.loader.exec_module(oracle)
 
 
 class OracleResourceTests(unittest.TestCase):
-    def test_oracle_rejects_a_full_receipt_without_persisted_effects(self):
+    def test_oracle_rejects_receipt_contract_mutants(self):
         baseline = (ROOT / "evals/fixtures/receipt/inventory.py").read_text(encoding="utf-8")
         start = baseline.index("    def receive(")
         end = baseline.index("    def close(", start)
@@ -56,10 +56,17 @@ class OracleResourceTests(unittest.TestCase):
             '            self.db.execute("INSERT INTO receipts',
             '            if result == ordered:\n                return result\n'
             '            self.db.execute("INSERT INTO receipts')
+        validation = '        if type(quantity) is not int or quantity <= 0:\n            raise ValueError("invalid quantity")\n'
+        late_validation = receive.replace(validation, '').replace(
+            '            order = self.db.execute(',
+            '            if type(quantity) is not int or quantity <= 0:\n'
+            '                raise ValueError("invalid quantity")\n'
+            '            order = self.db.execute(')
         with tempfile.TemporaryDirectory() as directory:
             candidate = Path(directory)
             for name, implementation, expected_exit in (
-                    ("valid", receive, 0), ("missing writes", broken, 1), ("missing receipt", missing_receipt, 1)):
+                    ("valid", receive, 0), ("missing writes", broken, 1), ("missing receipt", missing_receipt, 1),
+                    ("validation after replay", late_validation, 1)):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]
                     inventory = candidate / "inventory.py"

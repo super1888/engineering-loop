@@ -73,6 +73,12 @@ class ReceiptContractTests(unittest.TestCase):
             self.inventory.receive("missing", 1, "missing")
         self.assertEqual(self.inventory.received("A"), 0)
         self.assertEqual(self.receipt_rows(), [])
+        self.assertEqual(self.inventory.receive("A", 1, "single"), 1)
+        for quantity in [True, 1.0]:
+            with self.subTest(replay_quantity=quantity), self.assertRaises(ValueError):
+                self.inventory.receive("A", quantity, "single")
+        self.assertEqual(self.inventory.received("A"), 1)
+        self.assertEqual(self.receipt_rows(), [("single", "A", 1, 1)])
 
     def compete(self, requests):
         barrier = threading.Barrier(len(requests))
