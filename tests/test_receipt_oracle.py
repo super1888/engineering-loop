@@ -56,6 +56,17 @@ class OracleResourceTests(unittest.TestCase):
             '            self.db.execute("INSERT INTO receipts',
             '            if result == ordered:\n                return result\n'
             '            self.db.execute("INSERT INTO receipts')
+        insertion = ('            self.db.execute("INSERT INTO receipts VALUES (?, ?, ?, ?)",\n'
+                     '                            (request_id, order_id, quantity, result))\n')
+        tracked_failure = receive.replace(insertion,
+            '            try:\n' + ''.join('    ' + line for line in insertion.splitlines(keepends=True)) +
+            '            except sqlite3.DatabaseError:\n'
+            '                self.storage_failed = True\n                raise\n')
+        recovery_mutants = []
+        for name, anchor in (("recovery missing writes", '            self.db.execute("UPDATE orders'),
+                             ("recovery missing receipt", '            try:\n')):
+            recovery_mutants.append((name, tracked_failure.replace(anchor,
+                '            if getattr(self, "storage_failed", False):\n                return result\n' + anchor), 1))
         validation = '        if type(quantity) is not int or quantity <= 0:\n            raise ValueError("invalid quantity")\n'
         late_validation = receive.replace(validation, '').replace(
             '            order = self.db.execute(',
@@ -98,7 +109,7 @@ class OracleResourceTests(unittest.TestCase):
                     ("valid", receive, 0), ("missing writes", broken, 1), ("missing receipt", missing_receipt, 1),
                     ("validation after replay", late_validation, 1),
                     ("nullable quantity", nullable_validation, 1),
-                    ("initial integral float", initial_integral_float, 1), *restored_rejections):
+                    ("initial integral float", initial_integral_float, 1), *restored_rejections, *recovery_mutants):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]
                     inventory = candidate / "inventory.py"

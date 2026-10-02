@@ -123,6 +123,8 @@ class ReceiptContractTests(unittest.TestCase):
         with closing(sqlite3.connect(self.path)) as connection, connection:
             connection.execute("DROP TRIGGER reject_receipt")
         self.assertEqual(self.inventory.receive("A", 60, "R1"), 60)
+        self.assertEqual(self.inventory.received("A"), 60)
+        self.assertEqual(self.receipt_rows(), [("R1", "A", 60, 60)])
 
 
 if __name__ == "__main__":
