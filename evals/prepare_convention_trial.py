@@ -22,8 +22,8 @@ def git_output(*args: str) -> bytes:
 
 
 def copy_skill_revision(revision: str, destination: Path) -> None:
-    paths = git_output("ls-tree", "-r", "--name-only", revision, "skills/engineering-loop").decode().splitlines()
-    for path in paths:
+    paths = git_output("ls-tree", "-r", "-z", "--name-only", revision, "skills/engineering-loop").decode("utf-8").split("\0")
+    for path in filter(None, paths):
         target = destination / Path(path).relative_to("skills/engineering-loop")
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(git_output("show", f"{revision}:{path}"))

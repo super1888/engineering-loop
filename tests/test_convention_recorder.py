@@ -5,13 +5,40 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "evals"))
 from record_convention_trial import run_result
+import prepare_convention_trial
 
 
 class ConventionRecorderTests(unittest.TestCase):
+    def test_skill_snapshot_preserves_native_paths_and_committed_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "repository"
+            skill = root / "skills/engineering-loop"
+            contents = {Path("SKILL.md"): b"entry\n",
+                        Path("references/plain.md"): b"plain\r\nwithout final newline",
+                        Path("references/说明 空格.md"): "冻结内容\n".encode("utf-8")}
+            for relative, content in contents.items():
+                path = skill / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(content)
+            for command in (["git", "init", "--quiet"], ["git", "config", "core.autocrlf", "false"],
+                            ["git", "config", "core.quotepath", "true"], ["git", "add", "."],
+                            ["git", "-c", "user.name=Eval", "-c", "user.email=eval@example.invalid",
+                             "commit", "--quiet", "-m", "Frozen skill"]):
+                subprocess.run(command, cwd=root, check=True, capture_output=True)
+            for relative in contents:
+                (skill / relative).write_bytes(b"uncommitted replacement\n")
+            (skill / "references/untracked.md").write_bytes(b"not in revision\n")
+            snapshot = Path(directory) / "snapshot"
+            with patch.object(prepare_convention_trial, "ROOT", root):
+                prepare_convention_trial.copy_skill_revision("HEAD", snapshot)
+            self.assertEqual({path.relative_to(snapshot): path.read_bytes()
+                              for path in snapshot.rglob("*") if path.is_file()}, contents)
+
     def test_patch_uses_the_trial_baseline_instead_of_the_current_template(self):
         with tempfile.TemporaryDirectory() as directory:
             trial = Path(directory)
