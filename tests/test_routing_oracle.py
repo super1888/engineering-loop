@@ -131,6 +131,7 @@ class RoutingOracleTests(unittest.TestCase):
         additions = {"backend/validation.py": helper.read_bytes(),
                      "审阅 结论.md": b"Mixed lines\r\nwithout final newline",
                      "__pycache__ policy.md": b"Cache directories are excluded.\n",
+                     "__pycache__": b"An ordinary file can share a cache directory name.\n",
                      "empty.py": b"", "payload.bin": bytes(range(256))}
         for name, content in additions.items():
             (self.workspace / name).write_bytes(content)
