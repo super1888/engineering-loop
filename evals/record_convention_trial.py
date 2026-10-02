@@ -31,9 +31,9 @@ def run_result(directory: Path, output: Path, name: str) -> dict:
     for relative in sorted(paths):
         if relative in tracked:
             file_patch = subprocess.check_output(
-                ["git", "diff", "HEAD", "--", ":(literal)" + relative.as_posix()], cwd=workspace)
+                ["git", "diff", "--binary", "HEAD", "--", ":(literal)" + relative.as_posix()], cwd=workspace)
         else:
-            command = ["git", "diff", "--no-index", "--", "/dev/null", relative.as_posix()]
+            command = ["git", "diff", "--no-index", "--binary", "--", "/dev/null", relative.as_posix()]
             result = subprocess.run(command, cwd=workspace, capture_output=True)
             if result.returncode not in (0, 1):
                 raise subprocess.CalledProcessError(result.returncode, command, result.stdout, result.stderr)

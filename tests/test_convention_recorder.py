@@ -11,6 +11,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "evals"))
 from record_convention_trial import run_result
+from convention_oracle import assess
 import prepare_convention_trial
 
 
@@ -52,6 +53,10 @@ class ConventionRecorderTests(unittest.TestCase):
             baseline_document = order_document.read_bytes()
             empty_document = workspace / "empty-before.md"
             empty_document.write_bytes(b"")
+            binary_baseline = {"encoded-edit.md": "Before edit\n".encode("utf-16"),
+                               "encoded-delete.md": "Before delete\n".encode("utf-16")}
+            for name, content in binary_baseline.items():
+                (workspace / name).write_bytes(content)
             for command in (["git", "init", "--quiet"], ["git", "config", "core.autocrlf", "false"],
                             ["git", "add", "."],
                             ["git", "-c", "user.name=Eval", "-c", "user.email=eval@example.invalid",
@@ -101,12 +106,29 @@ class ConventionRecorderTests(unittest.TestCase):
             empty_document.unlink()
             (workspace / "extra.py").write_text("VALUE = 1\n", encoding="utf-8")
             (workspace / "empty-after.py").write_bytes(b"")
+            binary_candidate = {"encoded-edit.md": "After edit\n".encode("utf-16"),
+                                "新增 编码.md": "Added document\n".encode("utf-16")}
+            for name, content in binary_candidate.items():
+                (workspace / name).write_bytes(content)
+            (workspace / "encoded-delete.md").unlink()
             added_and_deleted = run_result(trial, output, "amount-C")
+            self.assertEqual(added_and_deleted["oracle_failures"], [])
             self.assertCountEqual(added_and_deleted["changed_files"],
-                                  ["ORDER.md", "extra.py", "order_constants.py", "empty-before.md", "empty-after.py"])
+                                  ["ORDER.md", "extra.py", "order_constants.py", "empty-before.md",
+                                   "empty-after.py", "encoded-edit.md", "encoded-delete.md", "新增 编码.md"])
             patch = (output / "amount-C.patch").read_text(encoding="utf-8")
             self.assertIn("-Frozen trial context.", patch)
             self.assertIn("+VALUE = 1", patch)
+            replay = trial / "replay"
+            subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(workspace), str(replay)],
+                           check=True, capture_output=True)
+            applied = subprocess.run(["git", "apply", str(output / "amount-C.patch")], cwd=replay,
+                                     capture_output=True)
+            self.assertEqual(applied.returncode, 0, applied.stderr.decode("utf-8", errors="replace"))
+            self.assertEqual(assess(replay), [])
+            for name, content in binary_candidate.items():
+                self.assertEqual((replay / name).read_bytes(), content)
+            self.assertFalse((replay / "encoded-delete.md").exists())
             subprocess.run(["git", "apply", "--reverse", str(output / "amount-C.patch")],
                            cwd=workspace, check=True, capture_output=True)
             self.assertFalse((workspace / "extra.py").exists())
@@ -114,6 +136,11 @@ class ConventionRecorderTests(unittest.TestCase):
             self.assertEqual(empty_document.read_bytes(), b"")
             self.assertEqual(order_document.read_bytes(), baseline_document)
             self.assertEqual(constants.read_bytes(), baseline_constants)
+            for name, content in binary_baseline.items():
+                self.assertEqual((workspace / name).read_bytes(), content)
+            self.assertFalse((workspace / "新增 编码.md").exists())
+            self.assertEqual(subprocess.check_output(["git", "diff", "--cached", "--name-only"],
+                                                    cwd=workspace), b"")
 
 
 if __name__ == "__main__":
