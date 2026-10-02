@@ -18,6 +18,7 @@ for payload in (
     {'item_name': 'Pen', 'quantity': 0},
     {'item_name': 'Pen', 'quantity': 21},
     {'item_name': 'Pen', 'quantity': 1.5},
+    {'item_name': 'Pen', 'quantity': 1.0},
     {'item_name': 'Pen', 'quantity': True},
 ):
     try:

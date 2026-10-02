@@ -81,7 +81,9 @@ class RoutingOracleTests(unittest.TestCase):
         for old, new in ((
                 'name = payload.get("item_name")', 'name = str(payload.get("item_name"))'), (
                 'quantity = payload.get("quantity")',
-                'quantity = payload.get("quantity")\n    if isinstance(quantity, str):\n        quantity = int(quantity)')):
+                'quantity = payload.get("quantity")\n    if isinstance(quantity, str):\n        quantity = int(quantity)'), (
+                'not isinstance(quantity, int)',
+                'not isinstance(quantity, (int, float)) or quantity % 1 != 0')):
             with self.subTest(coercion=new):
                 orders.write_text(valid.replace(old, new), encoding="utf-8")
                 result = assess(self.workspace)
