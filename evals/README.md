@@ -224,6 +224,8 @@ The [skill-routing fixture](fixtures/skill-routing/AGENTS.md) supplies a backend
 
 The routing backend oracle also rejects a numeric product name and a string quantity, matching the fixture API's string/integer contract. Two native mutant controls previously passed after silently coercing those values; the corrected oracle rejects them while retaining the valid backend and unaffected form control. This adds evaluator coverage, not a new fixture requirement or evidence of model improvement.
 
+Routing backend checks compare stored order values with the accepted examples after invalid input and after the next successful order. The previous length-only checks missed both a wrong stored quantity behind a correct response and an invalid request that changed an existing order before raising. Native mutant controls now reject both while preserving the valid backend/form control. These synthetic checks do not establish database or model behavior.
+
 The routing recorder and convention comment control share the Python report check. It requires the terminal summary to be plain `OK`; an earlier diagnostic line saying `OK` cannot override `OK (skipped=...)` or `OK (expected failures=...)`. Native subprocess controls retain successful tests with that diagnostic and reject skipped or expected-failure cases. This checks report interpretation; inspect changed or weakened tests separately.
 
 The routing recorder saves Git diff bytes unchanged and reads NUL-delimited file lists, so Git's quoted non-ASCII paths cannot drop tracked edits or distort untracked names. A native reverse-apply check covers staged and unstaged edits with LF and mixed line endings.
