@@ -3,7 +3,7 @@ name: engineering-loop
 description: Coordinate a bounded engineering change across requirements, implementation, review, verification, and delivery. Use when explicitly requested, when resuming work with uncertain state, or when a cross-boundary change needs unresolved decisions coordinated. Do not activate for explanations, routine local edits, or an already-scoped stage handled by project guidance.
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Engineering Loop
@@ -49,7 +49,7 @@ For enumerable work, reconcile the source inventory with implemented, explicitly
 
 Evidence belongs to the relevant code, configuration, data, and environment state. Reuse inspectable evidence when those remain unchanged; rerun affected checks when they change. Completion language must distinguish static checks, runtime checks, and user acceptance.
 
-For temporary branch/worktree integration and cleanup, use [collaboration.md](references/collaboration.md).
+For authorized delegation, ongoing task coordination or temporary branch/worktree integration, use [collaboration.md](references/collaboration.md).
 
 ## Bound the agent's own work
 
@@ -61,4 +61,4 @@ If an attempt fails without yielding new evidence, change the hypothesis or inve
 
 When recovery is needed, keep one effective task state in the project's existing location: scope, decisions, blockers, evidence pointers and next action. Keep verbose history separate. Record relevant versions at handoff. Progressive disclosure does not erase loaded context or guarantee a fixed token cost.
 
-Once the requested outcome and required checks are complete, report the result, evidence, material limits and any required decision, then stop. Do not open an unsolicited optimization cycle. Keep communication proportional; do not narrate every internal checklist or repeat agreed principles. Invoke learning only for a demonstrated lesson or requested retrospective.
+Once a finite request and its checks are complete, report results, evidence and limits, then stop. An explicitly ongoing goal continues within its authorized scope; one completed slice does not finish it. Keep communication proportional. Invoke learning only for a demonstrated lesson or requested retrospective.

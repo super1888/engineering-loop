@@ -1,6 +1,6 @@
 # Coordinate implementation, specification and verification
 
-Use when concurrent contributors need ownership, disagreement resolution or contract-change coordination, or when temporary branches/worktrees need integration and cleanup. Delegate only when available, authorized and useful. Roles are responsibilities, not a required agent count: a coordinator, implementer and verifier may suffice; separate specification and test work only when their scope justifies it. A small local task needs no agent team or coordination service.
+Use when authorized delegated tasks need coordination, concurrent contributors need ownership or contract-change reconciliation, or temporary branches/worktrees need integration and cleanup. Delegate only when available, authorized and useful. Roles are responsibilities, not a required agent count: a coordinator, implementer and verifier may suffice; separate specification and test work only when their scope justifies it. A small local task needs no agent team or coordination service.
 
 ## Assign bounded ownership
 
@@ -14,6 +14,14 @@ Use when concurrent contributors need ownership, disagreement resolution or cont
 Give each contributor only the relevant agreement/version, paths and contracts owned, prerequisites, expected result and checks. Agree who owns shared files and integration before overlapping work. Serialize conflicting writes, including specification/test files and shared build or Git state, according to project policy. In a shared checkout, check the staged paths immediately before committing; a path-limited `git add` does not isolate a later commit if another contributor stages files meanwhile. Coordinate the index or use an isolated index when that race is real. Do not assign two agents the same repair without a concrete reason.
 
 For a specialist assignment, name the affected stack and applicable project skill or maintained reference when available. A role label alone does not supply project expertise. Let a contributor identify a narrower relevant skill when the environment exposes one, but keep the effective agreement, file ownership and acceptance with the coordinator. Do not load every available skill or add contributors merely to give each skill an owner.
+
+## Carry an ongoing goal across bounded slices
+
+Distinguish a finite assignment from an explicitly ongoing goal. Give the contributor the relevant outcome, exclusions, authority, project/skill paths, owned slice, checks and continuation condition. Creating a task proves dispatch, not implementation or verification. Keep its returned identity and reconcile the resulting artifacts at each meaningful checkpoint.
+
+For an ongoing goal, preserve the full outcome while finishing verifiable slices. A verified slice or commit is a checkpoint, not goal completion. After checking its evidence, proceed to the next supported slice within the existing scope. If the contributor is terminal and work remains, continue through an authorized follow-up or perform the next slice; if a specific handle remains live, follow the monitoring guidance below. An ongoing goal alone does not authorize new tools, schedulers, external messages, publication or unrelated cleanup.
+
+A continuation or scope correction supersedes a conflicting first-round stopping instruction. Send affected contributors the relevant delta when authorized and check their next artifacts against it; they may retain already-loaded guidance. On an explicit pause, stop dispatching new slices and relay the pause to authorized active contributors, preserving unfinished work and evidence. Do not turn a finite completed request into an ongoing loop or mark an unfinished paused goal complete.
 
 ## Resolve disagreements with evidence
 
@@ -39,7 +47,7 @@ Review the first representative slice before replication, a material shared-cont
 
 For critical behavior, establish test expectations from accepted scenarios before or alongside implementation where useful. A verifier may inspect code for risks, but expected results need an independent basis. Preserve legitimate alternative implementations and exceptions. Source conformance, observable behavior and task usefulness require different evidence; use [verification.md](verification.md).
 
-The coordinator reconciles findings, accepted specification changes and affected contributor results, then verifies combined behavior at an identifiable integrated state. Separate green checks or a clean merge are insufficient. Report passed, failed and unrun evidence and any remaining decision. Stop when the requested result and required checks are complete; extra reviewers need a current unresolved reason.
+The coordinator reconciles findings, accepted specification changes and affected contributor results, then verifies combined behavior at an identifiable integrated state. Separate green checks or a clean merge are insufficient. Report passed, failed and unrun evidence and any remaining decision. Stop when a finite requested result and required checks are complete; ongoing goals follow the continuation condition above. Extra reviewers need a current unresolved reason.
 
 ## Retire temporary branches after integration
 

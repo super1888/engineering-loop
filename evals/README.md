@@ -156,6 +156,20 @@ The six specifications `collaboration-specification-dispute`, `collaboration-con
 
 Keep the evaluator's conflicting and stale artifacts out of contributor instructions except where they are normal task inputs. Check actual ownership, artifacts and integrated behavior; notification receipts, role labels and agreement counts are insufficient. Include settled-decision, unaffected-evidence, legitimate-contract and single-agent controls. Compare missed defects, rework, human decisions, duplicate checks and coordination effort when measured; do not infer an accuracy improvement from adding agents.
 
+### Ongoing-goal checkpoint exercise (2026-10-02)
+
+The additional `collaboration-ongoing-continuation` specification has a reusable [checkpoint fixture](fixtures/delegated-continuation/TASK.md). Two fresh Codex desktop subagents on Windows received identical synthetic terminal/live observations and separate frozen skill copies, without evaluator answers or each other's output. A used the `5a28a7f` skill; B used the local v0.1.1 coordination draft. The exact account model/configuration was not exposed by the agent tool. Raw prompts, snapshots and responses remain local under ignored `results/delegation-continuation-20261002/`.
+
+| Supplied checkpoint | A decision | B decision |
+|---|---|---|
+| First verified slice complete; explicitly ongoing goal and another supported issue remain | Continue the next authorized slice | Continue and carry the continuation condition into the handoff |
+| Finite one-fix request verified and committed | Report and stop | Report and stop |
+| User pauses while a regression handle is live | Interrupt safely, preserve work and confirm stopping | Interrupt safely, preserve work and confirm stopping |
+
+Both responses meet these decision checks. A read the entrypoint, resume and collaboration references; B read the entrypoint and collaboration reference. This single pair shows no observed outcome advantage; the revision clarifies routing and the continuation contract. Neither run contacted a live contributor, interrupted a command or verified repository artifacts: actual follow-up, adaptation, waiting and interruption behavior in the full specification remain unrun. No native skill discovery, speedup, cost reduction or general orchestration benefit is claimed.
+
+The frozen entrypoint SHA-256 values are `f4851ec1e993170a26111dcf2c7226fbc0643e71266d03ff393944811a0962fb` (A) and `6451a9276ba5b777febee399ed4a3024a966b508a8dd9c6ecf1d0333af554e7b` (B); reference bytes are retained in the corresponding local snapshots. Revisit or narrow this guidance if live trials show repeated instructions without a useful effect. The six earlier specifications above retain their unrun status.
+
 ## Asynchronous import and live owner-change A/B trial
 
 The [asynchronous import fixture](fixtures/async-import/AGENTS.md) combines a Python/SQLite backend, a real HTTP adapter and a plain JavaScript UI. Initial product and API documents disagree about partial success. A scheduled [owner decision](async_import_change.md) settles that disagreement and adds per-item results, failed-only retry and durable recovery from an accepted request whose response is lost. The 100-row limit is already settled and serves as a clarification control.

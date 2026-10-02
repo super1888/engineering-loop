@@ -123,7 +123,7 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 
 当前未发布修订明确了受影响返回路径的可见结果、视觉缺陷的实际渲染证据和已知修复回放的结论边界（[三个场景](evals/README.md#unreleased-flow-visual-and-learning-revision)），并补充参考项目继承、有效约定维护、门禁证据、实际使用效果及纠正的跨会话保留（[七个场景](evals/README.md#unreleased-reference-inheritance-and-effective-guidance-revision)）。这十个场景均待执行；历史产品检查不能证明新指导有额外收益。保留现有阶段路由，不强制统一项目架构。
 
-可选的[协作指南](skills/engineering-loop/references/collaboration.md)补充职责归属、规格分歧裁决、已接受变更的同步和独立验证，不要求固定 agent 团队。对应[另四个协作场景](evals/README.md#unreleased-collaboration-revision)也尚未试跑；增加 agent 不代表已经提高准确率。
+可选的[协作指南](skills/engineering-loop/references/collaboration.md)涵盖职责归属、已接受变更的同步、独立验证和明确授权的持续目标，不要求固定 agent 团队。完成一个切片不代表持续目标结束；有限任务完成后仍然停止。[评估状态](evals/README.md#unreleased-collaboration-revision)区分检查点练习与真实协作执行；增加 agent 不代表已经提高准确率。
 
 [发布指南](skills/engineering-loop/references/release.md)现要求用已有隔离 CI 夹具验证新增门禁，并核对发行产物的实际字节与平台相关的权限证据。[跨平台场景](evals/README.md)仍未试跑。
 

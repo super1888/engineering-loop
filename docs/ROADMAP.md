@@ -1,5 +1,13 @@
 # Roadmap
 
+## v0.1.1: unreleased coordination correction
+
+- Route authorized delegation and ongoing goals to the existing collaboration guide.
+- Keep a verified slice distinct from goal completion; reconcile terminal contributors, continuation corrections and explicit pauses within existing authorization.
+- Preserve finite-task stopping and the existing live-handle monitoring boundary. No scheduler, runtime service or fixed agent team is added.
+
+This is a local guidance revision, not a published release. Packaging checks and checkpoint exercises do not establish live orchestration quality or a general improvement.
+
 ## v0.1: usable public draft
 
 - A portable entrypoint and focused lifecycle references.
