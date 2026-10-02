@@ -1,5 +1,6 @@
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -21,6 +22,16 @@ class RoutingOracleTests(unittest.TestCase):
         failures = assess(self.workspace)
         self.assertIsNotNone(failures["backend"])
         self.assertIsNotNone(failures["form"])
+
+    def test_silent_nonzero_processes_fail_the_cli(self):
+        (self.workspace / "backend/orders.py").write_text("raise SystemExit(1)\n", encoding="utf-8")
+        (self.workspace / "ui/order-form.mjs").write_text(
+            "export function submitOrder() {}\nprocess.exit(1);\n", encoding="utf-8")
+        result = subprocess.run([sys.executable, str(ROOT / "evals/routing_oracle.py"),
+                                 str(self.workspace)], capture_output=True, text=True, timeout=15)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("backend: FAIL: Process exited with code 1", result.stdout)
+        self.assertIn("form: FAIL: Process exited with code 1", result.stdout)
 
     def test_valid_backend_and_form_pass(self):
         (self.workspace / "backend/orders.py").write_text('''def create_order(store: list[dict], payload: dict) -> dict:

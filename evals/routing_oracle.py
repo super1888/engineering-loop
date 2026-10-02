@@ -64,7 +64,8 @@ def assess(workspace: Path) -> dict[str, str | None]:
     results = {}
     for name, command in commands.items():
         result = subprocess.run(command, cwd=workspace, capture_output=True, text=True, timeout=15)
-        results[name] = None if result.returncode == 0 else (result.stderr.strip() or result.stdout.strip())
+        results[name] = None if result.returncode == 0 else (
+            result.stderr.strip() or result.stdout.strip() or f"Process exited with code {result.returncode}")
     return results
 
 
