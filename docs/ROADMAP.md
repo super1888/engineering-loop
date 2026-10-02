@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.6: unreleased blank-description protection
+
+- Reject a description containing only spaces or tabs inside the actual frontmatter; a body example cannot satisfy it.
+- Extend the existing metadata regression and preserve descriptions with extra leading spacing. This check remains scoped to this repository's frontmatter layout, not a general YAML validator.
+
+This is a local distribution-check correction, not a published release or a model-behavior improvement.
+
 ## v0.1.5: unreleased archive file-identity protection
 
 - Reject existing output files that are hardlinks to the supplied license or any skill source file before opening the ZIP.
