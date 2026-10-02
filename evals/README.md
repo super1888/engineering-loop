@@ -170,6 +170,12 @@ Both responses meet these decision checks. A read the entrypoint, resume and col
 
 The frozen entrypoint SHA-256 values are `f4851ec1e993170a26111dcf2c7226fbc0643e71266d03ff393944811a0962fb` (A) and `6451a9276ba5b777febee399ed4a3024a966b508a8dd9c6ecf1d0333af554e7b` (B); reference bytes are retained in the corresponding local snapshots. Revisit or narrow this guidance if live trials show repeated instructions without a useful effect. The six earlier specifications above retain their unrun status.
 
+### Limited live checkpoint observation (2026-10-02)
+
+Separately, a Windows/Codex desktop coordinator observed a real Java/Spring backend task receiving the v0.1.1 continuation delta, reading the relevant collaboration section and continuing through three scoped, verified commits. The coordinator inspected returned diffs, failed-before/fixed-after reports and successful root-build logs, and checked a specific live Maven process before waiting. Review also exposed a new test's incomplete restoration of category-specific Locale defaults; the returned correction and isolated JDK 21 normal/failure probes were inspected before accepting that slice. Raw task identities, private code and logs remain local in the ignored trial directory or the target project's evidence directory.
+
+This establishes selected live handoff, adaptation and review observations, not execution of the full synthetic specification or a causal benefit from the skill. The same contributor turn stayed active: terminal-worker continuation, explicit pause propagation and the finite-task control were not exercised live. No matched live baseline, exact account model/configuration, cost or general quality advantage was established. Existing review guidance covered the test defect; no new universal rule is inferred from it.
+
 ## Asynchronous import and live owner-change A/B trial
 
 The [asynchronous import fixture](fixtures/async-import/AGENTS.md) combines a Python/SQLite backend, a real HTTP adapter and a plain JavaScript UI. Initial product and API documents disagree about partial success. A scheduled [owner decision](async_import_change.md) settles that disagreement and adds per-item results, failed-only retry and durable recovery from an accepted request whose response is lost. The 100-row limit is already settled and serves as a clarification control.

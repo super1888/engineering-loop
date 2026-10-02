@@ -1,6 +1,6 @@
 # Compatibility and validation
 
-Last updated: 2026-09-23. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+Last updated: 2026-10-02. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
 
 ## Installation surfaces
 
@@ -57,3 +57,5 @@ The 2026-09-23 routing A/B/C trial used six fresh local CLI runs against two syn
 The 2026-09-23 bar-boundary golden-set pilot used four fresh local CLI runs and a separate blinded model review. Both pairs tied on the fixed rubric. The pilot gate passed, but the release profile failed for lack of human blinded review. CI covers the gate tool's unit tests, not live model trials or a production release decision; one synthetic trial per arm is too little to establish a quality or cost advantage.
 
 Local personal-folder installation does not imply availability in cloud products or scheduled remote sessions. Follow each host's documentation for those environments. No automatic install, setting mutation, or API call occurs merely from reading this skill.
+
+The 2026-10-02 [coordination observations](../evals/README.md#ongoing-goal-checkpoint-exercise-2026-10-02) combine two fresh simulated checkpoint responses with selected live handoff, adaptation and review evidence from an ongoing backend task. Both simulated variants made the correct continue/stop/pause decisions; no outcome advantage was observed. The live task continued through verified slices, but did not exercise terminal-worker restart, pause propagation or the finite-task control. This does not validate the full collaboration scenario, native discovery, other hosts or a general quality/cost benefit.
