@@ -56,6 +56,16 @@ const minimum = await submitOrder({ itemName: ' Paper ', quantity: '1' }, async 
 assert.deepEqual(calls[1], { path: '/orders', payload: { item_name: 'Paper', quantity: 1 } });
 assert.equal(calls.length, 2);
 assert.deepEqual(minimum, { ok: true, order: { id: 8, item_name: 'Paper', quantity: 1 } });
+for (let quantity = 2; quantity < 20; quantity++) {
+  const order = { id: quantity + 8, item_name: 'Paper', quantity };
+  const result = await submitOrder({ itemName: ' Paper ', quantity: String(quantity) }, async (path, payload) => {
+    calls.push({ path, payload });
+    assert.deepEqual({ path, payload }, { path: '/orders', payload: { item_name: 'Paper', quantity } });
+    return { status: 201, body: order };
+  });
+  assert.equal(calls.length, quantity + 1);
+  assert.deepEqual(result, { ok: true, order });
+}
 for (const invalid of [
   { itemName: ' ', quantity: '1' },
   { itemName: 'Pen', quantity: '0' },
