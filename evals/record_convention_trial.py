@@ -9,6 +9,7 @@ from convention_oracle import assess, assess_comment_control
 
 
 def run_result(directory: Path, output: Path, name: str) -> dict:
+    directory = directory.resolve()
     events = [json.loads(line) for line in (directory / "evidence/events.jsonl").read_text(encoding="utf-8").splitlines()]
     completed = [event for event in events if event.get("type") == "turn.completed"]
     if len(completed) != 1:

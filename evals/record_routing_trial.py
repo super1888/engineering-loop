@@ -15,6 +15,7 @@ TRIALS = ("full-A", "full-B", "full-C", "backend-A", "backend-B", "backend-C")
 
 
 def record(directory: Path, output: Path, name: str) -> dict:
+    directory = directory.resolve()
     workspace = directory / "workspace"
     events = [json.loads(line) for line in (directory / "evidence/events.jsonl").read_text(encoding="utf-8").splitlines()]
     completed = [event for event in events if event.get("type") == "turn.completed"]
@@ -62,6 +63,8 @@ def main() -> None:
     parser.add_argument("--c-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    args.ab_root = args.ab_root.resolve()
+    args.c_root = args.c_root.resolve()
     ab = json.loads((args.ab_root / "manifest.json").read_text(encoding="utf-8"))
     c = json.loads((args.c_root / "manifest.json").read_text(encoding="utf-8"))
     for field in ("source_revision", "fixture_hashes", "skill_hashes", "tasks", "routing_rule"):

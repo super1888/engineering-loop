@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -122,10 +123,19 @@ class RoutingOracleTests(unittest.TestCase):
         trial = self.workspace.parent
         (trial / "evidence").mkdir()
         (trial / "evidence/events.jsonl").write_text(
-            json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
+            json.dumps({"type": "item.completed", "item": {"type": "agent_message",
+                       "text": "A stable table. " + str(self.workspace)}}) + "\n"
+            + json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
         output = trial / "recorded"
         output.mkdir()
-        before = record(trial, output, "full-A")
+        previous = Path.cwd()
+        try:
+            os.chdir(trial.parent)
+            before = record(Path(trial.name), output, "full-A")
+        finally:
+            os.chdir(previous)
+        self.assertEqual((output / "full-A-final.txt").read_text(encoding="utf-8"),
+                         "A stable table. " + str(self.workspace).replace(str(trial.parent), "<trial-root>") + "\n")
         patch = (output / "full-A.patch").read_text(encoding="utf-8")
         subprocess.run(["git", "add", "backend/orders.py", "ui/order-form.mjs", tracked_name],
                        cwd=self.workspace, check=True, capture_output=True)
@@ -151,6 +161,44 @@ class RoutingOracleTests(unittest.TestCase):
             ["git", "apply", "--reverse", "--check", str(output / "full-A.patch")],
             cwd=self.workspace, capture_output=True, text=True)
         self.assertEqual(reverse_check.returncode, 0, reverse_check.stderr)
+
+    def test_recording_cli_normalizes_relative_roots_and_keeps_prompt_mismatch_gate(self):
+        parent = self.workspace.parent
+        runner = parent / "runner"
+        runner.mkdir()
+        for folder in ("ab", "c"):
+            subprocess.run([sys.executable, str(ROOT / "evals/prepare_routing_trial.py"),
+                            "--output", str(parent / folder)], check=True,
+                           capture_output=True, text=True, timeout=40)
+        for task in ("full", "backend"):
+            for variant in ("A", "B", "C"):
+                trial = parent / ("c" if variant == "C" else "ab") / f"{task}-{variant}"
+                (trial / "evidence/events.jsonl").write_text(
+                    json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
+        inputs = []
+        for name, ab, c in (("absolute", str(parent / "ab"), str(parent / "c")),
+                            ("relative", "../ab", "../c")):
+            output = parent / name
+            result = subprocess.run([sys.executable, str(ROOT / "evals/record_routing_trial.py"),
+                                     "--ab-root", ab, "--c-root", c, "--output", str(output)],
+                                    cwd=runner, capture_output=True, text=True, timeout=40)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            inputs.append(json.loads((output / "inputs.json").read_text(encoding="utf-8")))
+            for prompt in inputs[-1]["normalized_prompts"].values():
+                self.assertNotIn(str(parent), prompt)
+                self.assertIn("<workspace>", prompt)
+            outcomes = json.loads((output / "outcomes.json").read_text(encoding="utf-8"))
+            self.assertTrue(all(not trial["public_backend_pass"] for trial in outcomes.values()))
+        self.assertEqual(inputs[0], inputs[1])
+        prompt = parent / "c/full-C/prompt.txt"
+        prompt.write_text(prompt.read_text(encoding="utf-8") + "\nDifferent approved task.\n", encoding="utf-8")
+        rejected = subprocess.run([sys.executable, str(ROOT / "evals/record_routing_trial.py"),
+                                   "--ab-root", "../ab", "--c-root", "../c",
+                                   "--output", str(parent / "mismatch")], cwd=runner,
+                                  capture_output=True, text=True, timeout=40)
+        self.assertEqual(rejected.returncode, 1, rejected.stdout + rejected.stderr)
+        self.assertIn("Prompt mismatch: full", rejected.stderr)
+        self.assertFalse((parent / "mismatch/outcomes.json").exists())
 
 
 if __name__ == "__main__":

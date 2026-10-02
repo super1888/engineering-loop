@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -58,11 +59,20 @@ class ConventionRecorderTests(unittest.TestCase):
                 subprocess.run(command, cwd=workspace, check=True, capture_output=True)
             (trial / "evidence").mkdir()
             (trial / "evidence/events.jsonl").write_text(
-                json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
+                json.dumps({"type": "item.completed", "item": {"type": "agent_message",
+                           "text": "A stable table. " + str(workspace)}}) + "\n"
+                + json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
             output = trial / "recorded"
             output.mkdir()
 
-            unchanged = run_result(trial, output, "amount-A")
+            previous = Path.cwd()
+            try:
+                os.chdir(trial.parent)
+                unchanged = run_result(Path(trial.name), output, "amount-A")
+            finally:
+                os.chdir(previous)
+            self.assertEqual((output / "amount-A-final.txt").read_text(encoding="utf-8"),
+                             "A stable table. " + str(workspace).replace(str(trial.parent), "<trial-root>") + "\n")
             self.assertEqual(unchanged["changed_files"], [])
             self.assertEqual((output / "amount-A.patch").read_text(encoding="utf-8"), "")
 
