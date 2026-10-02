@@ -23,6 +23,45 @@ import record_convention_trial
 
 
 class ConventionRecorderTests(unittest.TestCase):
+    def test_recording_rejects_changed_frozen_prompts_before_writing_results(self):
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            roots, prompts = [], []
+            for group, task in (("amount", "amount"), ("comment", "comment"), ("style", "amount")):
+                root = parent / group
+                roots.append(root)
+                manifest = {"baseline": "old", "candidate": "new", "fixture_hashes": {},
+                            "tasks": {task: "Frozen request"}, "style_skill": None, "trials": {}}
+                for variant in ("A", "B"):
+                    trial_id = f"{task}-{variant}"
+                    prompt = root / trial_id / "prompt.txt"
+                    prompt.parent.mkdir(parents=True)
+                    prompt.write_bytes(b"Frozen request.\r\n")
+                    prompts.append(prompt)
+                    manifest["trials"][trial_id] = {
+                        "prompt_sha256": hashlib.sha256(b"Frozen request.\n").hexdigest()}
+                (root / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            output = parent / "recorded"
+            arguments = ["record", "--amount-root", str(roots[0]), "--comment-root", str(roots[1]),
+                         "--style-root", str(roots[2]), "--output", str(output)]
+            with patch.object(sys, "argv", arguments), \
+                    patch.object(record_convention_trial, "run_result", return_value={}) as record:
+                record_convention_trial.main()
+                self.assertEqual(record.call_count, 6)
+                before = {p.name: p.read_bytes() for p in output.iterdir()}
+                for prompt in prompts:
+                    with self.subTest(prompt=prompt.relative_to(parent)):
+                        record.reset_mock()
+                        original = prompt.read_bytes()
+                        prompt.write_bytes(b"A different request.\n")
+                        try:
+                            with self.assertRaisesRegex(ValueError, "Trial prompt changed after preparation"):
+                                record_convention_trial.main()
+                            record.assert_not_called()
+                            self.assertEqual({p.name: p.read_bytes() for p in output.iterdir()}, before)
+                        finally:
+                            prompt.write_bytes(original)
+
     def test_style_skill_is_frozen_and_recorded_instead_of_read_from_its_source(self):
         with tempfile.TemporaryDirectory() as directory:
             repository = Path(directory) / "repository"

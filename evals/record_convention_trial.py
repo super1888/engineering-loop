@@ -1,6 +1,7 @@
 """Save path-neutral artifacts from completed local convention trials."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -64,7 +65,6 @@ def main() -> None:
     parser.add_argument("--style-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    args.output.mkdir(parents=True, exist_ok=True)
     roots = {"amount-A": args.amount_root, "amount-B": args.amount_root,
              "comment-A": args.comment_root, "comment-B": args.comment_root,
              "style-A": args.style_root, "style-B": args.style_root}
@@ -73,6 +73,14 @@ def main() -> None:
     if len({(manifest["baseline"], manifest["candidate"],
              json.dumps(manifest["fixture_hashes"], sort_keys=True)) for manifest in manifests}) != 1:
         raise ValueError("Trial roots have different revisions or fixture inputs")
+    for root, manifest, task in zip((args.amount_root, args.comment_root, args.style_root),
+                                    manifests, ("amount", "comment", "amount")):
+        for variant in ("A", "B"):
+            trial_id = f"{task}-{variant}"
+            prompt = (root / trial_id / "prompt.txt").read_text(encoding="utf-8")
+            if hashlib.sha256(prompt.encode("utf-8")).hexdigest() != manifest["trials"][trial_id]["prompt_sha256"]:
+                raise ValueError(f"Trial prompt changed after preparation: {root.name}/{trial_id}")
+    args.output.mkdir(parents=True, exist_ok=True)
     inputs = {"baseline": manifests[0]["baseline"], "candidate": manifests[0]["candidate"],
               "fixture_hashes": manifests[0]["fixture_hashes"],
               "standard_tasks": manifests[0]["tasks"], "style_tasks": manifests[2]["tasks"],
