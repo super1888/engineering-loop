@@ -36,10 +36,12 @@ def run_result(directory: Path, output: Path, name: str) -> dict:
         after = target.read_text(encoding="utf-8").splitlines(keepends=True) if target.exists() else []
         if before != after:
             changed.append(relative.as_posix())
-            patch.extend(difflib.unified_diff(before, after,
-                                              fromfile="a/" + relative.as_posix(),
-                                              tofile="b/" + relative.as_posix()))
-    (output / f"{name}.patch").write_text("".join(patch), encoding="utf-8")
+            for line in difflib.unified_diff(before, after,
+                                             fromfile="a/" + relative.as_posix(),
+                                             tofile="b/" + relative.as_posix()):
+                patch.append(line if line.endswith("\n")
+                             else line + "\n\\ No newline at end of file\n")
+    (output / f"{name}.patch").write_text("".join(patch), encoding="utf-8", newline="\n")
     final_message = messages[-1] if messages else ""
     trial_root = str(directory.parent)
     for location in (trial_root, trial_root.replace("\\", "/")):

@@ -46,6 +46,16 @@ class ConventionRecorderTests(unittest.TestCase):
             self.assertIn("-MAX_ORDER_TOTAL_CENTS = 10_000", patch)
             self.assertIn("+MAX_ORDER_TOTAL_CENTS = 15_000", patch)
 
+            valid_constants = constants.read_text(encoding="utf-8")
+            constants.write_text(valid_constants.rstrip("\n"), encoding="utf-8", newline="\n")
+            without_newline = run_result(trial, output, "amount-D")
+            self.assertEqual(without_newline["oracle_failures"], [])
+            reverse_check = subprocess.run(
+                ["git", "apply", "--reverse", "--check", str(output / "amount-D.patch")],
+                cwd=workspace, capture_output=True, text=True)
+            self.assertEqual(reverse_check.returncode, 0, reverse_check.stderr)
+            constants.write_text(valid_constants, encoding="utf-8", newline="\n")
+
             order_document.unlink()
             (workspace / "extra.py").write_text("VALUE = 1\n", encoding="utf-8")
             added_and_deleted = run_result(trial, output, "amount-C")
