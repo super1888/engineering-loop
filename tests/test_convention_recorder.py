@@ -39,6 +39,7 @@ class ConventionRecorderTests(unittest.TestCase):
                     prompt.write_bytes(b"Frozen request.\r\n")
                     prompts.append(prompt)
                     manifest["trials"][trial_id] = {
+                        "baseline_revision": "baseline",
                         "skill_hashes": {},
                         "prompt_sha256": hashlib.sha256(b"Frozen request.\n").hexdigest()}
                 (root / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
@@ -46,6 +47,7 @@ class ConventionRecorderTests(unittest.TestCase):
             arguments = ["record", "--amount-root", str(roots[0]), "--comment-root", str(roots[1]),
                          "--style-root", str(roots[2]), "--output", str(output)]
             with patch.object(sys, "argv", arguments), \
+                    patch.object(record_convention_trial.subprocess, "check_output", return_value="baseline\n"), \
                     patch.object(record_convention_trial, "run_result", return_value={}) as record:
                 record_convention_trial.main()
                 self.assertEqual(record.call_count, 6)
@@ -120,6 +122,33 @@ class ConventionRecorderTests(unittest.TestCase):
             self.assertEqual(json.loads((output / "inputs.json").read_text(encoding="utf-8"))
                              ["style_skill_hashes"], expected_hashes)
             recorded = {path.name: path.read_bytes() for path in output.iterdir()}
+            for trial_id in manifest["trials"]:
+                with self.subTest(changed_baseline=trial_id):
+                    workspace = scratch / trial_id / "workspace"
+                    baseline = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=workspace).strip()
+                    source = workspace / "orders.py"
+                    original = source.read_bytes()
+                    try:
+                        source.write_bytes(original + b"\n# Committed candidate change.\n")
+                        subprocess.run(["git", "add", "orders.py"], cwd=workspace, check=True, capture_output=True)
+                        subprocess.run(["git", "-c", "user.name=Eval", "-c", "user.email=eval@example.invalid",
+                                        "commit", "--quiet", "-m", "Unexpected candidate commit"],
+                                       cwd=workspace, check=True, capture_output=True)
+                        result = subprocess.run([sys.executable, str(ROOT / "evals/record_convention_trial.py"),
+                                                 "--amount-root", str(scratch), "--comment-root", str(scratch),
+                                                 "--style-root", str(scratch), "--output", str(output)],
+                                                capture_output=True, text=True, timeout=40)
+                        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                        self.assertIn("Trial baseline changed after preparation", result.stderr)
+                        self.assertEqual({path.name: path.read_bytes() for path in output.iterdir()}, recorded)
+                    finally:
+                        subprocess.run(["git", "update-ref", "HEAD", baseline.decode()], cwd=workspace,
+                                       check=True, capture_output=True)
+                        subprocess.run(["git", "read-tree", baseline.decode()], cwd=workspace,
+                                       check=True, capture_output=True)
+                        source.write_bytes(original)
+                        for name, content in recorded.items():
+                            (output / name).write_bytes(content)
             changes = [(snapshot / name, replacement, "Trial style skill changed after preparation")
                        for name, replacement in (("SKILL.md", b"Changed frozen style.\n"),
                                                  ("references/说明 空格.md", None),

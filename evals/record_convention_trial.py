@@ -86,6 +86,10 @@ def main() -> None:
                 raise ValueError(f"Trial prompt changed after preparation: {root.name}/{trial_id}")
             if hashes(root / trial_id / "skill") != manifest["trials"][trial_id]["skill_hashes"]:
                 raise ValueError(f"Trial skill changed after preparation: {root.name}/{trial_id}")
+            revision = subprocess.check_output(["git", "rev-parse", "HEAD"],
+                                               cwd=root / trial_id / "workspace", text=True).strip()
+            if revision != manifest["trials"][trial_id].get("baseline_revision"):
+                raise ValueError(f"Trial baseline changed after preparation: {root.name}/{trial_id}")
     args.output.mkdir(parents=True, exist_ok=True)
     inputs = {"baseline": manifests[0]["baseline"], "candidate": manifests[0]["candidate"],
               "fixture_hashes": manifests[0]["fixture_hashes"],
