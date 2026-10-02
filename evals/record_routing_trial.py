@@ -1,6 +1,7 @@
 """Record path-neutral evidence from completed synthetic skill-routing trials."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -78,16 +79,22 @@ def main() -> None:
         if ab[field] != c[field]:
             raise ValueError(f"Trial input mismatch: {field}")
     normalized_prompts = {}
+    raw_prompts = {}
     for task in ("full", "backend"):
         prompts = []
         for variant in ("A", "B", "C"):
             root = args.c_root if variant == "C" else args.ab_root
             trial = root / f"{task}-{variant}"
             prompt = (trial / "prompt.txt").read_text(encoding="utf-8")
+            raw_prompts[trial.name] = prompt
             prompts.append(prompt.replace(str(trial / "workspace"), "<workspace>"))
         if len(set(prompts)) != 1:
             raise ValueError(f"Prompt mismatch: {task}")
         normalized_prompts[task] = prompts[0]
+    for name, prompt in raw_prompts.items():
+        manifest = c if name.endswith("-C") else ab
+        if hashlib.sha256(prompt.encode("utf-8")).hexdigest() != manifest["trials"][name]["prompt_sha256"]:
+            raise ValueError(f"Trial prompt changed after preparation: {name}")
     args.output.mkdir(parents=True, exist_ok=True)
     inputs = {field: ab[field] for field in ("source_revision", "fixture_hashes", "skill_hashes", "tasks", "routing_rule")}
     inputs["test_rule"] = c["test_rule"]

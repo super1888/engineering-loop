@@ -296,6 +296,20 @@ class RoutingOracleTests(unittest.TestCase):
         self.assertEqual(rejected.returncode, 1, rejected.stdout + rejected.stderr)
         self.assertIn("Prompt mismatch: full", rejected.stderr)
         self.assertFalse((parent / "mismatch/outcomes.json").exists())
+        for variant in ("A", "B"):
+            prompt = parent / "ab" / f"full-{variant}/prompt.txt"
+            prompt.write_text(prompt.read_text(encoding="utf-8") + "\nDifferent approved task.\n",
+                              encoding="utf-8")
+        output = parent / "relative"
+        before = {p.name: p.read_bytes() for p in output.iterdir()}
+        changed_together = subprocess.run([sys.executable, str(ROOT / "evals/record_routing_trial.py"),
+                                          "--ab-root", "../ab", "--c-root", "../c",
+                                          "--output", str(output)], cwd=runner,
+                                         capture_output=True, text=True, timeout=40)
+        self.assertEqual(changed_together.returncode, 1,
+                         changed_together.stdout + changed_together.stderr)
+        self.assertIn("Trial prompt changed after preparation", changed_together.stderr)
+        self.assertEqual({p.name: p.read_bytes() for p in output.iterdir()}, before)
 
 
 if __name__ == "__main__":
