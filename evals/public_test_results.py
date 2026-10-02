@@ -7,7 +7,7 @@ import subprocess
 def unittest_passed(result: subprocess.CompletedProcess[str]) -> bool:
     return (result.returncode == 0
             and re.search(r"^Ran [1-9]\d* tests? in ", result.stderr, re.M) is not None
-            and "OK" in result.stderr.splitlines())
+            and result.stderr.rstrip().endswith("\nOK"))
 
 
 def node_tap_passed(result: subprocess.CompletedProcess[str], minimum_tests: int) -> bool:
