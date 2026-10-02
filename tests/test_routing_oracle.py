@@ -130,9 +130,14 @@ class RoutingOracleTests(unittest.TestCase):
         (self.workspace / "backend/orders.py").write_text("from .validation import create_order\n", encoding="utf-8")
         additions = {"backend/validation.py": helper.read_bytes(),
                      "审阅 结论.md": b"Mixed lines\r\nwithout final newline",
+                     "__pycache__ policy.md": b"Cache directories are excluded.\n",
                      "empty.py": b"", "payload.bin": bytes(range(256))}
         for name, content in additions.items():
             (self.workspace / name).write_bytes(content)
+        cache = self.workspace / "backend/__pycache__"
+        cache.mkdir()
+        (cache / "local.md").write_bytes(b"Disposable cache output.\n")
+        (self.workspace / "local.pyc").write_bytes(b"Disposable bytecode.\n")
         trial = self.workspace.parent
         (trial / "evidence").mkdir()
         (trial / "evidence/events.jsonl").write_text(
@@ -144,7 +149,8 @@ class RoutingOracleTests(unittest.TestCase):
         self.assertTrue(result["oracle_form_pass"])
         self.assertCountEqual(result["untracked_non_cache"], additions)
         replay = trial / "replay"
-        subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(self.workspace), str(replay)],
+        subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", "--config", "core.autocrlf=false",
+                        str(self.workspace), str(replay)],
                        check=True, capture_output=True)
         subprocess.run(["git", "apply", str(output / "full-A.patch")], cwd=replay,
                        check=True, capture_output=True)

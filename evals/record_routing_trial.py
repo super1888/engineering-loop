@@ -30,7 +30,7 @@ def record(directory: Path, output: Path, name: str) -> dict:
     patch = [subprocess.check_output(["git", "diff", "--binary", "HEAD", "--"], cwd=workspace)]
     untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard", "-z"],
                                         cwd=workspace).decode("utf-8").split("\0")[:-1]
-    untracked = [file for file in untracked if "__pycache__" not in file and not file.endswith(".pyc")]
+    untracked = [file for file in untracked if "__pycache__" not in Path(file).parts and not file.endswith(".pyc")]
     for file in untracked:
         command = ["git", "diff", "--no-index", "--binary", "--", "/dev/null", file]
         result = subprocess.run(command, cwd=workspace, capture_output=True)
