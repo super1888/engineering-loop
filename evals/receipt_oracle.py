@@ -118,6 +118,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 2 or not (Path(sys.argv[1]) / "inventory.py").is_file():
         sys.exit("Usage: python evals/receipt_oracle.py CANDIDATE_DIRECTORY (must contain inventory.py)")
     candidate = Path(sys.argv.pop()).resolve() / "inventory.py"
+    sys.path.insert(0, str(candidate.parent))
     spec = importlib.util.spec_from_file_location("receipt_candidate", candidate)
     module = importlib.util.module_from_spec(spec)
     with fresh_python():

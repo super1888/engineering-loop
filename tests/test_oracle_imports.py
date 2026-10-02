@@ -10,6 +10,35 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class OracleImportTests(unittest.TestCase):
+    def test_receipt_oracle_resolves_candidate_sibling_imports_from_another_directory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            candidate = root / "候选 目录"
+            shutil.copytree(ROOT / "evals/fixtures/receipt", candidate,
+                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+            oracle = [sys.executable, str(ROOT / "evals/receipt_oracle.py")]
+            baseline = subprocess.run(oracle + [str(candidate)], cwd=root,
+                                      capture_output=True, text=True, timeout=30)
+            self.assertEqual(baseline.returncode, 1, baseline.stderr)
+            self.assertIn("Ran 7 tests", baseline.stderr)
+            inventory = candidate / "inventory.py"
+            helper = candidate / "receipt_storage.py"
+            helper.write_bytes(inventory.read_bytes())
+            inventory.write_bytes(b"from receipt_storage import Inventory\n")
+            before = {path: path.read_bytes() for path in (inventory, helper)}
+            public = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"],
+                                    cwd=candidate, capture_output=True, text=True, timeout=30)
+            self.assertIn("Ran 3 tests", public.stderr)
+            for supplied_path in (str(candidate), candidate.name):
+                with self.subTest(path=supplied_path):
+                    result = subprocess.run(oracle + [supplied_path], cwd=root,
+                                            capture_output=True, text=True, timeout=30)
+                    self.assertEqual(result.returncode, baseline.returncode, result.stderr)
+                    self.assertIn("Ran 7 tests", result.stderr)
+                    self.assertEqual(result.stderr.splitlines()[-1], baseline.stderr.splitlines()[-1])
+                    self.assertNotIn("ModuleNotFoundError", result.stderr)
+            self.assertEqual({path: path.read_bytes() for path in before}, before)
+
     def test_contract_checks_cannot_be_bypassed_by_an_import_exit(self):
         for fixture, oracle, module, tests in (
                 ("receipt", "receipt_oracle.py", "inventory.py", 7),
