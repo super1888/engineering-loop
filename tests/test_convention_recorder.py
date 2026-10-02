@@ -19,9 +19,74 @@ import prepare_convention_trial
 import prepare_bar_trial
 import prepare_routing_trial
 import prepare_async_import_trial
+import record_convention_trial
 
 
 class ConventionRecorderTests(unittest.TestCase):
+    def test_style_skill_is_frozen_and_recorded_instead_of_read_from_its_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repository = Path(directory) / "repository"
+            skill = repository / "skills/engineering-loop"
+            skill.mkdir(parents=True)
+            (skill / "SKILL.md").write_bytes(b"Synthetic entry.\n")
+            for command in (["git", "init", "--quiet"], ["git", "add", "."],
+                            ["git", "-c", "user.name=Eval", "-c", "user.email=eval@example.invalid",
+                             "commit", "--quiet", "-m", "Inputs"]):
+                subprocess.run(command, cwd=repository, check=True, capture_output=True)
+            style = Path(directory) / "风格 skill"
+            contents = {"SKILL.md": b"Frozen style.\r\nNo final newline",
+                        "references/说明 空格.md": "冻结约定\n".encode("utf-8"),
+                        "documents/__pycache__": b"Ordinary style input.\n"}
+            for name, content in contents.items():
+                path = style / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(content)
+            (style / "__pycache__").mkdir()
+            (style / "__pycache__/cached.md").write_bytes(b"Disposable cache.\n")
+            (style / "local.pyc").write_bytes(b"Disposable bytecode.\n")
+            scratch = Path(directory) / "trial"
+            scratch.mkdir()
+            previous = Path.cwd()
+            try:
+                os.chdir(directory)
+                with patch.object(prepare_convention_trial, "ROOT", repository), \
+                        patch.object(prepare_convention_trial.tempfile, "mkdtemp", return_value=str(scratch)), \
+                        patch.object(sys, "argv", ["prepare", "--baseline", "HEAD", "--style-skill", style.name]), \
+                        redirect_stdout(io.StringIO()):
+                    prepare_convention_trial.main()
+            finally:
+                os.chdir(previous)
+            for name in contents:
+                (style / name).write_bytes(b"Later source replacement.\n")
+            snapshot = scratch / "style-skill"
+            self.assertEqual({path.relative_to(snapshot).as_posix(): path.read_bytes()
+                              for path in snapshot.rglob("*") if path.is_file()}, contents)
+            expected_hashes = {name: hashlib.sha256(content).hexdigest() for name, content in contents.items()}
+            manifest = json.loads((scratch / "manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(manifest["style_skill"], style.name)
+            self.assertEqual(manifest["style_skill_hashes"], expected_hashes)
+            self.assertEqual(len(manifest["trials"]), 4)
+            for trial_id in manifest["trials"]:
+                trial = scratch / trial_id
+                prompt = (trial / "prompt.txt").read_text(encoding="utf-8")
+                self.assertIn(str(snapshot / "SKILL.md"), prompt)
+                self.assertNotIn(style.name, prompt)
+                (trial / "evidence/events.jsonl").write_text(
+                    json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
+            output = Path(directory) / "recorded"
+            with patch.object(sys, "argv", ["record", "--amount-root", str(scratch),
+                    "--comment-root", str(scratch), "--style-root", str(scratch), "--output", str(output)]):
+                record_convention_trial.main()
+            self.assertEqual(json.loads((output / "inputs.json").read_text(encoding="utf-8"))
+                             ["style_skill_hashes"], expected_hashes)
+            del manifest["style_skill_hashes"]
+            (scratch / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            with patch.object(sys, "argv", ["record", "--amount-root", str(scratch),
+                    "--comment-root", str(scratch), "--style-root", str(scratch), "--output", str(output)]):
+                record_convention_trial.main()
+            self.assertIsNone(json.loads((output / "inputs.json").read_text(encoding="utf-8"))
+                              ["style_skill_hashes"])
+
     def test_prepared_workspaces_preserve_files_named_like_cache_directories(self):
         with tempfile.TemporaryDirectory() as directory:
             repository = Path(directory) / "repository"
@@ -65,6 +130,9 @@ class ConventionRecorderTests(unittest.TestCase):
                     manifest_path = (Path(directory) / "recorded/inputs.json" if module is prepare_async_import_trial
                                      else scratch / "manifest.json")
                     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                    if module is prepare_convention_trial:
+                        self.assertIsNone(manifest["style_skill_hashes"])
+                        self.assertFalse((scratch / "style-skill").exists())
                     self.assertEqual(manifest["fixture_hashes"]["documents/__pycache__"],
                                      hashlib.sha256(b"Ordinary frozen input.\n").hexdigest())
                     self.assertNotIn("__pycache__/cached.md", manifest["fixture_hashes"])

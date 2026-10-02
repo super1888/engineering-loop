@@ -45,12 +45,18 @@ def main() -> None:
     baseline = git_output("rev-parse", args.baseline).decode().strip()
     candidate = git_output("rev-parse", "HEAD").decode().strip()
     root = Path(tempfile.mkdtemp(prefix="engineering-loop-convention-ab-"))
+    style_skill = root / "style-skill" if args.style_skill else None
+    if style_skill:
+        shutil.copytree(args.style_skill, style_skill, ignore=lambda directory, names: [name
+            for name in shutil.ignore_patterns("__pycache__", "*.pyc")(directory, names)
+            if name != "__pycache__" or (Path(directory) / name).is_dir()])
     variants = {"A": baseline, "B": candidate}
     tasks = dict(TASKS)
     if args.style_skill:
         tasks["amount"] = "Simplify order validation while raising its amount limit as approved in ORDER.md. Preserve this project's conventions."
     manifest = {"baseline": baseline, "candidate": candidate, "tasks": tasks,
                 "style_skill": args.style_skill.name if args.style_skill else None,
+                "style_skill_hashes": hashes(style_skill) if style_skill else None,
                 "fixture_hashes": hashes(FIXTURE), "trials": {}}
     for task_name, task in tasks.items():
         for variant, revision in variants.items():
@@ -68,8 +74,8 @@ def main() -> None:
                             "-c", "user.email=eval@example.invalid", "commit", "--quiet", "-m", "Synthetic baseline"],
                            cwd=workspace, check=True)
             copy_skill_revision(revision, skill)
-            style_instruction = (f"Also use the coding-style skill at {args.style_skill / 'SKILL.md'} "
-                                 "in its default full mode.\n" if args.style_skill else "")
+            style_instruction = (f"Also use the coding-style skill at {style_skill / 'SKILL.md'} "
+                                 "in its default full mode.\n" if style_skill else "")
             prompt = (
                 f"Complete the following user request in the isolated exercise workspace {workspace}:\n"
                 f"{task}\n\n"

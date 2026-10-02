@@ -76,7 +76,8 @@ def main() -> None:
     inputs = {"baseline": manifests[0]["baseline"], "candidate": manifests[0]["candidate"],
               "fixture_hashes": manifests[0]["fixture_hashes"],
               "standard_tasks": manifests[0]["tasks"], "style_tasks": manifests[2]["tasks"],
-              "style_skill": manifests[2]["style_skill"]}
+              "style_skill": manifests[2]["style_skill"],
+              "style_skill_hashes": manifests[2].get("style_skill_hashes")}
     (args.output / "inputs.json").write_text(json.dumps(inputs, indent=2) + "\n", encoding="utf-8")
     results = {}
     for name, root in roots.items():
