@@ -27,8 +27,17 @@ def record(directory: Path, output: Path, name: str) -> dict:
                      re.findall(r"skills[\\/]+([a-z-]+)[\\/]+SKILL\.md", command.get("command", ""), re.I)})
     changed = subprocess.check_output(["git", "diff", "HEAD", "--name-only", "-z"],
                                       cwd=workspace).decode("utf-8").split("\0")[:-1]
-    patch = subprocess.check_output(["git", "diff", "HEAD", "--"], cwd=workspace)
-    (output / f"{name}.patch").write_bytes(patch)
+    patch = [subprocess.check_output(["git", "diff", "--binary", "HEAD", "--"], cwd=workspace)]
+    untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard", "-z"],
+                                        cwd=workspace).decode("utf-8").split("\0")[:-1]
+    untracked = [file for file in untracked if "__pycache__" not in file and not file.endswith(".pyc")]
+    for file in untracked:
+        command = ["git", "diff", "--no-index", "--binary", "--", "/dev/null", file]
+        result = subprocess.run(command, cwd=workspace, capture_output=True)
+        if result.returncode not in (0, 1):
+            raise subprocess.CalledProcessError(result.returncode, command, result.stdout, result.stderr)
+        patch.append(result.stdout)
+    (output / f"{name}.patch").write_bytes(b"".join(patch))
     messages = [event["item"]["text"] for event in events if event.get("type") == "item.completed"
                 and event.get("item", {}).get("type") == "agent_message"]
     final = messages[-1] if messages else ""
@@ -45,10 +54,7 @@ def record(directory: Path, output: Path, name: str) -> dict:
                               cwd=workspace, capture_output=True, text=True, encoding="utf-8",
                               errors="replace", timeout=30)
     oracle = assess(workspace)
-    untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard", "-z"],
-                                        cwd=workspace).decode("utf-8").split("\0")[:-1]
-    return {"changed_files": changed, "untracked_non_cache": [file for file in untracked
-            if "__pycache__" not in file and not file.endswith(".pyc")],
+    return {"changed_files": changed, "untracked_non_cache": untracked,
             "skills_read": skills, "usage": completed[0].get("usage"),
             "public_backend_pass": unittest_passed(backend),
             "public_form_pass": None if form is None else node_tap_passed(form, minimum_tests=2),

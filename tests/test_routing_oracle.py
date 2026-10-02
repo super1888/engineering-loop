@@ -118,6 +118,44 @@ class RoutingOracleTests(unittest.TestCase):
                 with self.subTest(state=state, arm=arm):
                     self.assertFalse(result[f"public_{arm}_pass"])
 
+    def test_recorded_patch_replays_implementation_in_new_files(self):
+        for command in (["git", "init", "--quiet"], ["git", "config", "core.autocrlf", "false"],
+                        ["git", "add", "."],
+                        ["git", "-c", "user.name=Eval Test", "-c", "user.email=eval@example.invalid",
+                         "commit", "--quiet", "-m", "Baseline"]):
+            subprocess.run(command, cwd=self.workspace, check=True, capture_output=True)
+        self._write_valid_implementation()
+        helper = self.workspace / "backend/validation.py"
+        helper.write_bytes((self.workspace / "backend/orders.py").read_bytes())
+        (self.workspace / "backend/orders.py").write_text("from .validation import create_order\n", encoding="utf-8")
+        additions = {"backend/validation.py": helper.read_bytes(),
+                     "审阅 结论.md": b"Mixed lines\r\nwithout final newline",
+                     "empty.py": b"", "payload.bin": bytes(range(256))}
+        for name, content in additions.items():
+            (self.workspace / name).write_bytes(content)
+        trial = self.workspace.parent
+        (trial / "evidence").mkdir()
+        (trial / "evidence/events.jsonl").write_text(
+            json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
+        output = trial / "recorded"
+        output.mkdir()
+        result = record(trial, output, "full-A")
+        self.assertTrue(result["oracle_backend_pass"])
+        self.assertTrue(result["oracle_form_pass"])
+        self.assertCountEqual(result["untracked_non_cache"], additions)
+        replay = trial / "replay"
+        subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(self.workspace), str(replay)],
+                       check=True, capture_output=True)
+        subprocess.run(["git", "apply", str(output / "full-A.patch")], cwd=replay,
+                       check=True, capture_output=True)
+        self.assertEqual(assess(replay), {"backend": None, "form": None})
+        for name, content in additions.items():
+            with self.subTest(name=name):
+                self.assertEqual((replay / name).read_bytes(), content)
+                self.assertEqual((self.workspace / name).read_bytes(), content)
+        self.assertEqual(subprocess.check_output(["git", "diff", "--cached", "--name-only"],
+                                                cwd=self.workspace), b"")
+
     def test_recording_keeps_staged_and_unstaged_changes_against_baseline(self):
         tracked_name = "后端 说明.md"
         untracked_name = "审阅 结论.md"
@@ -171,7 +209,10 @@ class RoutingOracleTests(unittest.TestCase):
         self.assertIn("+Changed note.", mixed_patch)
         native_diff = subprocess.check_output(
             ["git", "diff", "HEAD", "--", *mixed["changed_files"]], cwd=self.workspace)
-        self.assertEqual((output / "full-A.patch").read_bytes(), native_diff)
+        added_diff = subprocess.run(["git", "diff", "--no-index", "--", "/dev/null", untracked_name],
+                                    cwd=self.workspace, capture_output=True)
+        self.assertEqual(added_diff.returncode, 1)
+        self.assertEqual((output / "full-A.patch").read_bytes(), native_diff + added_diff.stdout)
         reverse_check = subprocess.run(
             ["git", "apply", "--reverse", "--check", str(output / "full-A.patch")],
             cwd=self.workspace, capture_output=True, text=True)
