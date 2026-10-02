@@ -23,15 +23,22 @@ class RoutingOracleTests(unittest.TestCase):
         self.assertIsNotNone(failures["backend"])
         self.assertIsNotNone(failures["form"])
 
-    def test_silent_nonzero_processes_fail_the_cli(self):
-        (self.workspace / "backend/orders.py").write_text("raise SystemExit(1)\n", encoding="utf-8")
-        (self.workspace / "ui/order-form.mjs").write_text(
-            "export function submitOrder() {}\nprocess.exit(1);\n", encoding="utf-8")
-        result = subprocess.run([sys.executable, str(ROOT / "evals/routing_oracle.py"),
-                                 str(self.workspace)], capture_output=True, text=True, timeout=15)
-        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-        self.assertIn("backend: FAIL: Process exited with code 1", result.stdout)
-        self.assertIn("form: FAIL: Process exited with code 1", result.stdout)
+    def test_silent_early_exit_processes_fail_the_cli(self):
+        for exit_code, diagnostic in ((0, "Behavior checks did not reach completion"),
+                                      (1, "Process exited with code 1")):
+            with self.subTest(exit_code=exit_code):
+                workspace = self.workspace.parent / f"exit-{exit_code}"
+                shutil.copytree(self.workspace, workspace,
+                                ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+                (workspace / "backend/orders.py").write_text(
+                    f"raise SystemExit({exit_code})\n", encoding="utf-8")
+                (workspace / "ui/order-form.mjs").write_text(
+                    f"export function submitOrder() {{}}\nprocess.exit({exit_code});\n", encoding="utf-8")
+                result = subprocess.run([sys.executable, str(ROOT / "evals/routing_oracle.py"),
+                                         str(workspace)], capture_output=True, text=True, timeout=15)
+                self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                self.assertIn(f"backend: FAIL: {diagnostic}", result.stdout)
+                self.assertIn(f"form: FAIL: {diagnostic}", result.stdout)
 
     def test_valid_backend_and_form_pass(self):
         (self.workspace / "backend/orders.py").write_text('''def create_order(store: list[dict], payload: dict) -> dict:

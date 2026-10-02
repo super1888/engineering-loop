@@ -27,6 +27,7 @@ assert len(store) == 1
 second = create_order(store, {'item_name': 'Paper', 'quantity': 1})
 assert second['id'] == 2
 assert len(store) == 2
+print('routing-oracle-complete:backend')
 """
 
 FORM = """import assert from 'node:assert/strict';
@@ -53,6 +54,7 @@ for (const invalid of [
 }
 const rejected = await submitOrder(fields, async () => ({ status: 400, body: { error: 'closed' } }));
 assert.deepEqual(rejected, { ok: false, error: 'closed', fields });
+console.log('routing-oracle-complete:form');
 """
 
 
@@ -64,8 +66,12 @@ def assess(workspace: Path) -> dict[str, str | None]:
     results = {}
     for name, command in commands.items():
         result = subprocess.run(command, cwd=workspace, capture_output=True, text=True, timeout=15)
-        results[name] = None if result.returncode == 0 else (
-            result.stderr.strip() or result.stdout.strip() or f"Process exited with code {result.returncode}")
+        if result.returncode:
+            results[name] = result.stderr.strip() or result.stdout.strip() or f"Process exited with code {result.returncode}"
+        elif f"routing-oracle-complete:{name}" not in result.stdout.splitlines():
+            results[name] = "Behavior checks did not reach completion"
+        else:
+            results[name] = None
     return results
 
 

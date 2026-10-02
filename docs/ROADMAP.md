@@ -19,6 +19,7 @@ This is a local packaging correction, not a published release or a model-behavio
 - Invalidate a blinded review when its referenced task context changes; reuse the context frozen in the packet and preserve line-ending-only conversions.
 - Reject private arm mappings inside the review directory or its descendants during preparation and gating.
 - Treat a silent nonzero backend or form subprocess as a failed routing check; retain its exit code instead of an empty failure value.
+- Require completion markers after the routing and convention amount checks' independent assertions; an early zero exit cannot substitute for completed checks.
 
 These are regression-tested evaluator corrections, not changes to the distributed skill or evidence of model-quality improvement.
 

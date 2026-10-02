@@ -42,11 +42,14 @@ for accepts in (accepts_order_total, accepts_export_total):
     assert accepts(15_000)
     assert not accepts(15_001)
 assert format_reference('ab12') == 'ab12'
+print('convention-oracle-complete')
 """
     result = subprocess.run([sys.executable, "-c", snippet], cwd=workspace,
                             capture_output=True, text=True, timeout=15)
     if result.returncode:
         failures.append("Behavior check failed: " + (result.stderr.strip() or str(result.returncode)))
+    elif "convention-oracle-complete" not in result.stdout.splitlines():
+        failures.append("Behavior checks did not reach completion")
     return failures
 
 
