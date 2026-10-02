@@ -40,6 +40,22 @@ class ConventionOracleTests(unittest.TestCase):
                 orders.write_text(updated.replace("<= MAX_ORDER_TOTAL_CENTS", "<= 15_000"), encoding="utf-8")
                 self.assertIn("Order behavior must use the module-owned constant.", assess(self.workspace))
 
+    def test_annotated_constant_keeps_value_and_assignment_checks(self):
+        constants = self.workspace / "order_constants.py"
+        original = constants.read_text(encoding="utf-8")
+        for declaration, valid in (
+                ("MAX_ORDER_TOTAL_CENTS: int = 15_000", True),
+                ("MAX_ORDER_TOTAL_CENTS: int\nMAX_ORDER_TOTAL_CENTS = 15_000", True),
+                ("MAX_ORDER_TOTAL_CENTS: int = 9_999", False),
+                ("MAX_ORDER_TOTAL_CENTS: int", False)):
+            with self.subTest(declaration=declaration):
+                constants.write_text(original.replace("MAX_ORDER_TOTAL_CENTS = 10_000", declaration), encoding="utf-8")
+                failures = assess(self.workspace)
+                if valid:
+                    self.assertEqual(failures, [])
+                else:
+                    self.assertIn("The module-owned amount constant must be 15,000 cents.", failures)
+
     def test_early_zero_exit_cannot_skip_behavior_checks(self):
         constants = self.workspace / "order_constants.py"
         constants.write_text(constants.read_text(encoding="utf-8").replace("10_000", "15_000"), encoding="utf-8")

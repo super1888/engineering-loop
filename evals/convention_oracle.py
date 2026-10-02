@@ -21,9 +21,12 @@ def assess(workspace: Path) -> list[str]:
     except (OSError, SyntaxError) as error:
         return [f"Cannot inspect source: {error}"]
 
-    assignments = [node for node in constants.body if isinstance(node, ast.Assign)
-                   and any(isinstance(target, ast.Name) and target.id == "MAX_ORDER_TOTAL_CENTS"
-                           for target in node.targets)]
+    assignments = [node for node in constants.body
+                   if (isinstance(node, ast.Assign)
+                       and any(isinstance(target, ast.Name) and target.id == "MAX_ORDER_TOTAL_CENTS"
+                               for target in node.targets))
+                   or (isinstance(node, ast.AnnAssign) and node.value is not None
+                       and isinstance(node.target, ast.Name) and node.target.id == "MAX_ORDER_TOTAL_CENTS")]
     if len(assignments) != 1 or not isinstance(assignments[0].value, ast.Constant) or assignments[0].value.value != 15_000:
         failures.append("The module-owned amount constant must be 15,000 cents.")
     if "accounting export field" not in constants_text.lower():

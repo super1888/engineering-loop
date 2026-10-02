@@ -37,6 +37,7 @@ This is a local packaging correction, not a published release or a model-behavio
 
 ## Unreleased evaluation tooling correction
 
+- Accept annotated constant assignments in the convention amount check; reject a wrong value or a declaration without a value assignment.
 - Verify the order and export limits against the module constant in a fresh process; unused references cannot hide an inlined limit in either behavior.
 - Copy convention-trial skill revisions from native NUL-delimited Git paths, preserving Chinese names, spaces and committed file bytes independently of working-tree edits.
 - Accept standard constant and module imports, including aliases, in the convention amount check; keep unused-import and inlined-limit counterexamples failing.
