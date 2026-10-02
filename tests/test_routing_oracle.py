@@ -138,6 +138,21 @@ class RoutingOracleTests(unittest.TestCase):
         form.write_text(valid, encoding="utf-8")
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_form_oracle_preserves_server_order_expectations(self):
+        self._write_valid_implementation()
+        form = self.workspace / "ui/order-form.mjs"
+        valid = form.read_text(encoding="utf-8")
+        statement = 'return { ok: true, order: response.body };'
+        for field in ('id', 'quantity'):
+            with self.subTest(field=field):
+                form.write_text(valid.replace(statement,
+                    f'if (quantity === 2) response.body.{field} = 0;\n  ' + statement), encoding="utf-8")
+                result = assess(self.workspace)
+                self.assertIsNone(result["backend"])
+                self.assertIsNotNone(result["form"])
+        form.write_text(valid, encoding="utf-8")
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_form_oracle_preserves_original_fields_on_each_failure_path(self):
         self._write_valid_implementation()
         form = self.workspace / "ui/order-form.mjs"

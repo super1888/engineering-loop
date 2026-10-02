@@ -67,7 +67,7 @@ for (let quantity = 2; quantity < 20; quantity++) {
   const result = await submitOrder({ itemName: ' Paper ', quantity: String(quantity) }, async (path, payload) => {
     calls.push({ path, payload });
     assert.deepEqual({ path, payload }, { path: '/orders', payload: { item_name: 'Paper', quantity } });
-    return { status: 201, body: order };
+    return { status: 201, body: { ...order } };
   });
   assert.equal(calls.length, quantity + 1);
   assert.deepEqual(result, { ok: true, order });
