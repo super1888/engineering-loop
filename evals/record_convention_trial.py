@@ -4,11 +4,9 @@ import argparse
 import difflib
 import json
 from pathlib import Path
+import subprocess
 
 from convention_oracle import assess, assess_comment_control
-
-
-FIXTURE = Path(__file__).resolve().parent / "fixtures/convention-boundary"
 
 
 def run_result(directory: Path, output: Path, name: str) -> dict:
@@ -22,15 +20,19 @@ def run_result(directory: Path, output: Path, name: str) -> dict:
     workspace = directory / "workspace"
     patch = []
     changed = []
-    paths = {path.relative_to(FIXTURE) for path in FIXTURE.rglob("*")
-             if path.is_file() and path.suffix in {".py", ".md"} and "__pycache__" not in path.parts}
+    baseline = subprocess.check_output(["git", "ls-tree", "-r", "-z", "--name-only", "HEAD"],
+                                       cwd=workspace).decode("utf-8")
+    tracked = {Path(path) for path in baseline.split("\0") if path}
+    paths = {path for path in tracked
+             if path.suffix in {".py", ".md"} and "__pycache__" not in path.parts}
     paths |= {path.relative_to(workspace) for path in workspace.rglob("*")
               if path.is_file() and path.suffix in {".py", ".md"}
               and ".git" not in path.parts and "__pycache__" not in path.parts}
     for relative in sorted(paths):
-        source = FIXTURE / relative
         target = workspace / relative
-        before = source.read_text(encoding="utf-8").splitlines(keepends=True) if source.exists() else []
+        before = (subprocess.check_output(["git", "show", f"HEAD:{relative.as_posix()}"], cwd=workspace)
+                  .decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
+                  .splitlines(keepends=True) if relative in tracked else [])
         after = target.read_text(encoding="utf-8").splitlines(keepends=True) if target.exists() else []
         if before != after:
             changed.append(relative.as_posix())
