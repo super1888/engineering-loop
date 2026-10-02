@@ -44,8 +44,9 @@ def main():
     for variant in ('A', 'B'):
         directory = scratch / variant
         workspace, skill, evidence = (directory / name for name in ('workspace', 'skill', 'evidence'))
-        shutil.copytree(ROOT / 'evals/fixtures/async-import', workspace,
-                        ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
+        shutil.copytree(ROOT / 'evals/fixtures/async-import', workspace, ignore=lambda directory, names: [name
+            for name in shutil.ignore_patterns('__pycache__', '*.pyc')(directory, names)
+            if name != '__pycache__' or (Path(directory) / name).is_dir()])
         shutil.copytree(ROOT / 'skills/engineering-loop', skill)
         evidence.mkdir()
         guidance = directory / 'trial-guidance.md'
@@ -55,7 +56,7 @@ def main():
         trials[variant] = str(directory)
     manifest = {'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'fixture_hashes': {name: digest for name, digest in hashes(ROOT / 'evals/fixtures/async-import').items()
-                           if '__pycache__' not in Path(name).parts and not name.endswith('.pyc')},
+                           if '__pycache__' not in Path(name).parts[:-1] and not name.endswith('.pyc')},
         'skill_hashes': hashes(ROOT / 'skills/engineering-loop'), 'evaluator_hashes': evaluator_hashes,
         'guidance_A': OVERLAY, 'guidance_B': OVERLAY + CANDIDATE, 'prompt_template': PROMPT,
         'owner_reply': CHANGE_MESSAGE, 'early_reply': EARLY_REPLY, 'order': ['A', 'B'],

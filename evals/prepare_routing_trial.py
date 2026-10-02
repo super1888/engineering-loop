@@ -51,7 +51,9 @@ def main() -> None:
             trial_id = f"{task_name}-{variant}"
             directory = root / trial_id
             workspace = directory / "workspace"
-            shutil.copytree(FIXTURE, workspace, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+            shutil.copytree(FIXTURE, workspace, ignore=lambda directory, names: [name
+                for name in shutil.ignore_patterns("__pycache__", "*.pyc")(directory, names)
+                if name != "__pycache__" or (Path(directory) / name).is_dir()])
             shutil.copytree(ROOT / "skills/engineering-loop", workspace / ".agents/skills/engineering-loop")
             if variant in ("B", "C"):
                 with (workspace / "AGENTS.md").open("a", encoding="utf-8") as document:

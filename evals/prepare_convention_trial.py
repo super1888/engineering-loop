@@ -58,7 +58,9 @@ def main() -> None:
             directory = root / trial_id
             workspace = directory / "workspace"
             skill = directory / "skill"
-            shutil.copytree(FIXTURE, workspace, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+            shutil.copytree(FIXTURE, workspace, ignore=lambda directory, names: [name
+                for name in shutil.ignore_patterns("__pycache__", "*.pyc")(directory, names)
+                if name != "__pycache__" or (Path(directory) / name).is_dir()])
             subprocess.run(["git", "init", "--quiet", str(workspace)], check=True)
             subprocess.run(["git", "config", "core.autocrlf", "false"], cwd=workspace, check=True)
             subprocess.run(["git", "add", "."], cwd=workspace, check=True)

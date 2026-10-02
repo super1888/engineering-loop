@@ -1,5 +1,7 @@
 from pathlib import Path
+from contextlib import redirect_stdout
 import hashlib
+import io
 import json
 import os
 import shutil
@@ -16,9 +18,65 @@ from convention_oracle import assess
 import prepare_convention_trial
 import prepare_bar_trial
 import prepare_routing_trial
+import prepare_async_import_trial
 
 
 class ConventionRecorderTests(unittest.TestCase):
+    def test_prepared_workspaces_preserve_files_named_like_cache_directories(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repository = Path(directory) / "repository"
+            shutil.copytree(ROOT / "skills/engineering-loop", repository / "skills/engineering-loop")
+            for name in ("convention-boundary", "skill-routing", "async-import"):
+                fixture = repository / "evals/fixtures" / name
+                shutil.copytree(ROOT / "evals/fixtures" / name, fixture)
+                (fixture / "documents").mkdir()
+                (fixture / "documents/__pycache__").write_bytes(b"Ordinary frozen input.\n")
+                (fixture / "__pycache__").mkdir(exist_ok=True)
+                (fixture / "__pycache__/cached.md").write_bytes(b"Disposable cache.\n")
+                (fixture / "local.pyc").write_bytes(b"Disposable bytecode.\n")
+            for name in ("async_import_oracle.py", "async_import_browser_oracle.cjs",
+                         "async_import_change.md", "python_source.py"):
+                shutil.copyfile(ROOT / "evals" / name, repository / "evals" / name)
+            for command in (["git", "init", "--quiet"], ["git", "config", "core.autocrlf", "false"],
+                            ["git", "add", "."], ["git", "-c", "user.name=Eval",
+                             "-c", "user.email=eval@example.invalid", "commit", "--quiet", "-m", "Inputs"]):
+                subprocess.run(command, cwd=repository, check=True, capture_output=True)
+            for module, fixture, arguments, count in (
+                    (prepare_convention_trial, "convention-boundary", ["--baseline", "HEAD"], 4),
+                    (prepare_routing_trial, "skill-routing", ["--output"], 6),
+                    (prepare_async_import_trial, "async-import", ["--output"], 2)):
+                with self.subTest(preparer=module.__name__):
+                    scratch = Path(directory) / module.__name__
+                    scratch.mkdir()
+                    args = list(arguments)
+                    if module is prepare_routing_trial:
+                        args.append(str(scratch))
+                    elif module is prepare_async_import_trial:
+                        args += [str(Path(directory) / "recorded"), "--node-modules", "unused", "--browser", "unused"]
+                    with patch.object(module, "ROOT", repository), patch.object(module.tempfile, "mkdtemp", return_value=str(scratch)), \
+                            patch.object(sys, "argv", [module.__name__, *args]), redirect_stdout(io.StringIO()):
+                        if module is prepare_async_import_trial:
+                            module.main()
+                        else:
+                            with patch.object(module, "FIXTURE", repository / "evals/fixtures" / fixture):
+                                module.main()
+                    workspaces = list(scratch.glob("*/workspace"))
+                    self.assertEqual(len(workspaces), count)
+                    manifest_path = (Path(directory) / "recorded/inputs.json" if module is prepare_async_import_trial
+                                     else scratch / "manifest.json")
+                    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                    self.assertEqual(manifest["fixture_hashes"]["documents/__pycache__"],
+                                     hashlib.sha256(b"Ordinary frozen input.\n").hexdigest())
+                    self.assertNotIn("__pycache__/cached.md", manifest["fixture_hashes"])
+                    self.assertNotIn("local.pyc", manifest["fixture_hashes"])
+                    for workspace in workspaces:
+                        self.assertEqual((workspace / "documents/__pycache__").read_bytes(), b"Ordinary frozen input.\n")
+                        self.assertFalse((workspace / "__pycache__").exists())
+                        self.assertFalse((workspace / "local.pyc").exists())
+                        if module is not prepare_async_import_trial:
+                            self.assertIn("documents/__pycache__", subprocess.check_output(
+                                ["git", "ls-files"], cwd=workspace, text=True).splitlines())
+
     def test_input_hashes_ignore_cache_inside_the_root_only(self):
         with tempfile.TemporaryDirectory() as directory:
             for ancestor in ("ordinary", "__pycache__", ".git"):
