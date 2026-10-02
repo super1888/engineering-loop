@@ -21,6 +21,9 @@ class ConventionRecorderTests(unittest.TestCase):
             order_document = workspace / "ORDER.md"
             order_document.write_text(order_document.read_text(encoding="utf-8")
                                       + "\nFrozen trial context.\n", encoding="utf-8")
+            baseline_document = order_document.read_bytes()
+            empty_document = workspace / "empty-before.md"
+            empty_document.write_bytes(b"")
             for command in (["git", "init", "--quiet"], ["git", "config", "core.autocrlf", "false"],
                             ["git", "add", "."],
                             ["git", "-c", "user.name=Eval", "-c", "user.email=eval@example.invalid",
@@ -37,6 +40,7 @@ class ConventionRecorderTests(unittest.TestCase):
             self.assertEqual((output / "amount-A.patch").read_text(encoding="utf-8"), "")
 
             constants = workspace / "order_constants.py"
+            baseline_constants = constants.read_bytes()
             constants.write_text(constants.read_text(encoding="utf-8").replace("10_000", "15_000"),
                                  encoding="utf-8")
             changed = run_result(trial, output, "amount-B")
@@ -57,13 +61,22 @@ class ConventionRecorderTests(unittest.TestCase):
             constants.write_text(valid_constants, encoding="utf-8", newline="\n")
 
             order_document.unlink()
+            empty_document.unlink()
             (workspace / "extra.py").write_text("VALUE = 1\n", encoding="utf-8")
+            (workspace / "empty-after.py").write_bytes(b"")
             added_and_deleted = run_result(trial, output, "amount-C")
             self.assertCountEqual(added_and_deleted["changed_files"],
-                                  ["ORDER.md", "extra.py", "order_constants.py"])
+                                  ["ORDER.md", "extra.py", "order_constants.py", "empty-before.md", "empty-after.py"])
             patch = (output / "amount-C.patch").read_text(encoding="utf-8")
             self.assertIn("-Frozen trial context.", patch)
             self.assertIn("+VALUE = 1", patch)
+            subprocess.run(["git", "apply", "--reverse", str(output / "amount-C.patch")],
+                           cwd=workspace, check=True, capture_output=True)
+            self.assertFalse((workspace / "extra.py").exists())
+            self.assertFalse((workspace / "empty-after.py").exists())
+            self.assertEqual(empty_document.read_bytes(), b"")
+            self.assertEqual(order_document.read_bytes(), baseline_document)
+            self.assertEqual(constants.read_bytes(), baseline_constants)
 
 
 if __name__ == "__main__":

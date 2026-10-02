@@ -1,7 +1,6 @@
 """Save path-neutral artifacts from completed local convention trials."""
 
 import argparse
-import difflib
 import json
 from pathlib import Path
 import subprocess
@@ -29,19 +28,19 @@ def run_result(directory: Path, output: Path, name: str) -> dict:
               if path.is_file() and path.suffix in {".py", ".md"}
               and ".git" not in path.parts and "__pycache__" not in path.parts}
     for relative in sorted(paths):
-        target = workspace / relative
-        before = (subprocess.check_output(["git", "show", f"HEAD:{relative.as_posix()}"], cwd=workspace)
-                  .decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
-                  .splitlines(keepends=True) if relative in tracked else [])
-        after = target.read_text(encoding="utf-8").splitlines(keepends=True) if target.exists() else []
-        if before != after:
+        if relative in tracked:
+            file_patch = subprocess.check_output(
+                ["git", "diff", "HEAD", "--", ":(literal)" + relative.as_posix()], cwd=workspace)
+        else:
+            command = ["git", "diff", "--no-index", "--", "/dev/null", relative.as_posix()]
+            result = subprocess.run(command, cwd=workspace, capture_output=True)
+            if result.returncode not in (0, 1):
+                raise subprocess.CalledProcessError(result.returncode, command, result.stdout, result.stderr)
+            file_patch = result.stdout
+        if file_patch:
             changed.append(relative.as_posix())
-            for line in difflib.unified_diff(before, after,
-                                             fromfile="a/" + relative.as_posix(),
-                                             tofile="b/" + relative.as_posix()):
-                patch.append(line if line.endswith("\n")
-                             else line + "\n\\ No newline at end of file\n")
-    (output / f"{name}.patch").write_text("".join(patch), encoding="utf-8", newline="\n")
+            patch.append(file_patch)
+    (output / f"{name}.patch").write_bytes(b"".join(patch))
     final_message = messages[-1] if messages else ""
     trial_root = str(directory.parent)
     for location in (trial_root, trial_root.replace("\\", "/")):
