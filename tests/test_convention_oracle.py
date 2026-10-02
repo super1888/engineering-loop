@@ -47,6 +47,24 @@ class ConventionOracleTests(unittest.TestCase):
         orders.write_text(orders.read_text(encoding="utf-8") + "\nraise SystemExit(0)\n", encoding="utf-8")
         self.assertIn("Behavior checks did not reach completion", assess(self.workspace))
 
+    def test_unused_reference_cannot_hide_inlined_behavior_limits(self):
+        constants = self.workspace / "order_constants.py"
+        constants.write_text(constants.read_text(encoding="utf-8").replace("10_000", "15_000"), encoding="utf-8")
+        orders = self.workspace / "orders.py"
+        original = orders.read_text(encoding="utf-8")
+        order_source, export_source = original.split("\ndef accepts_export_total", 1)
+        for scope in ("order", "export", "both"):
+            with self.subTest(scope=scope):
+                order = (order_source.replace("<= MAX_ORDER_TOTAL_CENTS", "<= 15_000")
+                         if scope in ("order", "both") else order_source)
+                export = (export_source.replace("<= MAX_ORDER_TOTAL_CENTS", "<= 15_000")
+                          if scope in ("export", "both") else export_source)
+                updated = order + "\ndef accepts_export_total" + export
+                orders.write_text(updated + "\ndef unused_limit():\n    return MAX_ORDER_TOTAL_CENTS\n", encoding="utf-8")
+                for bytecode in self.workspace.glob("__pycache__/*.pyc"):
+                    bytecode.unlink()
+                self.assertIn("Order behavior must use the module-owned constant.", assess(self.workspace))
+
     def test_inlining_limit_and_dropping_reason_fails(self):
         constants = self.workspace / "order_constants.py"
         constants.write_text("MAX_ORDER_TOTAL_CENTS = 15_000\n", encoding="utf-8")

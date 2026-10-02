@@ -17,7 +17,7 @@ def assess(workspace: Path) -> list[str]:
         constants_text = constants_path.read_text(encoding="utf-8")
         orders_text = orders_path.read_text(encoding="utf-8")
         constants = ast.parse(constants_text)
-        orders = ast.parse(orders_text)
+        ast.parse(orders_text)
     except (OSError, SyntaxError) as error:
         return [f"Cannot inspect source: {error}"]
 
@@ -28,18 +28,6 @@ def assess(workspace: Path) -> list[str]:
         failures.append("The module-owned amount constant must be 15,000 cents.")
     if "accounting export field" not in constants_text.lower():
         failures.append("The accepted export-storage explanation is missing; inspect any rewritten explanation manually.")
-    constant_names = {alias.asname or alias.name for node in orders.body
-                      if isinstance(node, ast.ImportFrom) and node.module == "order_constants"
-                      for alias in node.names if alias.name == "MAX_ORDER_TOTAL_CENTS"}
-    module_names = {alias.asname or alias.name for node in orders.body
-                    if isinstance(node, ast.Import)
-                    for alias in node.names if alias.name == "order_constants"}
-    used = any((isinstance(node, ast.Name) and node.id in constant_names
-                or isinstance(node, ast.Attribute) and node.attr == "MAX_ORDER_TOTAL_CENTS"
-                and isinstance(node.value, ast.Name) and node.value.id in module_names)
-               and isinstance(node.ctx, ast.Load) for node in ast.walk(orders))
-    if not used:
-        failures.append("Order behavior must use the module-owned constant.")
     snippet = """from orders import accepts_order_total, accepts_export_total, format_reference
 for accepts in (accepts_order_total, accepts_export_total):
     assert not accepts(-1)
@@ -57,6 +45,18 @@ print('convention-oracle-complete')
         failures.append("Behavior check failed: " + (result.stderr.strip() or str(result.returncode)))
     elif "convention-oracle-complete" not in result.stdout.splitlines():
         failures.append("Behavior checks did not reach completion")
+    ownership = """import order_constants
+order_constants.MAX_ORDER_TOTAL_CENTS = 12_345
+from orders import accepts_order_total, accepts_export_total
+for accepts in (accepts_order_total, accepts_export_total):
+    assert accepts(12_345)
+    assert not accepts(12_346)
+print('convention-owner-complete')
+"""
+    result = subprocess.run([sys.executable, "-c", ownership], cwd=workspace,
+                            capture_output=True, text=True, timeout=15)
+    if result.returncode or "convention-owner-complete" not in result.stdout.splitlines():
+        failures.append("Order behavior must use the module-owned constant.")
     return failures
 
 

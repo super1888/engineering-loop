@@ -37,6 +37,7 @@ This is a local packaging correction, not a published release or a model-behavio
 
 ## Unreleased evaluation tooling correction
 
+- Verify the order and export limits against the module constant in a fresh process; unused references cannot hide an inlined limit in either behavior.
 - Copy convention-trial skill revisions from native NUL-delimited Git paths, preserving Chinese names, spaces and committed file bytes independently of working-tree edits.
 - Accept standard constant and module imports, including aliases, in the convention amount check; keep unused-import and inlined-limit counterexamples failing.
 - Reject a blind-gate decision output that aliases any review input, artifact or fixture context; preserve input bytes while allowing a separate decision file to be refreshed.
