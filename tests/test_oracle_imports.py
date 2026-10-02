@@ -10,6 +10,28 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class OracleImportTests(unittest.TestCase):
+    def test_receipt_oracle_loads_dataclasses_with_postponed_annotations(self):
+        with tempfile.TemporaryDirectory() as directory:
+            candidate = Path(directory) / "candidate"
+            shutil.copytree(ROOT / "evals/fixtures/receipt", candidate,
+                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+            inventory = candidate / "inventory.py"
+            source = (b"from __future__ import annotations\nfrom dataclasses import dataclass\n"
+                      b"from sqlite3 import Connection\n"
+                      + inventory.read_bytes().replace(
+                          b"class Inventory:",
+                          b"@dataclass\nclass Inventory:\n    db: Connection"))
+            inventory.write_bytes(source)
+            public = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"],
+                                    cwd=candidate, capture_output=True, text=True, timeout=30)
+            self.assertIn("Ran 3 tests", public.stderr)
+            result = subprocess.run([sys.executable, str(ROOT / "evals/receipt_oracle.py"), str(candidate)],
+                                    capture_output=True, text=True, timeout=30)
+            self.assertEqual(result.returncode, 1, result.stderr)
+            self.assertIn("Ran 7 tests", result.stderr)
+            self.assertNotIn("AttributeError", result.stderr)
+            self.assertEqual(inventory.read_bytes(), source)
+
     def test_receipt_oracle_resolves_candidate_sibling_imports_from_another_directory(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
