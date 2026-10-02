@@ -3,7 +3,7 @@ name: engineering-loop
 description: Coordinate a bounded engineering change across requirements, implementation, review, verification, and delivery. Use when explicitly requested, when resuming work with uncertain state, or when a cross-boundary change needs unresolved decisions coordinated. Do not activate for explanations, routine local edits, or an already-scoped stage handled by project guidance.
 license: MIT
 metadata:
-  version: "0.1.4"
+  version: "0.1.5"
 ---
 
 # Engineering Loop

@@ -95,6 +95,24 @@ class DistributionTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 build_archive(source, Path(directory) / "skill.zip", ROOT / "LICENSE")
 
+    def test_output_hardlinks_cannot_overwrite_inputs(self):
+        for relative in ("SKILL.md", "references/review.md", "LICENSE"):
+            with self.subTest(input=relative), tempfile.TemporaryDirectory() as directory:
+                source = Path(directory) / "source"
+                shutil.copytree(ROOT / "skills/engineering-loop", source)
+                license_path = Path(directory) / "LICENSE"
+                license_path.write_bytes((ROOT / "LICENSE").read_bytes())
+                protected = license_path if relative == "LICENSE" else source / relative
+                before = protected.read_bytes()
+                output = Path(directory) / "skill.zip"
+                try:
+                    output.hardlink_to(protected)
+                except OSError:
+                    self.skipTest("Host does not permit creating a test hardlink")
+                with self.assertRaises(ValueError):
+                    build_archive(source, output, license_path)
+                self.assertEqual(protected.read_bytes(), before)
+
 
 if __name__ == "__main__":
     unittest.main()

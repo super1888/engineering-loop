@@ -11,7 +11,9 @@ def build_archive(source, output, license_path):
     source = Path(source).resolve()
     output = Path(output).resolve()
     license_path = Path(license_path).resolve()
-    if output == source or source in output.parents or output == license_path:
+    output_exists = output.exists()
+    if (output == source or source in output.parents or output == license_path
+            or (output_exists and license_path.exists() and output.samefile(license_path))):
         raise ValueError("Archive output must be outside the skill source and must not overwrite the license")
     if not (source / "SKILL.md").is_file():
         raise ValueError("Source is not a skill directory")
@@ -20,6 +22,8 @@ def build_archive(source, output, license_path):
         if path.is_symlink():
             raise ValueError("Symlinks are not accepted in the offline payload")
         if path.is_file():
+            if output_exists and output.samefile(path):
+                raise ValueError("Archive output must not overwrite a skill source file")
             payload.append((path.relative_to(source).as_posix(), path.read_bytes()))
     if not any(name == "LICENSE" for name, _ in payload):
         payload.append(("LICENSE", license_path.read_bytes()))

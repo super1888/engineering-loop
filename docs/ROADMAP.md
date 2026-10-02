@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.5: unreleased archive file-identity protection
+
+- Reject existing output files that are hardlinks to the supplied license or any skill source file before opening the ZIP.
+- Use the standard library's file-identity check; verify preserved input bytes for the entrypoint, a nested reference and the external license alongside normal archive controls.
+
+This is a local packaging correction, not a published release or a model-behavior improvement.
+
 ## v0.1.4: unreleased archive input protection
 
 - Reject an archive output that resolves to the supplied license, alongside the existing skill-source protection.
