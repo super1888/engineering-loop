@@ -1,4 +1,5 @@
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -35,6 +36,59 @@ class BlindGateTests(unittest.TestCase):
         write_json(self.review, {"suite": "pilot", "reviewer": "test", "reviewer_kind": "human", "reviews": [
             {"id": "one", "ratings": ratings, "preference": preference, "reason": "Observed outcome"}]})
         return gate(self.suite, self.runs, self.packet, self.key, self.review)
+
+    def run_gate(self, output: Path) -> subprocess.CompletedProcess:
+        command = [sys.executable, str(ROOT / "evals/blind_gate.py"), "gate"]
+        for name in ("suite", "runs", "packet", "key", "review"):
+            command += ["--" + name, str(getattr(self, name))]
+        return subprocess.run(command + ["--output", str(output)], capture_output=True, text=True)
+
+    def test_gate_output_preserves_all_review_inputs(self):
+        fixture = self.root / "fixture"
+        fixture.mkdir()
+        brief = fixture / "BRIEF.md"
+        brief.write_bytes(b"Accepted context\n")
+        suite = read_json(self.suite)
+        suite["cases"][0]["fixture"] = "fixture"
+        write_json(self.suite, suite)
+        self.packet = self.root / "context-reviewer/packet.json"
+        self.key = self.root / "context-private/key.json"
+        prepare(self.suite, self.runs, self.packet, self.key, seed=1)
+        self.submit("pass", "pass")
+        inputs = [self.suite, self.runs, self.packet, self.key, self.review,
+                  self.root / "old.txt", self.root / "new.txt", brief]
+        for destination in inputs:
+            with self.subTest(destination=destination.name):
+                before = destination.read_bytes()
+                result = self.run_gate(destination)
+                preserved = destination.read_bytes() == before
+                if not preserved:
+                    destination.write_bytes(before)
+                self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertIn("Gate output must not overwrite its inputs", result.stderr)
+                self.assertTrue(preserved)
+        output = self.root / "decision.json"
+        result = self.run_gate(output)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(read_json(output)["decision"], "pass")
+        write_json(output, {"decision": "stale"})
+        result = self.run_gate(output)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(read_json(output)["decision"], "pass")
+
+    def test_gate_output_hardlink_preserves_artifact(self):
+        self.submit("pass", "pass")
+        artifact = self.root / "new.txt"
+        output = self.root / "decision.json"
+        try:
+            output.hardlink_to(artifact)
+        except OSError:
+            self.skipTest("Host does not permit creating a test hardlink")
+        before = artifact.read_bytes()
+        result = self.run_gate(output)
+        self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Gate output must not overwrite its inputs", result.stderr)
+        self.assertEqual(artifact.read_bytes(), before)
 
     def test_blinded_packet_and_valid_candidate_pass(self):
         packet = self.packet.read_text(encoding="utf-8")

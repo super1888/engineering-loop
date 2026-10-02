@@ -180,6 +180,14 @@ def main() -> None:
         else:
             result = gate(args.suite, args.runs, args.packet, args.key, args.review,
                           require_human=not args.pilot)
+            inputs = [args.suite, args.runs, args.packet, args.key, args.review]
+            inputs.extend(args.runs.parent / entry["artifact"]
+                          for arm in read_json(args.runs)["arms"].values() for entry in arm.values())
+            inputs.extend(args.suite.parent / case["fixture"] / "BRIEF.md"
+                          for case in read_json(args.suite)["cases"] if "fixture" in case)
+            if any(args.output.resolve() == path.resolve()
+                   or (args.output.exists() and args.output.samefile(path)) for path in inputs):
+                raise ValueError("Gate output must not overwrite its inputs")
             write_json(args.output, result)
             print(result["decision"], "; ".join(result["reasons"]))
             if result["decision"] != "pass":

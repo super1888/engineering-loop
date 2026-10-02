@@ -37,6 +37,7 @@ This is a local packaging correction, not a published release or a model-behavio
 
 ## Unreleased evaluation tooling correction
 
+- Reject a blind-gate decision output that aliases any review input, artifact or fixture context; preserve input bytes while allowing a separate decision file to be refreshed.
 - Invalidate a blinded review when its referenced task context changes; reuse the context frozen in the packet and preserve line-ending-only conversions.
 - Reject private arm mappings inside the review directory or its descendants during preparation and gating.
 - Treat a silent nonzero backend or form subprocess as a failed routing check; retain its exit code instead of an empty failure value.
