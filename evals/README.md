@@ -1,5 +1,7 @@
 # Behavioral evaluation protocol
 
+The unrun `native-processing-archive-evidence` case separates an isolated native processor probe from persisted history, normal API archive, preview and final delivery. Its stale-candidate and unaffected-archive branches cannot establish the requested new-method path; its complete-path and processor-only controls prevent unnecessary gates. The motivating application release supplied actual native and normal-archive evidence with different scopes. This synthetic specification has not been executed and makes no model-quality claim; existing verification guidance remains unchanged.
+
 `cases.json` contains scenario specifications, not a model runner or a pass-rate claim. Most descriptions still require a tester to build a fixture. Receipt, copy, list-detail, asynchronous-import and pilot bar-boundary fixtures are supplied below. Execution evidence is recorded per trial; a completed trial does not mark all scenarios or all hosts as passed.
 
 The unrun `presentation-defaults-saved-evidence` case checks a page whose Next and render actions share a payload constructor that overwrites saved custom instructions with localized defaults, invalidating an existing artifact. Its new-object and explicit-edit controls must retain their legitimate defaults and invalidation. Actual application navigation was repaired and verified; no new general guidance or model-evaluation result is claimed.
