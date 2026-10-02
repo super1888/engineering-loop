@@ -309,22 +309,25 @@ class RoutingOracleTests(unittest.TestCase):
         before = {p.name: p.read_bytes() for p in output.iterdir()}
         for task in ("full", "backend"):
             for variant in ("A", "B", "C"):
-                for skill_name in ("engineering-loop", "order-backend", "order-form"):
-                    with self.subTest(changed_skill=f"{task}-{variant}/{skill_name}"):
+                for relative in ("AGENTS.md", ".agents/skills/engineering-loop/SKILL.md",
+                                 ".agents/skills/order-backend/SKILL.md", ".agents/skills/order-form/SKILL.md"):
+                    with self.subTest(changed_instruction=f"{task}-{variant}/{relative}"):
                         trial = parent / ("c" if variant == "C" else "ab") / f"{task}-{variant}"
-                        skill = trial / f"workspace/.agents/skills/{skill_name}/SKILL.md"
-                        original = skill.read_bytes()
+                        instruction = trial / "workspace" / relative
+                        original = instruction.read_bytes()
                         try:
-                            skill.write_bytes(original + b"\nChanged frozen instruction.\n")
+                            instruction.write_bytes(original + b"\nChanged frozen instruction.\n")
                             drift = subprocess.run([sys.executable, str(ROOT / "evals/record_routing_trial.py"),
                                                     "--ab-root", "../ab", "--c-root", "../c",
                                                     "--output", str(output)], cwd=runner,
                                                    capture_output=True, text=True, timeout=40)
                             self.assertEqual(drift.returncode, 1, drift.stdout + drift.stderr)
-                            self.assertIn("Trial skill changed after preparation", drift.stderr)
+                            diagnostic = ("Trial project instructions changed after preparation"
+                                          if relative == "AGENTS.md" else "Trial skill changed after preparation")
+                            self.assertIn(diagnostic, drift.stderr)
                             self.assertEqual({p.name: p.read_bytes() for p in output.iterdir()}, before)
                         finally:
-                            skill.write_bytes(original)
+                            instruction.write_bytes(original)
                             for name, content in before.items():
                                 (output / name).write_bytes(content)
         prompt = parent / "c/full-C/prompt.txt"

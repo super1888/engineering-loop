@@ -99,6 +99,9 @@ def main() -> None:
     for name in TRIALS:
         root = args.c_root if name.endswith("-C") else args.ab_root
         manifest = c if name.endswith("-C") else ab
+        instructions = root / name / "workspace/AGENTS.md"
+        if hashlib.sha256(instructions.read_bytes()).hexdigest() != manifest["trials"][name]["input_hashes"]["AGENTS.md"]:
+            raise ValueError(f"Trial project instructions changed after preparation: {name}")
         snapshot = root / name / "workspace/.agents/skills/engineering-loop"
         if hashes(snapshot) != manifest["skill_hashes"]:
             raise ValueError(f"Trial skill changed after preparation: {name}")
