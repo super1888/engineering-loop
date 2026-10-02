@@ -20,6 +20,7 @@ for payload in (
     {'item_name': 123, 'quantity': 1},
     {'item_name': 'Pen', 'quantity': None},
     {'item_name': 'Pen', 'quantity': '2'},
+    {'item_name': 'Pen', 'quantity': -1},
     {'item_name': 'Pen', 'quantity': 0},
     {'item_name': 'Pen', 'quantity': 21},
     {'item_name': 'Pen', 'quantity': 1.5},
@@ -74,6 +75,7 @@ for (let quantity = 2; quantity < 20; quantity++) {
 }
 for (const invalid of [
   { itemName: ' ', quantity: '1' },
+  { itemName: 'Pen', quantity: '-1' },
   { itemName: 'Pen', quantity: '0' },
   { itemName: 'Pen', quantity: '21' },
   { itemName: 'Pen', quantity: '1.5' },

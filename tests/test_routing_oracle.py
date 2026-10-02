@@ -152,6 +152,22 @@ class RoutingOracleTests(unittest.TestCase):
         form.write_text(valid, encoding="utf-8")
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_oracle_rejects_absolute_value_quantity_coercion(self):
+        self._write_valid_implementation()
+        for arm, relative, old, new in (
+                ("backend", "backend/orders.py", 'quantity = payload.get("quantity")',
+                 'quantity = payload.get("quantity")\n    if type(quantity) is int:\n        quantity = abs(quantity)'),
+                ("form", "ui/order-form.mjs", 'Number(fields.quantity)', 'Math.abs(Number(fields.quantity))')):
+            with self.subTest(arm=arm):
+                source = self.workspace / relative
+                valid = source.read_text(encoding="utf-8")
+                source.write_text(valid.replace(old, new), encoding="utf-8")
+                result = assess(self.workspace)
+                source.write_text(valid, encoding="utf-8")
+                self.assertIsNotNone(result[arm])
+                self.assertIsNone(result["form" if arm == "backend" else "backend"])
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_form_oracle_preserves_server_order_expectations(self):
         self._write_valid_implementation()
         form = self.workspace / "ui/order-form.mjs"
