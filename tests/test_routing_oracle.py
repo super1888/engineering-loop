@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "evals"))
@@ -72,6 +73,20 @@ class RoutingOracleTests(unittest.TestCase):
     def test_valid_backend_and_form_pass(self):
         self._write_valid_implementation()
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
+    def test_optimization_environment_cannot_disable_independent_assertions(self):
+        self._write_valid_implementation()
+        orders = self.workspace / "backend/orders.py"
+        valid = orders.read_text(encoding="utf-8")
+        for level in ("1", "2"):
+            with self.subTest(level=level), patch.dict(os.environ, PYTHONOPTIMIZE=level):
+                orders.write_text(valid, encoding="utf-8")
+                self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+                orders.write_text(valid.replace('"item_name": name.strip()', '"item_name": name'),
+                                  encoding="utf-8")
+                result = assess(self.workspace)
+                self.assertIn("AssertionError", result["backend"] or "")
+                self.assertIsNone(result["form"])
 
     def test_recording_requires_public_tests_to_execute(self):
         self._write_valid_implementation()

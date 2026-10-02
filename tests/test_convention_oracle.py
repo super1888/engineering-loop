@@ -1,8 +1,10 @@
 from pathlib import Path
+import os
 import shutil
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "evals"))
@@ -39,6 +41,29 @@ class ConventionOracleTests(unittest.TestCase):
             with self.subTest(statement=statement, used=False):
                 orders.write_text(updated.replace("<= MAX_ORDER_TOTAL_CENTS", "<= 15_000"), encoding="utf-8")
                 self.assertIn("Order behavior must use the module-owned constant.", assess(self.workspace))
+
+    def test_optimization_environment_cannot_disable_independent_assertions(self):
+        constants = self.workspace / "order_constants.py"
+        original_constants = constants.read_text(encoding="utf-8")
+        orders = self.workspace / "orders.py"
+        valid = orders.read_text(encoding="utf-8")
+        for level in ("1", "2"):
+            with self.subTest(level=level), patch.dict(os.environ, PYTHONOPTIMIZE=level):
+                constants.write_text(original_constants.replace("10_000", "15_000"), encoding="utf-8")
+                orders.write_text(valid, encoding="utf-8")
+                self.assertEqual(assess(self.workspace), [])
+                orders.write_text(valid.replace("<= MAX_ORDER_TOTAL_CENTS", ">= MAX_ORDER_TOTAL_CENTS"),
+                                  encoding="utf-8")
+                failures = assess(self.workspace)
+                self.assertTrue(any("Behavior check failed" in failure for failure in failures), failures)
+                self.assertIn("Order behavior must use the module-owned constant.", failures)
+                constants.write_text(original_constants, encoding="utf-8")
+                comment = valid.replace("    # References are always uppercase.\n", "")
+                orders.write_text(comment, encoding="utf-8")
+                self.assertEqual(assess_comment_control(self.workspace), [])
+                orders.write_text(comment.replace("<= MAX_ORDER_TOTAL_CENTS", "<= 15_000"), encoding="utf-8")
+                self.assertIn("The unrelated order amount boundary changed.",
+                              assess_comment_control(self.workspace))
 
     def test_annotated_constant_keeps_value_and_assignment_checks(self):
         constants = self.workspace / "order_constants.py"

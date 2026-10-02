@@ -11,6 +11,6 @@ def fresh_python():
         previous = sys.pycache_prefix, sys.dont_write_bytecode
         sys.pycache_prefix, sys.dont_write_bytecode = cache, True
         try:
-            yield [sys.executable, "-B", "-X", f"pycache_prefix={cache}"]
+            yield [sys.executable, "-E", "-B", "-X", f"pycache_prefix={cache}"]
         finally:
             sys.pycache_prefix, sys.dont_write_bytecode = previous
