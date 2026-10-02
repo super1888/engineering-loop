@@ -24,9 +24,9 @@ def record(directory: Path, output: Path, name: str) -> dict:
                 and event.get("item", {}).get("type") == "command_execution"]
     skills = sorted({match for command in commands for match in
                      re.findall(r"skills[\\/]+([a-z-]+)[\\/]+SKILL\.md", command.get("command", ""), re.I)})
-    changed = subprocess.check_output(["git", "diff", "--name-only"], cwd=workspace,
+    changed = subprocess.check_output(["git", "diff", "HEAD", "--name-only"], cwd=workspace,
                                       text=True, encoding="utf-8").splitlines()
-    patch = subprocess.check_output(["git", "diff", "--", *changed], cwd=workspace,
+    patch = subprocess.check_output(["git", "diff", "HEAD", "--", *changed], cwd=workspace,
                                     text=True, encoding="utf-8")
     (output / f"{name}.patch").write_text(patch, encoding="utf-8")
     messages = [event["item"]["text"] for event in events if event.get("type") == "item.completed"

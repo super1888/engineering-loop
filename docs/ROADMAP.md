@@ -29,6 +29,7 @@ This is a local packaging correction, not a published release or a model-behavio
 - Require completion markers after the routing and convention amount checks' independent assertions; an early zero exit cannot substitute for completed checks.
 - Require nonempty, unskipped native public-test reports in routing records and the convention comment control; the form report must execute at least the fixture's two cases.
 - Build convention-trial patches from each workspace's frozen Git baseline, so later repository template changes are not attributed to the implementing agent.
+- Record routing-trial file lists and patches against the prepared Git baseline, retaining staged changes alongside unstaged edits.
 
 These are regression-tested evaluator corrections, not changes to the distributed skill or evidence of model-quality improvement.
 

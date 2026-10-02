@@ -82,6 +82,9 @@ class RoutingOracleTests(unittest.TestCase):
         output.mkdir()
         subprocess.run(["git", "init", "--quiet"], cwd=self.workspace, check=True, capture_output=True)
         subprocess.run(["git", "add", "."], cwd=self.workspace, check=True, capture_output=True)
+        subprocess.run(["git", "-c", "user.name=Eval Test", "-c", "user.email=eval@example.invalid",
+                        "commit", "--quiet", "-m", "Baseline"], cwd=self.workspace,
+                       check=True, capture_output=True)
         normal = record(trial, output, "full-A")
         self.assertTrue(normal["public_backend_pass"])
         self.assertTrue(normal["public_form_pass"])
@@ -98,6 +101,36 @@ class RoutingOracleTests(unittest.TestCase):
             for arm in ("backend", "form"):
                 with self.subTest(state=state, arm=arm):
                     self.assertFalse(result[f"public_{arm}_pass"])
+
+    def test_recording_keeps_staged_and_unstaged_changes_against_baseline(self):
+        subprocess.run(["git", "init", "--quiet"], cwd=self.workspace, check=True, capture_output=True)
+        subprocess.run(["git", "add", "."], cwd=self.workspace, check=True, capture_output=True)
+        subprocess.run(["git", "-c", "user.name=Eval Test", "-c", "user.email=eval@example.invalid",
+                        "commit", "--quiet", "-m", "Baseline"], cwd=self.workspace,
+                       check=True, capture_output=True)
+        self._write_valid_implementation()
+        trial = self.workspace.parent
+        (trial / "evidence").mkdir()
+        (trial / "evidence/events.jsonl").write_text(
+            json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
+        output = trial / "recorded"
+        output.mkdir()
+        before = record(trial, output, "full-A")
+        patch = (output / "full-A.patch").read_text(encoding="utf-8")
+        subprocess.run(["git", "add", "backend/orders.py", "ui/order-form.mjs"],
+                       cwd=self.workspace, check=True, capture_output=True)
+        staged = record(trial, output, "full-A")
+        self.assertCountEqual(staged["changed_files"], ["backend/orders.py", "ui/order-form.mjs"])
+        self.assertEqual(staged["changed_files"], before["changed_files"])
+        self.assertEqual((output / "full-A.patch").read_text(encoding="utf-8"), patch)
+        with (self.workspace / "backend/orders.py").open("a", encoding="utf-8") as source:
+            source.write("# Unstaged follow-up\n")
+        mixed = record(trial, output, "full-A")
+        mixed_patch = (output / "full-A.patch").read_text(encoding="utf-8")
+        self.assertCountEqual(mixed["changed_files"], staged["changed_files"])
+        self.assertIn('+    order = {"id": len(store) + 1', mixed_patch)
+        self.assertIn("+  const response = await postJson", mixed_patch)
+        self.assertIn("+# Unstaged follow-up", mixed_patch)
 
 
 if __name__ == "__main__":
