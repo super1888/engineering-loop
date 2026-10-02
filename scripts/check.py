@@ -16,7 +16,7 @@ def check(root=ROOT):
     header, boundary, _ = text.partition("\n---\n")
     if not text.startswith("---\nname: engineering-loop\n"):
         errors.append("Missing expected skill name/frontmatter")
-    if not re.search(r"^description:[ \t]+\S", header if boundary else "", re.M):
+    if not re.search(r"^description:[ \t]+[^#\s]", header if boundary else "", re.M):
         errors.append("Missing skill description")
     # A packaging budget, not a token estimate or a runtime guarantee.
     if len(text.encode("utf-8")) > 7000:

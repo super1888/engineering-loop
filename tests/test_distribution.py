@@ -35,13 +35,15 @@ class DistributionTests(unittest.TestCase):
             missing_description = original.replace("description: Metadata fixture.\n", "", 1)
             entry.write_text(missing_description + "\ndescription: Documentation example.\n", encoding="utf-8")
             self.assertIn("Missing skill description", check(root))
-            for whitespace in ("", " ", "   ", "\t "):
-                with self.subTest(description_whitespace=whitespace):
-                    blank_description = original.replace("Metadata fixture.", whitespace, 1)
+            for empty_value in ("", " ", "   ", "\t ", "# metadata note", "  # metadata note", "\t # metadata note"):
+                with self.subTest(description_value=empty_value):
+                    blank_description = original.replace("Metadata fixture.", empty_value, 1)
                     entry.write_text(blank_description + "\ndescription: Documentation example.\n", encoding="utf-8")
                     self.assertIn("Missing skill description", check(root))
-            entry.write_text(original.replace("Metadata fixture.", "  Metadata fixture.", 1), encoding="utf-8")
-            self.assertEqual(check(root), [])
+            for description in ("  Metadata fixture.", "'# useful description'", '"# useful description"'):
+                with self.subTest(valid_description=description):
+                    entry.write_text(original.replace("Metadata fixture.", description, 1), encoding="utf-8")
+                    self.assertEqual(check(root), [])
             mismatch = original.replace(f'  version: "{version}"', '  version: "999.0.0"', 1)
             for location in ("body", "description"):
                 with self.subTest(location=location):

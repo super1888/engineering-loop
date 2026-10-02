@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.7: unreleased comment-only description protection
+
+- Reject a description whose first nonblank character starts a YAML comment inside the actual frontmatter; a body example cannot supply the missing value.
+- Extend the existing metadata regression with comment-only values and preserve quoted descriptions starting with a literal hash. The check remains scoped to this repository's frontmatter layout.
+
+This is a local distribution-check correction, not a published release or a model-behavior improvement.
+
 ## v0.1.6: unreleased blank-description protection
 
 - Reject a description containing only spaces or tabs inside the actual frontmatter; a body example cannot satisfy it.
