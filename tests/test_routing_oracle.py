@@ -108,6 +108,20 @@ class RoutingOracleTests(unittest.TestCase):
         orders.write_text(valid, encoding="utf-8")
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_backend_oracle_rejects_defaults_for_missing_required_fields(self):
+        self._write_valid_implementation()
+        orders = self.workspace / "backend/orders.py"
+        valid = orders.read_text(encoding="utf-8")
+        for field, default in (("item_name", '"Pen"'), ("quantity", "1")):
+            with self.subTest(field=field):
+                orders.write_text(valid.replace(f'payload.get("{field}")',
+                                                 f'payload.get("{field}", {default})'), encoding="utf-8")
+                result = assess(self.workspace)
+                self.assertIn("Accepted invalid payload", result["backend"] or "")
+                self.assertIsNone(result["form"])
+        orders.write_text(valid, encoding="utf-8")
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_optimization_environment_cannot_disable_independent_assertions(self):
         self._write_valid_implementation()
         orders = self.workspace / "backend/orders.py"
