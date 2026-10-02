@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.2: unreleased metadata gate correction
+
+- Compare the plugin version with the skill's actual `metadata.version` in the repository's YAML layout; body examples and description text cannot satisfy the gate.
+- Keep a focused regression for mismatched metadata masked by documentation, plus a valid-metadata control with an unrelated example version.
+
+This is a local packaging correction, not a published release or a model-behavior improvement.
+
 ## v0.1.1: unreleased coordination correction
 
 - Route authorized delegation and ongoing goals to the existing collaboration guide.

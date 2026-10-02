@@ -46,7 +46,11 @@ def check(root=ROOT):
     market = json.loads((root / ".claude-plugin/marketplace.json").read_text(encoding="utf-8"))
     if plugin["name"] != "engineering-loop" or market["plugins"][0]["name"] != plugin["name"]:
         errors.append("Plugin and marketplace names disagree")
-    if f'version: "{plugin["version"]}"' not in text:
+    header, boundary, _ = text.partition("\n---\n")
+    # ponytail: check this repo's YAML layout; use a YAML parser if supported formats expand.
+    metadata_blocks = re.findall(r"^metadata:\n((?:[ \t]+[^\n]*(?:\n|$))*)", header if boundary else "", re.M)
+    versions = re.findall(r'^  version: "([^"\n]+)"[ \t]*(?:#.*)?$', metadata_blocks[0], re.M) if len(metadata_blocks) == 1 else []
+    if versions != [plugin["version"]]:
         errors.append("Skill and plugin versions disagree")
     if market["plugins"][0]["source"] != "./":
         errors.append("Marketplace must resolve to the root plugin")

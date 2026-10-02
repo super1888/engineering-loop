@@ -1,4 +1,5 @@
 import hashlib
+import json
 from pathlib import Path
 import shutil
 import sys
@@ -15,6 +16,33 @@ from package import build_archive
 class DistributionTests(unittest.TestCase):
     def test_local_links_and_metadata(self):
         self.assertEqual(check(), [])
+
+    def test_skill_version_comes_from_metadata_not_documentation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in ("skills", ".claude-plugin"):
+                shutil.copytree(ROOT / name, root / name)
+            (root / "evals").mkdir()
+            shutil.copyfile(ROOT / "evals/cases.json", root / "evals/cases.json")
+            entry = root / "skills/engineering-loop/SKILL.md"
+            version = json.loads((root / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))["version"]
+            original = ('---\nname: engineering-loop\ndescription: Metadata fixture.\n'
+                        f'metadata:\n  version: "{version}"\n---\n')
+            valid = original.replace("metadata:\n", "metadata:\n  note: distribution control\n", 1)
+            valid = valid.replace(f'  version: "{version}"', f'  version: "{version}" # local version', 1)
+            entry.write_text(valid + '\nExample version: "999.0.0"\n', encoding="utf-8")
+            self.assertEqual(check(root), [])
+            mismatch = original.replace(f'  version: "{version}"', '  version: "999.0.0"', 1)
+            for location in ("body", "description"):
+                with self.subTest(location=location):
+                    if location == "body":
+                        content = mismatch + f'\nExample version: "{version}"\n'
+                    else:
+                        lines = mismatch.splitlines()
+                        lines[2] = f'description: \'Notes on version: "{version}"\''
+                        content = "\n".join(lines) + "\n"
+                    entry.write_text(content, encoding="utf-8")
+                    self.assertIn("Skill and plugin versions disagree", check(root))
 
     def test_archive_is_complete_and_contains_only_skill_and_license(self):
         source = ROOT / "skills/engineering-loop"
