@@ -88,6 +88,17 @@ class ConventionOracleTests(unittest.TestCase):
         orders.write_text(orders.read_text(encoding="utf-8") + "\nraise SystemExit(0)\n", encoding="utf-8")
         self.assertIn("Behavior checks did not reach completion", assess(self.workspace))
 
+    def test_amount_change_preserves_unrelated_reference_validation(self):
+        constants = self.workspace / "order_constants.py"
+        constants.write_text(constants.read_text(encoding="utf-8").replace("10_000", "15_000"), encoding="utf-8")
+        orders = self.workspace / "orders.py"
+        valid = orders.read_text(encoding="utf-8")
+        self.assertEqual(assess(self.workspace), [])
+        orders.write_text(valid.replace('    if len(code) < 4:\n        raise ValueError("reference too short")\n', ''),
+                          encoding="utf-8")
+        failures = assess(self.workspace)
+        self.assertTrue(any("Behavior check failed" in failure for failure in failures), failures)
+
     def test_unused_reference_cannot_hide_inlined_behavior_limits(self):
         constants = self.workspace / "order_constants.py"
         constants.write_text(constants.read_text(encoding="utf-8").replace("10_000", "15_000"), encoding="utf-8")

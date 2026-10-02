@@ -40,6 +40,12 @@ for accepts in (accepts_order_total, accepts_export_total):
     assert accepts(15_000)
     assert not accepts(15_001)
 assert format_reference('ab12') == 'ab12'
+try:
+    format_reference('abc')
+except ValueError:
+    pass
+else:
+    raise AssertionError('Unrelated reference length validation changed')
 print('convention-oracle-complete')
 """
     with fresh_python() as python:
