@@ -39,6 +39,7 @@ class ConventionRecorderTests(unittest.TestCase):
                     prompt.write_bytes(b"Frozen request.\r\n")
                     prompts.append(prompt)
                     manifest["trials"][trial_id] = {
+                        "skill_hashes": {},
                         "prompt_sha256": hashlib.sha256(b"Frozen request.\n").hexdigest()}
                 (root / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
             output = parent / "recorded"
@@ -119,11 +120,14 @@ class ConventionRecorderTests(unittest.TestCase):
             self.assertEqual(json.loads((output / "inputs.json").read_text(encoding="utf-8"))
                              ["style_skill_hashes"], expected_hashes)
             recorded = {path.name: path.read_bytes() for path in output.iterdir()}
-            for name, replacement in (("SKILL.md", b"Changed frozen style.\n"),
-                                      ("references/说明 空格.md", None),
-                                      ("references/added.md", b"Added frozen instruction.\n")):
-                with self.subTest(snapshot_change=name):
-                    path = snapshot / name
+            changes = [(snapshot / name, replacement, "Trial style skill changed after preparation")
+                       for name, replacement in (("SKILL.md", b"Changed frozen style.\n"),
+                                                 ("references/说明 空格.md", None),
+                                                 ("references/added.md", b"Added frozen instruction.\n"))]
+            changes += [(scratch / trial_id / "skill/SKILL.md", b"Changed frozen entry.\n",
+                         "Trial skill changed after preparation") for trial_id in manifest["trials"]]
+            for path, replacement, diagnostic in changes:
+                with self.subTest(snapshot_change=path.relative_to(scratch)):
                     original = path.read_bytes() if path.exists() else None
                     if replacement is None:
                         path.unlink()
@@ -134,7 +138,7 @@ class ConventionRecorderTests(unittest.TestCase):
                                 "--comment-root", str(scratch), "--style-root", str(scratch),
                                 "--output", str(output)]), \
                                 patch.object(record_convention_trial, "run_result", return_value={}) as record:
-                            with self.assertRaisesRegex(ValueError, "Trial style skill changed after preparation"):
+                            with self.assertRaisesRegex(ValueError, diagnostic):
                                 record_convention_trial.main()
                             record.assert_not_called()
                         self.assertEqual({path.name: path.read_bytes() for path in output.iterdir()}, recorded)

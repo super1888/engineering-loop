@@ -84,6 +84,8 @@ def main() -> None:
             prompt = (root / trial_id / "prompt.txt").read_text(encoding="utf-8")
             if hashlib.sha256(prompt.encode("utf-8")).hexdigest() != manifest["trials"][trial_id]["prompt_sha256"]:
                 raise ValueError(f"Trial prompt changed after preparation: {root.name}/{trial_id}")
+            if hashes(root / trial_id / "skill") != manifest["trials"][trial_id]["skill_hashes"]:
+                raise ValueError(f"Trial skill changed after preparation: {root.name}/{trial_id}")
     args.output.mkdir(parents=True, exist_ok=True)
     inputs = {"baseline": manifests[0]["baseline"], "candidate": manifests[0]["candidate"],
               "fixture_hashes": manifests[0]["fixture_hashes"],
