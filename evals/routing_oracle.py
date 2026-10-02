@@ -36,6 +36,12 @@ assert store == [{'id': 1, 'item_name': 'Pen', 'quantity': 20}]
 second = create_order(store, {'item_name': 'Paper', 'quantity': 1})
 assert second == {'id': 2, 'item_name': 'Paper', 'quantity': 1}
 assert store == [{'id': 1, 'item_name': 'Pen', 'quantity': 20}, second]
+expected_store = [dict(order) for order in store]
+for quantity in range(2, 20):
+    expected = {'id': len(expected_store) + 1, 'item_name': 'Paper', 'quantity': quantity}
+    expected_store.append(expected)
+    assert create_order(store, {'item_name': 'Paper', 'quantity': quantity}) == expected
+    assert store == expected_store
 print('routing-oracle-complete:backend')
 """
 

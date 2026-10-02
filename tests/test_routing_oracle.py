@@ -175,6 +175,20 @@ class RoutingOracleTests(unittest.TestCase):
         orders.write_text(valid, encoding="utf-8")
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_backend_oracle_checks_interior_quantities_and_stored_orders(self):
+        self._write_valid_implementation()
+        orders = self.workspace / "backend/orders.py"
+        valid = orders.read_text(encoding="utf-8")
+        for old, new in (('not 1 <= quantity <= 20', 'quantity == 2 or not 1 <= quantity <= 20'),
+                         ('"quantity": quantity}', '"quantity": 1 if quantity == 2 else quantity}')):
+            with self.subTest(mutation=new):
+                orders.write_text(valid.replace(old, new), encoding="utf-8")
+                result = assess(self.workspace)
+                self.assertIsNotNone(result["backend"])
+                self.assertIsNone(result["form"])
+        orders.write_text(valid, encoding="utf-8")
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_backend_oracle_checks_stored_order_values_and_failed_write_atomicity(self):
         self._write_valid_implementation()
         orders = self.workspace / "backend/orders.py"

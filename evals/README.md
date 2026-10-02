@@ -254,6 +254,8 @@ The same check rejects an explicitly null product name or quantity independently
 
 Routing backend checks compare stored order values with the accepted examples after invalid input and after the next successful order. The previous length-only checks missed both a wrong stored quantity behind a correct response and an invalid request that changed an existing order before raising. Native mutant controls now reject both while preserving the valid backend/form control. These synthetic checks do not establish database or model behavior.
 
+The backend oracle also accepts each interior quantity from `2` through `19`, checking the returned order, sequential ID and complete stored history against independent expected rows. Native controls previously passed while rejecting quantity `2` or storing it as `1`; both now fail and the valid implementation still passes. This closes the same finite-range coverage gap for backend-only trials without changing the API or claiming model improvement.
+
 The routing recorder and convention comment control share the Python report check. It requires the terminal summary to be plain `OK`; an earlier diagnostic line saying `OK` cannot override `OK (skipped=...)` or `OK (expected failures=...)`. Native subprocess controls retain successful tests with that diagnostic and reject skipped or expected-failure cases. This checks report interpretation; inspect changed or weakened tests separately.
 
 The routing recorder saves Git diff bytes unchanged and reads NUL-delimited file lists, so Git's quoted non-ASCII paths cannot drop tracked edits or distort untracked names. A native reverse-apply check covers staged and unstaged edits with LF and mixed line endings.
