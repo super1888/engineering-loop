@@ -48,6 +48,11 @@ class ConventionOracleTests(unittest.TestCase):
         orders = self.workspace / "orders.py"
         orders.write_text(orders.read_text(encoding="utf-8").replace("    # References are always uppercase.\n", ""), encoding="utf-8")
         self.assertEqual(assess_comment_control(self.workspace), [])
+        tests = self.workspace / "tests/test_orders.py"
+        tests.write_text(tests.read_text(encoding="utf-8").replace(
+            "class OrderTests", '@unittest.skip("control: not executed")\nclass OrderTests'), encoding="utf-8")
+        self.assertTrue(any("Public behavior failed" in failure
+                            for failure in assess_comment_control(self.workspace)))
 
 
 if __name__ == "__main__":

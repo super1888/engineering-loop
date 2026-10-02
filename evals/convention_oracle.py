@@ -6,6 +6,8 @@ from pathlib import Path
 import subprocess
 import sys
 
+from public_test_results import unittest_passed
+
 
 def assess(workspace: Path) -> list[str]:
     failures = []
@@ -63,7 +65,7 @@ def assess_comment_control(workspace: Path) -> list[str]:
         failures.append("The obsolete uppercase-only comment remains.")
     result = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"],
                             cwd=workspace, capture_output=True, text=True, timeout=15)
-    if result.returncode:
+    if not unittest_passed(result):
         failures.append("Public behavior failed: " + (result.stderr.strip() or str(result.returncode)))
     return failures
 

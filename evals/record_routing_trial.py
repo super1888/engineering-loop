@@ -8,6 +8,7 @@ import subprocess
 import sys
 
 from routing_oracle import assess
+from public_test_results import node_tap_passed, unittest_passed
 
 
 TRIALS = ("full-A", "full-B", "full-C", "backend-A", "backend-B", "backend-C")
@@ -39,7 +40,7 @@ def record(directory: Path, output: Path, name: str) -> dict:
                              errors="replace", timeout=30)
     form = None
     if name.startswith("full"):
-        form = subprocess.run(["node", "--test", "ui/order-form.test.mjs"],
+        form = subprocess.run(["node", "--test", "--test-reporter=tap", "ui/order-form.test.mjs"],
                               cwd=workspace, capture_output=True, text=True, encoding="utf-8",
                               errors="replace", timeout=30)
     oracle = assess(workspace)
@@ -48,8 +49,8 @@ def record(directory: Path, output: Path, name: str) -> dict:
     return {"changed_files": changed, "untracked_non_cache": [file for file in untracked
             if "__pycache__" not in file and not file.endswith(".pyc")],
             "skills_read": skills, "usage": completed[0].get("usage"),
-            "public_backend_pass": backend.returncode == 0,
-            "public_form_pass": None if form is None else form.returncode == 0,
+            "public_backend_pass": unittest_passed(backend),
+            "public_form_pass": None if form is None else node_tap_passed(form, minimum_tests=2),
             "oracle_backend_pass": oracle["backend"] is None,
             "oracle_form_pass": oracle["form"] is None,
             "completed_commands": len(commands),

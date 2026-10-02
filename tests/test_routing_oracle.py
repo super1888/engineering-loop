@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 import shutil
 import subprocess
 import sys
@@ -8,6 +9,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "evals"))
 from routing_oracle import assess
+from record_routing_trial import record
 
 
 class RoutingOracleTests(unittest.TestCase):
@@ -40,7 +42,7 @@ class RoutingOracleTests(unittest.TestCase):
                 self.assertIn(f"backend: FAIL: {diagnostic}", result.stdout)
                 self.assertIn(f"form: FAIL: {diagnostic}", result.stdout)
 
-    def test_valid_backend_and_form_pass(self):
+    def _write_valid_implementation(self):
         (self.workspace / "backend/orders.py").write_text('''def create_order(store: list[dict], payload: dict) -> dict:
     name = payload.get("item_name")
     quantity = payload.get("quantity")
@@ -65,7 +67,37 @@ class RoutingOracleTests(unittest.TestCase):
   return { ok: true, order: response.body };
 }
 ''', encoding="utf-8")
+
+    def test_valid_backend_and_form_pass(self):
+        self._write_valid_implementation()
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
+    def test_recording_requires_public_tests_to_execute(self):
+        self._write_valid_implementation()
+        trial = self.workspace.parent
+        (trial / "evidence").mkdir()
+        (trial / "evidence/events.jsonl").write_text(
+            json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
+        output = trial / "recorded"
+        output.mkdir()
+        subprocess.run(["git", "init", "--quiet"], cwd=self.workspace, check=True, capture_output=True)
+        subprocess.run(["git", "add", "."], cwd=self.workspace, check=True, capture_output=True)
+        normal = record(trial, output, "full-A")
+        self.assertTrue(normal["public_backend_pass"])
+        self.assertTrue(normal["public_form_pass"])
+        backend_tests = self.workspace / "backend/tests/test_orders.py"
+        form_tests = self.workspace / "ui/order-form.test.mjs"
+        backend_tests.write_text(backend_tests.read_text(encoding="utf-8").replace(
+            "class OrderTests", '@unittest.skip("control: not executed")\nclass OrderTests'), encoding="utf-8")
+        form_tests.write_text(form_tests.read_text(encoding="utf-8").replace("test(", "test.skip("), encoding="utf-8")
+        for state in ("skipped", "empty"):
+            if state == "empty":
+                backend_tests.write_text("", encoding="utf-8")
+                form_tests.write_text("", encoding="utf-8")
+            result = record(trial, output, "full-A")
+            for arm in ("backend", "form"):
+                with self.subTest(state=state, arm=arm):
+                    self.assertFalse(result[f"public_{arm}_pass"])
 
 
 if __name__ == "__main__":

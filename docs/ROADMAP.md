@@ -20,6 +20,7 @@ This is a local packaging correction, not a published release or a model-behavio
 - Reject private arm mappings inside the review directory or its descendants during preparation and gating.
 - Treat a silent nonzero backend or form subprocess as a failed routing check; retain its exit code instead of an empty failure value.
 - Require completion markers after the routing and convention amount checks' independent assertions; an early zero exit cannot substitute for completed checks.
+- Require nonempty, unskipped native public-test reports in routing records and the convention comment control; the form report must execute at least the fixture's two cases.
 
 These are regression-tested evaluator corrections, not changes to the distributed skill or evidence of model-quality improvement.
 
