@@ -32,7 +32,7 @@ def copy_skill_revision(revision: str, destination: Path) -> None:
 def hashes(directory: Path) -> dict[str, str]:
     return {path.relative_to(directory).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
             for path in sorted(directory.rglob("*"))
-            if path.is_file() and "__pycache__" not in path.parts and path.suffix != ".pyc"}
+            if path.is_file() and "__pycache__" not in path.relative_to(directory).parts and path.suffix != ".pyc"}
 
 
 def main() -> None:

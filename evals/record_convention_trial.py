@@ -27,7 +27,8 @@ def run_result(directory: Path, output: Path, name: str) -> dict:
              if path.suffix in {".py", ".md"} and "__pycache__" not in path.parts}
     paths |= {path.relative_to(workspace) for path in workspace.rglob("*")
               if path.is_file() and path.suffix in {".py", ".md"}
-              and ".git" not in path.parts and "__pycache__" not in path.parts}
+              and ".git" not in path.relative_to(workspace).parts
+              and "__pycache__" not in path.relative_to(workspace).parts}
     for relative in sorted(paths):
         if relative in tracked:
             file_patch = subprocess.check_output(

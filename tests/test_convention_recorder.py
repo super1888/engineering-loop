@@ -13,9 +13,24 @@ sys.path.insert(0, str(ROOT / "evals"))
 from record_convention_trial import run_result
 from convention_oracle import assess
 import prepare_convention_trial
+import prepare_bar_trial
+import prepare_routing_trial
 
 
 class ConventionRecorderTests(unittest.TestCase):
+    def test_input_hashes_ignore_cache_inside_the_root_only(self):
+        with tempfile.TemporaryDirectory() as directory:
+            for ancestor in ("ordinary", "__pycache__", ".git"):
+                root = Path(directory) / ancestor / "inputs"
+                root.mkdir(parents=True)
+                (root / "context.md").write_bytes(b"Frozen context.\n")
+                (root / "__pycache__").mkdir()
+                (root / "__pycache__/cached.md").write_bytes(b"Disposable cache.\n")
+                (root / "local.pyc").write_bytes(b"Disposable bytecode.\n")
+                for module in (prepare_convention_trial, prepare_bar_trial, prepare_routing_trial):
+                    with self.subTest(ancestor=ancestor, preparer=module.__name__):
+                        self.assertEqual(list(module.hashes(root)), ["context.md"])
+
     def test_skill_snapshot_preserves_native_paths_and_committed_bytes(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "repository"
@@ -43,7 +58,7 @@ class ConventionRecorderTests(unittest.TestCase):
 
     def test_patch_uses_the_trial_baseline_instead_of_the_current_template(self):
         with tempfile.TemporaryDirectory() as directory:
-            trial = Path(directory)
+            trial = Path(directory) / "__pycache__" / ".git" / "trial"
             workspace = trial / "workspace"
             shutil.copytree(ROOT / "evals/fixtures/convention-boundary", workspace,
                             ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
@@ -106,6 +121,8 @@ class ConventionRecorderTests(unittest.TestCase):
             empty_document.unlink()
             (workspace / "extra.py").write_text("VALUE = 1\n", encoding="utf-8")
             (workspace / "empty-after.py").write_bytes(b"")
+            (workspace / "__pycache__").mkdir()
+            (workspace / "__pycache__/cached.md").write_bytes(b"Disposable cache.\n")
             binary_candidate = {"encoded-edit.md": "After edit\n".encode("utf-16"),
                                 "新增 编码.md": "Added document\n".encode("utf-16")}
             for name, content in binary_candidate.items():
