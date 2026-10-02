@@ -79,6 +79,8 @@ def main() -> None:
             (directory / "prompt.txt").write_text(prompt, encoding="utf-8")
             (directory / "evidence").mkdir()
             manifest["trials"][trial_id] = {"workspace": str(workspace),
+                                             "baseline_revision": subprocess.check_output(
+                                                 ["git", "rev-parse", "HEAD"], cwd=workspace, text=True).strip(),
                                              "input_hashes": hashes(workspace),
                                              "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest()}
     (root / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

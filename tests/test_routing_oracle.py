@@ -330,6 +330,34 @@ class RoutingOracleTests(unittest.TestCase):
                             instruction.write_bytes(original)
                             for name, content in before.items():
                                 (output / name).write_bytes(content)
+        for task in ("full", "backend"):
+            for variant in ("A", "B", "C"):
+                with self.subTest(changed_baseline=f"{task}-{variant}"):
+                    workspace = parent / ("c" if variant == "C" else "ab") / f"{task}-{variant}/workspace"
+                    baseline = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=workspace).strip()
+                    source = workspace / "backend/orders.py"
+                    original = source.read_bytes()
+                    try:
+                        source.write_bytes(original + b"\n# Committed candidate change.\n")
+                        subprocess.run(["git", "add", "backend/orders.py"], cwd=workspace, check=True,
+                                       capture_output=True)
+                        subprocess.run(["git", "-c", "user.name=Eval Test", "-c", "user.email=eval@example.invalid",
+                                        "commit", "--quiet", "-m", "Unexpected candidate commit"], cwd=workspace,
+                                       check=True, capture_output=True)
+                        drift = subprocess.run([sys.executable, str(ROOT / "evals/record_routing_trial.py"),
+                                                "--ab-root", "../ab", "--c-root", "../c", "--output", str(output)],
+                                               cwd=runner, capture_output=True, text=True, timeout=40)
+                        self.assertEqual(drift.returncode, 1, drift.stdout + drift.stderr)
+                        self.assertIn("Trial baseline changed after preparation", drift.stderr)
+                        self.assertEqual({p.name: p.read_bytes() for p in output.iterdir()}, before)
+                    finally:
+                        subprocess.run(["git", "update-ref", "HEAD", baseline.decode()], cwd=workspace,
+                                       check=True, capture_output=True)
+                        subprocess.run(["git", "read-tree", baseline.decode()], cwd=workspace,
+                                       check=True, capture_output=True)
+                        source.write_bytes(original)
+                        for name, content in before.items():
+                            (output / name).write_bytes(content)
         prompt = parent / "c/full-C/prompt.txt"
         prompt.write_text(prompt.read_text(encoding="utf-8") + "\nDifferent approved task.\n", encoding="utf-8")
         rejected = subprocess.run([sys.executable, str(ROOT / "evals/record_routing_trial.py"),

@@ -99,6 +99,10 @@ def main() -> None:
     for name in TRIALS:
         root = args.c_root if name.endswith("-C") else args.ab_root
         manifest = c if name.endswith("-C") else ab
+        revision = subprocess.check_output(["git", "rev-parse", "HEAD"],
+                                           cwd=root / name / "workspace", text=True).strip()
+        if revision != manifest["trials"][name].get("baseline_revision"):
+            raise ValueError(f"Trial baseline changed after preparation: {name}")
         instructions = root / name / "workspace/AGENTS.md"
         if hashlib.sha256(instructions.read_bytes()).hexdigest() != manifest["trials"][name]["input_hashes"]["AGENTS.md"]:
             raise ValueError(f"Trial project instructions changed after preparation: {name}")
