@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 
 from convention_oracle import assess, assess_comment_control
+from prepare_convention_trial import hashes
 
 
 def run_result(directory: Path, output: Path, name: str) -> dict:
@@ -75,6 +76,9 @@ def main() -> None:
         raise ValueError("Trial roots have different revisions or fixture inputs")
     for root, manifest, task in zip((args.amount_root, args.comment_root, args.style_root),
                                     manifests, ("amount", "comment", "amount")):
+        if (manifest.get("style_skill_hashes") is not None
+                and hashes(root / "style-skill") != manifest["style_skill_hashes"]):
+            raise ValueError(f"Trial style skill changed after preparation: {root.name}")
         for variant in ("A", "B"):
             trial_id = f"{task}-{variant}"
             prompt = (root / trial_id / "prompt.txt").read_text(encoding="utf-8")

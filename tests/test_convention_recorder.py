@@ -118,6 +118,31 @@ class ConventionRecorderTests(unittest.TestCase):
                 record_convention_trial.main()
             self.assertEqual(json.loads((output / "inputs.json").read_text(encoding="utf-8"))
                              ["style_skill_hashes"], expected_hashes)
+            recorded = {path.name: path.read_bytes() for path in output.iterdir()}
+            for name, replacement in (("SKILL.md", b"Changed frozen style.\n"),
+                                      ("references/说明 空格.md", None),
+                                      ("references/added.md", b"Added frozen instruction.\n")):
+                with self.subTest(snapshot_change=name):
+                    path = snapshot / name
+                    original = path.read_bytes() if path.exists() else None
+                    if replacement is None:
+                        path.unlink()
+                    else:
+                        path.write_bytes(replacement)
+                    try:
+                        with patch.object(sys, "argv", ["record", "--amount-root", str(scratch),
+                                "--comment-root", str(scratch), "--style-root", str(scratch),
+                                "--output", str(output)]), \
+                                patch.object(record_convention_trial, "run_result", return_value={}) as record:
+                            with self.assertRaisesRegex(ValueError, "Trial style skill changed after preparation"):
+                                record_convention_trial.main()
+                            record.assert_not_called()
+                        self.assertEqual({path.name: path.read_bytes() for path in output.iterdir()}, recorded)
+                    finally:
+                        if original is None:
+                            path.unlink()
+                        else:
+                            path.write_bytes(original)
             del manifest["style_skill_hashes"]
             (scratch / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
             with patch.object(sys, "argv", ["record", "--amount-root", str(scratch),
