@@ -50,9 +50,9 @@ class ReceiptContractTests(unittest.TestCase):
             with self.subTest(order=order, quantity=quantity):
                 with self.assertRaises(ValueError):
                     self.inventory.receive(order, quantity, "R1")
-        self.assertEqual(self.inventory.received("A"), 20)
-        self.assertEqual(self.inventory.received("B"), 0)
-        self.assertEqual(self.receipt_rows(), [("R1", "A", 20, 20)])
+                self.assertEqual(self.inventory.received("A"), 20)
+                self.assertEqual(self.inventory.received("B"), 0)
+                self.assertEqual(self.receipt_rows(), [("R1", "A", 20, 20)])
 
     def test_over_receipt_is_atomic_and_does_not_consume_identity(self):
         self.inventory.receive("A", 60, "R1")
@@ -69,16 +69,19 @@ class ReceiptContractTests(unittest.TestCase):
             with self.subTest(quantity=quantity):
                 with self.assertRaises(ValueError):
                     self.inventory.receive("A", quantity, "invalid")
+                self.assertEqual(self.inventory.received("A"), 0)
+                self.assertEqual(self.receipt_rows(), [])
         with self.assertRaises(KeyError):
             self.inventory.receive("missing", 1, "missing")
         self.assertEqual(self.inventory.received("A"), 0)
         self.assertEqual(self.receipt_rows(), [])
         self.assertEqual(self.inventory.receive("A", 1, "single"), 1)
         for quantity in [True, 1.0]:
-            with self.subTest(replay_quantity=quantity), self.assertRaises(ValueError):
-                self.inventory.receive("A", quantity, "single")
-        self.assertEqual(self.inventory.received("A"), 1)
-        self.assertEqual(self.receipt_rows(), [("single", "A", 1, 1)])
+            with self.subTest(replay_quantity=quantity):
+                with self.assertRaises(ValueError):
+                    self.inventory.receive("A", quantity, "single")
+                self.assertEqual(self.inventory.received("A"), 1)
+                self.assertEqual(self.receipt_rows(), [("single", "A", 1, 1)])
 
     def compete(self, requests):
         barrier = threading.Barrier(len(requests))

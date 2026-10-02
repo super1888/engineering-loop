@@ -72,13 +72,33 @@ class OracleResourceTests(unittest.TestCase):
             '            if receipt is not None:\n'
             '                if type(quantity) is not int:\n'
             '                    raise ValueError("invalid replay quantity")\n')
+        restored_rejections = []
+        for name, before, after, corrupt, restore in (
+                ("invalid order", 'quantity is None', 'type(quantity) is int and quantity == 0',
+                 "UPDATE orders SET received = 1 WHERE order_id = 'A'",
+                 "UPDATE orders SET received = 0 WHERE order_id = 'A'"),
+                ("invalid receipt", 'quantity is None', 'type(quantity) is int and quantity == 0',
+                 "INSERT INTO receipts VALUES ('invalid', 'A', 1, 1)",
+                 "DELETE FROM receipts WHERE request_id = 'invalid'"),
+                ("conflict", '(order_id, quantity) == ("A", 30)', '(order_id, quantity) == ("B", 20)',
+                 "UPDATE orders SET received = 21 WHERE order_id = 'A'",
+                 "UPDATE orders SET received = 20 WHERE order_id = 'A'"),
+                ("invalid replay", 'request_id == "single" and type(quantity) is bool',
+                 'request_id == "single" and type(quantity) is float and quantity == 1.0',
+                 "UPDATE orders SET received = 2 WHERE order_id = 'A'",
+                 "UPDATE orders SET received = 1 WHERE order_id = 'A'")):
+            mutation = (f'        if {before}:\n            with self.db:\n'
+                        f'                self.db.execute({corrupt!r})\n'
+                        f'        elif {after}:\n            with self.db:\n'
+                        f'                self.db.execute({restore!r})\n')
+            restored_rejections.append((f"restored {name} write", receive.replace(validation, mutation + validation), 1))
         with tempfile.TemporaryDirectory() as directory:
             candidate = Path(directory)
             for name, implementation, expected_exit in (
                     ("valid", receive, 0), ("missing writes", broken, 1), ("missing receipt", missing_receipt, 1),
                     ("validation after replay", late_validation, 1),
                     ("nullable quantity", nullable_validation, 1),
-                    ("initial integral float", initial_integral_float, 1)):
+                    ("initial integral float", initial_integral_float, 1), *restored_rejections):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]
                     inventory = candidate / "inventory.py"
