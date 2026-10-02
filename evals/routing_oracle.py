@@ -32,7 +32,7 @@ for payload in (
         pass
     else:
         raise AssertionError(f'Accepted invalid payload: {payload}')
-assert store == [{'id': 1, 'item_name': 'Pen', 'quantity': 20}]
+    assert store == [{'id': 1, 'item_name': 'Pen', 'quantity': 20}]
 second = create_order(store, {'item_name': 'Paper', 'quantity': 1})
 assert second == {'id': 2, 'item_name': 'Paper', 'quantity': 1}
 assert store == [{'id': 1, 'item_name': 'Pen', 'quantity': 20}, second]

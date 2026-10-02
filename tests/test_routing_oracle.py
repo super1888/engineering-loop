@@ -234,6 +234,23 @@ class RoutingOracleTests(unittest.TestCase):
         orders.write_text(valid, encoding="utf-8")
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_backend_oracle_checks_storage_after_each_rejected_request(self):
+        self._write_valid_implementation()
+        orders = self.workspace / "backend/orders.py"
+        valid = orders.read_text(encoding="utf-8")
+        for corrupt, restore in (('store[0]["quantity"] = 0', 'store[0]["quantity"] = 20'),
+                                 ('store.append({"id": 2})', 'store.pop()')):
+            with self.subTest(corrupt=corrupt):
+                mutation = (f'if payload == {{}}:\n        {corrupt}\n    '
+                            f'elif payload == {{"item_name": "Pen"}}:\n        {restore}\n    ')
+                orders.write_text(valid.replace('name = payload.get("item_name")',
+                                                mutation + 'name = payload.get("item_name")'), encoding="utf-8")
+                result = assess(self.workspace)
+                self.assertIsNotNone(result["backend"])
+                self.assertIsNone(result["form"])
+        orders.write_text(valid, encoding="utf-8")
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_backend_oracle_rejects_defaults_for_missing_required_fields(self):
         self._write_valid_implementation()
         orders = self.workspace / "backend/orders.py"
