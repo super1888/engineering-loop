@@ -1,6 +1,6 @@
 # Compatibility and validation
 
-Last updated: 2026-10-02. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+Last updated: 2026-10-03. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
 
 ## Installation surfaces
 
@@ -26,6 +26,8 @@ The controls are host-specific. Plugin updates can replace local edits; keep a d
 ## Evidence status
 
 Historical trial reports and raw outputs are available in Git history through commit `eacbca4`; new raw runs remain local. The summaries below do not imply broader model coverage.
+
+Local packaging check on Windows with Python 3.12.3 (2026-10-03): a native directory junction was not reported as a symlink and allowed an outside fixture file into the offline ZIP. Version 0.1.9 rejects its native mount-point reparse tag in both distribution checks and packaging, before traversing its contents or replacing an existing archive. The focused eight-test distribution run passed seven cases, including the native junction, deterministic ZIP and hardlink controls; the symbolic-link case skipped because this host disallowed creating it. The junction test skips on non-Windows hosts; no new cross-platform CI or model result is claimed.
 
 Initial local checks on Windows (2026-09-21):
 

@@ -1,7 +1,9 @@
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -105,6 +107,42 @@ class DistributionTests(unittest.TestCase):
                 self.skipTest("Host does not permit creating a test symlink")
             with self.assertRaises(ValueError):
                 build_archive(source, Path(directory) / "skill.zip", ROOT / "LICENSE")
+
+    @unittest.skipUnless(sys.platform == "win32", "Windows junction control")
+    def test_directory_junction_cannot_include_files_outside_the_skill(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            for name in ("skills", ".claude-plugin"):
+                shutil.copytree(ROOT / name, root / name)
+            (root / "evals").mkdir()
+            shutil.copyfile(ROOT / "evals/cases.json", root / "evals/cases.json")
+            license_path = root / "LICENSE"
+            license_path.write_bytes((ROOT / "LICENSE").read_bytes())
+            source = root / "skills/engineering-loop"
+            outside = root / "outside"
+            outside.mkdir()
+            protected = outside / "outside.txt"
+            protected.write_bytes(b"external fixture bytes")
+            output = root / "skill.zip"
+            build_archive(source, output, license_path)
+            original = output.read_bytes()
+            junction = source / "linked"
+            self.assertTrue(junction.is_relative_to(root) and outside.is_relative_to(root))
+            environment = dict(os.environ, ENGINEERING_LOOP_TASK_LINK=str(junction),
+                               ENGINEERING_LOOP_TASK_TARGET=str(outside))
+            subprocess.run(["powershell", "-NoProfile", "-Command",
+                            "New-Item -ItemType Junction -Path $env:ENGINEERING_LOOP_TASK_LINK "
+                            "-Target $env:ENGINEERING_LOOP_TASK_TARGET | Out-Null"],
+                           env=environment, check=True, capture_output=True, text=True)
+            try:
+                self.assertFalse(junction.is_symlink())
+                self.assertTrue(any("Skill payload must be self-contained" in error for error in check(root)))
+                with self.assertRaises(ValueError):
+                    build_archive(source, output, license_path)
+                self.assertEqual(output.read_bytes(), original)
+                self.assertEqual(protected.read_bytes(), b"external fixture bytes")
+            finally:
+                junction.rmdir()
 
     def test_output_hardlinks_cannot_overwrite_inputs(self):
         for relative in ("SKILL.md", "references/review.md", "LICENSE"):

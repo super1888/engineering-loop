@@ -2,6 +2,7 @@
 
 import argparse
 from pathlib import Path
+import stat
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,9 +19,10 @@ def build_archive(source, output, license_path):
     if not (source / "SKILL.md").is_file():
         raise ValueError("Source is not a skill directory")
     payload = []
-    for path in sorted(source.rglob("*")):
-        if path.is_symlink():
-            raise ValueError("Symlinks are not accepted in the offline payload")
+    for path in source.rglob("*"):
+        if (path.is_symlink() or getattr(path.lstat(), "st_reparse_tag", 0)
+                == getattr(stat, "IO_REPARSE_TAG_MOUNT_POINT", -1)):
+            raise ValueError("Symlinks and directory junctions are not accepted in the offline payload")
         if path.is_file():
             if output_exists and output.samefile(path):
                 raise ValueError("Archive output must not overwrite a skill source file")

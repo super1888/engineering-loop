@@ -1,5 +1,13 @@
 # Roadmap
 
+## v0.1.9: unreleased directory-junction protection
+
+- Reject Windows directory junctions as well as symlinks in the skill payload, using the standard library's native reparse tag on supported Python versions.
+- Check entries before descending into linked directories or replacing an existing ZIP; keep normal deterministic archives, file hardlinks and their input-preservation controls.
+- Add one native Windows junction regression that checks both distribution rejection and preserved archive/source bytes. Other platforms skip that Windows-specific case.
+
+This is a local packaging correction, not a published release or a model-behavior improvement.
+
 ## v0.1.8: unreleased empty-scalar description protection
 
 - Reject empty or blank quoted descriptions and unquoted YAML null values, including an inline comment after a null value.

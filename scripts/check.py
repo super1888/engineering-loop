@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 import re
+import stat
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,8 +26,10 @@ def check(root=ROOT):
     if len(text.encode("utf-8")) > 7000:
         errors.append("Entrypoint exceeds the 7 KB maintenance budget")
     for path in skill.rglob("*"):
-        if path.is_symlink():
+        if (path.is_symlink() or getattr(path.lstat(), "st_reparse_tag", 0)
+                == getattr(stat, "IO_REPARSE_TAG_MOUNT_POINT", -1)):
             errors.append(f"Skill payload must be self-contained: {path.relative_to(root)}")
+            return errors
     excluded = {".git", ".idea", ".planning", "dist", "node_modules"}
 
     def is_local_output(path):
