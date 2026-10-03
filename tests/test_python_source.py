@@ -28,6 +28,35 @@ def replace_with_timestamp_collision(path, before, after):
 
 
 class PythonSourceTests(unittest.TestCase):
+    def test_browser_server_unicode_logs_do_not_prevent_port_announcement(self):
+        with tempfile.TemporaryDirectory() as directory:
+            trial = Path(directory)
+            candidate = trial / "candidate"
+            shutil.copytree(ROOT / "evals/fixtures/async-import", candidate,
+                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+            fake_modules = trial / "node_modules/playwright"
+            fake_modules.mkdir(parents=True)
+            (fake_modules / "index.js").write_text(
+                "exports.chromium = { launch() { throw Error('Reached browser launch control'); } };\n",
+                encoding="utf-8")
+            env = {**os.environ, "NODE_PATH": str(fake_modules.parent),
+                   "EVAL_PYTHON": sys.executable, "EVAL_BROWSER_EXECUTABLE": sys.executable,
+                   "PYTHONIOENCODING": "gbk"}
+            command = ["node", str(ROOT / "evals/async_import_browser_oracle.cjs"), str(candidate)]
+            path = candidate / "backend/service.py"
+            original = path.read_bytes()
+            for log in (b"", '\nprint("启动日志✓")\n'.encode("utf-8")):
+                with self.subTest(logged=bool(log)):
+                    path.write_bytes(original + log)
+                    result = subprocess.run(command, capture_output=True, encoding="utf-8",
+                                            env=env, timeout=30)
+                    self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                    report = json.loads(result.stdout)
+                    self.assertFalse(report["passed"])
+                    self.assertIn("Reached browser launch control", report["error"])
+                    self.assertNotIn("UnicodeEncodeError", report["error"])
+                    self.assertEqual(path.read_bytes(), original + log)
+
     def test_import_cache_settings_are_restored_after_an_exception(self):
         previous = sys.pycache_prefix, sys.dont_write_bytecode
         with self.assertRaisesRegex(RuntimeError, "import failed"):

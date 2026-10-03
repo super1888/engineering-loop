@@ -114,7 +114,7 @@ async function main() {
   server = spawn(python, ['-B', '-X', `pycache_prefix=${path.join(temporary, 'pycache')}`,
     'server.py', '--db', db, '--port', '0', '--manual-worker', '--fail-once-row', 'beta'], {
     cwd: candidate, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true,
-    env: { ...process.env, PYTHONUNBUFFERED: '1' },
+    env: { ...process.env, PYTHONUNBUFFERED: '1', PYTHONIOENCODING: 'utf-8' },
   });
   server.on('error', error => { serverError = error; });
   server.stdin.on('error', error => { serverError = error; });
