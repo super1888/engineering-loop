@@ -171,6 +171,8 @@ The oracle also reopens an adjacent record through those controls to preserve it
 
 It checks the rendered Close button role and accessible name as well. Removing the existing `Close detail` name previously passed every check because the close action used only its DOM ID. The native control now rejects that lost name while retaining the valid behavior and copy controls; the check preserves the fixture's accessibility contract without requiring a particular naming attribute or evaluating screen-reader announcements.
 
+That role/name check is tied to the actual Close control. Moving its accessible name to the Cancel button previously passed all ten browser checks while leaving Close unnamed. The native regression now rejects that misplaced name alongside the missing-name control; valid behavior and copy runs still pass, without prescribing the naming attribute or claiming screen-reader announcements.
+
 The preparation helper creates four disposable workspaces with identical application inputs and copies of the current skill. A uses the skill normally; B adds only two experimental instructions: identify the uncertainty an additional contributor would resolve, and seek a concrete counterexample to a material completion claim. These overlays are trial inputs, not changes to the distributed skill. Each condition gets a behavior-repair task and a copy-only control. Start every task in fresh context and run the recorded sequence without showing agents sibling trials or evaluator checks.
 
 ```text

@@ -50,7 +50,7 @@ async function main() {
           const oldName = await page.locator('#name').inputValue();
           const newName = `Edited record ${id}`;
           await page.locator('#name').fill(newName);
-          assert.equal(await page.getByRole('button', { name: 'Close detail', exact: true }).count(), 1, 'close accessible name');
+          assert.equal(await page.locator('#close').and(page.getByRole('button', { name: 'Close detail', exact: true })).count(), 1, 'close accessible name');
           if (mode === 'copy') assert.equal(await page.locator('#save').innerText(), 'Save draft');
           else assert.equal(await page.locator('#save').innerText(), 'Save');
           if (action === 'escape') await page.keyboard.press('Escape');

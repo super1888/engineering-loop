@@ -65,16 +65,21 @@ class ListDetailOracleTests(unittest.TestCase):
             html = workspace / "index.html"
             source = html.read_text(encoding="utf-8")
             self.assertEqual(source.count(' aria-label="Close detail"'), 1)
-            html.write_text(source.replace(' aria-label="Close detail"', ''), encoding="utf-8")
-            before = {p.name: p.read_bytes() for p in workspace.iterdir() if p.is_file()}
-            result = subprocess.run(["node", str(ROOT / "evals/list_detail_oracle.cjs"), str(workspace), "behavior"],
-                capture_output=True, text=True, timeout=60)
-            report = json.loads(result.stdout)
-            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-            self.assertEqual(len(report["results"]), 10)
-            self.assertTrue(all(not row["passed"] and "close accessible name" in row["error"]
-                for row in report["results"]))
-            self.assertEqual({p.name: p.read_bytes() for p in workspace.iterdir() if p.is_file()}, before)
+            for misplaced in (False, True):
+                with self.subTest(name_on_cancel=misplaced):
+                    candidate = source.replace(' aria-label="Close detail"', '')
+                    if misplaced:
+                        candidate = candidate.replace('id="cancel"', 'id="cancel" aria-label="Close detail"')
+                    html.write_text(candidate, encoding="utf-8")
+                    before = {p.name: p.read_bytes() for p in workspace.iterdir() if p.is_file()}
+                    result = subprocess.run(["node", str(ROOT / "evals/list_detail_oracle.cjs"), str(workspace), "behavior"],
+                        capture_output=True, text=True, timeout=60)
+                    report = json.loads(result.stdout)
+                    self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                    self.assertEqual(len(report["results"]), 10)
+                    self.assertTrue(all(not row["passed"] and "close accessible name" in row["error"]
+                        for row in report["results"]))
+                    self.assertEqual({p.name: p.read_bytes() for p in workspace.iterdir() if p.is_file()}, before)
 
 
 if __name__ == "__main__":
