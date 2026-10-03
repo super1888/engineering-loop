@@ -51,6 +51,8 @@ class ReceiptContractTests(unittest.TestCase):
         other = Inventory(self.path)
         try:
             self.assertEqual(other.receive("A", 60, "R1"), 60)
+            self.check_received(other, "A", 80)
+            self.assertEqual(self.receipt_rows(), [("R1", "A", 60, 60), ("R2", "A", 20, 80)])
             self.assertEqual(other.receive("A", 20, "R2"), 80)
             self.check_received(other, "A", 80)
         finally:
