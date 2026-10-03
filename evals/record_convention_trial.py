@@ -25,12 +25,12 @@ def run_result(directory: Path, output: Path, name: str) -> dict:
     baseline = subprocess.check_output(["git", "ls-tree", "-r", "-z", "--name-only", "HEAD"],
                                        cwd=workspace).decode("utf-8")
     tracked = {Path(path) for path in baseline.split("\0") if path}
-    paths = {path for path in tracked
-             if path.suffix in {".py", ".md"} and "__pycache__" not in path.parts}
-    paths |= {path.relative_to(workspace) for path in workspace.rglob("*")
-              if path.is_file() and path.suffix in {".py", ".md"}
-              and ".git" not in path.relative_to(workspace).parts
-              and "__pycache__" not in path.relative_to(workspace).parts}
+    inventory = subprocess.check_output(
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+        cwd=workspace).decode("utf-8")
+    paths = tracked | {Path(path) for path in inventory.split("\0") if path}
+    paths = {path for path in paths
+             if "__pycache__" not in path.parts[:-1] and path.suffix != ".pyc"}
     for relative in sorted(paths):
         if relative in tracked:
             file_patch = subprocess.check_output(

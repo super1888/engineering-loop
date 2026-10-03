@@ -23,6 +23,59 @@ import record_convention_trial
 
 
 class ConventionRecorderTests(unittest.TestCase):
+    def test_patch_replays_non_python_test_data_without_staging_candidate(self):
+        with tempfile.TemporaryDirectory() as directory:
+            trial = Path(directory) / "trial"
+            workspace = trial / "workspace"
+            shutil.copytree(ROOT / "evals/fixtures/convention-boundary", workspace,
+                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+            (workspace / ".gitignore").write_bytes(b".local.json\n")
+            for command in (["git", "init", "--quiet"], ["git", "config", "core.autocrlf", "false"],
+                            ["git", "add", "."], ["git", "-c", "user.name=Eval",
+                            "-c", "user.email=eval@example.invalid", "commit", "--quiet", "-m", "Baseline"]):
+                subprocess.run(command, cwd=workspace, check=True, capture_output=True)
+            (trial / "evidence").mkdir()
+            (trial / "evidence/events.jsonl").write_text(
+                json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
+            constants = workspace / "order_constants.py"
+            constants.write_text(constants.read_text(encoding="utf-8").replace("10_000", "15_000"),
+                                 encoding="utf-8")
+            data = b'[[15000, true], [15001, false]]\n'
+            (workspace / "tests/boundary.json").write_bytes(data)
+            (workspace / ".local.json").write_bytes(b"Local artifact, ignored by Git.\n")
+            (workspace / "tests/test_data.py").write_text(
+                'import json, unittest\nfrom pathlib import Path\n'
+                'from orders import accepts_order_total, accepts_export_total\n'
+                'class DataTests(unittest.TestCase):\n'
+                '    def test_boundary_data(self):\n'
+                '        for cents, accepted in json.loads(Path(__file__).with_name("boundary.json").read_text()):\n'
+                '            for check in (accepts_order_total, accepts_export_total):\n'
+                '                self.assertEqual(check(cents), accepted)\n', encoding="utf-8")
+            command = [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"]
+            original = subprocess.run(command, cwd=workspace, capture_output=True, text=True, timeout=15)
+            self.assertEqual(original.returncode, 0, original.stderr)
+            output = trial / "recorded"
+            output.mkdir()
+            result = run_result(trial, output, "amount-A")
+            self.assertEqual(result["oracle_failures"], [])
+            replay = trial / "replay"
+            subprocess.run(["git", "-c", "core.autocrlf=false", "clone", "--quiet", "--no-hardlinks",
+                            str(workspace), str(replay)],
+                           check=True, capture_output=True)
+            subprocess.run(["git", "config", "core.autocrlf", "false"], cwd=replay,
+                           check=True, capture_output=True)
+            applied = subprocess.run(["git", "apply", str(output / "amount-A.patch")], cwd=replay,
+                                     capture_output=True)
+            self.assertEqual(applied.returncode, 0, applied.stderr.decode("utf-8", errors="replace"))
+            restored = subprocess.run(command, cwd=replay, capture_output=True, text=True, timeout=15)
+            self.assertEqual(restored.returncode, 0, restored.stderr)
+            self.assertEqual((replay / "tests/boundary.json").read_bytes(), data)
+            self.assertIn("tests/boundary.json", result["changed_files"])
+            self.assertNotIn(".local.json", result["changed_files"])
+            self.assertFalse(any("__pycache__" in Path(path).parts for path in result["changed_files"]))
+            self.assertEqual(subprocess.check_output(["git", "diff", "--cached", "--name-only"],
+                                                    cwd=workspace), b"")
+
     def test_recording_rejects_changed_frozen_prompts_before_writing_results(self):
         with tempfile.TemporaryDirectory() as directory:
             parent = Path(directory)
