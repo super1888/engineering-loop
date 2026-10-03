@@ -161,6 +161,8 @@ The [list-detail fixture](fixtures/list-detail/PRODUCT.md) is a dependency-free 
 
 The oracle also reopens an adjacent record through those controls to preserve its original name. A candidate saving the edited name to every record previously passed all ten checks in both behavior and copy modes; the native browser regression now rejects both Save paths while valid behavior repair and copy-only controls retain their results. The regression uses existing Playwright/Chromium and reports a skip when they are unavailable; a packaging-only run does not establish browser coverage. No fixture or historical trial conclusion is changed.
 
+It checks the rendered Close button role and accessible name as well. Removing the existing `Close detail` name previously passed every check because the close action used only its DOM ID. The native control now rejects that lost name while retaining the valid behavior and copy controls; the check preserves the fixture's accessibility contract without requiring a particular naming attribute or evaluating screen-reader announcements.
+
 The preparation helper creates four disposable workspaces with identical application inputs and copies of the current skill. A uses the skill normally; B adds only two experimental instructions: identify the uncertainty an additional contributor would resolve, and seek a concrete counterexample to a material completion claim. These overlays are trial inputs, not changes to the distributed skill. Each condition gets a behavior-repair task and a copy-only control. Start every task in fresh context and run the recorded sequence without showing agents sibling trials or evaluator checks.
 
 ```text

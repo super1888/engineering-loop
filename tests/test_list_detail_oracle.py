@@ -55,6 +55,27 @@ class ListDetailOracleTests(unittest.TestCase):
                                 for row in report["results"] if not row["passed"]))
                         self.assertEqual({p.name: p.read_bytes() for p in workspace.iterdir() if p.is_file()}, before)
 
+    def test_browser_oracle_preserves_close_accessible_name(self):
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory) / "workspace"
+            shutil.copytree(ROOT / "evals/fixtures/list-detail", workspace)
+            app = workspace / "app.js"
+            app.write_text(app.read_text(encoding="utf-8").replace(
+                "leaveDetail(false)", "leaveDetail(true)"), encoding="utf-8")
+            html = workspace / "index.html"
+            source = html.read_text(encoding="utf-8")
+            self.assertEqual(source.count(' aria-label="Close detail"'), 1)
+            html.write_text(source.replace(' aria-label="Close detail"', ''), encoding="utf-8")
+            before = {p.name: p.read_bytes() for p in workspace.iterdir() if p.is_file()}
+            result = subprocess.run(["node", str(ROOT / "evals/list_detail_oracle.cjs"), str(workspace), "behavior"],
+                capture_output=True, text=True, timeout=60)
+            report = json.loads(result.stdout)
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertEqual(len(report["results"]), 10)
+            self.assertTrue(all(not row["passed"] and "close accessible name" in row["error"]
+                for row in report["results"]))
+            self.assertEqual({p.name: p.read_bytes() for p in workspace.iterdir() if p.is_file()}, before)
+
 
 if __name__ == "__main__":
     unittest.main()
