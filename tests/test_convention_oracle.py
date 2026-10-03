@@ -42,6 +42,39 @@ class ConventionOracleTests(unittest.TestCase):
                 orders.write_text(updated.replace("<= MAX_ORDER_TOTAL_CENTS", "<= 15_000"), encoding="utf-8")
                 self.assertIn("Order behavior must use the module-owned constant.", assess(self.workspace))
 
+    def test_native_candidate_output_retains_utf8_and_invalid_byte_diagnostics(self):
+        constants = self.workspace / "order_constants.py"
+        original_constants = constants.read_text(encoding="utf-8")
+        orders = self.workspace / "orders.py"
+        original_orders = orders.read_text(encoding="utf-8")
+        diagnostic = "中文日志".encode("utf-8") + b"\xff\n"
+        for mode, check in (("amount", assess), ("comment", assess_comment_control)):
+            with self.subTest(mode=mode):
+                constants.write_text(original_constants.replace("10_000", "15_000")
+                                     if mode == "amount" else original_constants, encoding="utf-8")
+                source = original_orders.replace("    # References are always uppercase.\n", "")
+                orders.write_text(source + f"\nimport sys\nprint('正常中文日志')\nsys.stdout.buffer.write({diagnostic!r})\n",
+                                  encoding="utf-8")
+                candidate = {p.relative_to(self.workspace): p.read_bytes()
+                             for p in self.workspace.rglob("*.py")}
+                self.assertEqual(check(self.workspace), [])
+                self.assertEqual({p.relative_to(self.workspace): p.read_bytes()
+                                  for p in self.workspace.rglob("*.py")}, candidate)
+                if mode == "amount":
+                    orders.write_text(source + f"\nimport sys\nsys.stderr.buffer.write({diagnostic!r})\n"
+                                      "raise SystemExit(7)\n", encoding="utf-8")
+                    failures = check(self.workspace)
+                    self.assertTrue(any("Behavior check failed: 中文日志\ufffd" in f for f in failures), failures)
+                    self.assertIn("Order behavior must use the module-owned constant.", failures)
+                else:
+                    tests = self.workspace / "tests/test_orders.py"
+                    public = tests.read_text(encoding="utf-8")
+                    tests.write_text(public + f"\nimport sys\nsys.stderr.buffer.write({diagnostic!r})\n"
+                                     "raise RuntimeError('中文失败')\n", encoding="utf-8")
+                    failures = check(self.workspace)
+                    self.assertTrue(any("Public behavior failed: " in f and "中文日志\ufffd" in f
+                                        and "RuntimeError: 中文失败" in f for f in failures), failures)
+
     def test_optimization_environment_cannot_disable_independent_assertions(self):
         constants = self.workspace / "order_constants.py"
         original_constants = constants.read_text(encoding="utf-8")

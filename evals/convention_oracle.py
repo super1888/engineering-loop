@@ -49,8 +49,8 @@ else:
 print('convention-oracle-complete')
 """
     with fresh_python() as python:
-        result = subprocess.run([*python, "-c", snippet], cwd=workspace,
-                                capture_output=True, text=True, timeout=15)
+        result = subprocess.run([*python, "-X", "utf8", "-c", snippet], cwd=workspace,
+                                capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=15)
     if result.returncode:
         failures.append("Behavior check failed: " + (result.stderr.strip() or str(result.returncode)))
     elif "convention-oracle-complete" not in result.stdout.splitlines():
@@ -64,8 +64,8 @@ for accepts in (accepts_order_total, accepts_export_total):
 print('convention-owner-complete')
 """
     with fresh_python() as python:
-        result = subprocess.run([*python, "-c", ownership], cwd=workspace,
-                                capture_output=True, text=True, timeout=15)
+        result = subprocess.run([*python, "-X", "utf8", "-c", ownership], cwd=workspace,
+                                capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=15)
     if result.returncode or "convention-owner-complete" not in result.stdout.splitlines():
         failures.append("Order behavior must use the module-owned constant.")
     return failures
@@ -91,13 +91,14 @@ for accepts in (accepts_order_total, accepts_export_total):
 print('convention-comment-boundary-complete')
 """
     with fresh_python() as python:
-        result = subprocess.run([*python, "-c", snippet], cwd=workspace,
-                                capture_output=True, text=True, timeout=15)
+        result = subprocess.run([*python, "-X", "utf8", "-c", snippet], cwd=workspace,
+                                capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=15)
     if result.returncode or "convention-comment-boundary-complete" not in result.stdout.splitlines():
         failures.append("The unrelated order amount boundary changed.")
     with fresh_python() as python:
-        result = subprocess.run([*python, "-m", "unittest", "discover", "-s", "tests", "-v"],
-                                cwd=workspace, capture_output=True, text=True, timeout=15)
+        result = subprocess.run([*python, "-X", "utf8", "-m", "unittest", "discover", "-s", "tests", "-v"],
+                                cwd=workspace, capture_output=True, text=True,
+                                encoding="utf-8", errors="replace", timeout=15)
     if not unittest_passed(result):
         failures.append("Public behavior failed: " + (result.stderr.strip() or str(result.returncode)))
     return failures
