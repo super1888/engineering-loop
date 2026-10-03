@@ -47,7 +47,7 @@ def record(directory: Path, output: Path, name: str) -> dict:
         final = final.replace(path, "<trial-root>")
     (output / f"{name}-final.txt").write_text(final + "\n", encoding="utf-8")
     with fresh_python() as python:
-        backend = subprocess.run([*python, "-m", "unittest", "discover", "-s", "backend/tests", "-v"],
+        backend = subprocess.run([*python, "-X", "utf8", "-m", "unittest", "discover", "-s", "backend/tests", "-v"],
                                  cwd=workspace, capture_output=True, text=True, encoding="utf-8",
                                  errors="replace", timeout=30)
     form = None

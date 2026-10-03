@@ -102,6 +102,38 @@ class RoutingOracleTests(unittest.TestCase):
                 else:
                     self.assertIn("验", result["form"] or "")
 
+    def test_python_backend_output_uses_utf8_in_oracle_and_public_tests(self):
+        self._write_valid_implementation()
+        trial = self.workspace.parent
+        for command in (["git", "init", "--quiet"], ["git", "add", "."],
+                        ["git", "-c", "user.name=Eval", "-c", "user.email=eval@example.invalid",
+                         "commit", "--quiet", "-m", "Baseline"]):
+            subprocess.run(command, cwd=self.workspace, check=True, capture_output=True)
+        (trial / "evidence").mkdir()
+        (trial / "evidence/events.jsonl").write_text(
+            json.dumps({"type": "turn.completed"}) + "\n", encoding="utf-8")
+        output = trial / "recorded"
+        output.mkdir()
+        backend = self.workspace / "backend/orders.py"
+        valid = backend.read_text(encoding="utf-8")
+        for prefix, passing in (("print('验证✅')\n", True),
+                                ("raise RuntimeError('验证✅')\n", False)):
+            with self.subTest(passing=passing):
+                backend.write_text(prefix + valid, encoding="utf-8")
+                source = backend.read_bytes()
+                result = assess(self.workspace)
+                self.assertIsNone(result["form"])
+                if passing:
+                    self.assertIsNone(result["backend"])
+                else:
+                    self.assertIn("RuntimeError: 验证✅", result["backend"] or "")
+                recorded = record(trial, output, "full-A")
+                self.assertEqual(recorded["public_backend_pass"], passing)
+                self.assertEqual(recorded["oracle_backend_pass"], passing)
+                self.assertTrue(recorded["public_form_pass"])
+                self.assertTrue(recorded["oracle_form_pass"])
+                self.assertEqual(backend.read_bytes(), source)
+
     def test_form_oracle_requires_an_error_on_local_validation_failure(self):
         self._write_valid_implementation()
         form = self.workspace / "ui/order-form.mjs"

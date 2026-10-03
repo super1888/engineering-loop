@@ -104,7 +104,7 @@ def assess(workspace: Path) -> dict[str, str | None]:
     results = {}
     with fresh_python() as python:
         commands = {
-            "backend": [*python, "-c", BACKEND],
+            "backend": [*python, "-X", "utf8", "-c", BACKEND],
             "form": ["node", "--input-type=module", "-e", FORM],
         }
         for name, command in commands.items():
