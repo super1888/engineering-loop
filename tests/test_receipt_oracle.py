@@ -89,6 +89,22 @@ class OracleResourceTests(unittest.TestCase):
                 '                with self.db:\n'
                 f'                    self.db.execute("UPDATE receipts SET {field} = {field} + 1")\n\n')
             competing_mutants.append((f"competing wrong {field}", wrapper, 1))
+        deferred_write_mutants = []
+        for corrupt in ("UPDATE orders SET received = 0 WHERE order_id = 'A'",
+                        "UPDATE receipts SET quantity = 21 WHERE request_id = 'R2'",
+                        "UPDATE receipts SET result = 81 WHERE request_id = 'R2'"):
+            wrapper = (receive.replace('    def receive(', '    def _receive(') +
+                '    def receive(self, order_id, quantity, request_id):\n'
+                '        result = self._receive(order_id, quantity, request_id)\n'
+                '        if (request_id, quantity) == ("R2", 20):\n'
+                f'            with self.db:\n                self.db.execute({corrupt!r})\n'
+                '        elif (request_id, quantity) == ("R1", 60) and self.db.execute(\n'
+                '                "SELECT quantity FROM receipts WHERE request_id = \'R2\'").fetchone() in [(20,), (21,)]:\n'
+                '            with self.db:\n'
+                '                self.db.execute("UPDATE orders SET received = 80 WHERE order_id = \'A\'")\n'
+                '                self.db.execute("UPDATE receipts SET quantity = 20, result = 80 WHERE request_id = \'R2\'")\n'
+                '        return result\n\n')
+            deferred_write_mutants.append((f"write restored by replay: {corrupt}", wrapper, 1))
         validation = '        if type(quantity) is not int or quantity <= 0:\n            raise ValueError("invalid quantity")\n'
         late_validation = receive.replace(validation, '').replace(
             '            order = self.db.execute(',
@@ -152,7 +168,7 @@ class OracleResourceTests(unittest.TestCase):
                     ("initial integral float", initial_integral_float, 1), *restored_rejections, *recovery_mutants,
                     ("receipt-based getter with persisted stock", receive + receipt_based_getter, 0),
                     ("unpersisted stock hidden by receipt totals", hidden_stock, 1),
-                    *competing_mutants, *failure_other_order_mutants):
+                    *competing_mutants, *failure_other_order_mutants, *deferred_write_mutants):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]
                     inventory = candidate / "inventory.py"

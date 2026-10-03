@@ -46,6 +46,8 @@ class ReceiptContractTests(unittest.TestCase):
     def test_retry_retains_original_result_after_other_receipt_and_reopen(self):
         self.assertEqual(self.inventory.receive("A", 60, "R1"), 60)
         self.assertEqual(self.inventory.receive("A", 20, "R2"), 80)
+        self.check_received(self.inventory, "A", 80)
+        self.assertEqual(self.receipt_rows(), [("R1", "A", 60, 60), ("R2", "A", 20, 80)])
         other = Inventory(self.path)
         try:
             self.assertEqual(other.receive("A", 60, "R1"), 60)
