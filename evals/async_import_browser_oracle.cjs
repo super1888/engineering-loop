@@ -111,6 +111,7 @@ async function main() {
   const db = path.join(temporary, 'state.sqlite');
   stage = 'launch actual candidate server';
   let output = '';
+  let announcedPort = null;
   server = spawn(python, ['-B', '-X', `pycache_prefix=${path.join(temporary, 'pycache')}`,
     'server.py', '--db', db, '--port', '0', '--manual-worker', '--fail-once-row', 'beta'], {
     cwd: candidate, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true,
@@ -118,17 +119,23 @@ async function main() {
   });
   server.on('error', error => { serverError = error; });
   server.stdin.on('error', error => { serverError = error; });
-  server.stdout.on('data', chunk => { output = (output + chunk).slice(-16000); });
-  server.stderr.on('data', chunk => { stderr = (stderr + chunk).slice(-16000); });
-  const port = await until('Server port announcement', async () => {
-    for (const line of output.split(/\r?\n/)) {
-      try {
-        const item = JSON.parse(line);
-        if (Number.isInteger(item.port) && item.port > 0) return item.port;
-      } catch { /* Wait for a complete JSON announcement. */ }
+  server.stdout.on('data', chunk => {
+    output += chunk;
+    if (announcedPort === null) {
+      for (const line of output.split(/\r?\n/)) {
+        try {
+          const item = JSON.parse(line);
+          if (Number.isInteger(item.port) && item.port > 0) {
+            announcedPort = item.port;
+            break;
+          }
+        } catch { /* Wait for a complete JSON announcement. */ }
+      }
     }
-    return null;
-  }, value => value !== null);
+    output = output.slice(-16000);
+  });
+  server.stderr.on('data', chunk => { stderr = (stderr + chunk).slice(-16000); });
+  const port = await until('Server port announcement', async () => announcedPort, value => value !== null);
   const base = `http://127.0.0.1:${port}`;
   browser = await chromium.launch({ executablePath: executable, headless: true });
   const context = await browser.newContext();
