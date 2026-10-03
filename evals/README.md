@@ -96,6 +96,8 @@ The [receipt fixture](fixtures/receipt/RULES.md) is a synthetic SQLite exercise 
 
 The distinct-request competition check matches the complete persisted receipt to the successful request, without requiring either contender to win. Native regressions reject candidates that preserve the outcomes, stock and receipt count but corrupt the stored quantity or original result; these are evaluator checks, not model-quality measurements.
 
+Each invalid quantity, invalid replay and unknown-order rejection also preserves the other existing order. Regressions cover corrupting that order on one rejected request and restoring it on the next, so a final-state check cannot conceal the forbidden write.
+
 The receipt and asynchronous-import service oracles reject `SystemExit` while importing a candidate module, including an early zero exit, with the original exit retained as the diagnostic cause. The regression also confirms their incomplete baseline fixtures still execute all seven/eight checks and fail acceptance. This is an import-boundary correction for trusted exercise code, not a sandbox or protection against arbitrary process termination.
 
 1. Copy `fixtures/receipt` to a new isolated directory. Give the implementing agent only that directory and the task below. For a skill trial, also provide a snapshot of `skills/engineering-loop`. Keep evaluator materials outside the supplied workspace; this is a procedural separation, not a security sandbox.

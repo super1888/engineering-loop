@@ -101,13 +101,20 @@ class OracleResourceTests(unittest.TestCase):
                 ("invalid receipt", 'quantity is None', 'type(quantity) is int and quantity == 0',
                  "INSERT INTO receipts VALUES ('invalid', 'A', 1, 1)",
                  "DELETE FROM receipts WHERE request_id = 'invalid'"),
+                ("invalid other order", 'quantity is None', 'type(quantity) is int and quantity == 0',
+                 "UPDATE orders SET received = 1 WHERE order_id = 'B'",
+                 "UPDATE orders SET received = 0 WHERE order_id = 'B'"),
                 ("conflict", '(order_id, quantity) == ("A", 30)', '(order_id, quantity) == ("B", 20)',
                  "UPDATE orders SET received = 21 WHERE order_id = 'A'",
                  "UPDATE orders SET received = 20 WHERE order_id = 'A'"),
                 ("invalid replay", 'request_id == "single" and type(quantity) is bool',
                  'request_id == "single" and type(quantity) is float and quantity == 1.0',
                  "UPDATE orders SET received = 2 WHERE order_id = 'A'",
-                 "UPDATE orders SET received = 1 WHERE order_id = 'A'")):
+                 "UPDATE orders SET received = 1 WHERE order_id = 'A'"),
+                ("invalid replay other order", 'request_id == "single" and type(quantity) is bool',
+                 'request_id == "single" and type(quantity) is float and quantity == 1.0',
+                 "UPDATE orders SET received = 1 WHERE order_id = 'B'",
+                 "UPDATE orders SET received = 0 WHERE order_id = 'B'")):
             mutation = (f'        if {before}:\n            with self.db:\n'
                         f'                self.db.execute({corrupt!r})\n'
                         f'        elif {after}:\n            with self.db:\n'
