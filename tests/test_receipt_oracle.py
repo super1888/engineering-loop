@@ -115,6 +115,10 @@ class OracleResourceTests(unittest.TestCase):
             'if type(quantity) is not int or quantity <= 0:',
             'if quantity is not None and (type(quantity) is not int or quantity <= 0):')
         single_receipt_cap = receive.replace('quantity <= 0:', 'quantity <= 0 or quantity > 60:')
+        earliest_order_result = receive.replace('                return receipt[2]',
+            '                return self.db.execute(\n'
+            '                    "SELECT MIN(result) FROM receipts WHERE order_id = ?",\n'
+            '                    (order_id,)).fetchone()[0]')
         initial_integral_float = receive.replace(
             'if type(quantity) is not int or quantity <= 0:',
             'if type(quantity) not in (int, float) or quantity <= 0 or int(quantity) != quantity:').replace(
@@ -167,6 +171,7 @@ class OracleResourceTests(unittest.TestCase):
                     ("validation after replay", late_validation, 1),
                     ("nullable quantity", nullable_validation, 1),
                     ("unapproved per-receipt cap", single_receipt_cap, 1),
+                    ("replay returns earliest order result", earliest_order_result, 1),
                     ("initial integral float", initial_integral_float, 1), *restored_rejections, *recovery_mutants,
                     ("receipt-based getter with persisted stock", receive + receipt_based_getter, 0),
                     ("unpersisted stock hidden by receipt totals", hidden_stock, 1),

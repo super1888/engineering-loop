@@ -102,6 +102,8 @@ The shared persisted-stock check also preserves that other order at every existi
 
 The later-receipt/reopen check verifies persisted stock and both complete receipts before replaying the earlier request. Previously, candidates could return the right later total while writing a wrong stock value, quantity or original result, then repair it during the replay and pass. Native controls now reject all three while preserving valid acceptance and replay; the fixture rules and historical trial conclusions remain unchanged.
 
+It also replays the later request after reopening. A candidate returning the earliest result for the order on every replay previously passed all seven checks because only the earliest receipt was replayed. The native control now rejects that implementation while preserving the correct receipt-specific results and existing persisted-state checks; this adds no business rule or model-quality claim.
+
 The over-receipt check also accepts a single receipt equal to a new order's entire ordered quantity, verifies its complete persisted receipt and preserves the other orders. A candidate imposing an unapproved per-receipt cap of `60` previously passed because all successful requests were smaller, even though they eventually filled an order. The native control now rejects that cap while retaining the valid implementation; this covers the existing ordered-quantity boundary without adding a business limit or model claim.
 
 Stock assertions check the public API and the retained `orders` table through an independent connection. A regression rejects unpersisted stock hidden by receipt-derived return values, while accepting a receipt-derived getter when the order is correctly persisted.
