@@ -3,6 +3,7 @@
 import argparse
 from pathlib import Path
 import subprocess
+import sys
 
 from python_source import fresh_python
 
@@ -120,6 +121,7 @@ def assess(workspace: Path) -> dict[str, str | None]:
 
 
 def main() -> None:
+    sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("workspace", type=Path)
     args = parser.parse_args()

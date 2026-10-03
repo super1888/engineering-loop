@@ -74,6 +74,32 @@ class RoutingOracleTests(unittest.TestCase):
         self._write_valid_implementation()
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_native_cli_reports_unicode_failures_with_a_legacy_output_encoding(self):
+        self._write_valid_implementation()
+        backend = self.workspace / "backend/orders.py"
+        form = self.workspace / "ui/order-form.mjs"
+        valid_backend, valid_form = backend.read_text(encoding="utf-8"), form.read_text(encoding="utf-8")
+        for failing_side in (None, "backend", "form"):
+            with self.subTest(failing_side=failing_side):
+                backend.write_text(('raise RuntimeError("失败✓")\n' if failing_side == "backend" else "")
+                                   + valid_backend, encoding="utf-8")
+                form.write_text(('throw new Error("失败✓");\n' if failing_side == "form" else "")
+                                + valid_form, encoding="utf-8")
+                candidate = {p.relative_to(self.workspace): p.read_bytes()
+                             for p in self.workspace.rglob("*") if p.is_file()}
+                result = subprocess.run(
+                    [sys.executable, str(ROOT / "evals/routing_oracle.py"), str(self.workspace)],
+                    capture_output=True, text=True, encoding="utf-8",
+                    env={**os.environ, "PYTHONIOENCODING": "gbk"}, timeout=20)
+                self.assertEqual(result.returncode, 1 if failing_side else 0, result.stderr)
+                self.assertEqual(result.stderr, "")
+                for side in ("backend", "form"):
+                    self.assertIn(f"{side}: {'FAIL:' if side == failing_side else 'PASS'}", result.stdout)
+                if failing_side:
+                    self.assertIn("失败✓", result.stdout)
+                self.assertEqual({p.relative_to(self.workspace): p.read_bytes()
+                                  for p in self.workspace.rglob("*") if p.is_file()}, candidate)
+
     def test_backend_oracle_rejects_boolean_one_in_order_fields(self):
         self._write_valid_implementation()
         source = self.workspace / "backend/orders.py"

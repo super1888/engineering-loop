@@ -4,6 +4,7 @@ import argparse
 import ast
 from pathlib import Path
 import subprocess
+import sys
 
 from public_test_results import unittest_passed
 from python_source import fresh_python
@@ -105,6 +106,7 @@ print('convention-comment-boundary-complete')
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("workspace", type=Path)
     parser.add_argument("--mode", choices=("amount", "comment-control"), default="amount")

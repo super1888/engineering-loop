@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -74,6 +75,34 @@ class ConventionOracleTests(unittest.TestCase):
                     failures = check(self.workspace)
                     self.assertTrue(any("Public behavior failed: " in f and "中文日志\ufffd" in f
                                         and "RuntimeError: 中文失败" in f for f in failures), failures)
+
+    def test_native_cli_reports_unicode_failures_with_a_legacy_output_encoding(self):
+        constants = self.workspace / "order_constants.py"
+        original_constants = constants.read_text(encoding="utf-8")
+        orders = self.workspace / "orders.py"
+        valid = orders.read_text(encoding="utf-8").replace("    # References are always uppercase.\n", "")
+        for mode in ("amount", "comment-control"):
+            constants.write_text(original_constants.replace("10_000", "15_000")
+                                 if mode == "amount" else original_constants, encoding="utf-8")
+            for passing in (True, False):
+                with self.subTest(mode=mode, passing=passing):
+                    orders.write_text(valid if passing else valid + '\nraise RuntimeError("失败✓")\n',
+                                      encoding="utf-8")
+                    candidate = {p.relative_to(self.workspace): p.read_bytes()
+                                 for p in self.workspace.rglob("*.py")}
+                    result = subprocess.run(
+                        [sys.executable, str(ROOT / "evals/convention_oracle.py"),
+                         str(self.workspace), "--mode", mode], capture_output=True, text=True,
+                        encoding="utf-8", env={**os.environ, "PYTHONIOENCODING": "gbk"}, timeout=20)
+                    self.assertEqual(result.returncode, 0 if passing else 1, result.stderr)
+                    self.assertEqual(result.stderr, "")
+                    if passing:
+                        self.assertIn("Selected convention checks passed.", result.stdout)
+                    else:
+                        self.assertIn("FAIL:", result.stdout)
+                        self.assertIn("RuntimeError: 失败✓", result.stdout)
+                    self.assertEqual({p.relative_to(self.workspace): p.read_bytes()
+                                      for p in self.workspace.rglob("*.py")}, candidate)
 
     def test_optimization_environment_cannot_disable_independent_assertions(self):
         constants = self.workspace / "order_constants.py"
