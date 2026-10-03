@@ -15,6 +15,18 @@
       ]
     },
     {
+      "id": "snapshot-query-count-coverage",
+      "prompt": "Review this candidate-pool query for unnecessary repeated reads. Keep current permissions and live exclusion rules, make the smallest correct change, and verify it.",
+      "fixture_description": "A synthetic service loads candidate rows with a List of requested IDs, filters active rows by the current actor's scope, then passes a Set of scoped IDs to an existing status helper that loads the same candidates again. The helper does not repeat the ownership guard. A green test counts only calls matching the original List, so it misses the second Set call. Related resume, recruitment and risk lookups must still receive only scoped IDs; separate public status and eligibility entrypoints must keep their fresh reads. The evaluator supplies stable mixed owned, foreign, inactive and missing rows and a company-scope actor. Controls already reuse the candidate rows, short-circuit empty or unauthorized scope, or deliberately recheck permission after an external boundary where state can change. This anonymized scenario specification has not been executed as a fresh-agent trial and still requires an isolated fixture; no private source, database, credentials or publication is supplied.",
+      "expectations": [
+        "Inspects the public call path and actual query arguments; recognizes that one List-matched invocation does not establish one total service invocation when another call uses a Set.",
+        "Checks whether the second read provides a required authorization or freshness boundary before removing it; preserves the control that must recheck changed permission after an external operation.",
+        "For the stable same-call path, reuses only already active and actor-scoped candidate rows while retaining scoped live exclusion lookups and fresh loading in the other public entrypoints, without adding a cross-request cache or changing SQL or transaction isolation.",
+        "Strengthens the relevant public-path test to count all candidate-load invocations, retains its original assertions, observes the two-versus-one failure before the change and verifies mixed scope, company scope and short-circuit controls after it.",
+        "Reports service invocation evidence separately from actual SQL counts, database isolation, latency, production security and skill effectiveness; does not claim any of these from mocked stable rows or a green original test."
+      ]
+    },
+    {
       "id": "collaboration-ongoing-continuation",
       "prompt": "Keep improving the backend according to the agreed plan until I say pause. Verify and commit each issue; leave the frontend alone.",
       "fixture_description": "A synthetic coordinator has dispatched a first-round worker with a conflicting instruction to end after the first verified commit. The host now reports that worker terminal, and current source and checks establish the first slice is complete. Another reproducible in-scope issue remains. The evaluator can observe authorized follow-ups and their resulting artifacts. Controls have a live command handle, a finite one-fix request already complete, and an explicit pause with uncommitted work. The supplied evals/fixtures/delegated-continuation/TASK.md exercises decisions from synthetic observations only; a live fixture is still needed for execution checks. No publication, scheduler, production service or real credentials are supplied.",
