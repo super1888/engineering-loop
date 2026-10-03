@@ -98,6 +98,8 @@ The distinct-request competition check matches the complete persisted receipt to
 
 Each invalid quantity, invalid replay and unknown-order rejection also preserves the other existing order. Regressions cover corrupting that order on one rejected request and restoring it on the next, so a final-state check cannot conceal the forbidden write.
 
+Stock assertions check the public API and the retained `orders` table through an independent connection. A regression rejects unpersisted stock hidden by receipt-derived return values, while accepting a receipt-derived getter when the order is correctly persisted.
+
 The receipt and asynchronous-import service oracles reject `SystemExit` while importing a candidate module, including an early zero exit, with the original exit retained as the diagnostic cause. The regression also confirms their incomplete baseline fixtures still execute all seven/eight checks and fail acceptance. This is an import-boundary correction for trusted exercise code, not a sandbox or protection against arbitrary process termination.
 
 1. Copy `fixtures/receipt` to a new isolated directory. Give the implementing agent only that directory and the task below. For a skill trial, also provide a snapshot of `skills/engineering-loop`. Keep evaluator materials outside the supplied workspace; this is a procedural separation, not a security sandbox.

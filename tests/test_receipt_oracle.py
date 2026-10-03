@@ -93,6 +93,17 @@ class OracleResourceTests(unittest.TestCase):
             '            if receipt is not None:\n'
             '                if type(quantity) is not int:\n'
             '                    raise ValueError("invalid replay quantity")\n')
+        receipt_total = 'COALESCE((SELECT MAX(result) FROM receipts WHERE order_id = orders.order_id), 0)'
+        hidden_stock = receive.replace('SELECT ordered, received FROM orders',
+                                       f'SELECT ordered, {receipt_total} FROM orders').replace(
+            insertion, '            self.db.execute("UPDATE orders SET received = 0 WHERE order_id = ?",\n'
+            '                            (order_id,))\n' + insertion)
+        receipt_based_getter = ('    def received(self, order_id):\n'
+                        f'        row = self.db.execute("SELECT {receipt_total} FROM orders WHERE order_id = ?",\n'
+                        '                              (order_id,)).fetchone()\n'
+                        '        if row is None:\n            raise KeyError(order_id)\n'
+                        '        return row[0]\n\n')
+        hidden_stock += receipt_based_getter
         restored_rejections = []
         for name, before, after, corrupt, restore in (
                 ("invalid order", 'quantity is None', 'type(quantity) is int and quantity == 0',
@@ -127,6 +138,8 @@ class OracleResourceTests(unittest.TestCase):
                     ("validation after replay", late_validation, 1),
                     ("nullable quantity", nullable_validation, 1),
                     ("initial integral float", initial_integral_float, 1), *restored_rejections, *recovery_mutants,
+                    ("receipt-based getter with persisted stock", receive + receipt_based_getter, 0),
+                    ("unpersisted stock hidden by receipt totals", hidden_stock, 1),
                     *competing_mutants):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]
