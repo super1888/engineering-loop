@@ -12,6 +12,7 @@ store = []
 first = create_order(store, {'item_name': ' Pen ', 'quantity': 20})
 assert first == {'id': 1, 'item_name': 'Pen', 'quantity': 20}
 assert not isinstance(first['id'], bool)
+assert store == [{'id': 1, 'item_name': 'Pen', 'quantity': 20}]
 for payload in (
     {},
     {'item_name': 'Pen'},

@@ -276,6 +276,8 @@ Both routing checks reject a negative quantity (`-1` or form text `"-1"`) in add
 
 The backend also rejects a boolean first ID or minimum quantity in an accepted order. Python dictionary equality previously treated `True` as `1`; native regression candidates expose both omissions while preserving the valid backend and unaffected form checks.
 
+The first successful backend request also checks the complete store before another request runs. Candidates that wrote a wrong quantity or an extra row, then restored the store during the next rejected request, previously passed. Native controls now reject both while retaining the valid implementation; this covers the existing per-request write contract without regrading past trials or claiming model improvement.
+
 The routing recorder and convention comment control share the Python report check. It requires the terminal summary to be plain `OK`; an earlier diagnostic line saying `OK` cannot override `OK (skipped=...)` or `OK (expected failures=...)`. Native subprocess controls retain successful tests with that diagnostic and reject skipped or expected-failure cases. This checks report interpretation; inspect changed or weakened tests separately.
 
 The routing recorder saves Git diff bytes unchanged and reads NUL-delimited file lists, so Git's quoted non-ASCII paths cannot drop tracked edits or distort untracked names. A native reverse-apply check covers staged and unstaged edits with LF and mixed line endings.
