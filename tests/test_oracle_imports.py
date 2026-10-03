@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 import shutil
 import subprocess
 import sys
@@ -10,6 +11,30 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class OracleImportTests(unittest.TestCase):
+    def test_unicode_candidate_logs_do_not_prevent_cli_contract_checks(self):
+        for fixture, oracle, module, count in (
+                ("receipt", "receipt_oracle.py", "inventory.py", 7),
+                ("async-import", "async_import_oracle.py", "backend/service.py", 8)):
+            with self.subTest(oracle=oracle), tempfile.TemporaryDirectory() as directory:
+                candidate = Path(directory) / "candidate"
+                shutil.copytree(ROOT / "evals/fixtures" / fixture, candidate,
+                                ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+                command = [sys.executable, str(ROOT / "evals" / oracle), str(candidate)]
+                env = {**os.environ, "PYTHONIOENCODING": "gbk"}
+                baseline = subprocess.run(command, capture_output=True, env=env, timeout=30)
+                self.assertEqual(baseline.returncode, 1, baseline.stderr)
+                self.assertIn(f"Ran {count} tests".encode(), baseline.stderr)
+                path = candidate / module
+                source = path.read_bytes() + '\nprint("评测日志✓")\n'.encode("utf-8")
+                path.write_bytes(source)
+                logged = subprocess.run(command, capture_output=True, env=env, timeout=30)
+                self.assertEqual(logged.returncode, baseline.returncode, logged.stderr)
+                self.assertIn("评测日志✓".encode("utf-8"), logged.stdout)
+                self.assertIn(f"Ran {count} tests".encode(), logged.stderr)
+                self.assertEqual(logged.stderr.splitlines()[-1], baseline.stderr.splitlines()[-1])
+                self.assertNotIn(b"UnicodeEncodeError", logged.stderr)
+                self.assertEqual(path.read_bytes(), source)
+
     def test_receipt_oracle_loads_dataclasses_with_postponed_annotations(self):
         with tempfile.TemporaryDirectory() as directory:
             candidate = Path(directory) / "candidate"

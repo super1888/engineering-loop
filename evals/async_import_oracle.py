@@ -324,6 +324,7 @@ class RevisionTwoTests(unittest.TestCase):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("candidate", type=Path)
     args = parser.parse_args()

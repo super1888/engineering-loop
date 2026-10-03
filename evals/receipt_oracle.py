@@ -156,6 +156,7 @@ class ReceiptContractTests(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
     if len(sys.argv) != 2 or not (Path(sys.argv[1]) / "inventory.py").is_file():
         sys.exit("Usage: python evals/receipt_oracle.py CANDIDATE_DIRECTORY (must contain inventory.py)")
     candidate = Path(sys.argv.pop()).resolve() / "inventory.py"
