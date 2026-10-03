@@ -67,6 +67,18 @@ class OracleResourceTests(unittest.TestCase):
                              ("recovery missing receipt", '            try:\n')):
             recovery_mutants.append((name, tracked_failure.replace(anchor,
                 '            if getattr(self, "storage_failed", False):\n                return result\n' + anchor), 1))
+        failure_other_order_mutants = []
+        for exception, message in (("ValueError", "excessive receipt"),
+                                   ("sqlite3.DatabaseError", "exercise storage failure")):
+            wrapper = (receive.replace('    def receive(', '    def _receive(') +
+                '    def receive(self, order_id, quantity, request_id):\n'
+                '        try:\n            return self._receive(order_id, quantity, request_id)\n'
+                f'        except {exception} as error:\n'
+                f'            if str(error) == {message!r}:\n'
+                '                with self.db:\n'
+                '                    self.db.execute("UPDATE orders SET received = 1 WHERE order_id = \'B\'")\n'
+                '            raise\n\n')
+            failure_other_order_mutants.append((f"other order after {exception}", wrapper, 1))
         competing_mutants = []
         for field in ("quantity", "result"):
             wrapper = (receive.replace('    def receive(', '    def _receive(') +
@@ -140,7 +152,7 @@ class OracleResourceTests(unittest.TestCase):
                     ("initial integral float", initial_integral_float, 1), *restored_rejections, *recovery_mutants,
                     ("receipt-based getter with persisted stock", receive + receipt_based_getter, 0),
                     ("unpersisted stock hidden by receipt totals", hidden_stock, 1),
-                    *competing_mutants):
+                    *competing_mutants, *failure_other_order_mutants):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]
                     inventory = candidate / "inventory.py"

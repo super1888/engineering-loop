@@ -98,6 +98,8 @@ The distinct-request competition check matches the complete persisted receipt to
 
 Each invalid quantity, invalid replay and unknown-order rejection also preserves the other existing order. Regressions cover corrupting that order on one rejected request and restoring it on the next, so a final-state check cannot conceal the forbidden write.
 
+The shared persisted-stock check also preserves that other order at every existing inventory checkpoint, including excessive-receipt rejection and database failure/recovery. Native candidates that rolled back the requested order and receipts correctly but changed the other order after either rejection previously passed all seven checks; both now fail while valid persisted-stock controls still pass. This extends evaluator coverage under the existing no-write and atomicity rules, without claiming model or external-database results.
+
 Stock assertions check the public API and the retained `orders` table through an independent connection. A regression rejects unpersisted stock hidden by receipt-derived return values, while accepting a receipt-derived getter when the order is correctly persisted.
 
 The receipt and asynchronous-import service oracles reject `SystemExit` while importing a candidate module, including an early zero exit, with the original exit retained as the diagnostic cause. The regression also confirms their incomplete baseline fixtures still execute all seven/eight checks and fail acceptance. This is an import-boundary correction for trusted exercise code, not a sandbox or protection against arbitrary process termination.
