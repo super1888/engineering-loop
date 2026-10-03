@@ -90,6 +90,12 @@ The gate's decision output cannot overwrite its suite, run manifest, packet, pri
 
 The 2026-09-23 pilot used four actual CLI runs and a fresh blinded model reviewer. Both cases tied; the pilot gate passed, while the release gate correctly failed because no human reviewed the packet. This does not demonstrate a quality improvement or complete the broader unrun `exception-decision-boundary` and `order-boundary-classification` specifications.
 
+## Unreleased native-command gating revision
+
+Observed local command sequences in two repositories hid a failed prerequisite behind a later successful native command; one started verification before the intended source change was applied. The focused verification guidance now checks native prerequisites before dependent writes or launches, preserving intentional negative checks whose outcomes match their expectation. This is conditional shell guidance, not a mandatory tool or framework.
+
+`tests/test_native_command_gates.py` reproduces an unguarded exit `7` followed by successful artifact/verification steps returning `0`, then checks that an immediate native-exit gate blocks both dependent steps. Successful prerequisites and expected exit-`7` negative checks still proceed; a negative check unexpectedly returning zero is blocked. The five scripted controls passed with Windows PowerShell and Python 3.12.3; hosts without PowerShell report a skip. These are known-mechanism controls, not model evaluations: the `native-command-prerequisite-gate` scenario's fresh-agent outcome, transfer benefit and performance remain unrun or unknown. Skill/plugin `0.1.10` records this unreleased guidance change; nothing was installed or published.
+
 ## Reproducible receipt trial
 
 The [receipt fixture](fixtures/receipt/RULES.md) is a synthetic SQLite exercise with a deliberately incomplete implementation. It is not production ERP code or a live domain-expert acceptance. It supplies approved behavior, existing project instructions, and a failing public retry test. The evaluator retains [receipt_oracle.py](receipt_oracle.py), which independently checks persisted identities/results, conflicts, rejection, competing connections and storage failure rollback.

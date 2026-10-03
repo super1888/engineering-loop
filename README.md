@@ -172,6 +172,8 @@ The optional [collaboration guide](skills/engineering-loop/references/collaborat
 
 The [release guide](skills/engineering-loop/references/release.md) now checks new preflights against existing isolated CI fixtures and identifies artifact bytes and host-specific permission evidence. Its [portability scenario](evals/README.md) remains unrun.
 
+The unreleased native-command revision checks failed prerequisites before dependent writes or verification, while permitting expected negative checks. Its [isolated shell reproduction](evals/README.md#unreleased-native-command-gating-revision) passed on Windows; fresh-agent transfer and other hosts remain untested.
+
 The [evaluation protocol](evals/README.md) retains reusable fixtures and checks. Raw model transcripts and trial output stay outside the tracked source tree; past trials are available in Git history.
 
 If the workflow helps you, a star helps others discover it. Reproducible feedback helps us improve it.

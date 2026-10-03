@@ -127,6 +127,8 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 
 [发布指南](skills/engineering-loop/references/release.md)现要求用已有隔离 CI 夹具验证新增门禁，并核对发行产物的实际字节与平台相关的权限证据。[跨平台场景](evals/README.md)仍未试跑。
 
+未发布的原生命令修订要求在依赖写入或验证前检查失败的前置步骤，同时允许结果符合预期的负向检查。[隔离脚本复现](evals/README.md#unreleased-native-command-gating-revision)已在 Windows 通过；新聊天的指导迁移效果及其他宿主尚未验证。
+
 [评估协议](evals/README.md)保留可复用的场景、夹具和检查；历史试跑记录可从 Git 历史查阅，不能据此推断普遍收益。
 
 欢迎在 [Issues](https://github.com/super1888/engineering-loop/issues) 提供脱敏反例，在 [Discussions](https://github.com/super1888/engineering-loop/discussions) 讨论流程取舍。重点是实际减少重复沟通、遗漏与返工，不以规则条数或文档数量作为成熟度。

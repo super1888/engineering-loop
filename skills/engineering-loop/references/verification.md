@@ -36,6 +36,8 @@ For generated media or documents, a successful processor exit and a nonempty fil
 
 When checks fail, classify implementation regression, accepted contract change, fixture weakness, timing/resource instability, or environment/command failure. Preserve the intended assertion. Do not silently update snapshots, remove cases, or broaden tolerances to fit an incorrect result.
 
+When one shell invocation runs several native commands, a later success can hide an earlier failed prerequisite. Check each required native result before dependent writes or verification launches; stop those dependent steps on an unexpected failure. In PowerShell, inspect `$LASTEXITCODE` immediately; `$ErrorActionPreference = 'Stop'` alone does not establish native-command success. An intentional negative check may continue when its actual result matches the expected failure. If an apply helper failed, confirm the intended artifact exists before running final verification; passing checks against the unapplied baseline do not verify the change.
+
 When implementation conforms but observed use fails the intended task, record the scenario and challenged assumption; return to [requirements.md](requirements.md) for a bounded design correction. Separate implementation defects, newly discovered constraints and changed preferences. Green checks do not settle usefulness, and dissatisfaction alone does not authorize unrelated redesign or invalidating unchanged acceptance.
 
 For an enumerable migration or replacement, compare the source set with covered/excluded/remaining items. State limits for claims that cannot be enumerated.
