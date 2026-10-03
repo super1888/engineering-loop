@@ -68,6 +68,12 @@ async function main() {
           for (let n = 1; n < Math.ceil(id / 30); n += 1) await page.locator('#next').click();
           await page.getByRole('button', { name: `Open record ${id}`, exact: true }).click();
           assert.equal(await page.locator('#name').inputValue(), action === 'save' ? newName : oldName, 'saved name');
+          await page.locator('#cancel').click();
+          await page.locator('#group').selectOption('all');
+          const neighbor = id + 1;
+          for (let n = 1; n < Math.ceil(neighbor / 30); n += 1) await page.locator('#next').click();
+          await page.getByRole('button', { name: `Open record ${neighbor}`, exact: true }).click();
+          assert.equal(await page.locator('#name').inputValue(), `Record ${neighbor}`, 'unrelated record name');
           assert.deepEqual(errors, [], 'browser errors');
           results.push({ name, passed: true });
         } catch (error) {
