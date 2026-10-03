@@ -154,6 +154,12 @@ class OracleResourceTests(unittest.TestCase):
                         '        if row is None:\n            raise KeyError(order_id)\n'
                         '        return row[0]\n\n')
         hidden_stock += receipt_based_getter
+        repairing_stock_getter = receipt_based_getter.replace(
+            '        row = self.db.execute(',
+            '        with self.db:\n'
+            f'            self.db.execute("UPDATE orders SET received = {receipt_total}")\n'
+            '        row = self.db.execute(')
+        read_repaired_stock = hidden_stock.replace(receipt_based_getter, repairing_stock_getter)
         restored_rejections = []
         for name, before, after, corrupt, restore in (
                 ("invalid order", 'quantity is None', 'type(quantity) is int and quantity == 0',
@@ -193,6 +199,7 @@ class OracleResourceTests(unittest.TestCase):
                     ("initial integral float", initial_integral_float, 1), *restored_rejections, *recovery_mutants,
                     ("receipt-based getter with persisted stock", receive + receipt_based_getter, 0),
                     ("unpersisted stock hidden by receipt totals", hidden_stock, 1),
+                    ("unpersisted stock repaired by received query", read_repaired_stock, 1),
                     *competing_mutants, *failure_other_order_mutants, *deferred_write_mutants, *replay_write_mutants):
                 with self.subTest(candidate=name):
                     source = baseline[:start] + implementation + baseline[end:]

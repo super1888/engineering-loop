@@ -34,7 +34,6 @@ class ReceiptContractTests(unittest.TestCase):
             ).fetchall()
 
     def check_received(self, inventory, order_id, expected, ordered=100):
-        self.assertEqual(inventory.received(order_id), expected)
         with closing(sqlite3.connect(self.path)) as connection:
             self.assertEqual(connection.execute(
                 "SELECT ordered, received FROM orders WHERE order_id = ?", (order_id,)
@@ -42,6 +41,7 @@ class ReceiptContractTests(unittest.TestCase):
             self.assertEqual(connection.execute(
                 "SELECT ordered, received FROM orders WHERE order_id = 'B'"
             ).fetchone(), (100, 0))
+        self.assertEqual(inventory.received(order_id), expected)
 
     def test_retry_retains_original_result_after_other_receipt_and_reopen(self):
         self.assertEqual(self.inventory.receive("A", 60, "R1"), 60)
