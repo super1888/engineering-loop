@@ -106,6 +106,8 @@ It also replays the later request after reopening. A candidate returning the ear
 
 The over-receipt check also accepts a single receipt equal to a new order's entire ordered quantity, verifies its complete persisted receipt and preserves the other orders. A candidate imposing an unapproved per-receipt cap of `60` previously passed because all successful requests were smaller, even though they eventually filled an order. The native control now rejects that cap while retaining the valid implementation; this covers the existing ordered-quantity boundary without adding a business limit or model claim.
 
+That check also creates an order for `120` and accepts its entire quantity, retaining the original `100` scenario. A candidate enforcing a fixed capacity of `100` instead of the stored ordered quantity previously passed every order boundary. The native regression now rejects it and verifies the new order and complete receipt rows without introducing an exercise-wide capacity or model claim.
+
 Stock assertions check the public API and the retained `orders` table through an independent connection. A regression rejects unpersisted stock hidden by receipt-derived return values, while accepting a receipt-derived getter when the order is correctly persisted.
 
 The receipt and asynchronous-import service oracles reject `SystemExit` while importing a candidate module, including an early zero exit, with the original exit retained as the diagnostic cause. The regression also confirms their incomplete baseline fixtures still execute all seven/eight checks and fail acceptance. This is an import-boundary correction for trusted exercise code, not a sandbox or protection against arbitrary process termination.

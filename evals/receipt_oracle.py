@@ -33,12 +33,12 @@ class ReceiptContractTests(unittest.TestCase):
                 "SELECT request_id, order_id, quantity, result FROM receipts ORDER BY request_id"
             ).fetchall()
 
-    def check_received(self, inventory, order_id, expected):
+    def check_received(self, inventory, order_id, expected, ordered=100):
         self.assertEqual(inventory.received(order_id), expected)
         with closing(sqlite3.connect(self.path)) as connection:
             self.assertEqual(connection.execute(
                 "SELECT ordered, received FROM orders WHERE order_id = ?", (order_id,)
-            ).fetchone(), (100, expected))
+            ).fetchone(), (ordered, expected))
             self.assertEqual(connection.execute(
                 "SELECT ordered, received FROM orders WHERE order_id = 'B'"
             ).fetchone(), (100, 0))
@@ -81,6 +81,10 @@ class ReceiptContractTests(unittest.TestCase):
         self.check_received(self.inventory, "C", 100)
         self.check_received(self.inventory, "A", 100)
         self.assertEqual(self.receipt_rows(), [("R1", "A", 60, 60), ("R2", "A", 40, 100), ("R3", "C", 100, 100)])
+        self.inventory.create_order("D", 120)
+        self.assertEqual(self.inventory.receive("D", 120, "R4"), 120)
+        self.check_received(self.inventory, "D", 120, ordered=120)
+        self.assertEqual(self.receipt_rows(), [("R1", "A", 60, 60), ("R2", "A", 40, 100), ("R3", "C", 100, 100), ("R4", "D", 120, 120)])
 
     def test_invalid_quantity_and_unknown_order_leave_no_receipt(self):
         for quantity in [None, 0, -1, 1.5, 1.0, True, "2"]:
