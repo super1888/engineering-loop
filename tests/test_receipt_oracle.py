@@ -114,6 +114,7 @@ class OracleResourceTests(unittest.TestCase):
         nullable_validation = receive.replace(
             'if type(quantity) is not int or quantity <= 0:',
             'if quantity is not None and (type(quantity) is not int or quantity <= 0):')
+        single_receipt_cap = receive.replace('quantity <= 0:', 'quantity <= 0 or quantity > 60:')
         initial_integral_float = receive.replace(
             'if type(quantity) is not int or quantity <= 0:',
             'if type(quantity) not in (int, float) or quantity <= 0 or int(quantity) != quantity:').replace(
@@ -165,6 +166,7 @@ class OracleResourceTests(unittest.TestCase):
                     ("valid", receive, 0), ("missing writes", broken, 1), ("missing receipt", missing_receipt, 1),
                     ("validation after replay", late_validation, 1),
                     ("nullable quantity", nullable_validation, 1),
+                    ("unapproved per-receipt cap", single_receipt_cap, 1),
                     ("initial integral float", initial_integral_float, 1), *restored_rejections, *recovery_mutants,
                     ("receipt-based getter with persisted stock", receive + receipt_based_getter, 0),
                     ("unpersisted stock hidden by receipt totals", hidden_stock, 1),
