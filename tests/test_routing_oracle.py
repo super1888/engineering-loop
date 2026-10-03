@@ -74,6 +74,20 @@ class RoutingOracleTests(unittest.TestCase):
         self._write_valid_implementation()
         self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
 
+    def test_backend_oracle_rejects_boolean_one_in_order_fields(self):
+        self._write_valid_implementation()
+        source = self.workspace / "backend/orders.py"
+        valid = source.read_text(encoding="utf-8")
+        for old, new in (('"id": len(store) + 1', '"id": True if not store else len(store) + 1'),
+                         ('"quantity": quantity', '"quantity": True if quantity == 1 else quantity')):
+            with self.subTest(field=old):
+                source.write_text(valid.replace(old, new), encoding="utf-8")
+                result = assess(self.workspace)
+                source.write_text(valid, encoding="utf-8")
+                self.assertIn("AssertionError", result["backend"] or "")
+                self.assertIsNone(result["form"])
+        self.assertEqual(assess(self.workspace), {"backend": None, "form": None})
+
     def test_non_ascii_form_output_keeps_independent_results(self):
         self._write_valid_implementation()
         form = self.workspace / "ui/order-form.mjs"

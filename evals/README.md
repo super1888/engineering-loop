@@ -274,6 +274,8 @@ The backend oracle also accepts each interior quantity from `2` through `19`, ch
 
 Both routing checks reject a negative quantity (`-1` or form text `"-1"`) in addition to zero. Native candidates taking the absolute value previously passed while accepting that invalid input; the regression now rejects each affected side and retains the valid implementation and unaffected side. This covers the existing lower bound without prescribing a parser, changing the fixture or claiming model improvement.
 
+The backend also rejects a boolean first ID or minimum quantity in an accepted order. Python dictionary equality previously treated `True` as `1`; native regression candidates expose both omissions while preserving the valid backend and unaffected form checks.
+
 The routing recorder and convention comment control share the Python report check. It requires the terminal summary to be plain `OK`; an earlier diagnostic line saying `OK` cannot override `OK (skipped=...)` or `OK (expected failures=...)`. Native subprocess controls retain successful tests with that diagnostic and reject skipped or expected-failure cases. This checks report interpretation; inspect changed or weakened tests separately.
 
 The routing recorder saves Git diff bytes unchanged and reads NUL-delimited file lists, so Git's quoted non-ASCII paths cannot drop tracked edits or distort untracked names. A native reverse-apply check covers staged and unstaged edits with LF and mixed line endings.

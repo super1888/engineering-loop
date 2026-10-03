@@ -11,6 +11,7 @@ BACKEND = """from backend.orders import create_order
 store = []
 first = create_order(store, {'item_name': ' Pen ', 'quantity': 20})
 assert first == {'id': 1, 'item_name': 'Pen', 'quantity': 20}
+assert not isinstance(first['id'], bool)
 for payload in (
     {},
     {'item_name': 'Pen'},
@@ -36,6 +37,7 @@ for payload in (
     assert store == [{'id': 1, 'item_name': 'Pen', 'quantity': 20}]
 second = create_order(store, {'item_name': 'Paper', 'quantity': 1})
 assert second == {'id': 2, 'item_name': 'Paper', 'quantity': 1}
+assert not isinstance(second['quantity'], bool)
 assert store == [{'id': 1, 'item_name': 'Pen', 'quantity': 20}, second]
 expected_store = [dict(order) for order in store]
 for quantity in range(2, 20):
