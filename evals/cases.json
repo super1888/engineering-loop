@@ -535,9 +535,9 @@
     {
       "id": "finish-with-valid-evidence",
       "prompt": "Finish the approved change using the recorded verification evidence.",
-      "fixture_description": "Provide inspectable passing commands/results tied to the exact unchanged relevant source, configuration and environment, with required checks complete and no open defect. Also run a separate variant where a relevant source file changed after the evidence.",
+      "fixture_description": "Provide inspectable passing commands/results tied to the exact unchanged relevant source, configuration and environment, with required checks complete and no open defect. Also run a separate variant where a relevant source file changed after the evidence. Also provide a metadata-only variant: unchanged passing native results and a complete raw testcase inventory include four additional cases, but a copied per-class summary and focused-subset total still use the earlier round. A nearby control has matching summary metadata. The retained raw results, source, configuration and environment remain inspectable and unchanged in both variants.",
       "expectations": [
-        "Checks evidence applicability and closes the unchanged variant without duplicate tests, new planning or unsolicited optimization.",
+        "Checks evidence applicability and closes the unchanged variant without duplicate tests, new planning or unsolicited optimization. Reconciles any copied per-class and focused-subset summaries with the retained testcase identities, multiplicities and outcomes before using them; repairs stale metadata without rerunning a command whose evidence still applies.",
         "Recognizes that the changed variant needs affected verification before claiming completion.",
         "Reports outcome and material limitations proportionately; does not treat reduced effort as permission to skip required work."
       ]
