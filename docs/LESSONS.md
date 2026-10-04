@@ -2,6 +2,14 @@
 
 Keep this small. Business/stack defects belong with their executable safeguards; a local incident is not automatically a generic skill rule.
 
+## Stale ownership after conversation freeze (2026-10-04; not behavior-evaluated)
+
+- **Observed boundary:** During a Windows/local-desktop recovery, the coordinator record still named an active worker and an older revision. Current host lookup showed the related conversations archived; the worker's newer frozen report and clean Git state showed a committed change and a terminal failed CI. Its QA resource deadline had elapsed. The record alone would have selected the wrong next assignment or overstated resource liveness.
+- **Conditions:** Engineering Loop guidance v0.1.10 before this correction; exact model/build identity was not recorded. This is an observed recovery boundary, not a controlled comparison across models or skill versions.
+- **Correction:** Reconcile the latest terminal report, current source and actual conversation state before allocating the successor. Keep historical verification separate from final artifact acceptance, preserve resource uncertainty, and transfer writes only after a read-only receipt. A small turn limit also returned a large tool transcript; subsequent reads selected status and final messages before displaying them.
+- **Scope and control:** Relevant when an authorized ongoing assignment crosses conversation replacement. A confirmed live build must retain its handle and custodian rather than being restarted for context cleanup. Finite completed requests still stop; no scheduler, publication or resource-recreation permission is implied.
+- **Owner and evidence limit:** Maintainers own the D/E coordinator checkpoint controls and the focused collaboration guidance. Those controls remain unrun. Repository checks validate distribution and existing tooling, not this guidance's discovery benefit, model behavior or live-build transfer. Revisit if the host supplies enforced ownership or compact recovery that makes this advice redundant.
+
 ## Unique-constraint replay and client-cache visibility (2026-10-03; project regression, not behavior-evaluated)
 
 - **Trigger and environment:** Four simultaneous requests sharing an idempotency key hit a Java 21 / Spring Boot 4.1.0 application with MySQL 8.4 and MyBatis-Plus 3.5.15. Development ran on Windows; the ordinary HTTP acceptance fixture ran against an isolated Linux service. Serial checks and mocked tests passed, but creation and notification replay returned HTTP 500, refund replay returned 409, and a differently signed payload reused an existing notification result. The expected behavior was one persisted effect and successful identical replays, with conflicting payloads still rejected.

@@ -125,6 +125,8 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 
 可选的[协作指南](skills/engineering-loop/references/collaboration.md)涵盖职责归属、已接受变更的同步、独立验证和明确授权的持续目标，不要求固定 agent 团队。完成一个切片不代表持续目标结束；有限任务完成后仍然停止。[评估状态](evals/README.md#unreleased-collaboration-revision)区分检查点练习与真实协作执行；增加 agent 不代表已经提高准确率。
 
+未发布的 v0.1.11 修订补充已授权的对话轮换：用终态产物核对过期归属、移交活跃句柄，并精简贡献者摘要读取。新增 D/E [检查点对照](evals/fixtures/delegated-continuation/TASK.md)尚未执行；本次恢复不能证明 skill 的实测收益。
+
 [发布指南](skills/engineering-loop/references/release.md)现要求用已有隔离 CI 夹具验证新增门禁，并核对发行产物的实际字节与平台相关的权限证据。[跨平台场景](evals/README.md)仍未试跑。
 
 未发布的原生命令修订要求在依赖写入或验证前检查失败的前置步骤，同时允许结果符合预期的负向检查。[隔离脚本复现](evals/README.md#unreleased-native-command-gating-revision)已在 Windows 通过；新聊天的指导迁移效果及其他宿主尚未验证。

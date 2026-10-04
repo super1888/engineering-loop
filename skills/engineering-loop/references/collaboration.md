@@ -41,6 +41,14 @@ An existing file or message can be sufficient. Propose a shared coordination ser
 
 When monitoring a contributor, an active conversation label or quiet timeout is not proof that a command is still running or has stopped. Inspect its specific job or session handle and relevant artifacts; wait on a confirmed live handle, otherwise state uncertainty only when actionable and defer to the next meaningful checkpoint instead of polling or nudging repeatedly. Do not restart solely because observation expired.
 
+## Replace a conversation without duplicating its work
+
+When the user authorizes context handoff, reconcile the current repository and latest terminal report before relying on an older ownership record. A completed contributor may have committed or frozen work after that record was written. Preserve its unique artifacts and evidence; do not replay the old assignment merely because the record still says active. Treat expired resource deadlines as historical until current handles or resource observations establish their state.
+
+Carry a short effective handoff into a fresh conversation: outcome, authority, source revision, owned changes, evidence, unresolved work and any live handles. Confirm the predecessor has stopped conflicting writes and the successor has checked the handoff before transferring ownership and continuing. A live command can survive the conversation: retain its handle and custodian rather than killing or restarting it for context cleanup. Retire the old conversation only within the user's authorization and at a safe boundary. Finite completed tasks need no replacement.
+
+Prefer compact status and terminal summaries when reading contributor history. A small turn count may still return an entire long tool transcript; select the needed fields before displaying it and fetch raw evidence only for an unresolved acceptance item. Conversation replacement preserves the goal, not every historical message.
+
 ## Review meaningful boundaries
 
 Review the first representative slice before replication, a material shared-contract change, an explicit specification conflict, or the integrated result. Select checkpoints by current risk rather than reviewing every edit or continuously polling unfinished code. Findings name the relevant agreement and identifiable code state, trigger, consequence and evidence. Code changes invalidate only affected findings and checks; reuse still-valid results.

@@ -1,5 +1,14 @@
 # Roadmap
 
+## v0.1.11: unreleased conversation-handoff revision
+
+- Reconcile terminal reports and current artifacts with stale ownership records before replacing an authorized conversation.
+- Transfer confirmed ownership and live handles at a safe boundary; retain resource-state uncertainty and avoid replaying completed work.
+- Keep contributor-history reads compact before displaying long tool transcripts.
+- Extend the [coordinator checkpoint fixture](../evals/fixtures/delegated-continuation/TASK.md) with stale-record recovery and a live-build control. Both new checkpoints remain unrun; packaging checks do not establish improved coordination.
+
+This is a local guidance revision, not a published release.
+
 ## v0.1.9: unreleased directory-junction protection
 
 - Reject Windows directory junctions as well as symlinks in the skill payload, using the standard library's native reparse tag on supported Python versions.
