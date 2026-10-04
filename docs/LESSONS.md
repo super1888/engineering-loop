@@ -2,6 +2,12 @@
 
 Keep this small. Business/stack defects belong with their executable safeguards; a local incident is not automatically a generic skill rule.
 
+## Immutable-tag preflight missed generated defaults (2026-10-05; candidate)
+
+- **Observed gap and conditions:** A Windows coordinator using Engineering Loop v0.1.12 reviewed a Linux image-publishing workflow before its first release build. The proposed registry preflight covered an explicit version and full commit tag. The producer used Docker metadata-action v6 with a Git-tag trigger; its [documented default](https://github.com/docker/metadata-action#latest-tag) also generated `latest`. Source inspection established the uncovered output; no overwritten tag or failed publication was observed. The exact model/build identity was not recorded.
+- **Correction and evidence:** Explicitly disable the moving alias for this immutable publication contract and reconcile the dispatch and Git-tag output sets with the preflight. Serialize the same source commit across both triggers. Eleven local tests passed, and a real read-only workflow authenticated with its normal token confirmed four intended component/tag pairs unused; build jobs were actually skipped. A subsequent official build remains a separate outcome. Unit fixtures and the absence of registry-read permission alone must not establish tag absence; errors remain unknown or fail the preflight.
+- **Scope, controls and owner:** Release maintainers own generated image metadata and the corresponding preflight. Inspect effective producer defaults when an enumerated write set drives a safety check; a deliberately moving alias under a different approved contract must remain available. This is a candidate incident record, not a new universal skill rule or proof of signed artifacts or production acceptance. Raw receipts stay local; no model evaluation or transferable benefit was established.
+
 ## URL-specific proxy overrides a generic transport correction (2026-10-05; candidate)
 
 - **Observed failure and conditions:** A Windows coordinator using Engineering Loop v0.1.12 and Git 2.44.0.windows.1 could read a repository through its HTTPS API, but Git remote discovery failed during TLS negotiation. Windows exposed a working loopback system proxy; the generic Git `http.proxy` query and proxy environment variables were empty. Adding that system proxy through a generic command option still failed, as did changing only the TLS backend. API success did not establish the Git transport path. The exact model/build identity was not recorded.
