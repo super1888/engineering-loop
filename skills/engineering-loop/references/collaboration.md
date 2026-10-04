@@ -47,6 +47,8 @@ When the user authorizes context handoff, reconcile the current repository and l
 
 Carry a short effective handoff into a fresh conversation: outcome, authority, source revision, owned changes, evidence, unresolved work and any live handles. Confirm the predecessor has stopped conflicting writes and the successor has checked the handoff before transferring ownership and continuing. A live command can survive the conversation: retain its handle and custodian rather than killing or restarting it for context cleanup. Retire the old conversation only within the user's authorization and at a safe boundary. Finite completed tasks need no replacement.
 
+When a saved receipt gates ownership transfer or continuation, read back the saved artifact and check its required identity and state against the effective handoff. File existence, a successful writer exit or syntactically valid JSON can still leave a null, incomplete or stale receipt. Repair only that receipt within the existing authority before dependent actions; do not replay verified work to fill it. Keep ordinary conversational handoffs in their established format; this does not require JSON, a new schema or another approval.
+
 Prefer compact status and terminal summaries when reading contributor history. A small turn count may still return an entire long tool transcript; select the needed fields before displaying it and fetch raw evidence only for an unresolved acceptance item. Conversation replacement preserves the goal, not every historical message.
 
 ## Review meaningful boundaries

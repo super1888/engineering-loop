@@ -172,6 +172,8 @@ The optional [collaboration guide](skills/engineering-loop/references/collaborat
 
 The unreleased v0.1.11 revision adds authorized conversation replacement: reconcile stale ownership with terminal artifacts, transfer live handles and read compact contributor summaries. The new D/E [checkpoint controls](evals/fixtures/delegated-continuation/TASK.md) remain unrun; the motivating recovery is not a measured skill benefit.
 
+The unreleased v0.1.12 revision checks saved receipt identity and state before a dependent ownership transfer or continuation. Its [receipt checkpoint controls](evals/fixtures/handoff-receipt/TASK.md) include null and stale artifacts, a repaired receipt and an ordinary text handoff. They remain unrun; no model-behavior benefit is claimed.
+
 The [release guide](skills/engineering-loop/references/release.md) now checks new preflights against existing isolated CI fixtures and identifies artifact bytes and host-specific permission evidence. Its [portability scenario](evals/README.md) remains unrun.
 
 The unreleased native-command revision checks failed prerequisites before dependent writes or verification, while permitting expected negative checks. Its [isolated shell reproduction](evals/README.md#unreleased-native-command-gating-revision) passed on Windows; fresh-agent transfer and other hosts remain untested.

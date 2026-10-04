@@ -127,6 +127,8 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 
 未发布的 v0.1.11 修订补充已授权的对话轮换：用终态产物核对过期归属、移交活跃句柄，并精简贡献者摘要读取。新增 D/E [检查点对照](evals/fixtures/delegated-continuation/TASK.md)尚未执行；本次恢复不能证明 skill 的实测收益。
 
+未发布的 v0.1.12 修订要求在依赖回执移交归属或继续任务前，核对保存内容中的身份和状态。[回执检查点对照](evals/fixtures/handoff-receipt/TASK.md)涵盖 null、过期内容、修复回执及普通文字交接；尚未执行，不宣称模型行为收益。
+
 [发布指南](skills/engineering-loop/references/release.md)现要求用已有隔离 CI 夹具验证新增门禁，并核对发行产物的实际字节与平台相关的权限证据。[跨平台场景](evals/README.md)仍未试跑。
 
 未发布的原生命令修订要求在依赖写入或验证前检查失败的前置步骤，同时允许结果符合预期的负向检查。[隔离脚本复现](evals/README.md#unreleased-native-command-gating-revision)已在 Windows 通过；新聊天的指导迁移效果及其他宿主尚未验证。

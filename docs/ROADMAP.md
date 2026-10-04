@@ -1,5 +1,13 @@
 # Roadmap
 
+## v0.1.12: unreleased saved-receipt revision
+
+- Read back identity and state before a saved receipt triggers ownership transfer or continuation; a successful writer exit and JSON syntax do not establish that contract.
+- Repair only the invalid receipt within existing authority, retaining verified work and live handles. Keep ordinary text handoffs in their established format without a required schema or approval.
+- Add [receipt checkpoint controls](../evals/fixtures/handoff-receipt/TASK.md) for null/stale artifacts, a repaired receipt and a valid text handoff. These remain unrun; packaging checks do not establish a model-behavior benefit.
+
+This is a local guidance revision, not a published release.
+
 ## v0.1.11: unreleased conversation-handoff revision
 
 - Reconcile terminal reports and current artifacts with stale ownership records before replacing an authorized conversation.

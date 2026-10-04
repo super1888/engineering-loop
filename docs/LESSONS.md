@@ -2,6 +2,13 @@
 
 Keep this small. Business/stack defects belong with their executable safeguards; a local incident is not automatically a generic skill rule.
 
+## Saved receipt validity before ownership transfer (2026-10-04; not behavior-evaluated)
+
+- **Observed boundary:** An authorized conversation replacement on Windows/local desktop used a saved JSON receipt to gate the ownership switch. A non-terminating PowerShell expression error left the receipt value null; the command exited zero and wrote syntactically valid `null`. The receiving coordinator read the actual file, rejected it and retained ownership. No invalid transfer occurred.
+- **Correction and evidence:** The sender corrected the local expression, rewrote only the receipt, then read back an object with the expected identity, source and unfinished state. Independent `pathlib`/`json.loads` inspection confirmed those fields before transfer. Existing CI and resource observations were retained; no remote operation or build was repeated merely to repair the receipt. The exact model/build identity was not recorded, so this is an observed artifact boundary rather than a controlled model comparison.
+- **Scope and control:** Check saved contents when a receipt authorizes dependent ownership or continuation. Syntax, file existence and writer exit status are insufficient for that contract. An ordinary text handoff with sufficient current evidence needs neither JSON nor a new schema/approval. A live job keeps its handle and custodian; receipt repair does not authorize resource recreation.
+- **Owner and limit:** Maintainers own the focused collaboration guidance and the [receipt checkpoint fixture](../evals/fixtures/handoff-receipt/TASK.md). The receiving coordinator already protected the actual boundary; the new fixture remains unrun and no additional prevention or model benefit is measured. Retire this advice if the host enforces the required receipt contents directly.
+
 ## Stale ownership after conversation freeze (2026-10-04; not behavior-evaluated)
 
 - **Observed boundary:** During a Windows/local-desktop recovery, the coordinator record still named an active worker and an older revision. Current host lookup showed the related conversations archived; the worker's newer frozen report and clean Git state showed a committed change and a terminal failed CI. Its QA resource deadline had elapsed. The record alone would have selected the wrong next assignment or overstated resource liveness.
