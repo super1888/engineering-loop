@@ -2,6 +2,13 @@
 
 Keep this small. Business/stack defects belong with their executable safeguards; a local incident is not automatically a generic skill rule.
 
+## Native command rendering and semantic acceptance (2026-10-04; candidate)
+
+- **Observed failure and conditions:** A coordinator on Windows/local desktop independently inspected an isolated Linux runtime with Engineering Loop v0.1.12. Two exact firewall rules passed native existence checks, but the local verifier rejected the deny rule because it required the displayed line to end with `-j REJECT`. The actual native rendering appended `--reject-with icmp-port-unreachable`. The rule still rejected traffic as intended. The exact model/build identity was not recorded.
+- **Correction and evidence:** Read the actual rule output before changing either the verifier or the runtime. Keep the independent native existence checks, exact source/destination and port checks, and ACCEPT-before-REJECT order; compare the parsed target rather than a string suffix. The corrected read-only observation passed and identified two running services and an active, unchanged cleanup timer. No firewall rule, container, timer or image was recreated to make the verifier pass. Original failed observations remain local.
+- **Scope and controls:** This is a candidate for acceptance tools that consume native commands with default or normalized rendering. A missing rule, changed address, broader port allowance, wrong target or wrong order must still fail. Exact source, archive and JAR byte identities require strict equality; semantic parsing must not relax those contracts. Existing verification guidance already separates command results and claim-specific evidence, so no new entrypoint or generic parsing framework is introduced.
+- **Owner and promotion gate:** Operators own the scoped verifier and its native predicates. Skill maintainers retain the incident as a candidate until a fresh task demonstrates that focused guidance improves discovery or acceptance without weakening the controls. No model evaluation, transferable benefit or full runtime acceptance is claimed by this record.
+
 ## Disabled integration registration and retained business dependencies (2026-10-04; candidate)
 
 - **Observed boundary:** A multi-module Java backend passed its source CI, including direct factory and consumer tests. An isolated Linux launch of the complete immutable JAR failed when messaging was disabled: the framework still registered an unconditional listener and required the container factory removed by the configuration switch. The listener's execution switch did not prevent registration. Development and coordination ran on Windows/local desktop with Engineering Loop v0.1.12; the exact model/build identity was not recorded.
