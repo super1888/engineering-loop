@@ -191,3 +191,5 @@ Inspired by published work on skill composition, specification-driven developmen
 The unreleased v0.1.13 revision adds conditional product-hypothesis challenges and a focused [UI workflow](skills/engineering-loop/references/ui.md). Clear local edits remain lightweight. First-round comparison conditions and actual outcomes are recorded in [evaluation](evals/README.md); packaging checks alone do not establish a behavioral benefit.
 
 Unreleased v0.1.14 adds a frontend scope gate: desktop by default; mobile design and acceptance only when explicitly requested by the user. Existing mobile behavior is preserved, with conflicting requirements resolved before dependent changes.
+
+Unreleased v0.1.15 adds risk-based operational readiness: business progress signals, response ownership, bounded recovery rehearsal and evidence of data recoverability. Local work and intentionally manual workers stay lightweight. Actual rehearsal outcomes and limits are recorded in [evaluation](evals/README.md).

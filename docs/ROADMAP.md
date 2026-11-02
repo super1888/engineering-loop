@@ -1,9 +1,15 @@
 # Roadmap
 
+## v0.1.15: unreleased operational readiness
+
+- Connect service expectations to observable business outcomes, response ownership and bounded runbooks without mandatory monitoring infrastructure.
+- Exercise a local configuration fault where HTTP remains healthy but queued work does not progress, preserving deliberately manual test modes.
+- Keep restart durability, actual backup restoration and production acceptance as separate evidence claims. Actual rehearsal conditions and results belong in `evals/README.md`.
+
 ## Current validation priorities
 
 - Independent review: distinguish a reproduced contract failure from passing author checks, and retain a legitimate no-finding control. See `evals/README.md` for actual observations rather than inferring benefit from agent count.
-- Operational readiness is the next validation gap: establish business-level progress and recovery evidence when HTTP health remains green, using a local controlled worker-configuration fault. Preserve deliberate manual-worker testing as a valid control; do not require a monitoring service for ordinary local work.
+- Operational readiness now has a local controlled worker-configuration rehearsal with business-progress and restart evidence. Production signals/response ownership and actual backup restoration remain unvalidated; preserve deliberate manual-worker testing as a valid control and do not require a monitoring service for ordinary local work.
 - Performance, capacity and cost remain conditional future work. They need representative workload and accepted budgets before new gates; no measurements or general improvement are claimed here.
 
 ## Unreleased specified-directory read protection

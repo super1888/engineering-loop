@@ -3,7 +3,7 @@ name: engineering-loop
 description: Coordinate a bounded engineering change across requirements, implementation, review, verification, and delivery. Use when explicitly requested, when resuming work with uncertain state, or when a cross-boundary change needs unresolved decisions coordinated. Do not activate for explanations, routine local edits, or an already-scoped stage handled by project guidance.
 license: MIT
 metadata:
-  version: "0.1.14"
+  version: "0.1.15"
 ---
 
 # Engineering Loop
@@ -27,7 +27,7 @@ Read only the needed reference:
 | Review a concrete diff | [review.md](references/review.md) | Evidence-linked findings and dispositions |
 | Verify behavior or integration | [verification.md](references/verification.md) | Passed, failed, unrun, with version/scope |
 | Prepare or execute a release | [release.md](references/release.md) | Identified artifact, migration/recovery, smoke evidence |
-| Diagnose a running service | [operations.md](references/operations.md) | Impact, tested hypothesis, recovery evidence |
+| Prepare or diagnose operations | [operations.md](references/operations.md) | Impact, tested hypothesis, recovery evidence |
 | Preserve a demonstrated lesson | [learning.md](references/learning.md) | Scoped correction and a counterexample |
 
 ## Keep authority and scope explicit

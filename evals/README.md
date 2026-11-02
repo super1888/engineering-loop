@@ -403,3 +403,9 @@ The [trial task](fixtures/read-guard-trial/TASK.md) and [actual report](fixtures
 ## Independent requirement-informed review (2026-11-02)
 
 The [two-candidate task](fixtures/independent-review-trial/TASK.md) checks whether fresh reviewers use the accepted receipt contract rather than a passing author self-check. The [actual observations](fixtures/independent-review-trial/RESULTS.md) record an independently reproduced replay-result rejection and a no-blocking-finding control, with preserved source hashes and specified-root read guards. Both narrow public checks passed before review; the evaluator oracle distinguished the seeded fault. This is a two-artifact capability probe, not measured multi-agent superiority or general review precision. The known seed, explicit acceptance example and shared baseline comment remain disclosed limitations; raw runs stay local.
+
+## Operational readiness and local recovery (2026-11-02)
+
+The [controlled task](fixtures/operations-readiness/TASK.md) starts a small working HTTP/SQLite queue in deliberately manual mode: health remains 200 while business work stays queued. The [actual recovery report](fixtures/operations-readiness/RESULTS.md) separates a real guided configuration repair from independent backlog, replay, new-work and same-database restart checks. The [mechanism test](../tests/test_operations_readiness.py) preserves legitimate manual behavior and establishes that the fixture can process automatically before a fault is attributed to configuration. It does not execute an operator model.
+
+This is a synthetic local single-version rehearsal, not production or skill-efficacy evidence. Reusing intact storage after restart does not validate backup restoration, disaster recovery, external alerts or service-level guarantees. Process records, logs and database snapshots remain local; exercise processes are cleaned up after verification.
