@@ -9,3 +9,4 @@ __pycache__/
 /progress.md
 /findings.md
 /evals/results/
+/.venv/
