@@ -19,4 +19,6 @@ Read this index to select evidence, then open only the relevant report. It summa
 
 The linked reports distinguish mechanism controls (oracle positive/negative candidates, read-denial probes and local service tests) from model observations. Distribution checks and passing unit tests do not measure model quality. Raw transcripts, screenshots and databases are not transferable guarantees; trial artifacts stay ignored/local and credentials are excluded from committed reports.
 
+[Delegated-environment controls](fixtures/delegated-environment/RESULTS.md) additionally reproduce protected-script and missing module-path failures in real subprocesses. These are mechanism controls, not a new model sample or proof that the revised handoff guidance prevents future failures.
+
 Unproven: general quality, speed or cost improvement; native skill discovery across hosts; reliable hidden-test transfer; broad UI usability; production alerting/ownership; off-host or encrypted-backup recovery. Historical scenario specifications remain unrun unless a specific execution record establishes otherwise. Do not turn these rows into a pooled pass rate or assume older evidence validates later skill revisions.

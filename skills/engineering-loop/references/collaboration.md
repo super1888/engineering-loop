@@ -15,6 +15,12 @@ Give each contributor only the relevant agreement/version, paths and contracts o
 
 For a specialist assignment, name the affected stack and applicable project skill or maintained reference when available. A role label alone does not supply project expertise. Let a contributor identify a narrower relevant skill when the environment exposes one, but keep the effective agreement, file ownership and acceptance with the coordinator. Do not load every available skill or add contributors merely to give each skill an owner.
 
+## Check the contributor's effective execution environment
+
+When delegated work depends on an interpreter, CLI, browser or external boundary, establish that the required command can run from the contributor's actual working directory, environment and permissions. A coordinator's successful check or host installation does not establish child-process availability: a protected checkout can hide its virtualenv, a sanitized search path can lose a CLI, or a browser module may not be inherited. Reuse still-valid evidence when those conditions are unchanged; a simple read-only assignment needs no runtime setup ceremony.
+
+Pass only the relevant non-sensitive runtime entrypoints, dependency resolution settings and scoped verification command. Keep credentials in their established channel, not in the handoff. Use a small discriminating check where availability is uncertain, then distinguish environment/permission failure from a code defect. Correct authorized invocation or dependency discovery within the existing boundary; do not disable protection, expose evaluator material, install a new toolchain or modify global configuration merely to make dispatch succeed. If the required capability remains unavailable, preserve that limit and continue independent work rather than claiming the intended verification ran.
+
 ## Carry an ongoing goal across bounded slices
 
 Distinguish a finite assignment from an explicitly ongoing goal. Give the contributor the relevant outcome, exclusions, authority, project/skill paths, owned slice, checks and continuation condition. Creating a task proves dispatch, not implementation or verification. Keep its returned identity and reconcile the resulting artifacts at each meaningful checkpoint.

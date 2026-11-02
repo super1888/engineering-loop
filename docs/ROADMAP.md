@@ -1,5 +1,11 @@
 # Roadmap
 
+## v0.1.16: unreleased delegated environment handoff
+
+- Distinguish coordinator-host availability from a contributor’s effective runtime, working directory and permission boundary.
+- Carry relevant non-sensitive invocation and dependency resolution details; preserve guards and reuse unchanged capability evidence.
+- Mechanism controls reproduce protected-path and missing module-resolution failures separately from code defects; model-transfer and time-saving effects remain unproven.
+
 ## Unreleased independent-destination recovery validation
 
 - Exercise SQLite backup restoration separately from restarting intact original storage, with an explicit before/after snapshot boundary.
