@@ -15,6 +15,7 @@ Read this index to select evidence, then open only the relevant report. It summa
 | [Local operational recovery](fixtures/operations-readiness/RESULTS.md) | Guided configuration repair; independent backlog, replay, new-work and same-database restart checks succeeded. | Simple synthetic fault; deliberate manual mode is a mechanism control, not another model condition. No production monitoring or backup-restore claim. |
 | [Independent-destination restore](fixtures/backup-restore/RESULTS.md) | Backup-cutoff data restored to a separate file; independent replay, new writes and restart checks succeeded; post-backup work remained absent. | Same-host exercise, not off-host disaster recovery or production RPO/RTO. Original byte hash starts during the run, not before dispatch. |
 | [Fresh runtime handoff consumers](fixtures/delegated-environment-transfer/RESULTS.md) | One executor used a prepared runtime card to run verification; a separate explicit read-only task stayed lightweight. | Human-prepared card, simple tasks and one sample each; not a model coordinator or causal handoff benefit. A later probe-runtime correction is separate mechanism evidence. |
+| [Verification boundary routing](fixtures/verification-routing/RESULTS.md) | Copy-only and serialization stayed scoped; a split-transaction plan read only its matching detailed section and retained its gate. | Three supplied-core plan samples, not real integration, native discovery, old/new superiority or token savings. |
 
 ## Tool controls and remaining gaps
 

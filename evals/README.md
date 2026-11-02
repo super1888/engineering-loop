@@ -17,6 +17,7 @@ The full methods below retain their own prerequisites and safety limits. Procedu
 | Need | Entry |
 |---|---|
 | What has actually been demonstrated? | [Current status and limits](STATUS.md) |
+| Which verification boundary applies? | [Core guide](../skills/engineering-loop/references/verification.md), [fresh routing observations](fixtures/verification-routing/RESULTS.md) |
 | Scenario inventory, including unrun cases | [Case specifications](cases.json), [retained details](DETAILS.md) |
 | Receipt, copy-only or integration task | Method sections below |
 | Recent product/UI, review or operations samples | [Current status](STATUS.md), report sections below |

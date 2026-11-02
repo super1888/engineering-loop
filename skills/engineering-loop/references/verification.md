@@ -6,33 +6,27 @@ Match the check to the claim: source tokens can protect an implementation conven
 
 Test meaningful cross-boundary values and combinations: large identifiers across languages, null versus zero, accepted versus unknown outcomes, competing credentials, duplicate calls, transaction/cache visibility, and persisted state after refresh when relevant. Do not make every example mandatory for every change.
 
-For a reservation committed separately from a work item, use the real database isolation level and independent connections to check commit-unknown exceptions, same-key contenders, and rollback/retry orderings. Inspect the resulting reservation, work item, and publication record together; mock-only tests cannot establish whether a release is safe or an orphan is eventually settled. A single atomic transaction with a confirmed rollback does not need this split-transaction gate.
+## Select applicable boundary checks
+
+Before concluding verification, read the matching section below when its trigger applies. The detailed gates remain required within their stated scope; moving them does not waive them. Read only relevant sections, not the entire companion reference. A clear local edit need not load unrelated integration or media examples.
+
+| Changed boundary or claim | Focused checks |
+|---|---|
+| Reservation and work item commit separately | [Split transactions](verification-boundaries.md#split-transactions) |
+| Excluded or replaced an SDK transitive dependency | [SDK transport](verification-boundaries.md#sdk-transport-after-dependency-changes) |
+| Delegated direct upload or shared-user workflow | [Storage quota](verification-boundaries.md#direct-upload-storage-quotas), [actor access](verification-boundaries.md#cross-user-and-role-access), as applicable |
+| Visual/responsive defect or accessibility scan | [Rendered result](verification-boundaries.md#rendered-visual-and-responsive-defects), [accessibility](verification-boundaries.md#accessibility-scans-and-status-feedback), as applicable |
+| Image-plus-schema request or media verdict with missing dimensions | [Capability combination](verification-boundaries.md#image-input-with-structured-output), [evidence limits](verification-boundaries.md#incomplete-media-evidence-and-abstention), as applicable |
+| Review fails after producing an artifact | [Blocking policy and retained diagnostics](verification-boundaries.md#failed-review-after-artifact-creation) |
+| Generated media/document output properties | [Actual runtime and rendering](verification-boundaries.md#generated-media-and-document-properties) |
 
 For integration tests that run only when external services or environment variables are present, inspect the test report as well as the job result. A green CI step with every intended case skipped proves nothing about that boundary. Make the gate fail on a missing report, fewer than the expected cases, or any skipped, failed, or errored case; keep a matched ordinary unit-test job free of unnecessary external setup.
-
-When excluding or replacing an SDK's transitive dependency, exercise the real SDK through the affected request path with the resulting classpath. Request serialization and mocked clients can pass while an interceptor fails before transport. A small loopback server can verify local transport without a paid provider call; keep the security constraint intact and distinguish this check from provider acceptance. An unaffected pure serialization change does not require a transport probe.
-
-When a delegated upload writes directly to object storage, verify quota against bytes the storage accepts, including unfinished objects. Declared size and a per-request proxy limit do not by themselves bound retained storage usage.
-
-For a workflow shared by several users or roles, follow the actual actor through downstream services. A project-level membership check does not prove that an owned task or resource can be read by another authorized member; verify the cross-user path and an unauthorized control without relaxing the public ownership boundary.
 
 Derive expected results from confirmed domain examples, an independent calculation or an authoritative contract. For a cross-screen state change, verify the visible outcome on affected return paths; a callback or cache-invalidation spy alone does not establish it. Another agent sharing the same mistaken premise is not an independent oracle. For concurrent contributors, verify the affected combined behavior after integration, not only each contribution in isolation.
 
 For delegated verification, provide the effective agreement and independent examples, not just the developer's claimed result. Establish critical expectations before or alongside implementation where useful. If an accepted contract changes during work, reconcile affected tests and invalidate related old evidence before integration; [collaboration.md](collaboration.md) describes ownership and notification. A test agent must not silently choose a new business rule to resolve the conflict.
 
-For a visual or responsive defect, reproduce the reported viewport or aspect ratio and inspect the rendered result as well as relevant geometry. Use the project's existing browser/design checks; passing overlap or overflow assertions does not establish visual quality. Include a nearby unaffected layout when useful, without imposing a universal viewport matrix or treating a smaller viewport as actual browser zoom. Scope evidence to the rendered asset and animation state.
-
-For accessibility scans, distinguish definite violations, incomplete checks, and manual findings. Inspect incomplete results at the affected element before claiming the scanned scope passed; uncertain contrast over an image does not by itself justify a color change. Check the rendered role and accessible name of labeled wrappers, including UI library components: an `aria-label` attribute on a generic container does not establish a named group. Where the name matters, assert the intended role and name rather than the attribute alone. For changing status messages, also inspect live-region text and `aria-busy` timing; a role/name assertion alone does not prove a screen reader announced the update.
-
 Use an explicitly configured test environment for real boundaries. Do not treat a mock database, preview page, or synthetic model as proof of real integration. For AI output quality, separate structure from semantics; use independently specified examples and human domain review where needed. Keep evaluation samples/version changes traceable, and retain cases not used for tuning when practical.
-
-When a business invocation combines image input with strict JSON Schema output, provider/model capability flags and a successful text-only connection test do not prove that combination works. Before activating that usage, exercise the intended adapter's actual image-plus-schema request with representative samples; check provider acceptance, parsed structure and task-relevant semantics. A text-only usage needs verification of its own text contract, not a multimodal probe.
-
-Test abstention as well as defect detection when evidence has known gaps. A structurally valid, high-scoring model verdict cannot establish audio or temporal quality from static frames. Where unobserved dimensions block delivery, enforce that evidence limit in the existing server adjudication rather than relying only on prompt wording, and preserve explicit defect failures. Supply known duration bounds for time-based findings and verify outputs through the actual consumer contract; schema acceptance alone may allow an invalid interval. Keep workflows with complete evidence scoped to their own contract.
-
-If review fails after an artifact has been produced, verify that the established failure policy still blocks approval while retaining permitted diagnostic output and a usable failure report. An exception that discards the artifact may defeat recovery without improving the gate; do not change a blocking policy into approval or human-review eligibility just to retain evidence. Keep intentionally disposable or unsafe output governed by its own retention contract.
-
-For generated media or documents, a successful processor exit and a nonempty file do not establish the agreed output properties. Check relevant properties in the actual runtime, such as supported subtitle glyphs, duration or audio tracks, and inspect the rendered result where needed. A nearby metadata-only change does not require an unrelated rendering or language matrix.
 
 When checks fail, classify implementation regression, accepted contract change, fixture weakness, timing/resource instability, or environment/command failure. Preserve the intended assertion. Do not silently update snapshots, remove cases, or broaden tolerances to fit an incorrect result.
 

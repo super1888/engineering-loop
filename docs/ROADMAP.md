@@ -1,5 +1,11 @@
 # Roadmap
 
+## v0.1.17: unreleased verification reference routing
+
+- Keep common verification decisions in the main guide and route conditional technical boundaries to a focused reference.
+- Preserve original acceptance paragraphs and exceptions without strengthening unrelated checks or weakening relevant gates.
+- Check structural preservation and actual fresh-context reference selection separately from general quality or context-cost claims.
+
 ## Unreleased handoff consumption and probe-runtime correction
 
 - Exercise a prepared runtime handoff and an explicit lightweight read-only condition in fresh contexts, without claiming end-to-end multi-agent or causal benefits.
