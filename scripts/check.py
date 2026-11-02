@@ -34,7 +34,8 @@ def check(root=ROOT):
 
     def is_local_output(path):
         parts = path.relative_to(root).parts
-        return any(part in excluded for part in parts) or parts[:2] == ("evals", "results")
+        return (parts[:1] == (".venv",) or any(part in excluded for part in parts)
+                or parts[:2] == ("evals", "results"))
 
     for path in root.rglob("*.md"):
         if is_local_output(path):

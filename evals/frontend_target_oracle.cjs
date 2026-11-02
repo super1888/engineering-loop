@@ -38,6 +38,19 @@ async function main() {
       await page.waitForFunction(() => document.querySelectorAll('#rows button').length === 3);
     },
     async 'failure-and-retry'(page) {
+      const inventorySnapshot = async () => {
+        const records = await page.locator('#rows tr').evaluateAll(rows => rows.map(row => {
+          const cells=row.querySelectorAll('td');
+          return {name:cells[0].textContent.trim(),available:cells[1].textContent.trim()};
+        }));
+        for (const record of records) {
+          await page.locator('#rows tr').filter({hasText:record.name}).getByRole('button',{name:'Details',exact:true}).click();
+          record.details=(await page.locator('#details').innerText()).trim();
+        }
+        return records.sort((left,right)=>left.name.localeCompare(right.name));
+      };
+      const originalInventory = await inventorySnapshot();
+      assert.equal(originalInventory.length,3,'initial inventory records');
       await page.getByLabel('Filter items').fill('MICRO');
       let release;
       const pending = new Promise(resolve => { release = resolve; });
@@ -59,6 +72,12 @@ async function main() {
       assert.equal(await page.getByLabel('Filter items').inputValue(),'MICRO');
       assert.match(await page.locator('#rows').innerText(),/Studio microphone/);
       assert.doesNotMatch(await page.locator('#rows').innerText(),/Field camera/);
+      // Retaining only the currently filtered row is not retaining the existing inventory.
+      await page.getByLabel('Filter items').fill('');
+      await page.waitForFunction(() => document.querySelectorAll('#rows button').length === 3);
+      assert.deepEqual(await inventorySnapshot(),originalInventory,'all original inventory values and details survive a failed refresh');
+      await page.getByLabel('Filter items').fill('MICRO');
+      assert.equal(await page.locator('#rows button').count(),1);
       assert.equal(await page.getByRole('button',{name:/\S/}).evaluateAll(buttons=>buttons.some(button=>button.id==='refresh')),true,'retry has button role and accessible name');
       await page.locator('#refresh').click();
       await page.waitForFunction(() => /updated|success|refreshed/i.test(document.querySelector('#status').textContent));

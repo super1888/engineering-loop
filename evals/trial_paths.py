@@ -19,7 +19,7 @@ def neutralize_trial_paths(message: str, directory: Path) -> str:
         roots.add(str(temporary / suffix))
     roots.update(root.replace("\\", "/") for root in tuple(roots))
     for root in sorted(roots, key=len, reverse=True):
-        # A sibling sharing the prefix is not inside this trial root.
-        message = re.sub(re.escape(root) + r"(?=$|\.(?:\s|$)|[\\/\s\"',;:!?()\[\]])", "<trial-root>", message)
+        # Embedded path prefixes and sibling suffixes are not this trial root.
+        message = re.sub(r"(?<![\w./\\:~+-])" + re.escape(root) + r"(?=$|\.(?:\s|$)|[\\/\s\"',;:!?()\[\]])", "<trial-root>", message)
     return message
 

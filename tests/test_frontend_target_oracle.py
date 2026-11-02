@@ -52,11 +52,17 @@ class FrontendTargetOracleTests(unittest.TestCase):
             original=(candidate/'app.js').read_text(encoding='utf-8')
             retry_label=CORRECT.replace("catch(error){status.textContent=", "catch(error){button.textContent='Retry refresh';status.textContent=")
             no_retry=CORRECT.replace("finally{button.disabled=false;}", "finally{button.disabled=status.textContent !== 'Updated';}")
-            variants=[('original',original,False),('valid',CORRECT,True),
+            formatted=CORRECT.replace('${item.available}</td>', '${item.available} available</td>')
+            variants=[('original',original,False),('valid',CORRECT,True),('formatted-availability',formatted,True),
                 ('retry-label',retry_label,True),('retry-disabled',no_retry,False),
+                ('lose-filtered-away-data',CORRECT.replace("catch(error){status.textContent=", "catch(error){items=shown.slice();render();status.textContent="),False),
+                ('corrupt-description-on-error',CORRECT.replace("catch(error){status.textContent=", "catch(error){items=items.map(item=>({...item,description:'Lost description'}));render();status.textContent="),False),
+                ('corrupt-availability-on-error',CORRECT.replace("catch(error){status.textContent=", "catch(error){items=items.map(item=>({...item,available:0}));render();status.textContent="),False),
                 ('lose-data-on-error',CORRECT.replace("catch(error){status.textContent=", "catch(error){items=[];render();status.textContent="),False)]
             for name,source,passed in variants:
                 with self.subTest(variant=name):
+                    if name not in ('original', 'valid'):
+                        self.assertNotEqual(source, CORRECT, 'control construction must change the baseline')
                     (candidate/'app.js').write_text(source,encoding='utf-8')
                     before={p.name:p.read_bytes() for p in candidate.iterdir() if p.is_file()}
                     result=subprocess.run(['node',str(ROOT/'evals/frontend_target_oracle.cjs'),str(candidate)],
@@ -65,7 +71,7 @@ class FrontendTargetOracleTests(unittest.TestCase):
                     self.assertEqual(len(report['results']),8)
                     self.assertEqual(result.returncode,0 if passed else 1,result.stdout+result.stderr)
                     self.assertEqual(all(row['passed'] for row in report['results']),passed)
-                    if name in ('lose-data-on-error','retry-disabled'):
+                    if name in ('lose-data-on-error','retry-disabled','lose-filtered-away-data','corrupt-availability-on-error','corrupt-description-on-error'):
                         self.assertTrue(any(not row['passed'] and row['name']=='failure-and-retry' for row in report['results']))
                     self.assertEqual(before,{p.name:p.read_bytes() for p in candidate.iterdir() if p.is_file()})
 

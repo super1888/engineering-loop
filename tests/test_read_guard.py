@@ -48,6 +48,11 @@ class ReadGuardTests(unittest.TestCase):
                     run_guarded(['must-not-run'], work, [denied], root/'receipt')
                 self.assertEqual(run.call_count, 1)
             self.assertEqual(list(denied.iterdir()), [])
+            report = json.loads((root/'receipt').read_text(encoding='utf-8'))
+            self.assertEqual(report['state'], 'failed')
+            self.assertFalse(report['probe_passed'])
+            self.assertFalse(report['command_dispatch_attempted'])
+            self.assertIsNone(report['command_exit_code'])
 
     @unittest.skipUnless(platform.system() == 'Darwin', 'macOS seatbelt control')
     def test_zero_exit_without_completion_never_dispatches(self):
@@ -103,6 +108,73 @@ raise SystemExit(7)
             self.assertEqual(result, 0)
             self.assertEqual((work/'ran').read_text(), 'OK')
             self.assertTrue(json.loads((root/'receipt.json').read_text())['probe_passed'])
+
+    @unittest.skipUnless(platform.system() == 'Darwin', 'macOS seatbelt control')
+    def test_invalid_receipt_parent_stops_before_target_side_effects(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); work = root/'work'; work.mkdir()
+            denied = root/'denied'; denied.mkdir()
+            blocked = root/'not-a-directory'; blocked.write_text('KEEP', encoding='utf-8')
+            with self.assertRaises(OSError):
+                run_guarded([str(Path(sys.executable).resolve()), '-c',
+                             "from pathlib import Path; Path('ran').write_text('RAN')"],
+                            work, [denied], blocked/'receipt.json')
+            self.assertFalse((work/'ran').exists())
+            self.assertEqual(blocked.read_text(encoding='utf-8'), 'KEEP')
+            self.assertEqual(list(denied.iterdir()), [])
+
+    @unittest.skipUnless(platform.system() == 'Darwin', 'macOS symlink control')
+    def test_existing_dangling_receipt_symlink_is_not_followed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); work = root/'work'; work.mkdir()
+            denied = root/'denied'; denied.mkdir()
+            destination = root/'unrelated-new.json'
+            receipt = root/'receipt.json'; receipt.symlink_to(destination)
+            with patch('read_guard.subprocess.run') as run:
+                with self.assertRaises(ValueError):
+                    run_guarded(['must-not-run'], work, [denied], receipt)
+                run.assert_not_called()
+            self.assertTrue(receipt.is_symlink())
+            self.assertFalse(destination.exists())
+
+    @unittest.skipUnless(platform.system() == 'Darwin', 'macOS receipt control')
+    def test_receipt_open_failure_prevents_all_subprocess_dispatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); work = root/'work'; work.mkdir()
+            denied = root/'denied'; denied.mkdir()
+            receipt = (root/'receipt.json').resolve()
+            original_open = Path.open
+            def refuse_receipt(path, *args, **kwargs):
+                if path == receipt:
+                    raise PermissionError('Synthetic unwritable receipt')
+                return original_open(path, *args, **kwargs)
+            with patch.object(Path, 'open', refuse_receipt), patch('read_guard.subprocess.run') as run:
+                with self.assertRaises(PermissionError):
+                    run_guarded(['must-not-run'], work, [denied], receipt)
+                run.assert_not_called()
+            self.assertFalse(receipt.exists())
+
+    @unittest.skipUnless(platform.system() == 'Darwin', 'macOS parent symlink control')
+    def test_new_receipt_through_parent_symlink_is_reserved_before_target(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); work = root/'work'; work.mkdir()
+            denied = root/'denied'; denied.mkdir()
+            actual = root/'receipts'; actual.mkdir()
+            alias = root/'receipt-directory'; alias.symlink_to(actual, target_is_directory=True)
+            receipt = alias/'new.json'
+            code = ("import json,pathlib,sys\n"
+                    "report=json.loads(pathlib.Path(sys.argv[1]).read_text())\n"
+                    "if report['state']!='running' or not report['probe_passed']: raise SystemExit(31)\n"
+                    "pathlib.Path('ran').write_text('RAN')\nraise SystemExit(3)")
+            result = run_guarded([str(Path(sys.executable).resolve()), '-c', code, str(receipt)],
+                                 work, [denied], receipt)
+            self.assertEqual(result, 3)
+            report = json.loads(receipt.read_text(encoding='utf-8'))
+            self.assertEqual(report['state'], 'completed')
+            self.assertEqual(report['command_exit_code'], 3)
+            self.assertTrue(report['command_dispatch_attempted'])
+            self.assertTrue((work/'ran').exists())
+            self.assertTrue(alias.is_symlink())
 
 
 if __name__ == '__main__':

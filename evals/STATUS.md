@@ -23,4 +23,6 @@ The linked reports distinguish mechanism controls (oracle positive/negative cand
 
 [Delegated-environment controls](fixtures/delegated-environment/RESULTS.md) additionally reproduce protected-script and missing module-path failures in real subprocesses. These are mechanism controls, not a new model sample or proof that the revised handoff guidance prevents future failures.
 
+[Maintenance corrections](TOOLING.md) repair receipt preflight, full-inventory retention checks, root-local virtualenv validation and unrelated summary paths. These are tool controls, not new model samples; historical oracle counts retain their original coverage limits.
+
 Unproven: general quality, speed or cost improvement; native skill discovery across hosts; reliable hidden-test transfer; broad UI usability; production alerting/ownership; off-host or encrypted-backup recovery. Historical scenario specifications remain unrun unless a specific execution record establishes otherwise. Do not turn these rows into a pooled pass rate or assume older evidence validates later skill revisions.

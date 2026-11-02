@@ -60,6 +60,36 @@ class DistributionTests(unittest.TestCase):
                     entry.write_text(content, encoding="utf-8")
                     self.assertIn("Skill and plugin versions disagree", check(root))
 
+    def test_root_virtualenv_is_local_but_project_files_remain_checked(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in ("skills", ".claude-plugin"):
+                shutil.copytree(ROOT / name, root / name)
+            (root / "evals").mkdir()
+            shutil.copyfile(ROOT / "evals/cases.json", root / "evals/cases.json")
+            self.assertEqual(check(root), [])
+            dependency = root / ".venv/lib/site-packages/example"
+            dependency.mkdir(parents=True)
+            (dependency / "README.md").write_text(
+                "[upstream documentation](not-distributed.md)\n", encoding="utf-8")
+            (dependency / "upstream.json").write_text("not JSON", encoding="utf-8")
+            self.assertEqual(check(root), [])
+            for relative in ("PROJECT.md", "docs/.venv/README.md",
+                             "evals/fixtures/example/.venv/README.md",
+                             "skills/engineering-loop/references/.venv/README.md"):
+                with self.subTest(project_document=relative):
+                    document = root / relative
+                    document.parent.mkdir(parents=True, exist_ok=True)
+                    document.write_text("[missing](not-distributed.md)\n", encoding="utf-8")
+                    self.assertTrue(any("Broken link in " + str(Path(relative)) + ":" in error
+                                        for error in check(root)))
+                    document.unlink()
+            nested_json = root / "evals/fixtures/example/.venv/data.json"
+            nested_json.parent.mkdir(parents=True, exist_ok=True)
+            nested_json.write_text("not JSON", encoding="utf-8")
+            with self.assertRaises(json.JSONDecodeError):
+                check(root)
+
     def test_archive_is_complete_and_contains_only_skill_and_license(self):
         source = ROOT / "skills/engineering-loop"
         with tempfile.TemporaryDirectory() as directory:

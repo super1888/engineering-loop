@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.18: unreleased evaluation and packaging corrections
+
+- Reject existing receipt leaves (including dangling links) and prepare receipt output before guarded dispatch; retain explicit failed/unstarted status on failed probes.
+- Check all original inventory after a failed refresh, including records hidden by the current filter, without prescribing numeric display formatting.
+- Ignore only the root-local `.venv` during document/JSON validation; preserve checks on project and nested fixture/payload files.
+- Preserve unrelated longer path prefixes in trial summaries. These controls repair tools, not model-quality evidence.
+
 ## v0.1.17: unreleased verification reference routing
 
 - Keep common verification decisions in the main guide and route conditional technical boundaries to a focused reference.
