@@ -207,3 +207,5 @@ Unreleased v0.1.18 corrects evaluation and distribution maintenance defects: rec
 Unreleased v0.1.20 validates all packaged skill documents and JSON, including directories with local-output names; repository-local output remains excluded. This is a distribution-check correction.
 
 Unreleased v0.1.21 fixes inline-link validation for angle-bracket destinations with spaces and optional titles; it does not claim complete Markdown parsing.
+
+A local v0.1.21 two-turn sample failed to resume an unfinished summary after a restored-file question; its explicit-stop control was respected. See the [actual observations and limits](evals/fixtures/same-chat-continuation/RESULTS.md).

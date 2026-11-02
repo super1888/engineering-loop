@@ -22,7 +22,7 @@ Validate Markdown links and JSON inside the complete skill payload, including di
 
 ## v0.1.19: unreleased same-chat continuation clarification
 
-Preserve unfinished work through intervening questions, with explicit stop, replacement and draft-only controls. The behavioral scenario is specified but not model-evaluated.
+Preserve unfinished work through intervening questions, with explicit stop, replacement and draft-only controls. A [local two-turn trial](../evals/fixtures/same-chat-continuation/RESULTS.md) failed the continuation condition and respected explicit stopping. Investigate conditional-blocker recovery before claiming prevention; replacement, draft-only and new-chat controls remain unrun.
 
 ## v0.1.18: unreleased evaluation and packaging corrections
 

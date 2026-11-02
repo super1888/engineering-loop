@@ -16,6 +16,7 @@ The full methods below retain their own prerequisites and safety limits. Procedu
 
 | Need | Entry |
 |---|---|
+| Same-chat questions and explicit stops | [Task and criteria](fixtures/same-chat-continuation/TASK.md), [actual failure and control](fixtures/same-chat-continuation/RESULTS.md) |
 | Native project-local skill discovery | [Frozen installation tasks](fixtures/native-discovery/TASK.md), [observed reads and limits](fixtures/native-discovery/RESULTS.md) |
 | What has actually been demonstrated? | [Current status and limits](STATUS.md) |
 | Which verification boundary applies? | [Core guide](../skills/engineering-loop/references/verification.md), [fresh routing observations](fixtures/verification-routing/RESULTS.md) |

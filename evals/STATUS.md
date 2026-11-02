@@ -18,6 +18,7 @@ Read this index to select evidence, then open only the relevant report. It summa
 | [Verification boundary routing](fixtures/verification-routing/RESULTS.md) | Copy-only and serialization stayed scoped; a split-transaction plan read only its matching detailed section and retained its gate. | Three supplied-core plan samples, not real integration, native discovery, old/new superiority or token savings. |
 | [Existing-client local release](fixtures/release-existing-clients/RESULTS.md) | Config-only candidate kept v2 active and v1 resources served; independent browser verified fresh/old pages and draft continuity. | Synthetic no-store assets; rollback retention is evaluator-supplied. Not production retention policy or recovery of an already-failed document. |
 | [Local native Codex discovery](fixtures/native-discovery/RESULTS.md) | Implicit resume read the installed project entrypoint and reference; copy-only stayed lightweight. | One CLI build/host and single samples. Explicit resume occurred without visible entry read, so its strict evidence condition remains unmet; host metadata provenance is unknown. |
+| [Same-chat continuation](fixtures/same-chat-continuation/RESULTS.md) | Two real two-turn sessions: restored-file question ended without the original summary; explicit stop was respected. | Continuation failed despite visible initial entry read; one synthetic sample per condition, not network recovery, reference compliance or causal improvement. |
 
 ## Tool controls and remaining gaps
 
