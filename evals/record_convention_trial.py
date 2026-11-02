@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+from trial_paths import neutralize_trial_paths
 import subprocess
 
 from convention_oracle import assess, assess_comment_control
@@ -11,6 +12,7 @@ from prepare_convention_trial import hashes
 
 
 def run_result(directory: Path, output: Path, name: str) -> dict:
+    supplied_directory = directory
     directory = directory.resolve()
     events = [json.loads(line) for line in (directory / "evidence/events.jsonl").read_text(encoding="utf-8").splitlines()]
     completed = [event for event in events if event.get("type") == "turn.completed"]
@@ -46,9 +48,7 @@ def run_result(directory: Path, output: Path, name: str) -> dict:
             patch.append(file_patch)
     (output / f"{name}.patch").write_bytes(b"".join(patch))
     final_message = messages[-1] if messages else ""
-    trial_root = str(directory.parent)
-    for location in (trial_root, trial_root.replace("\\", "/")):
-        final_message = final_message.replace(location, "<trial-root>")
+    final_message = neutralize_trial_paths(final_message, supplied_directory)
     (output / f"{name}-final.txt").write_text(final_message + "\n", encoding="utf-8")
     commands = [event["item"] for event in events if event.get("type") == "item.completed"
                 and event.get("item", {}).get("type") == "command_execution"]

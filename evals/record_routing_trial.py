@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+from trial_paths import neutralize_trial_paths
 import re
 import subprocess
 
@@ -17,6 +18,7 @@ TRIALS = ("full-A", "full-B", "full-C", "backend-A", "backend-B", "backend-C")
 
 
 def record(directory: Path, output: Path, name: str) -> dict:
+    supplied_directory = directory
     directory = directory.resolve()
     workspace = directory / "workspace"
     events = [json.loads(line) for line in (directory / "evidence/events.jsonl").read_text(encoding="utf-8").splitlines()]
@@ -43,8 +45,7 @@ def record(directory: Path, output: Path, name: str) -> dict:
     messages = [event["item"]["text"] for event in events if event.get("type") == "item.completed"
                 and event.get("item", {}).get("type") == "agent_message"]
     final = messages[-1] if messages else ""
-    for path in (str(directory.parent), str(directory.parent).replace("\\", "/")):
-        final = final.replace(path, "<trial-root>")
+    final = neutralize_trial_paths(final, supplied_directory)
     (output / f"{name}-final.txt").write_text(final + "\n", encoding="utf-8")
     with fresh_python() as python:
         backend = subprocess.run([*python, "-X", "utf8", "-m", "unittest", "discover", "-s", "backend/tests", "-v"],

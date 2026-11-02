@@ -23,6 +23,37 @@ import record_convention_trial
 
 
 class ConventionRecorderTests(unittest.TestCase):
+    def test_known_temporary_aliases_are_neutralized_without_sibling_damage(self):
+        import record_routing_trial
+        import trial_paths
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder).resolve()
+            actual = root / "actual"
+            actual.mkdir()
+            alias = root / "alias"
+            try:
+                alias.symlink_to(actual, target_is_directory=True)
+            except OSError as error:
+                self.skipTest(f"Directory symlinks unavailable: {error}")
+            trial = alias / "batch/trial"
+            trial.mkdir(parents=True)
+            message = (f"A stable table. {alias}/batch/trial/workspace "
+                       f"{actual}/batch/trial/workspace {alias}/batch-other Keep words.")
+            expected = (f"A stable table. <trial-root>/trial/workspace "
+                        f"<trial-root>/trial/workspace {alias}/batch-other Keep words.")
+            previous = Path.cwd()
+            try:
+                for module in (record_convention_trial, record_routing_trial):
+                    with patch.object(trial_paths.tempfile, "gettempdir", return_value=str(alias)):
+                        self.assertEqual(module.neutralize_trial_paths(message, trial), expected)
+                        self.assertEqual(module.neutralize_trial_paths(f"Root {alias}/batch.", trial),
+                                         "Root <trial-root>.")
+                        os.chdir(trial.parent)
+                        self.assertEqual(module.neutralize_trial_paths(message, Path("trial")), expected)
+                        os.chdir(previous)
+            finally:
+                os.chdir(previous)
+
     def test_patch_replays_non_python_test_data_without_staging_candidate(self):
         with tempfile.TemporaryDirectory() as directory:
             trial = Path(directory) / "trial"
