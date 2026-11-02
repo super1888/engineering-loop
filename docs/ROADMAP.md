@@ -1,5 +1,10 @@
 # Roadmap
 
+## Unreleased desktop runtime evaluation
+
+- Exercise the desktop target gate in a disposable inventory implementation, using evaluator-owned browser interactions and positive/negative oracle controls.
+- Preserve the initial empty-state assertion ambiguity and distinguish a clarified known-issue follow-up from independent discovery. See `evals/README.md` for actual outcomes and limitations; no general skill advantage or real-service acceptance is claimed.
+
 ## v0.1.14: unreleased frontend target gate
 
 - Default frontend design and acceptance to desktop; add specific mobile targets only on explicit user request.
