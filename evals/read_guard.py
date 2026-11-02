@@ -23,6 +23,8 @@ def run_guarded(command, workspace, denied_roots, receipt):
         raise ValueError('receipt must be outside denied roots')
     if platform.system() != 'Darwin' or not Path('/usr/bin/sandbox-exec').is_file():
         raise RuntimeError('macOS sandbox-exec is required; command was not started')
+    # Resolve only our stdlib probe runtime; the caller's target argv stays unchanged.
+    probe_interpreter = str(Path(sys.executable).resolve(strict=True))
     # Never expose real evaluator data: create synthetic probes in each real denied root.
     with tempfile.TemporaryDirectory(prefix='read-guard-', dir=workspace) as local:
         local = Path(local)
@@ -49,7 +51,7 @@ if pathlib.Path(sys.argv[4]).read_text() != 'INSIDE': raise SystemExit(32)
 pathlib.Path(sys.argv[5]).write_text('WRITABLE')
 print('READ-GUARD-PROBE-COMPLETE')
 '''
-                result = subprocess.run(['/usr/bin/sandbox-exec', '-p', profile, sys.executable,
+                result = subprocess.run(['/usr/bin/sandbox-exec', '-p', profile, probe_interpreter,
                     '-c', script, str(marker), os.path.relpath(marker, workspace), str(link),
                     str(inside), str(output)], cwd=workspace, capture_output=True)
                 if result.returncode != 0 or result.stdout.strip() != b'READ-GUARD-PROBE-COMPLETE' or not output.exists() or output.read_text() != 'WRITABLE':

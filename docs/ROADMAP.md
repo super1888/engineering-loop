@@ -1,5 +1,11 @@
 # Roadmap
 
+## Unreleased handoff consumption and probe-runtime correction
+
+- Exercise a prepared runtime handoff and an explicit lightweight read-only condition in fresh contexts, without claiming end-to-end multi-agent or causal benefits.
+- Resolve the read-guard helper’s own probe interpreter when a virtualenv alias is hidden by the policy; retain target argv and denied roots unchanged, with a reproduced red/green regression.
+- Keep the post-run helper correction distinct from the preceding model receipts. See `evals/README.md` for actual observations.
+
 ## v0.1.16: unreleased delegated environment handoff
 
 - Distinguish coordinator-host availability from a contributor’s effective runtime, working directory and permission boundary.

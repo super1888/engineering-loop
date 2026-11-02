@@ -14,6 +14,7 @@ Read this index to select evidence, then open only the relevant report. It summa
 | [Independent receipt review](fixtures/independent-review-trial/RESULTS.md) | Fresh reviewers reproduced a seeded contract error despite passing public checks and accepted the valid control within its tested domain. | Two constructed artifacts, explicit examples and a shared baseline cue; not multi-agent superiority or review precision/recall. |
 | [Local operational recovery](fixtures/operations-readiness/RESULTS.md) | Guided configuration repair; independent backlog, replay, new-work and same-database restart checks succeeded. | Simple synthetic fault; deliberate manual mode is a mechanism control, not another model condition. No production monitoring or backup-restore claim. |
 | [Independent-destination restore](fixtures/backup-restore/RESULTS.md) | Backup-cutoff data restored to a separate file; independent replay, new writes and restart checks succeeded; post-backup work remained absent. | Same-host exercise, not off-host disaster recovery or production RPO/RTO. Original byte hash starts during the run, not before dispatch. |
+| [Fresh runtime handoff consumers](fixtures/delegated-environment-transfer/RESULTS.md) | One executor used a prepared runtime card to run verification; a separate explicit read-only task stayed lightweight. | Human-prepared card, simple tasks and one sample each; not a model coordinator or causal handoff benefit. A later probe-runtime correction is separate mechanism evidence. |
 
 ## Tool controls and remaining gaps
 

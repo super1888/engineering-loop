@@ -21,7 +21,7 @@ The full methods below retain their own prerequisites and safety limits. Procedu
 | Receipt, copy-only or integration task | Method sections below |
 | Recent product/UI, review or operations samples | [Current status](STATUS.md), report sections below |
 | Native helper behavior | Repository tests and the relevant detailed section; not a model-efficacy claim |
-| Contributor environment differs from the coordinator | [Reproduction controls](fixtures/delegated-environment/TASK.md), [observations and limits](fixtures/delegated-environment/RESULTS.md) |
+| Contributor environment differs from the coordinator | [Reproduction controls](fixtures/delegated-environment/TASK.md), [observations and limits](fixtures/delegated-environment/RESULTS.md), [fresh handoff consumers](fixtures/delegated-environment-transfer/RESULTS.md) |
 
 ## Retained method and report links
 

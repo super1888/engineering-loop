@@ -85,6 +85,25 @@ raise SystemExit(7)
             for hidden in roots:
                 self.assertEqual([p.name for p in hidden.iterdir()], ['oracle.txt'])
 
+    @unittest.skipUnless(platform.system() == 'Darwin', 'macOS seatbelt control')
+    def test_probe_uses_resolved_interpreter_without_reopening_denied_paths(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); work = root/'work'; work.mkdir()
+            denied = root/'denied'; denied.mkdir()
+            external = Path(sys.executable).resolve()
+            alias = denied/'python-alias'; alias.symlink_to(external)
+            parent = subprocess.run([str(alias), '-c', "print('PARENT-READY')"],
+                                    capture_output=True, text=True, check=True)
+            self.assertEqual(parent.stdout.strip(), 'PARENT-READY')
+            script = denied/'hidden.py'; script.write_text('HIDDEN', encoding='utf-8')
+            code = "import pathlib,sys\ntry: pathlib.Path(sys.argv[1]).read_bytes()\nexcept PermissionError: pass\nelse: raise SystemExit(31)\npathlib.Path('ran').write_text('OK')"
+            with patch('read_guard.sys.executable', str(alias)):
+                result = run_guarded([str(external), '-c', code, str(script)], work,
+                                     [denied], root/'receipt.json')
+            self.assertEqual(result, 0)
+            self.assertEqual((work/'ran').read_text(), 'OK')
+            self.assertTrue(json.loads((root/'receipt.json').read_text())['probe_passed'])
+
 
 if __name__ == '__main__':
     unittest.main()
