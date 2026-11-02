@@ -50,7 +50,10 @@ class FrontendTargetOracleTests(unittest.TestCase):
             candidate=Path(directory)/'candidate'
             shutil.copytree(fixture,candidate)
             original=(candidate/'app.js').read_text(encoding='utf-8')
+            retry_label=CORRECT.replace("catch(error){status.textContent=", "catch(error){button.textContent='Retry refresh';status.textContent=")
+            no_retry=CORRECT.replace("finally{button.disabled=false;}", "finally{button.disabled=status.textContent !== 'Updated';}")
             variants=[('original',original,False),('valid',CORRECT,True),
+                ('retry-label',retry_label,True),('retry-disabled',no_retry,False),
                 ('lose-data-on-error',CORRECT.replace("catch(error){status.textContent=", "catch(error){items=[];render();status.textContent="),False)]
             for name,source,passed in variants:
                 with self.subTest(variant=name):
@@ -62,7 +65,7 @@ class FrontendTargetOracleTests(unittest.TestCase):
                     self.assertEqual(len(report['results']),8)
                     self.assertEqual(result.returncode,0 if passed else 1,result.stdout+result.stderr)
                     self.assertEqual(all(row['passed'] for row in report['results']),passed)
-                    if name=='lose-data-on-error':
+                    if name in ('lose-data-on-error','retry-disabled'):
                         self.assertTrue(any(not row['passed'] and row['name']=='failure-and-retry' for row in report['results']))
                     self.assertEqual(before,{p.name:p.read_bytes() for p in candidate.iterdir() if p.is_file()})
 

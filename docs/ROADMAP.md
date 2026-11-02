@@ -1,5 +1,10 @@
 # Roadmap
 
+## Unreleased specified-directory read protection
+
+- Add a macOS evaluation command wrapper with per-root canary probes, legitimate workspace operations and failure-closed dispatch.
+- Evaluate a real implementation under the boundary and independently inspect resulting desktop behavior; retain actual loaded-version limitations and distinguish directory protection from complete isolation.
+
 ## Unreleased desktop runtime evaluation
 
 - Exercise the desktop target gate in a disposable inventory implementation, using evaluator-owned browser interactions and positive/negative oracle controls.

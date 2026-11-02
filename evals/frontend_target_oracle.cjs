@@ -59,7 +59,8 @@ async function main() {
       assert.equal(await page.getByLabel('Filter items').inputValue(),'MICRO');
       assert.match(await page.locator('#rows').innerText(),/Studio microphone/);
       assert.doesNotMatch(await page.locator('#rows').innerText(),/Field camera/);
-      await page.getByRole('button',{name:'Refresh',exact:true}).click();
+      assert.equal(await page.getByRole('button',{name:/\S/}).evaluateAll(buttons=>buttons.some(button=>button.id==='refresh')),true,'retry has button role and accessible name');
+      await page.locator('#refresh').click();
       await page.waitForFunction(() => /updated|success|refreshed/i.test(document.querySelector('#status').textContent));
       assert.equal(await page.getByLabel('Filter items').inputValue(),'MICRO');
       assert.equal(await page.locator('#rows button').count(),1);
