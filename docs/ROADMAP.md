@@ -1,5 +1,11 @@
 # Roadmap
 
+## Current validation priorities
+
+- Independent review: distinguish a reproduced contract failure from passing author checks, and retain a legitimate no-finding control. See `evals/README.md` for actual observations rather than inferring benefit from agent count.
+- Operational readiness is the next validation gap: establish business-level progress and recovery evidence when HTTP health remains green, using a local controlled worker-configuration fault. Preserve deliberate manual-worker testing as a valid control; do not require a monitoring service for ordinary local work.
+- Performance, capacity and cost remain conditional future work. They need representative workload and accepted budgets before new gates; no measurements or general improvement are claimed here.
+
 ## Unreleased specified-directory read protection
 
 - Add a macOS evaluation command wrapper with per-root canary probes, legitimate workspace operations and failure-closed dispatch.
