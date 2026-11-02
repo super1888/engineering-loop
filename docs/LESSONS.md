@@ -2,6 +2,13 @@
 
 Keep this small. Business/stack defects belong with their executable safeguards; a local incident is not automatically a generic skill rule.
 
+## Intervening question displaced an unfinished task (2026-11-02; candidate)
+
+- **Trigger and evidence:** In a macOS Codex desktop chat, a user requested product disassembly references, then asked why the source page failed to connect. After restoring access, the assistant ended with an offer to continue; the user had to say continue. The original search remained unfinished. Exact serving model/build identity was not recorded; no evidence establishes a macOS-specific defect.
+- **Cause and missed boundary:** The assistant treated an intervening diagnostic question as the whole task instead of steering within the unfinished search. Existing continuation guidance did not explicitly cover this same-chat boundary; packaging checks do not exercise conversation behavior.
+- **Correction and scope:** The skill entrypoint now preserves the active outcome through follow-up questions and resumes authorized independent work after answering or resolving the blocker. Explicit stop, replacement, deferral and draft-only instructions still take precedence. New chats require retrieved context rather than assumed complete memory. This adds no external-send authority or obligation to continue a completed finite task.
+- **Safeguard and limits:** Maintainers own `intervening-question-preserves-active-task` in `evals/cases.json`, including stop/replacement/draft-only and new-chat controls. The case is specified, not model-evaluated; prevention and transferable benefit remain unverified. Revisit or narrow the paragraph if fresh-context trials show unnecessary continuation or no improvement.
+
 ## Immutable-tag preflight missed generated defaults (2026-10-05; candidate)
 
 - **Observed gap and conditions:** A Windows coordinator using Engineering Loop v0.1.12 reviewed a Linux image-publishing workflow before its first release build. The proposed registry preflight covered an explicit version and full commit tag. The producer used Docker metadata-action v6 with a Git-tag trigger; its [documented default](https://github.com/docker/metadata-action#latest-tag) also generated `latest`. Source inspection established the uncovered output; no overwritten tag or failed publication was observed. The exact model/build identity was not recorded.

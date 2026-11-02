@@ -9,3 +9,7 @@ When inspecting a running app, verify process/project identity and artifact/conf
 Recover only: current outcome/non-goals, settled decisions, changed surfaces, valid evidence, unresolved issues, next slice. Ask about a conflict only if it affects the next action. Already-settled choices are not a new questionnaire.
 
 Coordinate ownership when another task edits the same files, build outputs, or Git index. Final verification needs an identifiable snapshot. Follow the project's isolation strategy rather than automatically creating branches or worktrees.
+
+## Same-chat interruptions
+
+Treat follow-up messages in the same conversation as steering the unfinished task unless the user explicitly stops, replaces or defers it. Answer an intervening question or resolve its blocker, then continue the authorized work without requiring another ‘continue’. Preserve explicit limits such as ‘draft only; do not send’; a new conversation needs a retrieved handoff rather than assumed shared context.

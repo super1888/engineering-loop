@@ -3,7 +3,7 @@ name: engineering-loop
 description: Coordinate a bounded engineering change across requirements, implementation, review, verification, and delivery. Use when explicitly requested, when resuming work with uncertain state, or when a cross-boundary change needs unresolved decisions coordinated. Do not activate for explanations, routine local edits, or an already-scoped stage handled by project guidance.
 license: MIT
 metadata:
-  version: "0.1.18"
+  version: "0.1.19"
 ---
 
 # Engineering Loop
@@ -12,7 +12,9 @@ Align decisions, implementation and evidence. Match the user's language. Tool pe
 
 ## Enter once; route only when needed
 
-Identify the requested outcome and current stage. Reuse established decisions and the project's workflow. A named stage request enters that stage directly; do not restart discovery. A routine edit with sufficient context proceeds through the existing local workflow without extra ceremony.
+Identify the outcome and stage; reuse settled decisions and project workflow. Enter a requested stage directly. Routine edits proceed without restarting discovery.
+
+Answer intervening questions, then resume unfinished work. Honor stop, replacement and draft-only limits; see [resume.md](references/resume.md).
 
 For uncertain resumed work, read [resume.md](references/resume.md). When coordination or ambiguity warrants it, briefly establish **outcome/non-goals; relevant state; settled decisions; unresolved blockers; next slice and evidence**. Reuse an existing plan instead of restating it; keep this in conversation unless durable recovery is needed. Missing facts trigger investigation; material choices trigger questions. Do not ask the user to choose internal skill routes.
 

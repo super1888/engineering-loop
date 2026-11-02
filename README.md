@@ -198,4 +198,6 @@ Unreleased v0.1.16 clarifies delegated execution: verify relevant capabilities i
 
 Unreleased v0.1.17 separates general verification decisions from conditional boundary cases. The core routes relevant high-risk tasks to a focused reference while retaining existing acceptance constraints and lightweight nearby controls. Structural preservation and fresh routing observations are recorded in [evaluation](evals/README.md); smaller initial text is not proof of token savings or improved outcomes.
 
+Unreleased v0.1.19 clarifies that intervening same-chat questions preserve unfinished work while explicit stop, replacement and draft-only limits take precedence. A behavioral case covers continuation and its controls; model behavior has not been evaluated.
+
 Unreleased v0.1.18 corrects evaluation and distribution maintenance defects: receipt output is prepared before guarded dispatch, checks verify full-inventory retention after refresh failure, root-local virtualenv dependencies stay outside project validation, and path summaries preserve unrelated path prefixes. These are tool corrections, not new evidence of model-quality gains.

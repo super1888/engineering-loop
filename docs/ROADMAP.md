@@ -6,6 +6,10 @@
 - Separate fresh-page health from open-page continuity and keep evaluator-supplied rollback configuration distinct from the model artifact.
 - Preserve local-only, cache/retention-duration and production limitations; current execution status belongs in `evals/STATUS.md`, not historical snapshot wording.
 
+## v0.1.19: unreleased same-chat continuation clarification
+
+Preserve unfinished work through intervening questions, with explicit stop, replacement and draft-only controls. The behavioral scenario is specified but not model-evaluated.
+
 ## v0.1.18: unreleased evaluation and packaging corrections
 
 - Reject existing receipt leaves (including dangling links) and prepare receipt output before guarded dispatch; retain explicit failed/unstarted status on failed probes.
