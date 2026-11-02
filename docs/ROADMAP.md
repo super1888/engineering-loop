@@ -1,5 +1,10 @@
 # Roadmap
 
+## Unreleased independent-destination recovery validation
+
+- Exercise SQLite backup restoration separately from restarting intact original storage, with an explicit before/after snapshot boundary.
+- Preserve backup/source identity and distinguish restored historical data, new writes and restart persistence from off-host disaster recovery or production recovery objectives. See `evals/README.md` for actual results and limits.
+
 ## v0.1.15: unreleased operational readiness
 
 - Connect service expectations to observable business outcomes, response ownership and bounded runbooks without mandatory monitoring infrastructure.
@@ -9,7 +14,7 @@
 ## Current validation priorities
 
 - Independent review: distinguish a reproduced contract failure from passing author checks, and retain a legitimate no-finding control. See `evals/README.md` for actual observations rather than inferring benefit from agent count.
-- Operational readiness now has a local controlled worker-configuration rehearsal with business-progress and restart evidence. Production signals/response ownership and actual backup restoration remain unvalidated; preserve deliberate manual-worker testing as a valid control and do not require a monitoring service for ordinary local work.
+- Operational readiness now has local worker-configuration recovery and independent-destination backup restoration evidence, including an explicit snapshot cutoff. Production signals/response ownership, off-host recovery and production recovery objectives remain unvalidated; preserve deliberate manual-worker testing and do not require a monitoring service for ordinary local work.
 - Performance, capacity and cost remain conditional future work. They need representative workload and accepted budgets before new gates; no measurements or general improvement are claimed here.
 
 ## Unreleased specified-directory read protection
