@@ -1,5 +1,9 @@
 # Roadmap
 
+## v0.1.21: unreleased inline-link validation
+
+Check angle-bracket Markdown destinations with spaces and optional inline link titles. Retain valid local destinations, external links and fragment-only links; this remains a focused inline-link check, not full Markdown parsing.
+
 ## v0.1.20: unreleased packaged-input validation
 
 Validate Markdown links and JSON inside the complete skill payload, including directories whose names normally identify local output. Preserve repository-local output exclusions. This fixes distribution validation coverage, not model behavior.

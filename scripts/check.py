@@ -44,7 +44,13 @@ def check(root=ROOT):
         if is_local_output(path):
             continue
         content = path.read_text(encoding="utf-8")
-        for target in re.findall(r"\]\(([^\s)]+)\)", content):
+        # Inline destinations: angle brackets permit spaces; a title is not a path.
+        # This remains a focused check, not a complete Markdown parser.
+        links = re.findall(
+            r'''\]\((?:<([^<>\r\n]*)>|([^\s)]+))(?:[ \t]+(?:"[^"\r\n]*"|'[^'\r\n]*'|\([^()\r\n]*\)))?[ \t]*\)''',
+            content)
+        for angled, bare in links:
+            target = angled or bare
             if "://" in target or target.startswith(("#", "mailto:")):
                 continue
             target = target.split("#", 1)[0]

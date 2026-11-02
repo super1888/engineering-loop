@@ -16,6 +16,34 @@ from package import build_archive
 
 
 class DistributionTests(unittest.TestCase):
+    def test_angle_link_destinations_and_optional_titles(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in ("skills", ".claude-plugin"):
+                shutil.copytree(ROOT / name, root / name)
+            (root / "evals").mkdir()
+            shutil.copyfile(ROOT / "evals/cases.json", root / "evals/cases.json")
+            document = root / "LINKS.md"
+            for destination in ("missing.md", "missing file.md", "目录/缺失 文档.md"):
+                for title in ('', ' "Related guide"', " 'Related guide'", ' (Related guide)'):
+                    with self.subTest(destination=destination, title=title):
+                        document.write_text(f'[guide](<{destination}#details>{title})\n', encoding="utf-8")
+                        self.assertIn(f"Broken link in LINKS.md: {destination}", check(root))
+            target = root / "existing file.md"
+            target.write_text("# Existing guide\n", encoding="utf-8")
+            (root / "existing (guide).md").write_text("# Parentheses\n", encoding="utf-8")
+            document.write_text(
+                '[guide](<existing file.md#details> "Guide")\n'
+                '[parentheses](<existing (guide).md>)\n'
+                '[plain](existing.md "Guide")\n'
+                '[web](<https://example.invalid/somewhere> "External")\n'
+                '[mail](<mailto:test@example.invalid>)\n'
+                '[anchor](<#details>)\n', encoding="utf-8")
+            (root / "existing.md").write_text("# Plain\n", encoding="utf-8")
+            self.assertEqual(check(root), [])
+            (root / "existing.md").unlink()
+            self.assertIn("Broken link in LINKS.md: existing.md", check(root))
+
     def test_local_links_and_metadata(self):
         self.assertEqual(check(), [])
 

@@ -205,3 +205,5 @@ Unreleased v0.1.19 clarifies that intervening same-chat questions preserve unfin
 Unreleased v0.1.18 corrects evaluation and distribution maintenance defects: receipt output is prepared before guarded dispatch, checks verify full-inventory retention after refresh failure, root-local virtualenv dependencies stay outside project validation, and path summaries preserve unrelated path prefixes. These are tool corrections, not new evidence of model-quality gains.
 
 Unreleased v0.1.20 validates all packaged skill documents and JSON, including directories with local-output names; repository-local output remains excluded. This is a distribution-check correction.
+
+Unreleased v0.1.21 fixes inline-link validation for angle-bracket destinations with spaces and optional titles; it does not claim complete Markdown parsing.

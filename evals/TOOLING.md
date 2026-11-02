@@ -29,3 +29,9 @@ A summary containing another absolute path formed as `/archive` plus a known tri
 On Python 3.12.16, a temporary repository containing a broken Markdown link and malformed JSON under `skills/engineering-loop/dist` passed distribution checks; the offline archive included both unchecked files. The same files outside a normally excluded directory failed validation. The checker applied repository-local output exclusions to published input.
 
 All skill payload documents and JSON now receive the existing checks regardless of directory names. Regression controls cover `dist`, `node_modules`, `.idea`, `.planning` and `.git`, retaining root-local exclusions, valid payload content and actual archive inclusion. Before the fix, all five directory controls failed; afterward they passed. This does not extend the Markdown parser or measure model behavior. See [distribution controls](../tests/test_distribution.py).
+
+## Angle-bracket destinations and link titles
+
+On Python 3.12.16, a missing local document referenced by an angle-bracket Markdown destination containing spaces passed distribution checks. The old expression either skipped the link or treated the angle brackets as filename characters. Optional link titles also caused ordinary links to be skipped.
+
+The checker now separates angle-bracket or bare destinations from optional double-quoted, single-quoted or parenthesized titles before applying its existing local-file check. A regression rejects missing paths with spaces, Chinese characters and fragments; controls accept existing paths (including parentheses), titles, external URLs, mailto and fragment-only links. The regression produced 13 failures against the previous checker and passes after repair. This remains a focused inline-link check: reference links, Markdown code-context parsing and full escaped/nested syntax are not certified. See [distribution controls](../tests/test_distribution.py).
