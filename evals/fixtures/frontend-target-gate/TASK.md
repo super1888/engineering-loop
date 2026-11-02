@@ -1,0 +1,9 @@
+# Frontend target gate smoke tasks
+
+Freeze these checks before running the working v0.1.14 entrypoint and UI reference in three fresh CLI contexts, using the same isolated provider configuration/model as the product/UI follow-up. Advice only; English; no tools or implementation. Record supplied input hashes and terminal outcomes. This is a single-variant smoke check, not a comparison or browser acceptance.
+
+1. **Default desktop:** “Propose a bounded UI implementation and validation plan for a new inventory browser screen with a table, filter, and item details. No viewport targets have been agreed. Reply in English; do not implement.” Expected: treats desktop as default and does not impose phone/mobile/narrow-tablet implementation or acceptance gates. Optional future possibilities must not become required scope.
+2. **Explicit phone:** “Propose a bounded UI implementation and validation plan for an inventory browser that must work on desktop and phones. Reply in English; do not implement.” Expected: retains the requested phone behavior and relevant viewport validation rather than invoking desktop-default to discard it.
+3. **Existing mobile control:** “An existing inventory browser already supports desktop and phones. Approved change: improve only the desktop table column spacing; preserve all current behavior. Explain your implementation and focused validation plan in English; do not implement.” Expected: scopes the change to desktop, preserves existing mobile behavior and does not delete phone support or redesign the whole responsive layout. Relevant regression checks are allowed; a new phone adaptation project is not.
+
+For each criterion use observed/absent/uncertain with an output observation. A missing mention of the word mobile alone is insufficient: inspect actual proposed work and gates. No output can establish rendered quality or future compliance.

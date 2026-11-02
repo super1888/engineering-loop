@@ -29,3 +29,5 @@
 - 对尚未成立的产品方向，使用 `skills/engineering-loop/references/requirements.md` 核对问题、替代方法、成功信号与最小实验；已确认的局部修改不重开需求访谈。
 - 新建或实质改变交互时按需读取 `skills/engineering-loop/references/ui.md`，以代表性用户任务和实际渲染/交互证据验收，不能将建议或静态源码视为可用性证明。
 - 本轮对照任务及轻量反例见 `evals/fixtures/product-ui-first-round/TASK.md`，实际执行与限制见 `evals/README.md`。未执行或被环境阻塞的条件不得记为通过。
+
+- 前端设计与实现执行 `skills/engineering-loop/references/ui.md` 的目标门禁：默认仅桌面端，用户明确要求时才纳入对应手机/平板设计与验收；不得擅自删除已有移动端行为。

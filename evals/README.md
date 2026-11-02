@@ -377,3 +377,11 @@ The comment-only control independently checks the original module constant and b
 ## First-round product hypothesis and UI advice comparison (2026-11-02)
 
 The [matched tasks and counterexample](fixtures/product-ui-first-round/TASK.md) were executed in six fresh local Codex CLI contexts with baseline v0.1.12 and enhanced v0.1.13 reference packages. The [formal observation summary](fixtures/product-ui-first-round/RESULTS.md) records actual input hashes, model, configuration differences and criterion-level results. Both variants already challenged the product hypothesis and preserved a clear local-edit control. Enhanced product advice added specificity, while both UI responses omitted the combined loading/error/keyboard criterion. This advice-only exploratory run establishes neither a general guidance advantage nor rendered usability; raw runs remain ignored/local.
+
+## Product/UI follow-up and desktop target gate (2026-11-02)
+
+The [new-task follow-up](fixtures/product-ui-followup/TASK.md) repeats the advice comparison with matched configuration/language and separate state, keyboard and viewport criteria. Its [actual observations](fixtures/product-ui-followup/RESULTS.md) show that both packages cover explicitly requested loading/error/keyboard concerns; this does not establish a guidance advantage or repair of real UI behavior. First-round applicability limits are now explicit without changing historical scores.
+
+Trial recorders now preserve known lexical and resolved trial roots, including a temporary-directory alias, before writing path-neutral summaries. A shared helper and symlink regression cover absolute and relative calls, ordinary punctuation and sibling paths. This removes the macOS temporary-path workaround; arbitrary aliases not supplied or derivable from the temporary root remain outside the guarantee. These tooling checks establish no model-quality improvement.
+
+The desktop-default gate has separate [prespecified smoke tasks](fixtures/frontend-target-gate/TASK.md) and [three actual advice observations](fixtures/frontend-target-gate/RESULTS.md): default desktop, explicit phone support, and preservation of existing mobile behavior. All complied in this sample; no browser execution or reliable future compliance is established.

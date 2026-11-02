@@ -142,3 +142,5 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 [MIT 许可](LICENSE) · [参考与致谢](ACKNOWLEDGMENTS.md) · [后续方向](docs/ROADMAP.md)
 
 未发布的 v0.1.13 修订补充按需触发的产品假设挑战与聚焦的 [UI 工作指南](skills/engineering-loop/references/ui.md)，明确局部修改保持轻量。第一轮对照的条件与实际结果记录在[评估说明](evals/README.md)；包装检查本身不证明行为收益。
+
+未发布的 v0.1.14 增加前端范围门禁：默认仅桌面端，用户明确要求时才加入对应移动端设计与验收。保留已有移动行为，约定冲突须在依赖变更前明确。

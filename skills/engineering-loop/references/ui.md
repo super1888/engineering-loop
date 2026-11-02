@@ -2,6 +2,14 @@
 
 Use when a new or materially changed interface needs interaction or visual decisions. Reuse the project's design system, accepted screens and available design/browser tools. A settled copy or spacing correction needs only its affected checks, not a redesign workshop or a new design tool.
 
+## Frontend design gate: desktop by default
+
+Before planning or accepting frontend work, establish the requested target. Without an explicit user requirement for mobile, design and verify desktop only: do not add mobile mockups, phone breakpoints, touch-specific navigation or mobile acceptance tasks. Desktop window resizing, long content and browser zoom remain relevant desktop checks; a narrow window alone does not authorize a mobile scope.
+
+When the user explicitly requests mobile support, include the specified devices, interactions and viewports in design and acceptance. An explicit tablet or phone request applies to that target, not every mobile device. Reuse an already-confirmed user requirement rather than asking again. If existing project requirements or a supplied reference conflict with the desktop default, identify the conflict and resolve its intended scope before dependent changes; do not silently remove existing mobile behavior.
+
+At acceptance, state the target and inspect the corresponding rendered evidence. Unrequested mobile work is a scope failure to reconcile before acceptance; missing explicitly requested mobile evidence remains unverified. When rendering is unavailable, report the limitation rather than treating this gate as passed. The gate applies to design and implementation decisions, not a demand for a browser session during a design-only advice task.
+
 ## Start with a task and representative content
 
 Name the actor, entry point, information needed, main action, success signal and supported exit/return path. Establish what the interface must help the person decide or complete before choosing controls. Resolve business-policy uncertainty through [requirements.md](requirements.md); layout choices must not silently introduce permissions, cancellation or recovery policies.
@@ -22,7 +30,7 @@ Run the slice in the project's actual browser or preview path. Follow the repres
 
 - Navigation and supported return paths retain the expected context and show the changed result.
 - Loading, validation and failures give actionable feedback without duplicate submission or lost input.
-- Relevant narrow and wide layouts remain readable; long labels, dense data and missing media do not obscure the main action or create unintended overflow.
+- Relevant desktop window sizes (and explicitly requested mobile viewports) remain readable; long labels, dense data and missing media do not obscure the main action or create unintended overflow.
 - Keyboard order, visible focus, control names, contrast and status feedback support the affected interaction. Automated accessibility results still require interpretation.
 
 Choose viewports and states from the actual use or reported defect rather than imposing an exhaustive matrix. Compare a nearby unaffected layout when a responsive repair could regress it. Geometry checks and screenshots serve different purposes: neither alone establishes interaction quality. See [verification.md](verification.md) for visual, accessibility and integration evidence boundaries.

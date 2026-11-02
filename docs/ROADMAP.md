@@ -1,5 +1,13 @@
 # Roadmap
 
+## v0.1.14: unreleased frontend target gate
+
+- Default frontend design and acceptance to desktop; add specific mobile targets only on explicit user request.
+- Preserve established mobile behavior and resolve conflicting requirements before dependent changes.
+- Verify target scope separately from rendered acceptance; advice-only trials cannot prove browser behavior.
+- Split follow-up advice criteria and correct first-round applicability limits without rewriting historical scores.
+- Normalize known lexical/resolved trial paths in a shared recorder helper, with symlink and sibling-path controls; remove the macOS temporary-directory workaround.
+
 ## v0.1.13: unreleased product and UI revision
 
 - Challenge unresolved product assumptions with user/context, alternatives, impact, success signals and a bounded experiment; retain direct execution for settled local changes.
