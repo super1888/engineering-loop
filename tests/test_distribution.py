@@ -90,6 +90,37 @@ class DistributionTests(unittest.TestCase):
             with self.assertRaises(json.JSONDecodeError):
                 check(root)
 
+    def test_packaged_directories_cannot_be_excluded_as_local_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in ("skills", ".claude-plugin"):
+                shutil.copytree(ROOT / name, root / name)
+            (root / "evals").mkdir()
+            shutil.copyfile(ROOT / "evals/cases.json", root / "evals/cases.json")
+            for name in ("dist", "node_modules", ".idea", ".planning", ".git"):
+                with self.subTest(directory=name):
+                    local = root / name
+                    local.mkdir()
+                    (local / "bad.json").write_text("not JSON", encoding="utf-8")
+                    (local / "README.md").write_text("[missing](absent.md)\n", encoding="utf-8")
+                    self.assertEqual(check(root), [])
+                    payload = root / "skills/engineering-loop" / name
+                    payload.mkdir()
+                    document = payload / "README.md"
+                    document.write_text("[missing](absent.md)\n", encoding="utf-8")
+                    self.assertTrue(any("Broken link in " + str(document.relative_to(root)) in error
+                                        for error in check(root)))
+                    document.write_text("Valid payload document.\n", encoding="utf-8")
+                    data = payload / "data.json"
+                    data.write_text("not JSON", encoding="utf-8")
+                    with self.assertRaises(json.JSONDecodeError):
+                        check(root)
+                    data.write_text('{}\n', encoding="utf-8")
+                    self.assertEqual(check(root), [])
+                    archive = build_archive(root / "skills/engineering-loop", root / "payload.zip", ROOT / "LICENSE")
+                    with zipfile.ZipFile(archive) as packed:
+                        self.assertEqual(packed.read(f"engineering-loop/{name}/data.json"), b'{}\n')
+
     def test_archive_is_complete_and_contains_only_skill_and_license(self):
         source = ROOT / "skills/engineering-loop"
         with tempfile.TemporaryDirectory() as directory:

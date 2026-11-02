@@ -1,5 +1,9 @@
 # Roadmap
 
+## v0.1.20: unreleased packaged-input validation
+
+Validate Markdown links and JSON inside the complete skill payload, including directories whose names normally identify local output. Preserve repository-local output exclusions. This fixes distribution validation coverage, not model behavior.
+
 ## Unreleased local native discovery observations
 
 - Observe a complete project-local installation in fresh CLI contexts without evaluator-supplied skill body.

@@ -203,3 +203,5 @@ Unreleased v0.1.17 separates general verification decisions from conditional bou
 Unreleased v0.1.19 clarifies that intervening same-chat questions preserve unfinished work while explicit stop, replacement and draft-only limits take precedence. A behavioral case covers continuation and its controls; model behavior has not been evaluated.
 
 Unreleased v0.1.18 corrects evaluation and distribution maintenance defects: receipt output is prepared before guarded dispatch, checks verify full-inventory retention after refresh failure, root-local virtualenv dependencies stay outside project validation, and path summaries preserve unrelated path prefixes. These are tool corrections, not new evidence of model-quality gains.
+
+Unreleased v0.1.20 validates all packaged skill documents and JSON, including directories with local-output names; repository-local output remains excluded. This is a distribution-check correction.

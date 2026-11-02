@@ -23,3 +23,9 @@ A root `.venv` dependency README containing an upstream-only relative link, or a
 ## Preserve unrelated path prefixes
 
 A summary containing another absolute path formed as `/archive` plus a known trial root was previously changed inside that unrelated path. The normalizer now checks a left boundary as well as the existing sibling suffix boundary. Controls preserve common embedded prefixes while retaining standalone roots, punctuation and aliases. This is scoped text normalization, not an exhaustive parser or confidentiality guarantee. See [path controls](../tests/test_trial_paths.py).
+
+## Packaged input takes precedence over local-output names
+
+On Python 3.12.16, a temporary repository containing a broken Markdown link and malformed JSON under `skills/engineering-loop/dist` passed distribution checks; the offline archive included both unchecked files. The same files outside a normally excluded directory failed validation. The checker applied repository-local output exclusions to published input.
+
+All skill payload documents and JSON now receive the existing checks regardless of directory names. Regression controls cover `dist`, `node_modules`, `.idea`, `.planning` and `.git`, retaining root-local exclusions, valid payload content and actual archive inclusion. Before the fix, all five directory controls failed; afterward they passed. This does not extend the Markdown parser or measure model behavior. See [distribution controls](../tests/test_distribution.py).

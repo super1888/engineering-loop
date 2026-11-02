@@ -34,6 +34,9 @@ def check(root=ROOT):
 
     def is_local_output(path):
         parts = path.relative_to(root).parts
+        # Every packaged file is project input, even under a local-output name.
+        if path.is_relative_to(skill):
+            return False
         return (parts[:1] == (".venv",) or any(part in excluded for part in parts)
                 or parts[:2] == ("evals", "results"))
 
