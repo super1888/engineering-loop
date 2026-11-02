@@ -23,3 +23,9 @@
 - 极小且无法合理拆分的任务可由主 agent 实现、子 agent 独立验证。工具不可用或并发额度受限时说明实际限制，采用可行的替代检查，不把主 agent 自检称为独立验证；用户明确要求单 agent 时遵循该要求。
 - 使用 `skills/engineering-loop/references/collaboration.md` 中的归属、共享文件和集成约定；共享 Git 暂存区与提交由主 agent 统一管理，避免并发写入冲突。
 - 该默认协作方式仅作用于本仓库，不修改个人全局配置，也不作为分发 skill 对其他项目的默认要求。
+
+## 产品与 UI 工作入口
+
+- 对尚未成立的产品方向，使用 `skills/engineering-loop/references/requirements.md` 核对问题、替代方法、成功信号与最小实验；已确认的局部修改不重开需求访谈。
+- 新建或实质改变交互时按需读取 `skills/engineering-loop/references/ui.md`，以代表性用户任务和实际渲染/交互证据验收，不能将建议或静态源码视为可用性证明。
+- 本轮对照任务及轻量反例见 `evals/fixtures/product-ui-first-round/TASK.md`，实际执行与限制见 `evals/README.md`。未执行或被环境阻塞的条件不得记为通过。

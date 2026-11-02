@@ -3,12 +3,12 @@ name: engineering-loop
 description: Coordinate a bounded engineering change across requirements, implementation, review, verification, and delivery. Use when explicitly requested, when resuming work with uncertain state, or when a cross-boundary change needs unresolved decisions coordinated. Do not activate for explanations, routine local edits, or an already-scoped stage handled by project guidance.
 license: MIT
 metadata:
-  version: "0.1.12"
+  version: "0.1.13"
 ---
 
 # Engineering Loop
 
-Keep human decisions, implementation, and evidence aligned through one bounded change. Match the user's language. This skill guides decisions; tool permissions and executable checks enforce boundaries.
+Align decisions, implementation and evidence within the agreed change. Match the user's language. Tool permissions and executable checks enforce boundaries.
 
 ## Enter once; route only when needed
 
@@ -16,12 +16,13 @@ Identify the requested outcome and current stage. Reuse established decisions an
 
 For uncertain resumed work, read [resume.md](references/resume.md). When coordination or ambiguity warrants it, briefly establish **outcome/non-goals; relevant state; settled decisions; unresolved blockers; next slice and evidence**. Reuse an existing plan instead of restating it; keep this in conversation unless durable recovery is needed. Missing facts trigger investigation; material choices trigger questions. Do not ask the user to choose internal skill routes.
 
-Read only the reference for the current unresolved need:
+Read only the reference needed:
 
 | Need | Reference | Exit evidence |
 |---|---|---|
 | Connect project rules, reference projects or contributors | [project.md](references/project.md) | Effective conventions, owners, active checks and gaps |
 | Clarify behavior and tradeoffs | [requirements.md](references/requirements.md) | Accepted examples, boundaries, unresolved items |
+| Design a user interface | [ui.md](references/ui.md) | Task flow, states and rendered evidence |
 | Implement a slice or diagnose a bug | [implementation.md](references/implementation.md) | Scoped changes and relevant checks |
 | Review a concrete diff | [review.md](references/review.md) | Evidence-linked findings and dispositions |
 | Verify behavior or integration | [verification.md](references/verification.md) | Passed, failed, unrun, with version/scope |

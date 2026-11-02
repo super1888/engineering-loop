@@ -1,5 +1,11 @@
 # Roadmap
 
+## v0.1.13: unreleased product and UI revision
+
+- Challenge unresolved product assumptions with user/context, alternatives, impact, success signals and a bounded experiment; retain direct execution for settled local changes.
+- Add an on-demand UI workflow from user tasks and representative content to states, prototypes and rendered acceptance.
+- Run a first-round comparison and retain actual conditions, limitations and outcomes in `evals/README.md`. No release or general quality advantage is implied.
+
 ## v0.1.12: unreleased saved-receipt revision
 
 - Read back identity and state before a saved receipt triggers ownership transfer or continuation; a successful writer exit and JSON syntax do not establish that contract.

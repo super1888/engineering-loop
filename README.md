@@ -187,3 +187,5 @@ If the workflow helps you, a star helps others discover it. Reproducible feedbac
 Inspired by published work on skill composition, specification-driven development, test-first feedback, and recoverable agent workflows. See [acknowledgments](ACKNOWLEDGMENTS.md). This initial implementation is independently written; it does not bundle those projects.
 
 [MIT](LICENSE). Maintained by [super1888](https://github.com/super1888).
+
+The unreleased v0.1.13 revision adds conditional product-hypothesis challenges and a focused [UI workflow](skills/engineering-loop/references/ui.md). Clear local edits remain lightweight. First-round comparison conditions and actual outcomes are recorded in [evaluation](evals/README.md); packaging checks alone do not establish a behavioral benefit.
