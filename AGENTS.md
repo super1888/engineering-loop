@@ -31,3 +31,9 @@
 - 本轮对照任务及轻量反例见 `evals/fixtures/product-ui-first-round/TASK.md`，实际执行与限制见 `evals/README.md`。未执行或被环境阻塞的条件不得记为通过。
 
 - 前端设计与实现执行 `skills/engineering-loop/references/ui.md` 的目标门禁：默认仅桌面端，用户明确要求时才纳入对应手机/平板设计与验收；不得擅自删除已有移动端行为。
+
+## 评估证据读取入口
+
+- 先用 `evals/README.md` 选择方法，用 `evals/STATUS.md` 定位已执行样例及限制，再读取相关正式报告。
+- 历史全文与详细方法保留在 `evals/DETAILS.md`，仅按当前问题读取相应节，不默认预载整个文件。旧 README 锚点继续可用。
+- 新结果更新相应报告和证据索引；保留失败、未运行与不确定边界，不把异质样例合成总通过率，也不让旧版本结果替新版本背书。
