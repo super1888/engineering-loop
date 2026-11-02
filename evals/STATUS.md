@@ -16,6 +16,7 @@ Read this index to select evidence, then open only the relevant report. It summa
 | [Independent-destination restore](fixtures/backup-restore/RESULTS.md) | Backup-cutoff data restored to a separate file; independent replay, new writes and restart checks succeeded; post-backup work remained absent. | Same-host exercise, not off-host disaster recovery or production RPO/RTO. Original byte hash starts during the run, not before dispatch. |
 | [Fresh runtime handoff consumers](fixtures/delegated-environment-transfer/RESULTS.md) | One executor used a prepared runtime card to run verification; a separate explicit read-only task stayed lightweight. | Human-prepared card, simple tasks and one sample each; not a model coordinator or causal handoff benefit. A later probe-runtime correction is separate mechanism evidence. |
 | [Verification boundary routing](fixtures/verification-routing/RESULTS.md) | Copy-only and serialization stayed scoped; a split-transaction plan read only its matching detailed section and retained its gate. | Three supplied-core plan samples, not real integration, native discovery, old/new superiority or token savings. |
+| [Existing-client local release](fixtures/release-existing-clients/RESULTS.md) | Config-only candidate kept v2 active and v1 resources served; independent browser verified fresh/old pages and draft continuity. | Synthetic no-store assets; rollback retention is evaluator-supplied. Not production retention policy or recovery of an already-failed document. |
 
 ## Tool controls and remaining gaps
 

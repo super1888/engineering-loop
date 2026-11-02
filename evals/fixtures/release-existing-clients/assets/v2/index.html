@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Release exercise</title>
+<h1>v2 page</h1><label>Draft <textarea id="draft"></textarea></label><button id="load">Load details</button><p id="result" role="status"></p>
+<script type="module">
+document.querySelector('#load').addEventListener('click', async () => {
+ try { const details = await import('/assets/v2/detail.js'); document.querySelector('#result').textContent = details.value; }
+ catch { document.querySelector('#result').textContent = 'Detail unavailable'; }
+});
+</script></html>

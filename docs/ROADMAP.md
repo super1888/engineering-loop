@@ -1,5 +1,11 @@
 # Roadmap
 
+## Unreleased existing-client release evidence
+
+- Make the retained-assets branch of `release-existing-clients` runnable with two desktop versions and a delayed module fetch after cutover.
+- Separate fresh-page health from open-page continuity and keep evaluator-supplied rollback configuration distinct from the model artifact.
+- Preserve local-only, cache/retention-duration and production limitations; current execution status belongs in `evals/STATUS.md`, not historical snapshot wording.
+
 ## v0.1.18: unreleased evaluation and packaging corrections
 
 - Reject existing receipt leaves (including dangling links) and prepare receipt output before guarded dispatch; retain explicit failed/unstarted status on failed probes.
