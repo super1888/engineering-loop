@@ -1,5 +1,11 @@
 # Roadmap
 
+## Unreleased local native discovery observations
+
+- Observe a complete project-local installation in fresh CLI contexts without evaluator-supplied skill body.
+- Keep implicit project-entry evidence, explicit entry-read uncertainty and a lightweight control separate; do not turn one local build into cross-host certification.
+- Preserve original strict criteria and catalog/input-freezing audit limits in `evals/STATUS.md` and the linked report.
+
 ## Unreleased existing-client release evidence
 
 - Make the retained-assets branch of `release-existing-clients` runnable with two desktop versions and a delayed module fetch after cutover.

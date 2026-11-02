@@ -1,6 +1,6 @@
 # Compatibility and validation
 
-Last updated: 2026-10-03. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+Last updated: 2026-11-02. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
 
 ## Installation surfaces
 
@@ -24,6 +24,12 @@ Default metadata allows scoped automatic discovery. To require manual invocation
 The controls are host-specific. Plugin updates can replace local edits; keep a direct local copy or a fork for a persistent custom policy. This is an optional user choice, not the default distributed behavior.
 
 ## Evidence status
+
+### Local Codex project-copy discovery (2026-11-02)
+
+One macOS arm64 CLI build (`0.166.0-alpha.5.1`) was exercised with three complete project-local copies of unreleased v0.1.18, separate CODEX_HOME settings and unchanged HOME. The implicit uncertain-resume sample tool-read the project copy's entrypoint and resume reference and reconciled stale state. The ordinary label edit stayed lightweight. Explicit `$engineering-loop` produced an announcement and resume-reference read, but no visible entrypoint tool read; the predeclared strict read-evidence condition remains unmet, and native body-injection provenance was not captured.
+
+See the [frozen tasks](../evals/fixtures/native-discovery/TASK.md) and [actual observations](../evals/fixtures/native-discovery/RESULTS.md) for hashes, original criteria and audit limits. These local CLI observations do not establish native behavior in the desktop UI, Claude Code or another CLI build, nor reliable automatic selection, complete catalog isolation or a quality benefit. Earlier installation surfaces and historical checks below retain their own scope.
 
 Historical trial reports and raw outputs are available in Git history through commit `eacbca4`; new raw runs remain local. The summaries below do not imply broader model coverage.
 

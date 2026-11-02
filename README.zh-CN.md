@@ -91,6 +91,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 | 已确定方案，只要求评审或测试 | 直接进入对应阶段 |
 | 解释代码、改文案、明确的局部修改 | 使用原有项目流程，不重启完整访谈 |
 
+有限的[本地 Codex 发现观察](docs/COMPATIBILITY.md#local-codex-project-copy-discovery-2026-11-02)区分了已观察到的隐式项目入口读取与仍不完整的显式入口读取证据，不代表其他宿主认证。
+
 默认保留范围明确的自动发现；是否触发受宿主与模型影响，显式调用最便于复现。没有“每个任务必须调用”的全局钩子。需要完全手动触发时，见[兼容说明](docs/COMPATIBILITY.md#explicit-only-use)。
 
 ### 新项目如何接入与沉淀

@@ -17,6 +17,7 @@ Read this index to select evidence, then open only the relevant report. It summa
 | [Fresh runtime handoff consumers](fixtures/delegated-environment-transfer/RESULTS.md) | One executor used a prepared runtime card to run verification; a separate explicit read-only task stayed lightweight. | Human-prepared card, simple tasks and one sample each; not a model coordinator or causal handoff benefit. A later probe-runtime correction is separate mechanism evidence. |
 | [Verification boundary routing](fixtures/verification-routing/RESULTS.md) | Copy-only and serialization stayed scoped; a split-transaction plan read only its matching detailed section and retained its gate. | Three supplied-core plan samples, not real integration, native discovery, old/new superiority or token savings. |
 | [Existing-client local release](fixtures/release-existing-clients/RESULTS.md) | Config-only candidate kept v2 active and v1 resources served; independent browser verified fresh/old pages and draft continuity. | Synthetic no-store assets; rollback retention is evaluator-supplied. Not production retention policy or recovery of an already-failed document. |
+| [Local native Codex discovery](fixtures/native-discovery/RESULTS.md) | Implicit resume read the installed project entrypoint and reference; copy-only stayed lightweight. | One CLI build/host and single samples. Explicit resume occurred without visible entry read, so its strict evidence condition remains unmet; host metadata provenance is unknown. |
 
 ## Tool controls and remaining gaps
 

@@ -124,6 +124,8 @@ Plugin installations use `/engineering-loop:engineering-loop` instead.
 | Explain a function, fix a typo, adjust local copy | Ordinary project workflow; no lifecycle ceremony |
 | Already-scoped work handled by project guidance | Do not add a competing orchestrator |
 
+Limited [local Codex discovery observations](docs/COMPATIBILITY.md#local-codex-project-copy-discovery-2026-11-02) now distinguish an observed implicit project-entry read from incomplete explicit entry-read evidence; they do not certify other hosts.
+
 Automatic selection remains available through a deliberately scoped description. Selection is host/model-dependent; explicit invocation is the reproducible starting point. The skill is not an always-on hook. For explicit-only configuration, see [compatibility](docs/COMPATIBILITY.md#explicit-only-use).
 
 ## How it works
