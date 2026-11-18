@@ -1,6 +1,6 @@
 # Worked scenarios (illustrative, not benchmark results)
 
-When Engineering Loop is activated, every example first passes the mandatory [PMS MCP connection gate](../skills/engineering-loop/references/pms.md) and the relevant [route challenge](../skills/engineering-loop/references/grill.md). The narratives below focus on the selected stage, not exceptions to those prerequisites. Settled local edits may pass the challenge with no user questions; analysis-only requests still do not authorize task writes or implementation.
+When Engineering Loop is activated, every example first passes the mandatory [PMS MCP connection gate](../skills/engineering-loop/references/connection.md) and the common [route challenge](../skills/engineering-loop/references/grill.md), then reads its selected stage. Task operations and specialist coordination are conditional details, not prerequisites to an unrelated local edit. The narratives below are not exceptions to the gate. Settled local edits may pass the challenge with no user questions; analysis-only requests still do not authorize task writes or implementation.
 
 ## A bounded bug
 

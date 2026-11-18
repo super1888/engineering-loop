@@ -1,5 +1,7 @@
 # Turn intent into a bounded behavior contract
 
+**Challenge focus:** What user outcome and accepted example define this slice, and which exclusion, policy or success assumption remains unresolved?
+
 Investigate facts available in the project before asking the user. Separate current behavior, desired behavior, assumptions, and unknowns. Agree the current slice, not every hypothetical future feature.
 
 When a product direction is still an untested hypothesis, challenge the proposed solution against the problem before committing to implementation. Reuse available evidence about the target user, their current alternative, how often the problem occurs and its cost, and the observable improvement that would justify the change. Ask only the missing facts or choices that could change whether or what to build; a feature list or the agent's enthusiasm is not demand evidence. State the strongest consequential assumption and a bounded way to test it, such as a representative task with a lightweight prototype or a manual trial, with an agreed success signal and a decision to continue, revise or stop. Distinguish observed results from predictions. Recommending no development or a smaller experiment is a valid outcome, but do not silently cancel an authorized feature. An already-confirmed direction or a clear local edit does not need renewed product discovery without conflicting evidence or changed conditions.

@@ -32,7 +32,7 @@ Routed work requires a configured, authenticated PMS MCP connection; the include
 
 Choose **one** method per agent/scope to avoid duplicate discovery. These instructions target local **Claude Code and Codex**, not every product named Claude or ChatGPT. See [compatibility and validation status](docs/COMPATIBILITY.md).
 
-Before using a routed stage, configure the PMS MCP in the host and provide the intended workspace/project through the request or maintained project configuration. The [connection and task guide](skills/engineering-loop/references/pms.md) requires actual identity, project and workflow reads. Keep credentials in the host connection; a board URL is not an MCP endpoint. Missing access blocks routed execution, including analysis-only stages; minimal connection discovery/diagnosis remains allowed.
+Before using a routed stage, configure the PMS MCP in the host and provide the intended workspace/project through the request or maintained project configuration. The [connection gate](skills/engineering-loop/references/connection.md) requires actual identity, project and workflow reads. Read the separate [task guide](skills/engineering-loop/references/pms.md) for task references, task operations or work covered by the project's tracking policy. Keep credentials in the host connection; a board URL is not an MCP endpoint. Missing access blocks routed execution, including analysis-only stages; minimal connection discovery/diagnosis remains allowed.
 
 ### 1. Skills CLI — Claude Code or Codex
 
@@ -149,7 +149,7 @@ effective project state + user intent
 
 After the mandatory connection gate, enter at the needed stage. Every stage and selected specialist passes the built-in [grill-me-style challenge](skills/engineering-loop/references/grill.md): investigate facts, test a consequential assumption or failure example, and resolve only material gaps. Settled decisions can pass with no user questions. Verification starts with requirements and continues during implementation; the arrows do not mandate a waterfall or another approval at every step.
 
-The entrypoint applies the connection/challenge rules and routes to the relevant stage or available specialist skill. It does not read all documentation, create a new planning directory, or restart the interview on each message. Reuse valid connection evidence while its session, actor and target remain unchanged. Long-running work keeps a small effective state and evidence pointers in the connected task and maintained project sources. Already-loaded conversation content still consumes context.
+The entrypoint loads the connection gate and common challenge, then only matching stage guidance. Stage-specific challenge questions live with that stage; [specialist selection](skills/engineering-loop/references/specialists.md) and task-operation details are conditional reads. All applicable project instructions, full-document requirements and delivery stop points still apply. It does not read the whole lifecycle, create a new planning directory, or restart the interview on each message. Reuse valid connection evidence while its session, actor and target remain unchanged. Long-running work keeps effective state and evidence pointers in the connected task and maintained project sources. Already-loaded content still consumes context.
 
 ### A small example
 
@@ -165,7 +165,9 @@ The [requirements guide](skills/engineering-loop/references/requirements.md) dis
 
 ## Validation and contribution
 
-Unreleased v0.1.22 changes the entrypoint to team task/delivery coordination, adds the mandatory [PMS MCP gate](skills/engineering-loop/references/pms.md), Kaneo dependency declaration and an independently written [grill-me-style check](skills/engineering-loop/references/grill.md) on every route. Task writes stay within existing authorization; analysis does not create cards. The [new behavioral matrix](evals/fixtures/pms-grill-routing/TASK.md) is unrun. This is not server-side enforcement, an atomic claim implementation or evidence of fewer defects; historical results do not validate the new gate.
+Unreleased v0.1.23 separates the mandatory connection/common-challenge core from task operations and specialist coordination, and moves stage challenge focuses into their owning guides. The first slice reduces the common entry/reference text from 21,772 to 12,007 bytes; bytes are not measured tokens or quality/cost gains. All gates and applicable project constraints remain required. The [controlled local-copy trial](evals/fixtures/core-route/TASK.md) separates real model/tool observations from adapter tests; it does not validate the entire older matrix or implement a general rule engine/project profile registry.
+
+Unreleased v0.1.22 changes the entrypoint to team task/delivery coordination, adds the mandatory [PMS MCP gate](skills/engineering-loop/references/connection.md), Kaneo dependency declaration and an independently written [grill-me-style check](skills/engineering-loop/references/grill.md) on every route. Task writes stay within existing authorization; analysis does not create cards. Its [behavioral matrix](evals/fixtures/pms-grill-routing/TASK.md) remains unrun. This is not server-side enforcement, an atomic claim implementation or evidence of fewer defects; historical results do not validate the new gate.
 
 ```sh
 python scripts/check.py

@@ -1,5 +1,7 @@
 # Design and verify a usable interface slice
 
+**Challenge focus:** Which user task and existing design system govern the choice, and what rendered or interactive evidence could expose a failed assumption?
+
 Use when a new or materially changed interface needs interaction or visual decisions. Reuse the project's design system, accepted screens and available design/browser tools. A settled copy or spacing correction needs only its affected checks, not a redesign workshop or a new design tool.
 
 ## Frontend design gate: desktop by default

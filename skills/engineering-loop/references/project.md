@@ -1,6 +1,8 @@
 # Connect the workflow to the project's engineering system
 
-Use after the entrypoint's mandatory [PMS MCP gate](pms.md) and [route challenge](grill.md), when starting a project or a cross-boundary change whose working rules are missing or conflicting. Reuse existing project instructions and decisions; a routine local edit does not need onboarding. Resolve only what the next slice depends on, not the entire future architecture.
+**Challenge focus:** Which maintained conventions and representative implementation apply, and where do documented rules lack actual enforcement?
+
+Use after the entrypoint's mandatory [PMS MCP gate](connection.md) and [route challenge](grill.md), when starting a project or a cross-boundary change whose working rules are missing or conflicting. Reuse existing project instructions and decisions; a routine local edit does not need onboarding. Resolve only what the next slice depends on, not the entire future architecture.
 
 Build a short map in the project's existing source of truth, or the conversation when sufficient:
 

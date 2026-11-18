@@ -2,6 +2,14 @@
 
 Last updated: 2026-11-18. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
 
+## Unreleased v0.1.23 common-core split
+
+The mandatory reads are now the entrypoint, [connection gate](../skills/engineering-loop/references/connection.md) and common [challenge](../skills/engineering-loop/references/grill.md), followed by selected-stage guidance. Task operations and specialist coordination have their own conditional references; all applicable project instructions and required full reads remain effective. The three common source files total 12,007 bytes versus 21,772 in v0.1.22. This is not a token or runtime-cost measurement.
+
+The [controlled local-copy trial](../evals/fixtures/core-route/TASK.md) supplies synthetic PMS reads or no configured synthetic PMS to two otherwise matching native CLI contexts. Its protocol unit checks, source-read guards, actual model/tool events and production access are separate claims. Neither condition grants real PMS writes; the much broader v0.1.22 matrix remains unrun. A copied skill under controlled tools is not a claim of native discovery across hosts or universal route reliability.
+
+[Actual local observations](../evals/fixtures/core-route/RESULTS.md) retain output-path, approval and shell limitations, then a final native-profile pair: actual identity/project/workflow reads preceded the exact approved label edit; without configured PMS, entry/connection reads and read-only metadata discovery ended with refusal and no file changes. The native tool profile passed bounded read/write/network controls without trust, sandbox bypass or global changes. Host metadata was not fully isolated; model identity remains unknown. Two local outcomes do not establish general routing or production write safety.
+
 ## Unreleased v0.1.22 connection contract
 
 Routed work now requires an authenticated PMS MCP connection with successful identity, intended-project and workflow reads; the included operation map and Codex dependency metadata name Kaneo. Configure access separately in the host. A board URL is not an MCP endpoint, and a metadata declaration or enabled CLI entry is not a passed connection check. No automatic connection installation, credential change or offline bypass is included. Actual transport and host dependency-metadata behavior remain host-specific; the YAML declaration alone does not establish compatibility.

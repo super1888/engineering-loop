@@ -1,6 +1,8 @@
 # Coordinate implementation, specification and verification
 
-Use after the entrypoint's [PMS MCP gate](pms.md) and [route challenge](grill.md), when authorized delegated tasks need coordination, concurrent contributors need ownership or contract-change reconciliation, or temporary branches/worktrees need integration and cleanup. Delegate only when available, authorized and useful. Roles are responsibilities, not a required agent count: a coordinator, implementer and verifier may suffice; separate specification and test work only when their scope justifies it. A small local task needs no agent team or additional coordination service; the entrypoint's PMS gate still applies.
+**Challenge focus:** Are responsibilities, file ownership and the effective agreement clear, and what evidence will establish the combined result beyond separate green checks?
+
+Use after the entrypoint's [PMS MCP gate](connection.md) and [route challenge](grill.md), when authorized delegated tasks need coordination, concurrent contributors need ownership or contract-change reconciliation, or temporary branches/worktrees need integration and cleanup. Delegate only when available, authorized and useful. Roles are responsibilities, not a required agent count: a coordinator, implementer and verifier may suffice; separate specification and test work only when their scope justifies it. A small local task needs no agent team or additional coordination service; the entrypoint's PMS gate still applies.
 
 ## Assign bounded ownership
 

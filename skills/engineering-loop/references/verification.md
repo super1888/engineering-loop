@@ -1,5 +1,7 @@
 # Verify claims at the appropriate boundary
 
+**Challenge focus:** Which claim, artifact, configuration and environment does the check cover, and what remains failed, unrun or outside its scope?
+
 Select checks from the changed behavior and project requirements. Distinguish document/schema validity, static checks, simulated behavior, real integration, and user acceptance. Reuse a broader check only if it actually executes the required path.
 
 Match the check to the claim: source tokens can protect an implementation convention, dependency checks can reject forbidden calls, and interaction checks can establish visible behavior. Finding a toast API or responsive CSS in source does not prove correct timing, a single notification or usable layout. Prefer behavior assertions when different valid implementations should remain possible; test rendered interaction where source checks cannot distinguish the reported failure.

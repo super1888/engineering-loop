@@ -1,5 +1,7 @@
 # Review the change against intent and engineering evidence
 
+**Challenge focus:** Which effective requirement and identifiable diff support the finding, and does the proposed correction preserve legitimate alternatives?
+
 Fix the review target: relevant revision/diff, effective requirement, known pre-existing changes, and available verification. A review request alone does not authorize edits or release.
 
 Review two axes: (1) matches the accepted behavior and scope, including missing work; (2) preserves relevant engineering invariants such as authorization, data integrity, state transitions, compatibility, and recoverability. Assess unnecessary complexity against current requirements rather than file count alone.

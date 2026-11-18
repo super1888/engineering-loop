@@ -3,26 +3,28 @@ name: engineering-loop
 description: Team task and delivery entrypoint. Verify PMS MCP access, challenge assumptions, route to the applicable stage or specialist skill, and coordinate task creation, claiming, execution and acceptance. Use for team delivery, task management, uncertain project recovery, or explicit invocation. Standalone explanations outside this workflow stay lightweight.
 license: MIT
 metadata:
-  version: "0.1.22"
+  version: "0.1.23"
 ---
 
 # Engineering Loop
 
-Coordinate team intent, PMS tasks, specialist work and delivery evidence. Match the user's language. The host's permissions and executable controls enforce actions; instructions alone cannot guarantee correctness or exclusion.
+Coordinate team intent, tasks, specialist work and delivery evidence. Match the user's language. Host permissions and executable controls enforce actions; instructions cannot guarantee correctness or exclusion.
 
 ## Connect, challenge, then route
 
-1. **Mandatory MCP gate.** Before executing any routed stage or specialist skill, follow [pms.md](references/pms.md). Require successful authenticated identity, intended project access and actual status reads through the configured PMS MCP. Registered tools, enabled configuration or dependency metadata are insufficient. If any check fails or the target is unknown, stop downstream stage work and code/PMS writes; allow only connection/target discovery and diagnosis. This includes analysis-only routes, which remain read-only after the gate passes.
-2. **Challenge every route.** Follow [grill.md](references/grill.md) before the selected stage or specialist, and revisit affected assumptions on material change. Investigate facts and reuse settled decisions; ask consequential unresolved questions until the current slice has a defensible outcome, boundaries and acceptance. Sufficient evidence can pass without asking the user anything. Challenge depth follows risk; questioning does not replace verification.
-3. **Route the smallest useful slice.** Identify the outcome and current stage, reuse the project workflow and existing plan, then read only the matching guidance below. Select available specialist skills by outcome, stack and stated scope, using the selection rules in [grill.md](references/grill.md). Keep scope, ownership and acceptance with the coordinator. Do not make the user choose internal routes or load every skill.
+1. **Connect first:** read [connection.md](references/connection.md). Every activated stage and specialist, including analysis-only work, requires successful MCP identity, intended-project and workflow reads. Configuration or tool registration is insufficient. Failed or unknown access blocks downstream work and code/PMS writes; permit only minimal target/connection discovery and diagnosis.
+2. **Challenge the slice:** read the common [grill.md](references/grill.md). Investigate facts, reuse settled decisions and resolve material assumptions and acceptance gaps. Sufficient evidence permits zero user questions; questioning never replaces verification.
+3. **Read matching guidance:** identify the outcome, stage, affected paths and boundaries. Preserve all applicable project instructions, including required full-document reads and delivery stop points; filtering details cannot waive them. Use the stage table below, or [specialists.md](references/specialists.md) when selecting/delegating an available specialist. Read only matching details, not the entire lifecycle.
 
-Reuse MCP evidence only while the session, identity, target and connection remain valid; recheck affected conditions after changes or errors. A stage change alone does not require another identical probe. Task reading, deduplication, authorized creation/claiming and evidence write-back use [pms.md](references/pms.md); discussion does not authorize creating a task.
+Read [pms.md](references/pms.md) for a supplied task reference, task-management request, or work subject to the project's tracking policy. It governs lookup, deduplication, authorized creation/claiming and evidence write-back; the connection gate does not authorize task mutations. Keep credentials and project/member bindings in established configuration.
 
-Answer intervening questions, then resume unfinished authorized work. Honor stop, replacement and draft-only limits. For uncertain recovery, use [resume.md](references/resume.md) to reconcile outcome/non-goals, current artifacts, settled decisions, blockers, next slice and evidence. Keep the effective state in conversation unless durable recovery is needed.
+Reuse connection/challenge evidence only while its session, identity, target and relevant conditions remain valid. Recheck affected facts after errors or material change; a stage change alone does not require identical probes or another interview. Do not ask the user to choose internal routes.
+
+Answer intervening questions, then resume unfinished authorized work. Honor stop, replacement and draft-only limits. For uncertain recovery, use [resume.md](references/resume.md) to reconcile outcome/non-goals, artifacts, settled decisions, blockers, next slice and evidence. Reuse the existing plan and workflow.
 
 | Need | Reference | Exit evidence |
 |---|---|---|
-| Connect project rules or reference projects | [project.md](references/project.md) | Effective conventions, owners, checks and gaps |
+| Connect project rules or references | [project.md](references/project.md) | Effective conventions, owners, checks and gaps |
 | Clarify behavior and tradeoffs | [requirements.md](references/requirements.md) | Accepted examples, boundaries, unresolved items |
 | Design a user interface | [ui.md](references/ui.md) | Desktop default; target, states, rendered evidence |
 | Implement a slice or diagnose a bug | [implementation.md](references/implementation.md) | Scoped changes and relevant checks |
@@ -31,22 +33,22 @@ Answer intervening questions, then resume unfinished authorized work. Honor stop
 | Prepare or execute a release | [release.md](references/release.md) | Identified artifact, recovery, smoke evidence |
 | Prepare or diagnose operations | [operations.md](references/operations.md) | Impact, tested hypothesis, recovery evidence |
 | Preserve a demonstrated lesson | [learning.md](references/learning.md) | Scoped correction and a counterexample |
-| Delegate, coordinate or integrate contributions | [collaboration.md](references/collaboration.md) | Ownership, effective agreement, combined evidence |
+| Coordinate or integrate contributions | [collaboration.md](references/collaboration.md) | Ownership, agreement, combined evidence |
 
 ## Preserve authority and acceptance
 
-Follow user intent and existing authorization. Analysis does not authorize implementation; implementation does not authorize publication or destructive data changes. Do not ask again for an unchanged authorized action. Inherit project branch, commit, document, test, configuration and deployment rules; do not impose a stack, directory, agent count or worktree policy. Keep credentials and team-specific project/person mappings in their established configuration, outside the distributed skill.
+Follow intent and existing authorization. Analysis does not authorize implementation; implementation does not authorize publication or destructive data changes. Do not re-ask unchanged authorized actions. Inherit project branch, commit, document, test, configuration and deployment rules; impose no stack, directory, agent count or worktree policy.
 
-Distinguish observed facts, accepted behavior, proposals and unknowns. Investigate conflicts instead of rewriting sources to agree. Resolve authorized local, reversible engineering choices autonomously. Ask only consequential choices affecting behavior, acceptance, permissions or costly rework, with alternatives, recommendation, cost and reversibility. Silence is not acceptance; continue independent authorized work while a decision blocks dependent work.
+Distinguish facts, accepted behavior, proposals and unknowns; investigate conflicts. Make authorized local, reversible engineering choices autonomously. Ask consequential choices affecting behavior, acceptance, permissions or costly rework with alternatives, recommendation, cost and reversibility. Silence is not acceptance. Continue independent authorized work while a decision blocks dependent work.
 
-Keep acceptance independent of implementation. Do not lower thresholds, erase failing assertions or change expectations merely to pass. Record the reason and preserved intent of legitimate corrections. When actual use challenges the design, identify the failed assumption and validate a bounded alternative before changing the agreement.
+Keep acceptance independent of implementation. Do not lower thresholds, erase failing assertions or change expectations merely to pass. Record reasons and preserved intent for legitimate corrections. If actual use challenges the design, identify the failed assumption and validate a bounded alternative before changing the agreement.
 
 ## Retain evidence and bound effort
 
-Scale effort to uncertainty, impact and reversibility. Reconcile enumerable source items with implemented, explicitly excluded and remaining work; a tidy task list does not establish complete coverage. State limits for non-enumerable claims. Bind evidence to the relevant code, configuration, data and environment; reuse unchanged evidence and rerun affected checks. Distinguish static checks, runtime behavior and user acceptance. A PMS status is not proof of delivery.
+Scale effort to uncertainty, impact and reversibility. Reconcile enumerable source items with implemented, excluded and remaining work; a tidy task list does not prove coverage. State other coverage limits. Bind evidence to code, configuration, data and environment; reuse unchanged evidence and rerun affected checks. Distinguish static checks, runtime behavior and user acceptance. A PMS status is not delivery proof.
 
-Re-enter routing for stage transitions, material scope/risk changes, conflicting evidence or recovery, not every message or edit. Do not preload lifecycle references, repeat effective checks without cause or add reviewers without an unresolved need. When an attempt yields no new evidence, change the hypothesis or report the concrete blocker rather than repeating speculative patches.
+Re-route for stage transitions, material scope/risk changes, conflicting evidence or recovery, not every message/edit. Do not preload references, repeat effective checks without cause or add reviewers without need. If an attempt yields no new evidence, change the hypothesis or report the blocker instead of repeating speculative patches.
 
-For recovery, keep one effective task state with scope, decisions, ownership, blockers, evidence pointers, relevant versions and next action in the project's existing location. Keep verbose history separate; progressive loading cannot erase context or guarantee fixed token cost.
+For durable recovery, keep one effective state with scope, decisions, ownership, blockers, evidence/version pointers and next action in the project's existing location. Keep verbose history separate; splitting files cannot erase loaded context or guarantee token savings.
 
-Once a finite result and required checks are complete, report results, evidence and limits, then stop. An explicitly ongoing goal continues within its authorization; a completed slice is only a checkpoint. Invoke learning for a demonstrated lesson or requested retrospective.
+When a finite result and required checks are complete, report results, evidence and limits, then stop. An explicitly ongoing goal continues within its authorization; a completed slice is a checkpoint. Invoke learning for a demonstrated lesson or requested retrospective.

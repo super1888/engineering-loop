@@ -21,7 +21,7 @@ The optional [project connection guide](../skills/engineering-loop/references/pr
 
 ## PMS and challenge boundaries
 
-The [PMS guide](../skills/engineering-loop/references/pms.md) makes authenticated identity, intended-project access and workflow reads mandatory before routed work, including analysis-only stages. Only minimal connection/target discovery and diagnosis may proceed before that gate. Host configuration supplies credentials and team/project bindings; the skill carries neither private IDs nor a direct API bypass. Dependency metadata describes the Kaneo requirement but does not establish connectivity. A changed actor, target or failed connection invalidates affected evidence.
+The [connection guide](../skills/engineering-loop/references/connection.md) makes authenticated identity, intended-project access and workflow reads mandatory before routed work, including analysis-only stages. Only minimal connection/target discovery and diagnosis may proceed before that gate. Host configuration supplies credentials and team/project bindings; the skill carries neither private IDs nor a direct API bypass. Dependency metadata describes the Kaneo requirement but does not establish connectivity. A changed actor, target or failed connection invalidates affected evidence. The separate [task guide](../skills/engineering-loop/references/pms.md) is read for supplied task references, task operations or work covered by project tracking policy.
 
 PMS scope, assignee, dependencies and actual state stay authoritative for task coordination; code, documents, runtime handles and check results remain evidence of execution. Creation, claiming and synchronization require existing authority and read-back. Assignees are responsible members, not agent sessions. The exposed Kaneo updates do not provide atomic claiming or server-enforced completion checks; an agreed dispatcher is only an advisory coordination policy unless the service enforces it.
 
@@ -41,7 +41,9 @@ This is a map to existing sources, not a second set of requirements. A contribut
 
 ## Context lifecycle
 
-Discovery uses concise metadata. Activation reads the entrypoint. A current need reads its reference. Existing decisions and evidence are reused if relevant state is unchanged. Material changes invalidate only affected evidence. A handoff keeps effective state with pointers, not a growing transcript.
+Discovery uses concise metadata. Activation reads the entrypoint, connection gate and common challenge; a current need reads its owning stage. Stage challenge focuses live in their corresponding guides, task operations in the task guide, and [specialist selection](../skills/engineering-loop/references/specialists.md) is read only when selecting or handing off a specialist. Existing decisions and evidence are reused if relevant state is unchanged. Material changes invalidate only affected evidence. A handoff keeps effective state with pointers, not a growing transcript.
+
+The v0.1.23 first slice reduces the common three-file source text from 21,772 to 12,007 bytes without deleting connection or challenge prerequisites. This is not a token measurement or an observed cost/quality improvement. Preserve all applicable AGENTS, mandatory full-document reads, project lifecycle policies and delivery stop points before filtering optional details. A rule index or project-profile system is outside this slice; the [controlled trial](../evals/fixtures/core-route/TASK.md) targets a settled local edit with valid versus absent MCP only.
 
 The packaging check limits entrypoint size as a maintenance signal; it does not measure tokens or enforce runtime behavior. References are not a guarantee that an agent will avoid unnecessary reads. Evaluate that behavior explicitly.
 

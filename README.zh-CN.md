@@ -26,7 +26,7 @@
 
 每个工具、每个作用域选择一种安装方式，避免重复加载。这里的支持范围是本地 Claude Code / Codex；其他产品及客户端需要分别验证。
 
-使用路由阶段前，在宿主配置 PMS MCP，并通过请求或维护中的项目配置提供目标工作区和项目。[接入与任务指南](skills/engineering-loop/references/pms.md)要求真实读取身份、项目和状态；凭据保留在宿主连接配置，看板地址不是 MCP 服务端点。未接通时停止路由执行，包含仅分析阶段；仍允许最小连接定位与诊断。
+使用路由阶段前，在宿主配置 PMS MCP，并通过请求或维护中的项目配置提供目标工作区和项目。[连接门禁](skills/engineering-loop/references/connection.md)要求真实读取身份、项目和状态；有任务引用、任务操作或项目追踪要求时，再读独立的[任务指南](skills/engineering-loop/references/pms.md)。凭据保留在宿主连接配置，看板地址不是 MCP 服务端点。未接通时停止路由执行，包含仅分析阶段；仍允许最小连接定位与诊断。
 
 ### 方式一：Skills CLI
 
@@ -108,13 +108,15 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 ## 如何控制上下文
 
-入口先完成接入与拷问，再选择当前阶段或可用专业 skill。内置 [grill-me 式指南](skills/engineering-loop/references/grill.md)用于每个路由：先查事实，核对关键假设与失败反例，只追问影响当前切片的实质缺口；证据充分时可以零提问通过，不增加重复审批。连接证据在会话、身份和目标等条件不变时复用。各阶段细则按需读取，同一任务不因每次编辑或工具调用重新路由。有效任务与证据入口同步到 PMS，详细产物和历史保留在项目原有位置。
+入口先读连接门禁与共同拷问，再选择当前阶段。内置 [grill-me 式指南](skills/engineering-loop/references/grill.md)用于每个路由：先查事实、复用已定事项，只追问实质缺口；阶段焦点回到相应指南，[专业 skill 协调](skills/engineering-loop/references/specialists.md)和任务操作只按触发条件读取。全部有效项目约束、整份文档阅读要求和交付停点仍须保留。连接证据在会话、身份和目标等条件不变时复用，不因每次编辑重新路由或访谈。有效任务与证据入口同步到 PMS，详细产物和历史保留在项目原有位置。分文件不能清除已加载内容。
 
 分文件不能清除已进入会话的内容，也不保证固定 token 消耗；长任务仍需在适当检查点整理有效状态后交接。
 
 ## 如何逐步验证
 
-未发布的 v0.1.22 将入口调整为团队任务与交付协调，加入强制 [PMS MCP 接入门禁](skills/engineering-loop/references/pms.md)、Kaneo 依赖声明及每个路由的原创 [grill-me 式拷问](skills/engineering-loop/references/grill.md)。任务写入仍遵守已有授权，仅分析不自动建卡。[新增行为矩阵](evals/fixtures/pms-grill-routing/TASK.md)尚未执行；这不是服务端强制门禁或原子领取实现，历史结果不能为新门禁背书，也不证明减少缺陷。
+未发布的 v0.1.23 将强制连接／共同拷问核心与任务操作、专业 skill 协调分开，阶段焦点迁回各自指南。首个切片将共同入口与参考文本从 21,772 减到 12,007 字节；字节不等于实测 token 或质量、成本收益。全部门禁与有效项目约束继续生效。[受控局部文案试验](evals/fixtures/core-route/TASK.md)区分实际模型／工具观察与适配器检查；它不代表旧矩阵全面通过，也未实现通用规则引擎或项目 profile 注册表。
+
+未发布的 v0.1.22 将入口调整为团队任务与交付协调，加入强制 [PMS MCP 接入门禁](skills/engineering-loop/references/connection.md)、Kaneo 依赖声明及每个路由的原创 [grill-me 式拷问](skills/engineering-loop/references/grill.md)。任务写入仍遵守已有授权，仅分析不自动建卡。其[行为矩阵](evals/fixtures/pms-grill-routing/TASK.md)仍未执行；这不是服务端强制门禁或原子领取实现，历史结果不能为新门禁背书，也不证明减少缺陷。
 
 仓库提供包装检查、离线打包脚本和可复用的行为评估场景。多数场景仍待执行；已有本地试跑未证明 skill 带来质量优势或提速。试跑原始输出留在本地，不纳入当前源码树。
 

@@ -1,5 +1,7 @@
 # Implement and diagnose in slices
 
+**Challenge focus:** Which contracts, callers and state boundaries change, and what relevant failure or recovery example would contradict the proposed repair?
+
 When identifiers can exceed a consumer's exact numeric range, verify their round trip through APIs, browser state, widgets and saved examples. Keep the value exact with a string or explicit large-integer handling, and check that starter data names a usable resource rather than a placeholder ID.
 
 Inspect the incumbent behavior, related tests, callers, and boundaries. Select the smallest complete user behavior that can be verified. Reuse the repository's architecture and commands; do not introduce dependencies, abstractions, or a parallel framework without a current reason.

@@ -1,5 +1,7 @@
 # Prepare an identifiable, recoverable release
 
+**Challenge focus:** Which artifact will reach which consumers, and are migration, recovery, acceptance evidence and execution authority sufficient?
+
 First determine whether the request authorizes preparation, staging, or actual publication. Preserve existing authorization; ask only for a missing material choice or an action outside scope. Prepare a concrete reviewable artifact before requesting any required final approval.
 
 Follow the project's release process. Tie the build artifact to the verified source and configuration, including uncommitted-state evidence when relevant. Coordinate edits/builds so the artifact under test is not silently replaced; avoid repackaging a file an active process is still using.

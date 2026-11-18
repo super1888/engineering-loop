@@ -1,5 +1,7 @@
 # Diagnose operation failures without blind repair loops
 
+**Challenge focus:** What observed impact and tested hypothesis justify the next action, and which evidence will establish recovery rather than merely a restarted process?
+
 Identify observed symptom, time window, affected users/jobs, environment, and current version. Preserve the distinction between a user's report and what the available evidence shows. Correlate relevant logs, queue states, traces, and recent code/configuration changes without exposing sensitive payloads.
 
 Form a hypothesis and collect the least invasive discriminating evidence. Check service identity, business prerequisites, and dependencies before changing code. An unavailable price/configuration, an authentication mismatch, and a transport timeout are different failures even if the UI labels them alike.

@@ -1,24 +1,12 @@
-# Connect PMS before routed work
+# Work with PMS tasks
 
-Use for the mandatory connection gate and for reading, creating, claiming or updating team tasks. The entrypoint requires this gate before every selected lifecycle stage or specialist; reuse still-valid evidence rather than repeating it on every tool call. Team configuration identifies the PMS service, workspace/project binding and workflow. A board URL identifies a project, not an MCP endpoint. Do not ship private project IDs, member mappings or credentials in this skill.
+Read for a supplied task reference, a task-management request, or work subject to the project's tracking policy. First pass [connection.md](connection.md) and the common [route challenge](grill.md); all task mutations require both. A simple untracked local edit needs the common gate/challenge, not these task-operation details. Keep private bindings and credentials in the host/project configuration.
 
-## Fail closed on connection and target
-
-Before routed work, establish these facts with actual successful MCP results:
-
-1. **Capability and identity:** the configured PMS tools are present and an authenticated identity read succeeds. Keep the returned actor distinct from the user on whose behalf it acts; a connection account is not automatically the task owner.
-2. **Intended target:** resolve the workspace and project from explicit user input or maintained project configuration; read that project and check its returned identity against the intended binding. A remembered previous project is not a default. If the target is ambiguous, ask only the missing target decision.
-3. **Workflow:** read the project's actual columns/status values and required field definitions relevant to the next operation. Use actual slugs/options, never guessed labels. Check the existing task and its project when a task reference is supplied.
-
-Retain a compact gate result: actor, target, available required operations, status mapping, successful-read evidence and any limits. Tool registration, a CLI enabled flag, a readable local config, a successful unrelated service call, or a self-written "connected" receipt do not pass the gate. A read proves read access only; it does not establish write permission or atomic claiming. Dependency metadata does not install, authenticate or execute the service.
-
-Missing tools, failed identity, denied/wrong project, unreadable workflow or unavailable required capability leave the gate blocked. Before it passes, permit only the minimal local reads and MCP probes needed to discover the target or diagnose/repair the connection within existing authority. Do not start stage/specialist execution, mutate source or write PMS data, or silently switch to an offline task list. State the failed check and remedy; never expose credentials or change global settings without authorization. Stop requests still take effect immediately.
-
-Evidence is scoped to the current session, credential identity, target and connection. Reuse it while those facts remain valid. Invalidate affected evidence after account/project changes, authentication/transport failures or evidence of access changes; re-establish the gate before further routed work. Preserve completed artifacts and live handles during interruption. Already-produced work must not be replayed just to repair synchronization.
+Challenge the selected task route: is it an existing deliverable or a duplicate? Are scope, responsible member, execution ownership, dependencies and acceptance evidence clear? Which ownership controls are advisory versus enforced?
 
 ## Bind work to an effective task
 
-The connection section above is read-only preflight. Task creation, assignment, dependency changes and progress/evidence updates below are task-management routes: after the gate passes, complete the relevant [route challenge](grill.md) before their mutations. Reading this guide is not authorization or a challenge result.
+Creation, assignment, dependency changes and progress/evidence updates are task-management routes. Reading this guide is not authorization or a challenge result.
 
 If a task link/number is supplied, read it in the intended workspace/project, including relevant dependencies and maintained acceptance. For an unlinked formal deliverable, search existing tasks in that project and inspect plausible matches before creating anything. Paginate inventories when claiming completeness; search results or one page do not prove absence. Similar titles alone do not establish the same scope or version.
 
@@ -48,7 +36,7 @@ Tool names below describe the available adapter; discover the current schema bef
 
 | Purpose | Kaneo tools and check |
 |---|---|
-| Connection gate | `whoami`, `get_project`, `list_project_columns`; use `list_project_custom_fields` for required fields |
+| Required connection | Follow [connection.md](connection.md) before task operations; reuse its valid identity, project and workflow evidence |
 | Task lookup | `search`, `get_task` / `get_task_by_ticket_id`, `list_tasks`; scope to the intended project and follow pagination |
 | Creation | `create_task`, then `get_task`; check target, deliverable and requested fields |
 | Responsibility | `list_workspace_members`, `update_task_assignee`, then `get_task`; current owner/authorization first |

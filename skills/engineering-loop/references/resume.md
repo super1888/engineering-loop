@@ -1,5 +1,7 @@
 # Resume from effective state
 
+**Challenge focus:** Do current artifacts agree with the handoff, which work and live handles remain owned, and which prior decisions or checks are still valid?
+
 Read the applicable project instructions, current task record, relevant Git state, and the smallest implementation surface needed. Preserve other work. Do not reset a dirty checkout or switch branches to satisfy a generic preference.
 
 Check the handoff's source revision and referenced paths. Missing paths or a replaced architecture mean the handoff needs reconciliation, not restoration of old code. Distinguish current accepted decisions from historical proposals. A stale summary does not override the user's original scope.

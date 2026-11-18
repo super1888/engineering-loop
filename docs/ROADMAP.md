@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.23: unreleased common-core routing split
+
+- Separate the mandatory connection gate from task operations, keeping identity, target, workflow, fail-closed behavior and evidence validity required on every activated route.
+- Keep the shared grill method small; move stage focuses to their owning guides and read specialist coordination only when selecting or handing off a specialist.
+- Preserve applicable project instructions, full-document requirements, authorization and delivery stop points. Do not introduce a rule engine or cross-project profile changes in this first slice.
+- Freeze the [local-copy trial](../evals/fixtures/core-route/TASK.md) with valid versus absent MCP conditions and inspect actual model/tool/file events separately from adapter mechanism controls. Record actual outcomes and limits before making any behavioral claim.
+
 ## v0.1.22: unreleased team entrypoint, PMS gate and route challenge
 
 - Reposition the entrypoint around team task creation, claiming, execution and acceptance, with focused lifecycle and specialist routing.

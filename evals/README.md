@@ -27,6 +27,7 @@ The full methods below retain their own prerequisites and safety limits. Procedu
 | Native helper behavior | [Maintenance corrections](TOOLING.md), repository tests and the relevant detailed section; not a model-efficacy claim |
 | Contributor environment differs from the coordinator | [Reproduction controls](fixtures/delegated-environment/TASK.md), [observations and limits](fixtures/delegated-environment/RESULTS.md), [fresh handoff consumers](fixtures/delegated-environment-transfer/RESULTS.md) |
 | Mandatory PMS/MCP connection and challenged skill routing | [Unexecuted v0.1.22 matrix](fixtures/pms-grill-routing/TASK.md); gate, task-write reconciliation and bounded questioning controls |
+| Common-core split: connected versus missing MCP | [Controlled native local-copy task](fixtures/core-route/TASK.md); inspect real mock calls, reference reads and exact file changes separately from protocol tests |
 
 ## Retained method and report links
 
@@ -89,6 +90,14 @@ The headings below preserve existing inbound anchors. Each link identifies its c
 The v0.1.22 [scenario matrix](fixtures/pms-grill-routing/TASK.md) adds three aggregated cases in [the inventory](cases.json): live MCP identity/project/state gating, authorized task writes with uncertain-result reconciliation, and assumption/boundary/acceptance challenges before every lifecycle or specialist route. Missing tools, failed authentication, denied targets, configuration-only evidence and disconnects block downstream work. Neighboring controls cover reusable current evidence, authorized deduplicated creation, non-atomic claims, analysis-only work and an already-settled edit with zero unnecessary questions but the same mandatory gate.
 
 These are **unexecuted model scenarios**, not live-PMS acceptance or executable gate enforcement. The matrix separates synthetic checkpoint decisions from a future tool-backed trial and requires observable operation order, identities, artifacts and claims rather than text-pattern grading alone. Historical specialist-discovery and lightweight-task samples retain their original versions and limits; they do not validate the new gate. Reusing those tasks against this revision requires a successful controlled MCP baseline or explicitly grading a blocked-gate condition, not silently skipping the prerequisite. No real service writes or general routing/questioning benefit have been established by this addition.
+
+## Common-core controlled local-copy trial
+
+The [frozen task](fixtures/core-route/TASK.md) compares the same approved local button-label edit with synthetic Kaneo reads versus no configured PMS. `core_route_trial.py` prepares equal complete skill/task copies outside the repository, freezes hashes and runs the native CLI with an explicitly tested native tool profile. Preflight controls prove specified reads and external writes denied and workspace operations allowed. The stdlib mock advertises only identity, project and workflow reads; attempted mutations are logged and refused. Credentials remain in the existing private authentication channel, not prompts or committed reports. Tool profiles do not isolate the entire host/catalog/network.
+
+Protocol failure/mutation/input-drift controls in `tests/test_core_route_trial.py` do not establish model conformance. Actual completed command output, ordered mock calls, native preflight records and before/after files must establish the sample result; a path mention or a final "blocked" response cannot erase a forbidden action. Read witnesses require unchanged frozen reference hashes. Record host initialization and unobserved reads as limitations. A small local edit may omit task/specialist details, but never its required MCP gate or common challenge.
+
+[Retained actual observations](fixtures/core-route/RESULTS.md) include all initial harness/approval/shell limitations and the final native-profile pair. The configured-PMS condition completed the exact edit after real reads; the unconfigured-PMS condition refused downstream work without file changes. Host metadata discovery was still available. These two results do not promote the historical matrix or establish general reliability.
 
 ## First-round product hypothesis and UI advice comparison (2026-11-02)
 
