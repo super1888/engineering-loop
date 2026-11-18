@@ -1,6 +1,6 @@
 # Coordinate implementation, specification and verification
 
-Use when authorized delegated tasks need coordination, concurrent contributors need ownership or contract-change reconciliation, or temporary branches/worktrees need integration and cleanup. Delegate only when available, authorized and useful. Roles are responsibilities, not a required agent count: a coordinator, implementer and verifier may suffice; separate specification and test work only when their scope justifies it. A small local task needs no agent team or coordination service.
+Use after the entrypoint's [PMS MCP gate](pms.md) and [route challenge](grill.md), when authorized delegated tasks need coordination, concurrent contributors need ownership or contract-change reconciliation, or temporary branches/worktrees need integration and cleanup. Delegate only when available, authorized and useful. Roles are responsibilities, not a required agent count: a coordinator, implementer and verifier may suffice; separate specification and test work only when their scope justifies it. A small local task needs no agent team or additional coordination service; the entrypoint's PMS gate still applies.
 
 ## Assign bounded ownership
 
@@ -43,7 +43,7 @@ Documentation is not immune to correction, and implementation convenience is not
 
 Reuse the project's tracker or task state for the effective agreement/version, ownership, unresolved decisions and evidence pointers. An accepted change records what it supersedes and sends the relevant delta to affected contributors. Identify impacted code, tests and prior evidence; revise or stop obsolete dependent assignments before their results are integrated. Reading a message is not proof of adaptation: check that returned artifacts use the effective agreement. Do not broadcast whole histories or make every agent reload all references.
 
-An existing file or message can be sufficient. Propose a shared coordination service only for demonstrated needs, with appropriate authorization; it is not a prerequisite. If used, distinguish advisory ownership from enforced writes and handle stale reservations. Notifications do not replace reconciliation.
+An existing file or message can carry detailed execution handoff, with the effective task and evidence pointers synchronized through [pms.md](pms.md). The PMS connection is required; an additional shared coordination service needs a demonstrated need and appropriate authorization. Distinguish advisory ownership from enforced writes and handle stale reservations. Notifications do not replace reconciliation.
 
 When monitoring a contributor, an active conversation label or quiet timeout is not proof that a command is still running or has stopped. Inspect its specific job or session handle and relevant artifacts; wait on a confirmed live handle, otherwise state uncertainty only when actionable and defer to the next meaningful checkpoint instead of polling or nudging repeatedly. Do not restart solely because observation expired.
 

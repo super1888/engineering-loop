@@ -1,4 +1,10 @@
 interface:
   display_name: "Engineering Loop"
-  short_description: "Bounded engineering, from intent to evidence"
-  default_prompt: "Use $engineering-loop to move this change from current project state to a verified outcome within the agreed scope."
+  short_description: "Team tasks, MCP gates, challenge and verified delivery"
+  default_prompt: "Use $engineering-loop to verify PMS MCP access, challenge this task's assumptions, then route and deliver within the agreed scope with traceable evidence."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "kaneo"
+      description: "PMS identity, project, task and workflow tools required before routed work; configure and authenticate the connection in the host."

@@ -1,10 +1,12 @@
 # Design boundaries
 
-One small router, focused references, and project-owned state. This is a workflow skill, not a replacement for a repository's engineering system.
+One team task/delivery router, focused references, and project-owned artifacts. Routed stages require a verified PMS MCP connection and an evidence-based challenge; specialist skills supply execution guidance. The PMS stores shared task facts while the repository retains its engineering system and artifacts.
 
 ## Stable core
 
 - Preserve accepted intent and existing authorization.
+- Verify PMS MCP identity, intended project and workflow before any routed stage; stop downstream execution on failed access.
+- Challenge the relevant assumption and acceptance at every stage/specialist route, reusing settled evidence rather than demanding questions for their own sake.
 - Investigate facts; batch consequential choices by dependency.
 - Work in verifiable slices and reconcile enumerable coverage.
 - Bind claims to evidence at a known relevant state.
@@ -16,6 +18,14 @@ One small router, focused references, and project-owned state. This is a workflo
 Branch/commit policy, document paths, test commands, quality thresholds, stack, model, deployment system, and operational authority belong to the project. There is no mandatory `.planning/` folder, coverage percentage, number of questions, retry count, or multi-agent topology.
 
 The optional [project connection guide](../skills/engineering-loop/references/project.md) maps the relevant choices to their maintained sources, owners and executable checks. It does not mandate a new project file or a fixed architecture. Unknown business policy remains unknown until resolved; documented enforcement remains a gap until it actually runs.
+
+## PMS and challenge boundaries
+
+The [PMS guide](../skills/engineering-loop/references/pms.md) makes authenticated identity, intended-project access and workflow reads mandatory before routed work, including analysis-only stages. Only minimal connection/target discovery and diagnosis may proceed before that gate. Host configuration supplies credentials and team/project bindings; the skill carries neither private IDs nor a direct API bypass. Dependency metadata describes the Kaneo requirement but does not establish connectivity. A changed actor, target or failed connection invalidates affected evidence.
+
+PMS scope, assignee, dependencies and actual state stay authoritative for task coordination; code, documents, runtime handles and check results remain evidence of execution. Creation, claiming and synchronization require existing authority and read-back. Assignees are responsible members, not agent sessions. The exposed Kaneo updates do not provide atomic claiming or server-enforced completion checks; an agreed dispatcher is only an advisory coordination policy unless the service enforces it.
+
+The independently written [grill-me-style guide](../skills/engineering-loop/references/grill.md) challenges every route. It investigates facts, tests a consequential assumption and resolves material gaps for the current slice. Settled work can pass without a user question. This is not a promise of zero problems or a replacement for independent review, rendered behavior, runtime checks or authorized acceptance. The [new behavior matrix](../evals/fixtures/pms-grill-routing/TASK.md) remains unrun; older lightweight/discovery samples do not certify this changed connection contract.
 
 ### Connections in this repository
 

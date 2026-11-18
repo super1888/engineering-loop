@@ -1,7 +1,7 @@
 {
   "name": "engineering-loop",
-  "version": "0.1.21",
-  "description": "Bounded AI engineering: human decisions, small slices, and verifiable delivery.",
+  "version": "0.1.22",
+  "description": "Team task and delivery coordination with a mandatory PMS MCP gate, routed skills, critical questioning and verifiable outcomes.",
   "author": {
     "name": "super1888"
   },
@@ -11,6 +11,8 @@
   "keywords": [
     "engineering",
     "workflow",
+    "pms",
+    "mcp",
     "skills",
     "sdd",
     "tdd"

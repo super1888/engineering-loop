@@ -1,4 +1,4 @@
-# Evidence status — 2026-11-02
+# Evidence status — 2026-11-18
 
 Read this index to select evidence, then open only the relevant report. It summarizes retained observations, not a current release certification. Each report owns its conditions, input identities, initial failures and limitations. [Detailed protocols and historical notes](DETAILS.md) retain older coverage and unrun scenarios.
 
@@ -29,3 +29,7 @@ The linked reports distinguish mechanism controls (oracle positive/negative cand
 [Maintenance corrections](TOOLING.md) repair receipt preflight, full-inventory retention checks, root-local virtualenv validation and unrelated summary paths. These are tool controls, not new model samples; historical oracle counts retain their original coverage limits.
 
 Unproven: general quality, speed or cost improvement; native skill discovery across hosts; reliable hidden-test transfer; broad UI usability; production alerting/ownership; off-host or encrypted-backup recovery. Historical scenario specifications remain unrun unless a specific execution record establishes otherwise. Do not turn these rows into a pooled pass rate or assume older evidence validates later skill revisions.
+
+## Unexecuted v0.1.22 scenarios
+
+The [mandatory PMS/MCP gate and challenged-routing matrix](fixtures/pms-grill-routing/TASK.md) specifies identity, target-project and current-state reads before downstream stages or specialist execution; task deduplication, write/read-back and timeout reconciliation; non-atomic ownership limits; and assumption/boundary/acceptance checks with deep material questions and a zero-question settled-edit control. Its three [inventory cases](cases.json) are **unrun**. No model trial, executable mock adapter, live task write, synchronization acceptance or new routing-reliability benefit is recorded. Existing model samples above retain their historical conditions; none certifies this revision's mandatory gate.

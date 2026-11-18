@@ -1,6 +1,14 @@
 # Compatibility and validation
 
-Last updated: 2026-11-02. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+Last updated: 2026-11-18. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+
+## Unreleased v0.1.22 connection contract
+
+Routed work now requires an authenticated PMS MCP connection with successful identity, intended-project and workflow reads; the included operation map and Codex dependency metadata name Kaneo. Configure access separately in the host. A board URL is not an MCP endpoint, and a metadata declaration or enabled CLI entry is not a passed connection check. No automatic connection installation, credential change or offline bypass is included. Actual transport and host dependency-metadata behavior remain host-specific; the YAML declaration alone does not establish compatibility.
+
+Every routed stage/specialist also uses an independently written grill-me-style challenge. Existing stage guides remain, but historical lightweight, native-discovery and model results below belong to their recorded versions and do not validate this new gate or route challenge. The [new evaluation matrix](../evals/fixtures/pms-grill-routing/TASK.md) is unrun. Packaging checks cannot prove fail-closed model behavior, atomic task claiming or server-side workflow enforcement.
+
+Local maintenance checks on macOS (2026-11-18), Python 3.12.16 and Node.js 24.22.2: distribution checks and skill structural validation passed; the root unit suite reported `Ran 103 tests` and `OK (skipped=6)` (Windows junction, unavailable PowerShell and browser-fixture setup controls); the 17-entry offline ZIP matched all packaged source bytes. Some skip records are whole fixture classes, so subtracting six from the reported test count is not a passed-test count. These are distribution/tool checks. Live read-only Kaneo calls also returned authenticated identity, the supplied target project and its four workflow states. No task creation, assignment, status mutation, forced-disconnection test or new matrix model run was performed; read success does not establish write permission or enforcement. Private actor/project details are intentionally omitted.
 
 ## Installation surfaces
 

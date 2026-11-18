@@ -26,6 +26,7 @@ The full methods below retain their own prerequisites and safety limits. Procedu
 | Recent product/UI, review or operations samples | [Current status](STATUS.md), report sections below |
 | Native helper behavior | [Maintenance corrections](TOOLING.md), repository tests and the relevant detailed section; not a model-efficacy claim |
 | Contributor environment differs from the coordinator | [Reproduction controls](fixtures/delegated-environment/TASK.md), [observations and limits](fixtures/delegated-environment/RESULTS.md), [fresh handoff consumers](fixtures/delegated-environment-transfer/RESULTS.md) |
+| Mandatory PMS/MCP connection and challenged skill routing | [Unexecuted v0.1.22 matrix](fixtures/pms-grill-routing/TASK.md); gate, task-write reconciliation and bounded questioning controls |
 
 ## Retained method and report links
 
@@ -82,6 +83,12 @@ The headings below preserve existing inbound anchors. Each link identifies its c
 ## Specialist routing and project-convention trial
 
 [Protocol, observations and limitations](DETAILS.md#specialist-routing-and-project-convention-trial).
+
+## Unreleased mandatory PMS gate and challenged routing revision
+
+The v0.1.22 [scenario matrix](fixtures/pms-grill-routing/TASK.md) adds three aggregated cases in [the inventory](cases.json): live MCP identity/project/state gating, authorized task writes with uncertain-result reconciliation, and assumption/boundary/acceptance challenges before every lifecycle or specialist route. Missing tools, failed authentication, denied targets, configuration-only evidence and disconnects block downstream work. Neighboring controls cover reusable current evidence, authorized deduplicated creation, non-atomic claims, analysis-only work and an already-settled edit with zero unnecessary questions but the same mandatory gate.
+
+These are **unexecuted model scenarios**, not live-PMS acceptance or executable gate enforcement. The matrix separates synthetic checkpoint decisions from a future tool-backed trial and requires observable operation order, identities, artifacts and claims rather than text-pattern grading alone. Historical specialist-discovery and lightweight-task samples retain their original versions and limits; they do not validate the new gate. Reusing those tasks against this revision requires a successful controlled MCP baseline or explicitly grading a blocked-gate condition, not silently skipping the prerequisite. No real service writes or general routing/questioning benefit have been established by this addition.
 
 ## First-round product hypothesis and UI advice comparison (2026-11-02)
 

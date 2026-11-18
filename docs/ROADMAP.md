@@ -1,5 +1,13 @@
 # Roadmap
 
+## v0.1.22: unreleased team entrypoint, PMS gate and route challenge
+
+- Reposition the entrypoint around team task creation, claiming, execution and acceptance, with focused lifecycle and specialist routing.
+- Require actual authenticated PMS MCP identity, intended-project access and workflow reads before every activated route, including analysis-only work. Block downstream execution on failed access; dependency metadata and configuration alone cannot pass.
+- Add a Kaneo task-operation guide for scoped lookup, authorized creation, ownership, uncertain write outcomes, read-back and evidence-based state updates. Keep team bindings and credentials outside the distributed skill; ordinary assignment is not atomic claiming.
+- Apply an independently written grill-me-style challenge to each stage/specialist, investigating facts and resolving consequential assumptions while allowing zero-question settled work and preserving existing authorization.
+- Keep the [new behavior matrix](../evals/fixtures/pms-grill-routing/TASK.md) unrun. Local structural, distribution and read-only connection checks do not establish model reliability, write access or server-enforced gates; see [current compatibility evidence](COMPATIBILITY.md#unreleased-v0122-connection-contract).
+
 ## v0.1.21: unreleased inline-link validation
 
 Check angle-bracket Markdown destinations with spaces and optional inline link titles. Retain valid local destinations, external links and fragment-only links; this remains a focused inline-link check, not full Markdown parsing.

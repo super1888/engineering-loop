@@ -1,6 +1,6 @@
 # Engineering Loop
 
-**Clear decisions. Small changes. Evidence before done.**
+**Connect the team. Challenge the task. Deliver with evidence.**
 
 [中文](README.zh-CN.md) · [Install](#install) · [How it works](#how-it-works) · [Examples](examples/workflows.md) · [Evaluation](evals/README.md) · [Contribute](CONTRIBUTING.md)
 
@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Status: experimental](https://img.shields.io/badge/status-experimental-orange.svg)](docs/ROADMAP.md)
 
-A portable skill for Claude Code and Codex that coordinates a software change from requirements to operations. It keeps human decisions explicit, loads stage guidance only when needed, and ties completion claims to evidence.
+A team task and delivery entrypoint for Claude Code and Codex. It requires verified PMS MCP access before routed work, challenges assumptions on every stage or specialist route, and coordinates task creation, claiming, execution and acceptance with traceable evidence.
 
 **Using it in an existing Git repository?** Copy only the complete [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) directory into that project's skill location. Keep its `references/` and `agents/` subfolders; the rest of this repository is for development and evaluation.
 
@@ -26,11 +26,13 @@ An agent can pass tests while implementing the wrong requirement, resume from an
 - **Learn locally first.** Prefer a regression or executable check over another universal prompt rule.
 - **Connect project rules to enforcement.** Locate domain examples, module/contract owners and active checks before scaling implementation; verify relevant safeguards when transferring lessons.
 
-No runtime dependency, background daemon, API key, mandatory agents, hooks, or prescribed tech stack. This is guidance, not a permission system or a guarantee of correctness.
+Routed work requires a configured, authenticated PMS MCP connection; the included adapter targets Kaneo. Install the skill and configure the connection separately: dependency metadata does not install or authenticate a service. No background daemon, mandatory agent team, automatic hook or prescribed application stack is included. These instructions require fail-closed behavior, but host/PMS controls enforce permissions, concurrent claims and state transitions.
 
 ## Install
 
 Choose **one** method per agent/scope to avoid duplicate discovery. These instructions target local **Claude Code and Codex**, not every product named Claude or ChatGPT. See [compatibility and validation status](docs/COMPATIBILITY.md).
+
+Before using a routed stage, configure the PMS MCP in the host and provide the intended workspace/project through the request or maintained project configuration. The [connection and task guide](skills/engineering-loop/references/pms.md) requires actual identity, project and workflow reads. Keep credentials in the host connection; a board URL is not an MCP endpoint. Missing access blocks routed execution, including analysis-only stages; minimal connection discovery/diagnosis remains allowed.
 
 ### 1. Skills CLI — Claude Code or Codex
 
@@ -117,11 +119,12 @@ Plugin installations use `/engineering-loop:engineering-loop` instead.
 
 | Request | Expected behavior |
 |---|---|
-| Explicitly use Engineering Loop | Enter the requested stage |
+| Explicitly use Engineering Loop | Verify PMS MCP, challenge the slice, enter the requested stage |
+| Create, claim or update a team task | Read the intended project/task, respect authorization, check the write result |
 | Resume a project with uncertain state | Reconcile state, then route |
 | Cross-boundary change with unresolved decisions | Clarify the relevant decisions |
 | Review or test an approved change | Enter that stage; reuse existing context |
-| Explain a function, fix a typo, adjust local copy | Ordinary project workflow; no lifecycle ceremony |
+| Explain a function, fix a typo, adjust local copy outside this workflow | Ordinary project workflow; explicit invocation still requires the MCP gate and a proportionate challenge |
 | Already-scoped work handled by project guidance | Do not add a competing orchestrator |
 
 Limited [local Codex discovery observations](docs/COMPATIBILITY.md#local-codex-project-copy-discovery-2026-11-02) now distinguish an observed implicit project-entry read from incomplete explicit entry-read evidence; they do not certify other hosts.
@@ -133,6 +136,10 @@ Automatic selection remains available through a deliberately scoped description.
 ```text
 effective project state + user intent
                  |
+     verified PMS MCP connection
+                 |
+       challenge current assumptions
+                 |
        bounded outcome / next slice
                  |
   requirements -> implement -> review / verify -> release -> operate
@@ -140,15 +147,15 @@ effective project state + user intent
         +---- material change ---+---- demonstrated lesson ---+
 ```
 
-Enter at the needed stage. Verification starts with requirements and continues during implementation; the arrows do not mandate a waterfall or approval at every step.
+After the mandatory connection gate, enter at the needed stage. Every stage and selected specialist passes the built-in [grill-me-style challenge](skills/engineering-loop/references/grill.md): investigate facts, test a consequential assumption or failure example, and resolve only material gaps. Settled decisions can pass with no user questions. Verification starts with requirements and continues during implementation; the arrows do not mandate a waterfall or another approval at every step.
 
-The entrypoint routes to a single relevant reference. It does not read all documentation, create a new planning directory, or restart the interview on each message. Long-running work keeps a small effective state and evidence pointers in the project's existing location. Already-loaded conversation content still consumes context.
+The entrypoint applies the connection/challenge rules and routes to the relevant stage or available specialist skill. It does not read all documentation, create a new planning directory, or restart the interview on each message. Reuse valid connection evidence while its session, actor and target remain unchanged. Long-running work keeps a small effective state and evidence pointers in the connected task and maintained project sources. Already-loaded conversation content still consumes context.
 
 ### A small example
 
 Request: “Make batch import faster.”
 
-The agent first identifies the actual bottleneck and accepted behavior. It asks about unresolved partial-failure and duplicate-handling choices, implements one recoverable import slice, then checks actual concurrency and user-visible outcomes. It does not assume that a thread count proves throughput or that a timeout means nothing was saved.
+After verifying the PMS connection and reconciling the authorized task, the agent identifies the actual bottleneck and accepted behavior. It asks about unresolved partial-failure and duplicate-handling choices, implements one recoverable import slice, then checks actual concurrency and user-visible outcomes. It does not assume that a thread count proves throughput or that a timeout means nothing was saved.
 
 See [worked examples](examples/workflows.md) and [design boundaries](docs/DESIGN.md).
 
@@ -157,6 +164,8 @@ For a new project, the [project connection guide](skills/engineering-loop/refere
 The [requirements guide](skills/engineering-loop/references/requirements.md) distinguishes confirmed exclusions, authorized exceptions and undecided policies at relevant boundaries. It also separates an unclear request, an unsupported one and temporary unavailability when they have different outcomes. The [order-flow example](examples/workflows.md#a-bounded-order-flow-requirement) shows those distinctions without turning every hypothetical request into a feature.
 
 ## Validation and contribution
+
+Unreleased v0.1.22 changes the entrypoint to team task/delivery coordination, adds the mandatory [PMS MCP gate](skills/engineering-loop/references/pms.md), Kaneo dependency declaration and an independently written [grill-me-style check](skills/engineering-loop/references/grill.md) on every route. Task writes stay within existing authorization; analysis does not create cards. The [new behavioral matrix](evals/fixtures/pms-grill-routing/TASK.md) is unrun. This is not server-side enforcement, an atomic claim implementation or evidence of fewer defects; historical results do not validate the new gate.
 
 ```sh
 python scripts/check.py

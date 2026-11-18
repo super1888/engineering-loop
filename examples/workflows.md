@@ -1,5 +1,7 @@
 # Worked scenarios (illustrative, not benchmark results)
 
+When Engineering Loop is activated, every example first passes the mandatory [PMS MCP connection gate](../skills/engineering-loop/references/pms.md) and the relevant [route challenge](../skills/engineering-loop/references/grill.md). The narratives below focus on the selected stage, not exceptions to those prerequisites. Settled local edits may pass the challenge with no user questions; analysis-only requests still do not authorize task writes or implementation.
+
 ## A bounded bug
 
 **Request:** “Logout fails, but the UI shows me as signed out. Fix it.”

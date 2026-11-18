@@ -3,6 +3,42 @@
   "status": "scenario-specifications; execution evidence is recorded separately",
   "cases": [
     {
+      "id": "pms-mcp-live-gate",
+      "prompt": "Use Engineering Loop as the team entrypoint for this approved task. Verify the project connection before entering any stage or specialist route.",
+      "fixture_description": "Unexecuted v0.1.22 matrix at evals/fixtures/pms-grill-routing/TASK.md, rows G1-G9. Independent synthetic checkpoints supply absent tools, failed authentication, denied project access, configuration-only evidence, failed current-state reads, a successful session/principal/project/state baseline, unchanged-stage continuation, later disconnection and an unknown target. The fixture specifies observable call/state consequences for a future controlled runner but supplies no executable adapter, live PMS service or real credentials. Earlier model samples do not validate this changed gate.",
+      "expectations": [
+        "Before any activated requirements, design, analysis, implementation, review, verification or external-specialist execution, requires successful current MCP identity, target-project and existing-state reads. Tool registration, enabled configuration and stale prior-chat evidence cannot pass the gate.",
+        "For an unmet gate, permits only minimum local target facts, connection diagnosis and repair advice; blocks downstream stage execution and code/PMS writes. Identifies the specific failed prerequisite without exposing secrets, changing global configuration or substituting a different project.",
+        "With a successful baseline, permits the requested bounded route and reuses inspectable gate evidence while session, principal, target and tool availability remain unchanged. Does not treat authentication identity as the user, task owner or assignee.",
+        "Invalidates the gate on authentication, target or availability change and on connection errors. Stops further downstream work after disconnection, retains completed evidence at its actual source state and reports synchronization uncertainty instead of fabricated success; revalidates before resuming.",
+        "When the target is not uniquely identifiable, asks the minimum target question and stays blocked rather than guessing a prior project. Reports each row/control independently; these specified checkpoint decisions are not executed tools, enforced runtime gates or passing model trials."
+      ]
+    },
+    {
+      "id": "pms-task-identity-uncertain-writes",
+      "prompt": "Use the connected project to track this authorized formal task, avoid duplicates and preserve task identity when a write result is uncertain.",
+      "fixture_description": "Unexecuted v0.1.22 matrix at evals/fixtures/pms-grill-routing/TASK.md, rows T1-T6, begins with a successful controlled gate. Supplied observations cover a linked card under the wrong project, one or two duplicate-search matches, authorized creation with no match and read-back, a timed-out creation recoverable by identity, an unresolved timeout, and an ordinary read/update/read ownership claim without compare-and-set or lease. The authenticated principal and authorized teammate assignee are separate facts. No real task mutations or executable MCP adapter are supplied.",
+      "expectations": [
+        "Reads the supplied task identity and confirms its authorized target before updates. Searches for an existing equivalent task before authorized creation, reuses a confirmed match and resolves materially ambiguous matches rather than creating duplicates or guessing the target.",
+        "For authorized no-match creation, confirms the project before one create and reads back the returned task identity, project and intended content/state before claiming success. Keeps existing assignment unless reassignment is separately authorized.",
+        "After a create timeout, reconciles against current task identity and service guarantees before dependent writes; reuses a recovered card and does not infer that the failed response means nothing was persisted or blindly repeat a non-idempotent create.",
+        "If available evidence cannot resolve whether the write occurred, preserves the uncertain result and blocks dependent task writes/continuation rather than inventing a created card or successful synchronization. A normal successful create/read-back continues without duplicate approval.",
+        "Describes an ordinary claim update/read-back as an observed assignment with a concurrency limit, not an atomic lock or exclusive-writer proof. Judges event order, returned identities and records rather than titles or final-response wording alone; no live-write, concurrency or model benefit is claimed."
+      ]
+    },
+    {
+      "id": "grilled-slice-and-specialist-routing",
+      "prompt": "Route this task through Engineering Loop and the applicable specialist skills. Challenge material assumptions and make the current slice verifiable without reopening settled decisions.",
+      "fixture_description": "Unexecuted v0.1.22 matrix at evals/fixtures/pms-grill-routing/TASK.md, rows R1-R5, supplies a successful mandatory gate even for a tiny edit. Controls include settled Python-backend-only work versus a cross-boundary JavaScript form, a wrong-stack Java skill and broad simplification advice, an exact approved label replacement, analysis-only authority, a partial-import design whose replay policy remains unresolved after the first answer, and a specialist referring back to Engineering Loop. Freeze actual specialist documents, contract and checks before any future dispatch; no prepared executable workspace or model execution is claimed.",
+      "expectations": [
+        "Before each lifecycle or external-specialist route, checks the consequential assumptions, boundaries, relevant failure outcomes and acceptance against project facts. Investigates accessible facts first; follows stated stack/path scope and exclusions, invoking only applicable specialists and preserving maintained project rules.",
+        "For a consequential unknown, asks concrete dependency-ordered questions until the current slice has accepted observable outcomes. The first partial-import answer does not settle a separate replay policy; silence or implementation convenience is not approval, and the settled 100-row limit is not reopened.",
+        "For an exact already-approved label replacement, still passes the live MCP gate and performs the proportional route challenge, but completes with zero unnecessary questions and no product-discovery ceremony or unrelated scope.",
+        "For analysis-only authority, performs only the bounded analysis after the gate; does not create a formal task, implement code, change card status, claim implementation completion or send external messages merely because a specialist recommends doing so.",
+        "Avoids wrong-stack routes and recursive orchestration, reuses unchanged accepted decisions/gate evidence, and reports actual skill reads/invocations and unavailable capabilities accurately. Artifact/event inspection, not a claim of having grilled the task or a text regex, is the scoring basis; these scenarios remain unrun."
+      ]
+    },
+    {
       "id": "intervening-question-preserves-active-task",
       "prompt": "Continue the unfinished reference search after answering an intervening connection question. Respect subsequent draft-only steering.",
       "fixture_description": "Synthetic same-chat sequence: user requests three verified product disassembly references; first page fails; user asks why the connection failed; read-only checks restore access and one reference is verified, with two remaining. User then says continue. Separate controls explicitly stop the search, replace it with another objective, or request a prompt draft without sending to the earlier destination chat. A new-chat control has no retrieved prior history. No private project identity or real external writes are supplied.",

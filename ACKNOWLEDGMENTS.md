@@ -2,7 +2,7 @@
 
 This independently written draft was informed by public ideas in:
 
-- [Matt Pocock's skills](https://github.com/mattpocock/skills): dependency-aware questioning and scoped learning.
+- [Matt Pocock's skills](https://github.com/mattpocock/skills), including [grill-me](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) and [grilling](https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md) (MIT): dependency-aware questioning and scoped learning. The built-in route challenge is independently written; no upstream skill is installed or bundled.
 - [Addy Osmani's agent-skills](https://github.com/addyosmani/agent-skills): executable constraints and evaluating skill behavior.
 - [Superpowers](https://github.com/obra/superpowers): diagnostic discipline and verification before completion.
 - [OpenSpec](https://github.com/Fission-AI/OpenSpec): separating effective specifications from changes.

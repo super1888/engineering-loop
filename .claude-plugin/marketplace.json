@@ -1,7 +1,7 @@
 {
   "name": "engineering-loop-marketplace",
   "metadata": {
-    "description": "Portable, bounded engineering workflows for AI coding agents."
+    "description": "Team task and delivery workflows with PMS MCP access and critical questioning."
   },
   "owner": {
     "name": "super1888"
@@ -10,7 +10,7 @@
     {
       "name": "engineering-loop",
       "source": "./",
-      "description": "A bounded engineering workflow for AI coding agents."
+      "description": "A team delivery entrypoint with mandatory PMS MCP access, routed specialist skills and evidence-based acceptance."
     }
   ]
 }
