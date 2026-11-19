@@ -127,9 +127,9 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 | 联调 · I1–I8 | [契约、身份、数据表达、写入、异步链路、文件、状态与连通](skills/engineering-loop/references/development/scenarios/integration.md) |
 | 工程与共享能力 · E1–E4 | [公共库、CLI／脚本、构建依赖与生成工具](skills/engineering-loop/references/development/scenarios/engineering.md) |
 
-28 个场景条目记录命中条件、排除情况、现有来源、适用检查和待补细节。[技术栈规范](skills/engineering-loop/references/development/stacks.md)按实际模块配置筛选，关键词只负责召回候选。变化边界独立触发九项[共享风险规则](skills/engineering-loop/references/development/risks.md)，数据精度、权限、幂等、并发等内容维持单一来源。跨端任务可组合必要分支，不默认读取全部分支。
+28 个场景条目记录命中条件、排除情况和检查，并分别链接独立执行正文：所需输入、具体步骤、验收例子、交付证据及待绑定事项。只读命中的正文，不把细节堆回索引。[技术栈指导](skills/engineering-loop/references/development/stacks.md)按实际模块配置筛选；React/Vue 条件行为检查沿用项目的框架和组件库。变化边界独立触发九项[共享风险规则](skills/engineering-loop/references/development/risks.md)，数据精度、权限、幂等、并发等内容维持单一来源。
 
-[模板契约](skills/engineering-loop/references/development/templates.md)预留公共组件与样式条目，以及未来可能的 Frontend-Design-Common 绑定。实际模板目录和具体团队技术栈标准仍待填充，不代表已接入公共按钮模板。缺少可选细节时复用项目已有规范；缺少必要前置时只阻塞依赖工作。原 [implementation 路径](skills/engineering-loop/references/implementation.md)保留为已迁移规则的兼容入口。子路由本身不创建 PMS 卡片，也不扩展执行权限。
+[交付记录](skills/engineering-loop/references/development/delivery.md)将产物、检查和 PMS 证据写入项目已有任务／文档，不按专业角色重复建卡。[模板契约](skills/engineering-loop/references/development/templates.md)保留公共组件与样式条目；当前检查 Frontend-Design-Common 返回空仓库，实际模板及团队特定技术栈／包约定仍按项目绑定或待补。缺少可选细节时复用已有规范；缺少必要前置时只阻塞依赖工作。原 [implementation 路径](skills/engineering-loop/references/implementation.md)保留兼容，子路由不扩展执行权限。
 
 ### 新项目如何接入与沉淀
 
@@ -146,6 +146,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 分文件不能清除已进入会话的内容，也不保证固定 token 消耗；长任务仍需在适当检查点整理有效状态后交接。
 
 ## 如何逐步验证
+
+未发布的 v0.1.26 补齐全部 28 个场景的执行基线，保留短索引与项目既有选择。React/Vue 条件行为检查引用官方文档；未提供的团队包／样式标准与实际组件模板继续待补。[细则场景](evals/fixtures/development-details/TASK.md)和[验证记录](evals/fixtures/development-details/RESULTS.md)区分源码／格式检查与真实任务／运行行为，旧版本结果单独保留。
 
 未发布的 v0.1.25 增加开发场景子路由，并归位已有共通与风险规则，保留原约束。待补技术栈／模板内容与可用指导分开标明。[开发路由场景](evals/fixtures/development-routing/TASK.md)及[验证记录](evals/fixtures/development-routing/RESULTS.md)区分源码／分发检查与实际任务执行；目录更细本身不证明命中率提高、少读内容或模型质量收益。
 

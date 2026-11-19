@@ -4,7 +4,7 @@ Use only for an actual component/style reuse need in stage 02 design or stage 03
 
 ## Catalog status
 
-Status: **pending**. Frontend-Design-Common is the intended external team source; no inspected catalog, template contents, local checkout, release or package binding is supplied by this skill. The slots below are intentionally unfilled. Do not claim that ten buttons or any particular template has been loaded.
+Status: **pending**. [Frontend-Design-Common](https://github.com/super1888/Frontend-Design-Common) is the intended external team source. The connected repository read on 2026-11-19 returned an empty repository, so no template body, release or package binding was available. Recheck the actual source when content is supplied; the slots below remain unfilled. Do not claim that ten buttons or any particular template has been loaded.
 
 Maintained catalog reference/version:
 

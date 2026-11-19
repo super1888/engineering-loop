@@ -2,6 +2,12 @@
 
 Last updated: 2026-11-19. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
 
+## Unreleased v0.1.26 execution baselines
+
+All 28 development catalog entries now point to independent execution bodies. Framework-neutral steps and conditional React/Vue behavior checks retain project-owned libraries, architecture, commands and policies; they are guidance rather than a new framework/runtime implementation. The intended shared-template repository returned empty when inspected, so no template/package compatibility is claimed.
+
+The [current specification](../evals/fixtures/development-details/TASK.md) and [validation record](../evals/fixtures/development-details/RESULTS.md) distinguish source/reference/package checks from actual task/runtime evidence. Older v0.1.25 model samples do not validate these new bodies or a framework's real behavior.
+
 ## Unreleased v0.1.25 development subroutes
 
 Stage 03 now enters a fact-based development subrouter: four professional catalogs with 28 scenarios, shared core and nine conditional risks. Framework/stack bindings and the shared component-template catalog have explicit pending slots; no React/Vue standard, actual external template or automatic matcher is implied. Existing implementation guidance is redistributed with its legacy entry path retained. Project-required full reads, MCP, authorization and acceptance remain effective.

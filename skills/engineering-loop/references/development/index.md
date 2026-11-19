@@ -11,7 +11,7 @@ Investigate available facts before asking. Ask only a remaining outcome, busines
 ## Select guidance
 
 1. Read the [shared core](core.md) for a complete development slice. Do not restart project discovery or an already-settled interview.
-2. Select the affected areas below. Inspect the catalog and matching scenario sections; do not preload every area or read every linked body. Multiple areas are valid only when their changed behavior or contracts need them.
+2. Select the affected areas and scenario IDs below. Follow each selected scenario's **Read** link and read that execution body before implementation, even for a settled copy-only task. The catalog's summaries/checks are discovery metadata, not a substitute for the body. Reuse valid prior body reads; do not preload unrelated areas or bodies. Multiple areas are valid only when their changed behavior or contracts need them.
 3. Match the actual module's stack and project rules. Read [stack bindings](stacks.md) only when locating or filling a specialist convention; a framework name alone does not supply a standard.
 4. Check the short [risk index](risks.md) against the actual changes and downstream effects. Read every triggered rule, including a relevant rule outside the apparent frontend/backend label. Scenario suggestions are not an exhaustive risk checklist.
 5. For component/style reuse, consult [template matching](templates.md) only when relevant. Read selected bodies and necessary related checks, then apply the stage's common challenge before execution. New boundaries need affected questions, not another full interview.
@@ -23,6 +23,8 @@ Investigate available facts before asking. Ask only a remaining outcome, busines
 | Integration | [I1–I8](scenarios/integration.md) | A changed/shared contract or an actual cross-module/system chain | Merely editing two files or using a mocked API |
 | Engineering/shared capabilities | [E1–E4](scenarios/engineering.md) | Library/SDK, CLI/script, build/dependencies or generation tools | A requirement to deploy or install a new package |
 
+For example, an approved button-label edit matches [F1](scenarios/frontend.md#f1-components-and-styles): follow its Read target to [component execution](frontend/components.md), whose copy-only path permits scoped consistency checks. Reading that body does not require a redesign, browser session, framework guide or component-template catalog.
+
 ## Missing or conflicting details
 
 `available` identifies usable linked guidance within its stated scope; it does not certify execution. `partial` means existing baseline guidance is available but named team detail is pending. `pending` means no supplied standard/catalog is available. `retired` entries are not selected; retain their replacement pointer when one exists. These labels describe content, not task status or permission.
@@ -30,6 +32,8 @@ Investigate available facts before asking. Ask only a remaining outcome, busines
 A pending optional convention is not an automatic blocker: reuse effective project instructions, accepted components and representative implementations. If a necessary contract, permission, acceptance rule or expressly required template cannot be established, report that exact gap and pause only dependent work. Do not fabricate a framework rule, template, package requirement or successful skill invocation. A conflicting explicit choice needs reconciliation before substitution.
 
 Stage 03 inherits [PMS task policy](../pms.md), [verification](../verification.md) and conditional support from its stage. Route labels do not create cards, require one task per professional role, change an assignee or grant deployment authority. Finish at the accepted slice's evidence boundary.
+
+For a tracked deliverable or a requested execution/acceptance document, use the [delivery record](delivery.md) with the selected body's concrete artifact and check requirements. A local edit can keep this evidence in its existing task or response; the record is not another mandatory file.
 
 ## Maintain an index entry
 

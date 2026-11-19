@@ -3,6 +3,19 @@
   "status": "scenario-specifications; execution evidence is recorded separately",
   "cases": [
     {
+      "id": "development-execution-details",
+      "prompt": "Complete this accepted development slice using the matching execution details and the project's existing conventions. Preserve scope and report actual evidence.",
+      "fixture_description": "The v0.1.26 specification at evals/fixtures/development-details/TASK.md covers 28 separately linked execution bodies, conditional React/Vue behavior checks and a reusable delivery record. Its static positive/negative examples distinguish framework-neutral execution from project policy, optional templates from required contracts and task evidence from production authority. A bounded connected native copy-edit sample can exercise F1 body retrieval; current results remain separate from prior v0.1.25 observations and from real framework/application tests.",
+      "expectations": [
+        "Selects the matching execution body after the existing stage/MCP/core/conditional-risk route, rather than loading all 28 bodies or treating a short catalog as the complete instructions. Preserves project-required full reads and existing authorization.",
+        "Uses concrete inputs, execution steps, independently grounded verification and actual artifact/delivery evidence while retaining the selected project's libraries, layout, architecture, commands and business policy.",
+        "Keeps copy-only changes proportional, handles form/data/state and service boundaries without inventing behavior, and distinguishes authoritative write evidence from a requirement to add redundant production calls.",
+        "Applies React or Vue behavior checks only to the actual affected version/scenario; preserves version-dependent Vue props behavior and supported cleanup APIs without introducing a package, framework upgrade or universal rewrite.",
+        "Uses existing PMS/document formats and task granularity, keeps actual templates pending when the source is empty, and reports unrun or unavailable evidence accurately. No scope expansion or private-project rule import is granted by adding details.",
+        "Separates source/reference review, native task observations and real application/runtime acceptance. An exact copy edit cannot validate all new branch behavior or prove improved routing accuracy."
+      ]
+    },
+    {
       "id": "development-fact-filtered-routing",
       "prompt": "Use Engineering Loop for this authorized development slice. Locate the affected module and scenario, apply relevant project and boundary rules, and preserve the stated delivery limits.",
       "fixture_description": "The v0.1.25 specification at evals/fixtures/development-routing/TASK.md covers 28 frontend/backend/integration/engineering scenario entries, nine shared risks, actual-stack selection and pending convention/template slots. Its static matrix includes misleading keywords, hidden cross-boundary behavior, optional versus required missing content and legacy-entry migration. A bounded native copy-edit pair may reuse the existing read-only synthetic PMS harness; actual execution and limits are recorded separately, never inferred from this specification.",

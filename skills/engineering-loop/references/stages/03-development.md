@@ -12,6 +12,8 @@ Reuse the effective behavior, applicable design/contracts, current code and proj
 
 Enter the [development subrouter](../development/index.md): use its shared core, select the affected frontend/backend/integration/engineering scenarios, then add only matching stack, template and risk guidance. The old [implementation.md](../implementation.md) path remains a compatibility entry. Existing rules remain required when their conditions apply; pending team-specific details are not completed standards.
 
+For a selected scenario, read its catalog's **Read** target before changing artifacts, including a settled copy-only edit. The catalog is discovery metadata, not its execution body. Reuse an already-read body while its relevant conditions remain valid; do not reload it on every edit.
+
 Select an available project specialist by the affected stack through [specialists.md](../specialists.md) only when needed. Read [collaboration.md](../collaboration.md) for shared ownership or integration; use [verification.md](../verification.md) for applicable checks without waiting for a separate project-wide testing phase.
 
 Apply the [common challenge](../grill.md) to the affected contracts, state and failure example. Check code and accepted decisions first; ask only a consequential unresolved choice. Do not invent business policy to unblock implementation.

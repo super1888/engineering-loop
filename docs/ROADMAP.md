@@ -1,5 +1,13 @@
 # Roadmap
 
+## v0.1.26: unreleased scenario execution details
+
+- Give all 28 development scenarios individual execution bodies, leaving catalogs focused on matching and links.
+- Specify inputs, concrete actions, relevant positive/negative checks, actual delivery evidence and remaining project bindings; preserve copy-only, read-only and design-only limits.
+- Retain the user's confirmed existing project conventions. Add version-aware React/Vue behavior checks from official sources without selecting libraries, upgrades or a common architecture.
+- Reuse one optional delivery record for tracked artifacts and existing PMS policy; do not create a document/card per component or professional role.
+- Keep actual template contents pending after the intended source returned empty. Record current validation under the [detail specification](../evals/fixtures/development-details/TASK.md), separately from prior routing samples.
+
 ## v0.1.25: unreleased development subroutes
 
 - Keep the five-stage top level and route stage-03 work through 28 frontend, backend, integration and engineering/shared scenario entries, using task facts, paths, module configuration and changed boundaries.

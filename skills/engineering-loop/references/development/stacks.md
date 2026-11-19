@@ -1,6 +1,6 @@
 # Bind actual module stacks to maintained conventions
 
-Read when a selected scenario needs a stack-specific convention or when maintaining that binding. Status: **pending** for the team-specific slots below. This file supplies discovery/binding rules, not React, Vue, backend-framework or CLI coding standards.
+Read when a selected scenario needs stack-specific guidance or when maintaining that binding. Discovery and conditional React/Vue behavior checks are available; team-specific choices below remain **pending** unless the selected project supplies them. These checks do not introduce a new cross-project framework, package or architecture standard.
 
 ## Discover and select
 
@@ -11,7 +11,7 @@ Read when a selected scenario needs a stack-specific convention or when maintain
 
 ## React
 
-Status: pending. Applies only after an affected module is established as React.
+Read [React behavior checks](stacks/react.md) only when an affected React state/effect boundary is involved. Use the installed runtime/framework and its maintained project rules; a copy-only edit does not need this body. Team-specific conventions remain pending.
 
 Team-specific conventions:
 
@@ -19,7 +19,7 @@ Team-specific conventions:
 
 ## Vue
 
-Status: pending. Applies only after an affected module is established as Vue.
+Read [Vue behavior checks](stacks/vue.md) only for the matching Vue 3 reactivity/props/watch boundary. Detect the actual version/API style first; Vue 2 work follows its own maintained project/version guidance. Team-specific conventions remain pending.
 
 Team-specific conventions:
 
