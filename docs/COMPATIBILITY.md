@@ -1,6 +1,12 @@
 # Compatibility and validation
 
-Last updated: 2026-11-18. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+Last updated: 2026-11-19. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+
+## Unreleased v0.1.24 five-stage navigation
+
+The entrypoint now selects the current task's requirements, design/planning, development/integration, testing/acceptance or release/validation stage after the required MCP gate. Each stage indexes inputs, execution, conditional PMS use, deliverables and acceptance/return conditions, applying the common challenge and existing professional guidance. Review, coordination, recovery and learning remain conditional support. Existing guide paths and the Kaneo dependency remain available; no stack/component registry, automatic selector or new deployment authority is added.
+
+See the [acceptance specification](../evals/fixtures/five-stage-routing/TASK.md) and [validation record](../evals/fixtures/five-stage-routing/RESULTS.md) for current checks and limits. Historical v0.1.23 results below retain their original source identity and do not certify this routing change.
 
 ## Unreleased v0.1.23 common-core split
 

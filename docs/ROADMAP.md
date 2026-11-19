@@ -1,5 +1,13 @@
 # Roadmap
 
+## v0.1.24: unreleased five-stage directory
+
+- Make requirements analysis/confirmation, solution design/planning, development/integration, testing/acceptance and release/validation the five first-level entries.
+- Keep the MCP gate mandatory; identify the current task's stage from available evidence, asking only about consequential ambiguity, then apply that stage's challenge and relevant focused guidance.
+- Give each stage the same six-part contract: entry, inputs, execution/reference selection, PMS use, deliverables, and exit/return. Preserve current specialist/support guides and their boundaries; detailed stack, component, document and task templates remain follow-up work.
+- Treat project rules, review, collaboration, resume and learning as conditional support. Distinguish task stage from project-wide progress and board status; operational events need not create release work.
+- Keep historical trials tied to their actual versions. Current checks and any scenario exercises are recorded in the [evidence index](../evals/STATUS.md); the directory change alone does not establish automatic selection, context savings or delivery quality.
+
 ## v0.1.23: unreleased common-core routing split
 
 - Separate the mandatory connection gate from task operations, keeping identity, target, workflow, fail-closed behavior and evidence validity required on every activated route.

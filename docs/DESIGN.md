@@ -1,6 +1,24 @@
 # Design boundaries
 
-One team task/delivery router, focused references, and project-owned artifacts. Routed stages require a verified PMS MCP connection and an evidence-based challenge; specialist skills supply execution guidance. The PMS stores shared task facts while the repository retains its engineering system and artifacts.
+One team task/delivery router with five stage entries, focused references, and project-owned artifacts. Routed work requires a verified PMS MCP connection; select the task's stage, then apply its evidence-based challenge and relevant professional guidance. The PMS stores shared task facts while the repository retains its engineering system and artifacts.
+
+## Five-stage navigation
+
+The v0.1.24 directory distinguishes project stages from professional details and cross-cutting support:
+
+| First-level stage | Selected guidance |
+|---|---|
+| 01 Requirements analysis and confirmation | [Requirements entry](../skills/engineering-loop/references/stages/01-requirements.md) |
+| 02 Solution design and planning | [Design entry](../skills/engineering-loop/references/stages/02-design.md), including UI and architecture/planning references |
+| 03 Development and integration | [Development entry](../skills/engineering-loop/references/stages/03-development.md), including frontend/backend implementation, self-checks and integration |
+| 04 Testing and acceptance | [Testing entry](../skills/engineering-loop/references/stages/04-testing.md) |
+| 05 Release and validation | [Release entry](../skills/engineering-loop/references/stages/05-release.md), including relevant operational events |
+
+After the MCP gate, infer the current task/deliverable's stage from the request and effective project/task facts. Ask only when an unresolved distinction changes the next work; do not ask the user to choose internal skill names. An entire project need not occupy one stage, and a stage is not a PMS board status. A request spanning stages can be sequenced into authorized slices without replaying accepted prerequisites.
+
+Each stage has the same six sections: entry, inputs, execution/reference selection, PMS, deliverables, and exit/return. These are usable navigation contracts; exact stack rules, component indexes, document schemas and project-specific task policies remain future detail. This is not a rule engine or automatic selector.
+
+Project conventions, review, collaboration, resume and learning remain conditional support. UI design enters stage 02 while implementation enters stage 03. Testing is also part of implementation self-checks; stage 04 owns a testing/acceptance deliverable. Actual operational incidents can enter the relevant stage-05 branch without creating a release or requiring earlier stages. Existing focused guides keep their paths and own their detailed rules.
 
 ## Stable core
 
@@ -41,9 +59,9 @@ This is a map to existing sources, not a second set of requirements. A contribut
 
 ## Context lifecycle
 
-Discovery uses concise metadata. Activation reads the entrypoint, connection gate and common challenge; a current need reads its owning stage. Stage challenge focuses live in their corresponding guides, task operations in the task guide, and [specialist selection](../skills/engineering-loop/references/specialists.md) is read only when selecting or handing off a specialist. Existing decisions and evidence are reused if relevant state is unchanged. Material changes invalidate only affected evidence. A handoff keeps effective state with pointers, not a growing transcript.
+Discovery uses concise metadata. Activation reads the entrypoint and connection gate, identifies the current task's stage, then reads that stage and the common challenge before execution. Only matching focused details are loaded. Stage challenge focuses live in their corresponding guides, task operations in the task guide, and [specialist selection](../skills/engineering-loop/references/specialists.md) is read only when selecting or handing off a specialist. Existing decisions and evidence are reused if relevant state is unchanged. Material changes invalidate only affected evidence. A handoff keeps effective state with pointers, not a growing transcript.
 
-The v0.1.23 first slice reduces the common three-file source text from 21,772 to 12,007 bytes without deleting connection or challenge prerequisites. This is not a token measurement or an observed cost/quality improvement. Preserve all applicable AGENTS, mandatory full-document reads, project lifecycle policies and delivery stop points before filtering optional details. A rule index or project-profile system is outside this slice; the [controlled trial](../evals/fixtures/core-route/TASK.md) targets a settled local edit with valid versus absent MCP only.
+The historical v0.1.23 first slice reduced its common three-file source text from 21,772 to 12,007 bytes without deleting connection or challenge prerequisites. This is not a token measurement, a current-version size claim or an observed cost/quality improvement. Preserve all applicable AGENTS, mandatory full-document reads, project lifecycle policies and delivery stop points before filtering optional details. A rule index or project-profile system remains outside this directory revision; the [controlled trial](../evals/fixtures/core-route/TASK.md) targets the earlier settled local edit with valid versus absent MCP only and does not validate v0.1.24 routing.
 
 The packaging check limits entrypoint size as a maintenance signal; it does not measure tokens or enforce runtime behavior. References are not a guarantee that an agent will avoid unnecessary reads. Evaluate that behavior explicitly.
 

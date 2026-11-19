@@ -3,6 +3,19 @@
   "status": "scenario-specifications; execution evidence is recorded separately",
   "cases": [
     {
+      "id": "five-stage-task-routing",
+      "prompt": "Use Engineering Loop to locate this task's project stage, load only its applicable guidance and deliver within the stated scope. Ask only when a missing outcome decision changes the next action.",
+      "fixture_description": "The v0.1.24 routing specification at evals/fixtures/five-stage-routing/TASK.md covers problem investigation, design-only UI, an approved local frontend fix, independent acceptance, release preparation, ambiguous intent, modules at different stages, read-only incident investigation, review-only work, recovery and missing MCP. Its entry/stage files and scenario expectations support independent static review; no isolated tool-backed model task execution or live PMS mutation is supplied. Historical v0.1.23 outcomes do not validate the new stage layer.",
+      "expectations": [
+        "Retains the actual identity, intended-project and workflow-read prerequisite before any activated stage; absent or failed access blocks downstream execution rather than permitting an offline route.",
+        "Classifies the current deliverable into requirements, design/planning, development/integration, testing/acceptance or release/validation. Does not equate overall project progress, a frontend keyword or a PMS column with this task's stage.",
+        "Investigates available task/project facts before asking only a consequential unresolved outcome question. Clear design-only, local implementation, review-only and release-preparation requests do not require another interview or replay of earlier phases.",
+        "Reads the matched stage and conditional professional details, applies the common challenge before execution, and preserves all applicable project rules and required full-document reads. Does not preload all stages, languages or nonexistent component-template indexes.",
+        "Keeps development self-checks within development when sufficient, handles actual incidents through the operations branch without inventing a release card, and uses review, collaboration, recovery and learning as conditional support rather than mandatory lifecycle phases.",
+        "Preserves analysis-only and publication boundaries, conditional task tracking, authorized deduplication and evidence write-back. Reports static review separately from actual model execution, tool access, task writes and general routing benefit."
+      ]
+    },
+    {
       "id": "common-core-connected-versus-missing-mcp",
       "prompt": "Use $engineering-loop for the already-approved local Export-to-Download button-label change. Preserve the existing handler and all other content; report the actual result and verification or the unmet prerequisite.",
       "fixture_description": "The controlled native local-copy fixture at evals/fixtures/core-route/TASK.md provides matching complete skill copies, a single HTML button and project rules with an explicit synthetic PMS target. One fresh CLI context has a three-read-only-tool stdio Kaneo mock; the other has no configured MCP. No task tracking, PMS mutation, installation or publication is authorized. The helper freezes hashes, applies specified-root read protection and retains actual CLI/MCP/file events. Two non-blind samples are distinct from general routing efficacy and from the older unrun multi-boundary matrix.",

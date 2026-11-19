@@ -1,6 +1,6 @@
 # Work with PMS tasks
 
-Read for a supplied task reference, a task-management request, or work subject to the project's tracking policy. First pass [connection.md](connection.md) and the common [route challenge](grill.md); all task mutations require both. A simple untracked local edit needs the common gate/challenge, not these task-operation details. Keep private bindings and credentials in the host/project configuration.
+Read for a supplied task reference, a task-management request, or work subject to the project's tracking policy. First pass [connection.md](connection.md); read-only task lookup can then establish the current stage and scope. Apply the common [route challenge](grill.md) before task mutations or delivery execution; reads alone authorize neither. A simple untracked local edit needs the common gate/challenge, not these task-operation details. Keep private bindings and credentials in the host/project configuration.
 
 Challenge the selected task route: is it an existing deliverable or a duplicate? Are scope, responsible member, execution ownership, dependencies and acceptance evidence clear? Which ownership controls are advisory versus enforced?
 

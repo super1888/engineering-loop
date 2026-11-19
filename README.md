@@ -119,11 +119,11 @@ Plugin installations use `/engineering-loop:engineering-loop` instead.
 
 | Request | Expected behavior |
 |---|---|
-| Explicitly use Engineering Loop | Verify PMS MCP, challenge the slice, enter the requested stage |
+| Explicitly use Engineering Loop | Verify PMS MCP, identify the task's stage, then apply its guidance and challenge |
 | Create, claim or update a team task | Read the intended project/task, respect authorization, check the write result |
 | Resume a project with uncertain state | Reconcile state, then route |
 | Cross-boundary change with unresolved decisions | Clarify the relevant decisions |
-| Review or test an approved change | Enter that stage; reuse existing context |
+| Review or test an approved change | Select the relevant stage/support guide; reuse existing context |
 | Explain a function, fix a typo, adjust local copy outside this workflow | Ordinary project workflow; explicit invocation still requires the MCP gate and a proportionate challenge |
 | Already-scoped work handled by project guidance | Do not add a competing orchestrator |
 
@@ -134,22 +134,34 @@ Automatic selection remains available through a deliberately scoped description.
 ## How it works
 
 ```text
-effective project state + user intent
-                 |
-     verified PMS MCP connection
-                 |
-       challenge current assumptions
-                 |
-       bounded outcome / next slice
-                 |
-  requirements -> implement -> review / verify -> release -> operate
-        ^                        |                            |
-        +---- material change ---+---- demonstrated lesson ---+
+user input + effective project/task context
+                    |
+       verified PMS MCP connection
+                    |
+ identify this task's stage; ask only if unresolved
+                    |
+     read the selected stage's guidance
+                    |
+ challenge the slice + load relevant specialist details
+                    |
+ execute -> verify -> authorized PMS evidence write-back
 ```
 
-After the mandatory connection gate, enter at the needed stage. Every stage and selected specialist passes the built-in [grill-me-style challenge](skills/engineering-loop/references/grill.md): investigate facts, test a consequential assumption or failure example, and resolve only material gaps. Settled decisions can pass with no user questions. Verification starts with requirements and continues during implementation; the arrows do not mandate a waterfall or another approval at every step.
+The first-level directory follows five project stages. Route the current task or deliverable, rather than assigning one exclusive stage to an entire project. Different modules can be at different stages; accepted inputs permit direct entry without replaying earlier work.
 
-The entrypoint loads the connection gate and common challenge, then only matching stage guidance. Stage-specific challenge questions live with that stage; [specialist selection](skills/engineering-loop/references/specialists.md) and task-operation details are conditional reads. All applicable project instructions, full-document requirements and delivery stop points still apply. It does not read the whole lifecycle, create a new planning directory, or restart the interview on each message. Reuse valid connection evidence while its session, actor and target remain unchanged. Long-running work keeps effective state and evidence pointers in the connected task and maintained project sources. Already-loaded content still consumes context.
+| Stage | Focused entry |
+|---|---|
+| 01 Requirements analysis and confirmation | [Problem, evidence and behavior boundaries](skills/engineering-loop/references/stages/01-requirements.md) |
+| 02 Solution design and planning | [Product, architecture, UI and delivery planning](skills/engineering-loop/references/stages/02-design.md) |
+| 03 Development and integration | [Frontend/backend implementation, bug repair and integration](skills/engineering-loop/references/stages/03-development.md) |
+| 04 Testing and acceptance | [Test execution, evidence and business acceptance](skills/engineering-loop/references/stages/04-testing.md) |
+| 05 Release and validation | [Deployment, release validation and relevant operations](skills/engineering-loop/references/stages/05-release.md) |
+
+Each stage uses six sections: entry conditions, inputs, execution/reference selection, PMS use, deliverables, and exit/return. This revision establishes the directory and these contracts; detailed stack rules, document templates and component indexes will be added where needed. UI design belongs to stage 02 and UI implementation to stage 03; developer self-checks remain part of development. An operational incident can enter the relevant stage-05 operations branch without becoming a release or repeating earlier stages.
+
+Every activated stage and selected specialist still passes the built-in [grill-me-style challenge](skills/engineering-loop/references/grill.md). Investigate facts and reuse decisions before asking about material gaps; settled work can pass with zero questions. Project rules, review, collaboration, recovery and learning are conditional support, rather than additional peer stages. [Specialist selection](skills/engineering-loop/references/specialists.md) and [PMS task operations](skills/engineering-loop/references/pms.md) are read only when applicable. A stage is distinct from a board status, and selecting a stage does not automatically create a task.
+
+All applicable project instructions, full-document requirements and delivery stop points still apply. Read only the selected stage and matching details, reuse valid connection evidence, and preserve effective state/evidence pointers in the established project sources. Stage changes alone do not restart the interview or identical connection probes. Already-loaded content still consumes context.
 
 ### A small example
 
@@ -164,6 +176,8 @@ For a new project, the [project connection guide](skills/engineering-loop/refere
 The [requirements guide](skills/engineering-loop/references/requirements.md) distinguishes confirmed exclusions, authorized exceptions and undecided policies at relevant boundaries. It also separates an unclear request, an unsupported one and temporary unavailability when they have different outcomes. The [order-flow example](examples/workflows.md#a-bounded-order-flow-requirement) shows those distinctions without turning every hypothetical request into a feature.
 
 ## Validation and contribution
+
+Unreleased v0.1.24 reorganizes navigation around five stage entry files and a common six-part contract. Existing specialist and support references remain available; the MCP gate, authorization and acceptance boundaries remain required. The new directory is guidance rather than an automatic selector. Prior v0.1.23 trials do not validate this revised routing; current execution status is recorded in the [evidence index](evals/STATUS.md).
 
 Unreleased v0.1.23 separates the mandatory connection/common-challenge core from task operations and specialist coordination, and moves stage challenge focuses into their owning guides. The first slice reduces the common entry/reference text from 21,772 to 12,007 bytes; bytes are not measured tokens or quality/cost gains. All gates and applicable project constraints remain required. The [controlled local-copy trial](evals/fixtures/core-route/TASK.md) separates real model/tool observations from adapter tests; it does not validate the entire older matrix or implement a general rule engine/project profile registry.
 

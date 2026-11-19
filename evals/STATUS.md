@@ -1,4 +1,4 @@
-# Evidence status — 2026-11-18
+# Evidence status — 2026-11-19
 
 Read this index to select evidence, then open only the relevant report. It summarizes retained observations, not a current release certification. Each report owns its conditions, input identities, initial failures and limitations. [Detailed protocols and historical notes](DETAILS.md) retain older coverage and unrun scenarios.
 
@@ -22,6 +22,8 @@ Read this index to select evidence, then open only the relevant report. It summa
 | [Common-core local-copy observations](fixtures/core-route/RESULTS.md) | Final native-profile pair: three actual synthetic PMS reads preceded the exact label edit; with PMS absent, only entry/connection reads and metadata discovery occurred and files stayed unchanged. Initial setup/approval/shell failures retained. | Two bounded local outcomes, not general routing or production safety. Host plugin metadata remained visible; actual model identity unknown; older matrix unrun. |
 
 ## Tool controls and remaining gaps
+
+The v0.1.24 [five-stage navigation specification](fixtures/five-stage-routing/TASK.md) reorganizes the entrypoint and adds stage guides. Its [validation record](fixtures/five-stage-routing/RESULTS.md) records independent static scenario review, passing distribution/skill-format checks and `Ran 121 tests`, `OK (skipped=6)`. Tool-backed stage-task execution remains unrun. Older common-core and native-discovery samples do not validate this new layer.
 
 The linked reports distinguish mechanism controls (oracle positive/negative candidates, read-denial probes and local service tests) from model observations. Distribution checks and passing unit tests do not measure model quality. Raw transcripts, screenshots and databases are not transferable guarantees; trial artifacts stay ignored/local and credentials are excluded from committed reports.
 

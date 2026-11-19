@@ -18,4 +18,4 @@ Reuse evidence within the same session, credential identity, target and valid co
 
 Discover the current tool schema. For Kaneo, use `whoami`, `get_project` and `list_project_columns`; read `list_project_custom_fields` for relevant required fields. Another PMS must establish equivalent capabilities, not inherit assumed names.
 
-After success, apply the common [route challenge](grill.md), then only the selected stage. Read [pms.md](pms.md) when working with a task reference, performing task operations or following an applicable tracking policy; it contains creation, claiming, concurrency and write-back rules. Connection checks remain read-only and do not authorize those operations.
+After success, identify the current task's stage through the [entrypoint](../SKILL.md), read that stage and apply the common [route challenge](grill.md) before execution. Read [pms.md](pms.md) when working with a task reference, performing task operations or following an applicable tracking policy; it contains creation, claiming, concurrency and write-back rules. Connection checks remain read-only and do not authorize those operations.

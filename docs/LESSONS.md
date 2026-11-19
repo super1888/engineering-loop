@@ -2,6 +2,13 @@
 
 Keep this small. Business/stack defects belong with their executable safeguards; a local incident is not automatically a generic skill rule.
 
+## Stage navigation mixed phases, specialties and support (2026-11-19; candidate)
+
+- **Trigger and evidence:** While reviewing the v0.1.23 flowchart in Codex desktop, the user found the entry structure too complex and confirmed a five-stage directory before adding detailed norms. The entry table mixed delivery phases with UI specialization, project setup, review, collaboration and learning. Exact serving model/build identity was not established; no task-routing failure rate was measured.
+- **Correction and scope:** The v0.1.24 entry selects the current task/deliverable's stage after the mandatory MCP gate. Five stage files provide consistent entry, inputs, execution/reference selection, PMS, deliverables and exit/return sections, linking existing professional and support guidance only when relevant. Detailed stack/component/document policies are deferred. Expected benefit is a clearer ownership and discovery path; the cost is one small stage index per selected route.
+- **Counterexample and safeguard:** A project can have tasks in different stages. A local implementation self-check, standalone review or operational incident must not trigger a full lifecycle, a release or a new task merely to fit the directory. Existing authorization, MCP, project instructions and acceptance remain effective. Maintainers own the directory and corresponding routing cases; validation status is recorded in the [evidence index](../evals/STATUS.md).
+- **Evidence limit and review:** This is a navigation correction, not demonstrated automatic routing or reduced context/quality cost. Historical v0.1.23 runs cannot certify the revised directory. Revisit the extra stage layer if fresh-context tasks misroute, load unrelated guides or add unnecessary questions; retain legitimate direct entry and revise only the affected route.
+
 ## Intervening question displaced an unfinished task (2026-11-02; candidate)
 
 - **Trigger and evidence:** In a macOS Codex desktop chat, a user requested product disassembly references, then asked why the source page failed to connect. After restoring access, the assistant ended with an offer to continue; the user had to say continue. The original search remained unfinished. Exact serving model/build identity was not recorded; no evidence establishes a macOS-specific defect.

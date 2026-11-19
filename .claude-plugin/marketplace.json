@@ -1,7 +1,7 @@
 {
   "name": "engineering-loop-marketplace",
   "metadata": {
-    "description": "Team task and delivery workflows with PMS MCP access and critical questioning."
+    "description": "Five-stage team delivery with PMS MCP access and focused execution guidance."
   },
   "owner": {
     "name": "super1888"
@@ -10,7 +10,7 @@
     {
       "name": "engineering-loop",
       "source": "./",
-      "description": "A team delivery entrypoint with mandatory PMS MCP access, routed specialist skills and evidence-based acceptance."
+      "description": "A five-stage team delivery entrypoint with mandatory PMS MCP access and evidence-based acceptance."
     }
   ]
 }

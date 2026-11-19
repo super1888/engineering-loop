@@ -1,39 +1,39 @@
 ---
 name: engineering-loop
-description: Team task and delivery entrypoint. Verify PMS MCP access, challenge assumptions, route to the applicable stage or specialist skill, and coordinate task creation, claiming, execution and acceptance. Use for team delivery, task management, uncertain project recovery, or explicit invocation. Standalone explanations outside this workflow stay lightweight.
+description: Team delivery entrypoint with a required PMS MCP connection. Identify the current task's project stage, load its guidance and relevant specialist details, then coordinate execution and acceptance. Use for team delivery, task management, uncertain project recovery, or explicit invocation. Standalone explanations outside this workflow stay lightweight.
 license: MIT
 metadata:
-  version: "0.1.23"
+  version: "0.1.24"
 ---
 
 # Engineering Loop
 
 Coordinate team intent, tasks, specialist work and delivery evidence. Match the user's language. Host permissions and executable controls enforce actions; instructions cannot guarantee correctness or exclusion.
 
-## Connect, challenge, then route
+## Connect, locate the stage, then execute
 
 1. **Connect first:** read [connection.md](references/connection.md). Every activated stage and specialist, including analysis-only work, requires successful MCP identity, intended-project and workflow reads. Configuration or tool registration is insufficient. Failed or unknown access blocks downstream work and code/PMS writes; permit only minimal target/connection discovery and diagnosis.
-2. **Challenge the slice:** read the common [grill.md](references/grill.md). Investigate facts, reuse settled decisions and resolve material assumptions and acceptance gaps. Sufficient evidence permits zero user questions; questioning never replaces verification.
-3. **Read matching guidance:** identify the outcome, stage, affected paths and boundaries. Preserve all applicable project instructions, including required full-document reads and delivery stop points; filtering details cannot waive them. Use the stage table below, or [specialists.md](references/specialists.md) when selecting/delegating an available specialist. Read only matching details, not the entire lifecycle.
+2. **Locate this task's stage:** use its requested deliverable, task and project evidence, not keywords or overall project progress. Modules may be in different stages. Investigate first; ask only a missing outcome/scope decision that changes the next action, not which internal route to use. Combine stages when needed without replaying completed ones.
+3. **Read the selected stage:** use the five-stage table below. Apply the common [grill.md](references/grill.md) with that stage's focus before execution: reuse settled decisions and resolve material assumptions and acceptance gaps. Sufficient evidence permits zero user questions; questioning never replaces verification.
+4. **Descend only as needed:** follow the stage's links to professional guidance, applicable stack conventions or [specialists.md](references/specialists.md) when selecting a specialist. Preserve all applicable project instructions, required full-document reads and delivery stop points. Read only matching details, not every stage or technology.
 
 Read [pms.md](references/pms.md) for a supplied task reference, task-management request, or work subject to the project's tracking policy. It governs lookup, deduplication, authorized creation/claiming and evidence write-back; the connection gate does not authorize task mutations. Keep credentials and project/member bindings in established configuration.
 
-Reuse connection/challenge evidence only while its session, identity, target and relevant conditions remain valid. Recheck affected facts after errors or material change; a stage change alone does not require identical probes or another interview. Do not ask the user to choose internal routes.
+Reuse connection/challenge evidence only while its session, identity, target and relevant conditions remain valid. Recheck affected facts after errors or material change; a stage change alone does not require identical probes or another interview.
 
-Answer intervening questions, then resume unfinished authorized work. Honor stop, replacement and draft-only limits. For uncertain recovery, use [resume.md](references/resume.md) to reconcile outcome/non-goals, artifacts, settled decisions, blockers, next slice and evidence. Reuse the existing plan and workflow.
+Answer intervening questions, then resume unfinished authorized work. Honor stop, replacement and draft-only limits. Reuse the existing plan and workflow.
 
-| Need | Reference | Exit evidence |
+| Current task's stage | Stage guide | Main routing signals |
 |---|---|---|
-| Connect project rules or references | [project.md](references/project.md) | Effective conventions, owners, checks and gaps |
-| Clarify behavior and tradeoffs | [requirements.md](references/requirements.md) | Accepted examples, boundaries, unresolved items |
-| Design a user interface | [ui.md](references/ui.md) | Desktop default; target, states, rendered evidence |
-| Implement a slice or diagnose a bug | [implementation.md](references/implementation.md) | Scoped changes and relevant checks |
-| Review a concrete diff | [review.md](references/review.md) | Evidence-linked findings and dispositions |
-| Verify behavior or integration | [verification.md](references/verification.md) | Passed, failed, unrun, with version/scope |
-| Prepare or execute a release | [release.md](references/release.md) | Identified artifact, recovery, smoke evidence |
-| Prepare or diagnose operations | [operations.md](references/operations.md) | Impact, tested hypothesis, recovery evidence |
-| Preserve a demonstrated lesson | [learning.md](references/learning.md) | Scoped correction and a counterexample |
-| Coordinate or integrate contributions | [collaboration.md](references/collaboration.md) | Ownership, agreement, combined evidence |
+| 01 需求分析与确认 | [01-requirements.md](references/stages/01-requirements.md) | Investigate the problem, current behavior and boundaries |
+| 02 方案设计与规划 | [02-design.md](references/stages/02-design.md) | Product/technical design, UI and delivery planning |
+| 03 开发与联调 | [03-development.md](references/stages/03-development.md) | Implement, diagnose a bug or integrate systems |
+| 04 测试与验收 | [04-testing.md](references/stages/04-testing.md) | Test or assess a deliverable against accepted behavior |
+| 05 发布与验证 | [05-release.md](references/stages/05-release.md) | Release preparation/execution or an actual operational event |
+
+Stages classify work; PMS columns describe task state. Selecting a stage does not create a task or authorize the next phase. Each guide indexes entry, inputs, execution, PMS, deliverables and exit/return conditions; stack/template details remain conditional.
+
+Conditional support: [project.md](references/project.md) for missing conventions, [review.md](references/review.md) for concrete review, [collaboration.md](references/collaboration.md) for coordination, [resume.md](references/resume.md) for uncertain recovery, [learning.md](references/learning.md) for a demonstrated lesson or requested retrospective. A support-only task need not launch development or replay the lifecycle.
 
 ## Preserve authority and acceptance
 
