@@ -13,6 +13,7 @@ Reuse the relevant accepted behavior, boundaries, current architecture and desig
 - For behavior specifications or consequential scope changes, read [requirements.md](../requirements.md).
 - For architecture responsibilities, reference-project inheritance or enforcement gaps, read [project.md](../project.md) and the applicable maintained project architecture; this index supplies no separate architecture standard.
 - For interface decisions, read [ui.md](../ui.md), including its target-device gate.
+- For an applicable shared component/style catalog, use [template matching](../development/templates.md); it also serves design work without moving the request into implementation.
 - For delegated ownership, dependencies or integrated planning, read [collaboration.md](../collaboration.md) when those boundaries apply.
 
 Apply the [common challenge](../grill.md) to the uncertain design choice. Use facts, representative content or a bounded experiment; ask only a material unresolved decision, without reopening an accepted direction.

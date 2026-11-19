@@ -1,5 +1,14 @@
 # Roadmap
 
+## v0.1.25: unreleased development subroutes
+
+- Keep the five-stage top level and route stage-03 work through 28 frontend, backend, integration and engineering/shared scenario entries, using task facts, paths, module configuration and changed boundaries.
+- Extract existing implementation content into the common core and nine shared risk entries; retain the old implementation path as a compatibility route and keep focused verification/UI sources authoritative.
+- Apply stack filters and conditional risk rules without copying every scenario per language/framework or loading every branch. Preserve project instructions, required full reads, MCP, challenge, authority and acceptance.
+- Reserve explicit pending slots for team stack standards and component/style entries. The template contract is available; an actual Frontend-Design-Common catalog and shared button templates remain unconnected.
+- Reuse project conventions for missing optional detail, and stop dependent work for missing necessary prerequisites. Subroute selection does not create tasks or grant additional execution authority.
+- Record actual checks in the [development-routing validation](../evals/fixtures/development-routing/RESULTS.md); detailed indexes alone do not establish routing accuracy, reduced context or model-quality gains.
+
 ## v0.1.24: unreleased five-stage directory
 
 - Make requirements analysis/confirmation, solution design/planning, development/integration, testing/acceptance and release/validation the five first-level entries.

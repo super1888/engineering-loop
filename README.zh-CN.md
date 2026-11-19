@@ -112,9 +112,24 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 | 04 测试与验收 | [测试执行、证据与业务验收](skills/engineering-loop/references/stages/04-testing.md) |
 | 05 发布与验证 | [部署、上线验证与相关运维](skills/engineering-loop/references/stages/05-release.md) |
 
-每个阶段统一包含六项：进入条件、所需输入、执行与规范索引、PMS 使用、交付物、通过与返回条件。本轮先建立目录与阶段骨架，技术栈细则、文档模板和组件索引按需后补。UI 设计归阶段 02，实现归阶段 03；开发自测仍属于开发工作。实际运维事件可直接进入阶段 05 的相关分支，不强制变成发布任务或重走前面阶段。
+每个阶段统一包含六项：进入条件、所需输入、执行与规范索引、PMS 使用、交付物、通过与返回条件。五阶段目录定义这些契约；开发分支进一步索引已有规则，具体团队标准保留后续补充位置。UI 设计归阶段 02，实现归阶段 03；开发自测仍属于开发工作。实际运维事件可直接进入阶段 05 的相关分支，不强制变成发布任务或重走前面阶段。
 
 项目规则、评审、协作、恢复、沉淀属于各阶段按条件调用的支持机制。阶段与看板状态分开，命中阶段不自动创建任务。
+
+### 开发子路由
+
+阶段 03 进入[开发路由](skills/engineering-loop/references/development/index.md)，读取[共通开发基础](skills/engineering-loop/references/development/core.md)，再选择相关场景章节：
+
+| 专业 | 场景索引 |
+|---|---|
+| 前端 · F1–F8 | [组件、表单、表格、导航、状态、文件、可访问与工程](skills/engineering-loop/references/development/scenarios/frontend.md) |
+| 后端 · B1–B8 | [接口、领域、持久化、事务、权限、异步、SDK 与运行代码](skills/engineering-loop/references/development/scenarios/backend.md) |
+| 联调 · I1–I8 | [契约、身份、数据表达、写入、异步链路、文件、状态与连通](skills/engineering-loop/references/development/scenarios/integration.md) |
+| 工程与共享能力 · E1–E4 | [公共库、CLI／脚本、构建依赖与生成工具](skills/engineering-loop/references/development/scenarios/engineering.md) |
+
+28 个场景条目记录命中条件、排除情况、现有来源、适用检查和待补细节。[技术栈规范](skills/engineering-loop/references/development/stacks.md)按实际模块配置筛选，关键词只负责召回候选。变化边界独立触发九项[共享风险规则](skills/engineering-loop/references/development/risks.md)，数据精度、权限、幂等、并发等内容维持单一来源。跨端任务可组合必要分支，不默认读取全部分支。
+
+[模板契约](skills/engineering-loop/references/development/templates.md)预留公共组件与样式条目，以及未来可能的 Frontend-Design-Common 绑定。实际模板目录和具体团队技术栈标准仍待填充，不代表已接入公共按钮模板。缺少可选细节时复用项目已有规范；缺少必要前置时只阻塞依赖工作。原 [implementation 路径](skills/engineering-loop/references/implementation.md)保留为已迁移规则的兼容入口。子路由本身不创建 PMS 卡片，也不扩展执行权限。
 
 ### 新项目如何接入与沉淀
 
@@ -131,6 +146,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 分文件不能清除已进入会话的内容，也不保证固定 token 消耗；长任务仍需在适当检查点整理有效状态后交接。
 
 ## 如何逐步验证
+
+未发布的 v0.1.25 增加开发场景子路由，并归位已有共通与风险规则，保留原约束。待补技术栈／模板内容与可用指导分开标明。[开发路由场景](evals/fixtures/development-routing/TASK.md)及[验证记录](evals/fixtures/development-routing/RESULTS.md)区分源码／分发检查与实际任务执行；目录更细本身不证明命中率提高、少读内容或模型质量收益。
 
 未发布的 v0.1.24 将一级导航收敛为五阶段入口，并统一六项阶段规范。现有专业与支持指南保留，MCP 门禁、授权和验收边界继续生效。目录是指导索引，并非自动选择器；v0.1.23 的历史试验不能为新路由背书。本轮执行状态见[证据索引](evals/STATUS.md)。
 

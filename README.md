@@ -157,11 +157,26 @@ The first-level directory follows five project stages. Route the current task or
 | 04 Testing and acceptance | [Test execution, evidence and business acceptance](skills/engineering-loop/references/stages/04-testing.md) |
 | 05 Release and validation | [Deployment, release validation and relevant operations](skills/engineering-loop/references/stages/05-release.md) |
 
-Each stage uses six sections: entry conditions, inputs, execution/reference selection, PMS use, deliverables, and exit/return. This revision establishes the directory and these contracts; detailed stack rules, document templates and component indexes will be added where needed. UI design belongs to stage 02 and UI implementation to stage 03; developer self-checks remain part of development. An operational incident can enter the relevant stage-05 operations branch without becoming a release or repeating earlier stages.
+Each stage uses six sections: entry conditions, inputs, execution/reference selection, PMS use, deliverables, and exit/return. The directory defines these contracts; the development branch below indexes existing rules while detailed team standards remain available for later completion. UI design belongs to stage 02 and UI implementation to stage 03; developer self-checks remain part of development. An operational incident can enter the relevant stage-05 operations branch without becoming a release or repeating earlier stages.
 
 Every activated stage and selected specialist still passes the built-in [grill-me-style challenge](skills/engineering-loop/references/grill.md). Investigate facts and reuse decisions before asking about material gaps; settled work can pass with zero questions. Project rules, review, collaboration, recovery and learning are conditional support, rather than additional peer stages. [Specialist selection](skills/engineering-loop/references/specialists.md) and [PMS task operations](skills/engineering-loop/references/pms.md) are read only when applicable. A stage is distinct from a board status, and selecting a stage does not automatically create a task.
 
 All applicable project instructions, full-document requirements and delivery stop points still apply. Read only the selected stage and matching details, reuse valid connection evidence, and preserve effective state/evidence pointers in the established project sources. Stage changes alone do not restart the interview or identical connection probes. Already-loaded content still consumes context.
+
+### Development subroutes
+
+Stage 03 enters the [development router](skills/engineering-loop/references/development/index.md), reads the common [development core](skills/engineering-loop/references/development/core.md), and selects only relevant scenario sections:
+
+| Area | Scenario index |
+|---|---|
+| Frontend · F1–F8 | [Components, forms, tables, navigation, state, files, accessibility and engineering](skills/engineering-loop/references/development/scenarios/frontend.md) |
+| Backend · B1–B8 | [API, domain, persistence, transactions, access, async work, SDKs and runtime code](skills/engineering-loop/references/development/scenarios/backend.md) |
+| Integration · I1–I8 | [Contracts, identity, data representation, writes, async flows, files, state and connectivity](skills/engineering-loop/references/development/scenarios/integration.md) |
+| Engineering/shared capabilities · E1–E4 | [Libraries, CLI/scripts, builds/dependencies and generated tooling](skills/engineering-loop/references/development/scenarios/engineering.md) |
+
+These 28 scenario entries describe matching conditions, exclusions, existing sources, applicable checks and pending detail. Actual module configuration filters [stack-specific guidance](skills/engineering-loop/references/development/stacks.md); keywords only discover candidates. Relevant changes independently select from nine [shared risk rules](skills/engineering-loop/references/development/risks.md), so precision, access, idempotency or concurrency guidance is maintained once rather than copied into each area. A cross-boundary task may combine applicable branches without loading every branch.
+
+The [template contract](skills/engineering-loop/references/development/templates.md) reserves future component/style entries, including a possible Frontend-Design-Common binding. Its actual catalog and detailed team stack standards are pending; no shared button template is claimed to be connected. Optional missing detail can use maintained project conventions; a missing prerequisite blocks only dependent work. The old [implementation path](skills/engineering-loop/references/implementation.md) remains a compatibility entry to the migrated rules. Selecting a subroute does not create PMS cards or expand authority.
 
 ### A small example
 
@@ -176,6 +191,8 @@ For a new project, the [project connection guide](skills/engineering-loop/refere
 The [requirements guide](skills/engineering-loop/references/requirements.md) distinguishes confirmed exclusions, authorized exceptions and undecided policies at relevant boundaries. It also separates an unclear request, an unsupported one and temporary unavailability when they have different outcomes. The [order-flow example](examples/workflows.md#a-bounded-order-flow-requirement) shows those distinctions without turning every hypothetical request into a feature.
 
 ## Validation and contribution
+
+Unreleased v0.1.25 adds development scenario routing and extracts existing common/risk rules while preserving their constraints. Pending stack/template content is explicitly separate from usable guidance. The [development-routing specification](evals/fixtures/development-routing/TASK.md) and [validation record](evals/fixtures/development-routing/RESULTS.md) separate source/distribution checks from actual task execution. A finer index alone does not demonstrate higher routing accuracy, reduced reads or model-quality gains.
 
 Unreleased v0.1.24 reorganizes navigation around five stage entry files and a common six-part contract. Existing specialist and support references remain available; the MCP gate, authorization and acceptance boundaries remain required. The new directory is guidance rather than an automatic selector. Prior v0.1.23 trials do not validate this revised routing; current execution status is recorded in the [evidence index](evals/STATUS.md).
 

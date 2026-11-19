@@ -10,7 +10,7 @@ Reuse the effective behavior, applicable design/contracts, current code and proj
 
 ## Execution and focused references
 
-Read [implementation.md](../implementation.md) for slice selection, defect diagnosis and affected engineering boundaries. For frontend interaction or visual changes, also read the applicable [ui.md](../ui.md) guidance; for missing conventions or inherited architecture, use [project.md](../project.md).
+Enter the [development subrouter](../development/index.md): use its shared core, select the affected frontend/backend/integration/engineering scenarios, then add only matching stack, template and risk guidance. The old [implementation.md](../implementation.md) path remains a compatibility entry. Existing rules remain required when their conditions apply; pending team-specific details are not completed standards.
 
 Select an available project specialist by the affected stack through [specialists.md](../specialists.md) only when needed. Read [collaboration.md](../collaboration.md) for shared ownership or integration; use [verification.md](../verification.md) for applicable checks without waiting for a separate project-wide testing phase.
 

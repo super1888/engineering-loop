@@ -2,6 +2,12 @@
 
 Last updated: 2026-11-19. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
 
+## Unreleased v0.1.25 development subroutes
+
+Stage 03 now enters a fact-based development subrouter: four professional catalogs with 28 scenarios, shared core and nine conditional risks. Framework/stack bindings and the shared component-template catalog have explicit pending slots; no React/Vue standard, actual external template or automatic matcher is implied. Existing implementation guidance is redistributed with its legacy entry path retained. Project-required full reads, MCP, authorization and acceptance remain effective.
+
+See the [current specification](../evals/fixtures/development-routing/TASK.md) and [validation record](../evals/fixtures/development-routing/RESULTS.md). Source review, distribution checks and actual model/task observations are separate evidence levels; no general hit-rate or context-saving claim is established by additional index entries.
+
 ## Unreleased v0.1.24 five-stage navigation
 
 The entrypoint now selects the current task's requirements, design/planning, development/integration, testing/acceptance or release/validation stage after the required MCP gate. Each stage indexes inputs, execution, conditional PMS use, deliverables and acceptance/return conditions, applying the common challenge and existing professional guidance. Review, coordination, recovery and learning remain conditional support. Existing guide paths and the Kaneo dependency remain available; no stack/component registry, automatic selector or new deployment authority is added.

@@ -29,6 +29,7 @@ The full methods below retain their own prerequisites and safety limits. Procedu
 | Mandatory PMS/MCP connection and challenged skill routing | [Unexecuted v0.1.22 matrix](fixtures/pms-grill-routing/TASK.md); gate, task-write reconciliation and bounded questioning controls |
 | Common-core split: connected versus missing MCP | [Controlled native local-copy task](fixtures/core-route/TASK.md); inspect real mock calls, reference reads and exact file changes separately from protocol tests |
 | Five-stage navigation and task boundaries | [Stage-routing specification](fixtures/five-stage-routing/TASK.md), [validation record](fixtures/five-stage-routing/RESULTS.md); static review is separate from tool-backed task execution |
+| Development scenarios, shared risks and unfilled standards | [Subroute specification](fixtures/development-routing/TASK.md), [validation record](fixtures/development-routing/RESULTS.md); distinguish static coverage from observed reads and artifacts |
 
 ## Retained method and report links
 

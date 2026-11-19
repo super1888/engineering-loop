@@ -3,6 +3,19 @@
   "status": "scenario-specifications; execution evidence is recorded separately",
   "cases": [
     {
+      "id": "development-fact-filtered-routing",
+      "prompt": "Use Engineering Loop for this authorized development slice. Locate the affected module and scenario, apply relevant project and boundary rules, and preserve the stated delivery limits.",
+      "fixture_description": "The v0.1.25 specification at evals/fixtures/development-routing/TASK.md covers 28 frontend/backend/integration/engineering scenario entries, nine shared risks, actual-stack selection and pending convention/template slots. Its static matrix includes misleading keywords, hidden cross-boundary behavior, optional versus required missing content and legacy-entry migration. A bounded native copy-edit pair may reuse the existing read-only synthetic PMS harness; actual execution and limits are recorded separately, never inferred from this specification.",
+      "expectations": [
+        "Preserves the actual MCP gate, common challenge, all effective project instructions and required full reads; selecting a subroute does not grant PMS writes, installation, deployment or a new task per role.",
+        "Uses the requested deliverable, affected module/path, maintained configuration and actual callers to select only applicable professional scenarios. Keywords recall candidates; an admin/backend page is not automatically backend code and a monorepo need not have a single framework.",
+        "Reads shared core and triggered risk rules, including actual cross-end boundaries, while avoiding unrelated area, framework or template bodies. A scenario's suggested related rules cannot exclude another demonstrated risk.",
+        "Preserves every substantive prior implementation constraint after its migration to shared core and risk bodies; the legacy implementation path remains discoverable and usable without reading every area.",
+        "Treats pending team conventions and template catalogs as unfilled, not available standards. Reuses maintained project rules for optional missing detail, but reconciles an explicit incompatible template or necessary missing contract before dependent execution.",
+        "Distinguishes independent static review, native tool/control checks, observed per-task reads and artifact outcomes from general routing quality or context savings. Retains failed and unrun conditions without relabeling them as passing."
+      ]
+    },
+    {
       "id": "five-stage-task-routing",
       "prompt": "Use Engineering Loop to locate this task's project stage, load only its applicable guidance and deliver within the stated scope. Ask only when a missing outcome decision changes the next action.",
       "fixture_description": "The v0.1.24 routing specification at evals/fixtures/five-stage-routing/TASK.md covers problem investigation, design-only UI, an approved local frontend fix, independent acceptance, release preparation, ambiguous intent, modules at different stages, read-only incident investigation, review-only work, recovery and missing MCP. Its entry/stage files and scenario expectations support independent static review; no isolated tool-backed model task execution or live PMS mutation is supplied. Historical v0.1.23 outcomes do not validate the new stage layer.",
