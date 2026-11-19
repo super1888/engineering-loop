@@ -2,7 +2,7 @@
 
 **接通团队协作，追问关键假设，用证据交付。**
 
-[English](README.md) · [安装](#安装) · [设计边界](docs/DESIGN.md) · [参与贡献](CONTRIBUTING.md)
+[English](README.md) · [中文路由与执行手册](docs/ROUTING.zh-CN.md) · [安装](#安装) · [设计边界](docs/DESIGN.md) · [参与贡献](CONTRIBUTING.md)
 
 面向 Claude Code 和 Codex 的团队任务与交付统一入口。路由执行前必须通过 PMS MCP 接入校验，每个阶段及专业 skill 路由都核对关键假设，组织建任务、领取、执行与验收，并关联可追溯证据。
 

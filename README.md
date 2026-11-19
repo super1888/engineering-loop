@@ -2,7 +2,7 @@
 
 **Connect the team. Challenge the task. Deliver with evidence.**
 
-[中文](README.zh-CN.md) · [Install](#install) · [How it works](#how-it-works) · [Examples](examples/workflows.md) · [Evaluation](evals/README.md) · [Contribute](CONTRIBUTING.md)
+[中文](README.zh-CN.md) · [Chinese routing and execution manual](docs/ROUTING.zh-CN.md) · [Install](#install) · [How it works](#how-it-works) · [Examples](examples/workflows.md) · [Evaluation](evals/README.md) · [Contribute](CONTRIBUTING.md)
 
 [![Checks](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml/badge.svg)](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
