@@ -195,6 +195,8 @@ The [requirements guide](skills/engineering-loop/references/requirements.md) dis
 
 ## Validation and contribution
 
+Unreleased v0.1.31 records pre-release defect tracking and acceptance in stage 04. Stage 06 tracks production defects and references that same record and the affected version. Use the project's existing formats and locations. The refined handoff case remains unrun. [Acceptance template](skills/engineering-loop/templates/acceptance-record.md) · [Operations template](skills/engineering-loop/templates/operations-record.md) · [Template routing cases](evals/fixtures/stage-templates/TASK.md)
+
 Unreleased v0.1.30 provides on-demand templates for all six stages. The specification covers the two requirements cases, direct operations entry and an existing concise record. The new behavioral cases remain unrun. [Stage template index](skills/engineering-loop/templates/index.md) · [Template routing cases](evals/fixtures/stage-templates/TASK.md) · [Evidence index](evals/STATUS.md)
 
 Unreleased v0.1.29 adds a reusable stage 02 kickoff plan. It uses the project's formats and carries the same plan from draft through kickoff decisions to authorized PMS task synchronization. [Kickoff template](skills/engineering-loop/templates/kickoff-plan.md) · [Planning scenarios](evals/fixtures/kickoff-planning/TASK.md) · [Evidence index](evals/STATUS.md)

@@ -1,6 +1,6 @@
 # Engineering Loop 中文路由与执行手册
 
-适用于 **v0.1.30**（2026 年 11 月 20 日核对）。
+适用于 **v0.1.31**（2026 年 11 月 20 日核对）。
 
 本手册供团队理解、执行和维护当前 skill。主线是：**用户输入 → PMS MCP 接通 → 判断本次任务阶段和操作类型 → 读取匹配规范 → 解决关键缺口 → 执行与验证 → 按授权回写任务 → 交付**。先确定当前要交付什么，再选择需要的专业、技术栈和风险规则。
 
@@ -37,7 +37,7 @@
 | [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 问题与现状调研、范围与验收例子、实质需求变更，见[需求指南](../skills/engineering-loop/references/requirements.md) | [需求分析与确认](../skills/engineering-loop/templates/requirements.md)，按需记录调研、需求与痛点、访谈、评审确认 | 已有阶段入口及共用需求指南 |
 | [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构选型与权衡](#架构选型与权衡)、[项目约定与架构继承](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[启动计划与 PMS 规划](#启动计划与-pms-规划)、[协作与分工](../skills/engineering-loop/references/collaboration.md) | [启动计划](../skills/engineering-loop/templates/kickoff-plan.md) | 架构选型须结合公共拷问，启动计划沿用项目现有样式与规则 |
 | [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景](#开发场景与执行正文) | [模块开发与自测记录](../skills/engineering-loop/templates/development-record.md) | 已有 28 个场景正文及条件规则 |
-| [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | [测试方案、用例和验收记录](../skills/engineering-loop/templates/acceptance-record.md) | 已有阶段入口和验证指南，版本范围与必验链路逐项对账的细则待补 |
+| [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | [测试方案、用例、缺陷与验收记录](../skills/engineering-loop/templates/acceptance-record.md) | 已有阶段入口和验证指南，版本范围与必验链路逐项对账的细则待补 |
 | [05 发布与验证](../skills/engineering-loop/references/stages/05-release.md) | [发布准备、部署切换、上线验证与随版本回退](../skills/engineering-loop/references/release.md) | [发布计划、部署及上线验证记录](../skills/engineering-loop/templates/release-record.md) | 已有阶段入口和发布指南 |
 | [06 持续运维](../skills/engineering-loop/references/stages/06-operations.md) | [运行准备、故障调查、日常维护与独立恢复](../skills/engineering-loop/references/operations.md) | [运维和线上缺陷记录](../skills/engineering-loop/templates/operations-record.md) | 已有阶段入口和运维指南，子目录待细化 |
 
@@ -386,6 +386,8 @@ UI 默认设计和验证桌面端；用户明确要求的设备及已有有效�
 
 交付通过、失败、未运行的分项记录，包含命令／方法、版本、环境、覆盖范围、问题和限制。必需证据及有权验收的结果支持结论后退出。实现问题返回阶段 03，需求冲突返回阶段 01，环境或夹具问题在相应边界处理；测试通过不自动授权发布。
 
+发布前的缺陷跟踪、回归证据和测试验收结论归入 04 的《缺陷跟踪与测试验收记录》。沿用项目已有的验收格式和存放位置。 [测试验收记录模板](../skills/engineering-loop/templates/acceptance-record.md)
+
 入口：[04-testing.md](../skills/engineering-loop/references/stages/04-testing.md)。正文：[verification.md](../skills/engineering-loop/references/verification.md)、[边界检查](../skills/engineering-loop/references/verification-boundaries.md)、[review.md](../skills/engineering-loop/references/review.md)。
 
 ### 发布与验证
@@ -406,7 +408,7 @@ UI 默认设计和验证桌面端；用户明确要求的设备及已有有效�
 
 沿用现有运维、就绪或故障记录，保存范围、影响、检查结论、执行动作和剩余风险。涉及 PMS 跟踪时，按授权关联实际运行事件或维护交付。需要修改代码时按范围转 03，获准发布版本时转 05，发现新的业务需求时回 01。 [阶段 06](../skills/engineering-loop/references/stages/06-operations.md) · [运维指导](../skills/engineering-loop/references/operations.md)
 
-线上缺陷可在运维记录中跟踪，独立回归或版本验收引用对应的 04 结果。已有参考中的《缺陷跟踪与测试验收记录》涉及两个阶段，具体归档归属仍待项目确认。 [运维记录模板](../skills/engineering-loop/templates/operations-record.md) · [测试验收记录模板](../skills/engineering-loop/templates/acceptance-record.md)
+在现有运维格式中记录线上缺陷的影响、处置与恢复证据。已有对应验收记录时，按受影响版本引用 04 的同一份《缺陷跟踪与测试验收记录》及相应验收项。后续独立回归或版本验收按 04 记录实际受测版本和证据。 [运维记录模板](../skills/engineering-loop/templates/operations-record.md) · [测试验收记录模板](../skills/engineering-loop/templates/acceptance-record.md)
 
 ## 6 开发与联调的具体分支
 
@@ -1126,6 +1128,8 @@ PMS assignee 表示交付责任；连接账号、用户、执行 agent／聊天�
 通过[逐级填充目录](#逐级填充目录)按阶段、场景和公共规则查看原文。第 03 阶段的[正文速查表](#开发分支正文速查)可按编号直达文件。
 
 ### 当前已经观察到什么
+
+v0.1.31 修订了 06 直入的交接用例，核对线上缺陷记录是否引用同一份 04 发布前验收记录及受影响版本。修订用例尚未运行。 [模板路由用例](../evals/fixtures/stage-templates/TASK.md) · [证据索引](../evals/STATUS.md)
 
 v0.1.30 的用例规定了怎样核验两类需求、06 直入和沿用已有简短记录时的模板选择，新增用例尚未运行。 [模板路由用例](../evals/fixtures/stage-templates/TASK.md) · [证据索引](../evals/STATUS.md)
 

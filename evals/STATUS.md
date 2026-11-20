@@ -27,6 +27,8 @@ Read this index to select evidence, then open only the relevant report. It summa
 
 ## Tool controls and remaining gaps
 
+v0.1.31 refines the unrun operations handoff case T2 to check that stage 06 records production defects and references the original stage 04 pre-release acceptance record and affected version. [Stage template specification](fixtures/stage-templates/TASK.md)
+
 The v0.1.30 [stage template specification](fixtures/stage-templates/TASK.md) adds unrun controls for both requirements situations, direct operations handoff and reuse of an existing short record. The kickoff and general routing cases retain their own acceptance and evidence history.
 
 The v0.1.29 [kickoff and delivery planning specification](fixtures/kickoff-planning/TASK.md) covers pre-meeting planning, a wrong personal actor, a confirmed meeting subset with partial task synchronization, and the development-to-acceptance handoff. The cases remain unrun while project formats are finalized.

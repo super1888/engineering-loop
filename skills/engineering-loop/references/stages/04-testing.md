@@ -22,7 +22,7 @@ Follow [pms.md](../pms.md) when applicable. Link the actual version, covered sco
 
 Record passed, failed and unrun checks with commands or method, artifact/environment identity, covered scope, findings and unresolved limits. Use existing test and acceptance records; do not fabricate human acceptance or require a new report for every small check.
 
-When a new structured record is needed and the project has no applicable format, adapt the [test plan and case record](../../templates/acceptance-record.md). Keep expected outcomes and actual evidence traceable to their sources.
+Keep the pre-release defect tracking and test acceptance record in stage 04. Link the tested build, relevant case and retest evidence, open findings and actual acceptance decision so release and operations can reference that record. When a new structured record is needed and the project has no applicable format, adapt the [test and acceptance template](../../templates/acceptance-record.md).
 
 ## Exit and return
 

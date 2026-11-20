@@ -22,7 +22,7 @@ Follow [pms.md](../pms.md) when a task reference, operation or tracking policy a
 
 Use the existing incident, maintenance or readiness record. Identify the runtime and configuration, observed impact, checked hypotheses, actions taken, business-path evidence and outstanding limits. Capture the next action and owner when work remains. Keep secrets in their established channel.
 
-When a new structured record is needed and the project has no applicable format, adapt the [operations record](../../templates/operations-record.md). Link related defect records when they supply evidence for this operating task. Independent version testing or business acceptance follows [stage 04](04-testing.md), with references to the relevant evidence.
+For a production defect, record the runtime impact, actions and recovery evidence in the operations record. When the affected version has a pre-release defect tracking and test acceptance record, link that existing [stage 04](04-testing.md) record and the relevant acceptance items. Any subsequent independent acceptance is recorded against its tested version in stage 04. When a new structured record is needed and the project has no applicable format, adapt the [operations template](../../templates/operations-record.md).
 
 ## Exit and return
 

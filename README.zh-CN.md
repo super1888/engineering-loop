@@ -150,6 +150,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 ## 如何逐步验证
 
+未发布的 v0.1.31 将发布前的《缺陷跟踪与测试验收记录》归入 04。06 跟踪线上缺陷时引用同一份原记录及受影响版本，沿用项目已有格式与存放位置。调整后的交接用例尚未运行。 [测试验收模板](skills/engineering-loop/templates/acceptance-record.md) · [持续运维模板](skills/engineering-loop/templates/operations-record.md) · [模板路由用例](evals/fixtures/stage-templates/TASK.md)
+
 未发布的 v0.1.30 为六阶段提供按需使用的文档及交接模板。新增用例覆盖两类需求、直接进入运维及沿用已有简短记录，目前均未运行。 [阶段模板索引](skills/engineering-loop/templates/index.md) · [模板路由用例](evals/fixtures/stage-templates/TASK.md) · [证据索引](evals/STATUS.md)
 
 未发布的 v0.1.29 为阶段 02 增加可复用的启动计划。沿用项目格式，用同一份计划承接草稿、开工决定及获准的 PMS 任务同步。 [启动计划模板](skills/engineering-loop/templates/kickoff-plan.md) · [启动规划用例](evals/fixtures/kickoff-planning/TASK.md) · [证据索引](evals/STATUS.md)

@@ -1,5 +1,9 @@
 # Roadmap
 
+## v0.1.31 · unreleased acceptance and production-defect handoff
+
+- Keep the original pre-release defect and test acceptance record in stage 04. Track production defects in stage 06 and reference that record and the affected version. Reuse the project's existing formats and locations. [Acceptance template](../skills/engineering-loop/templates/acceptance-record.md) · [Operations template](../skills/engineering-loop/templates/operations-record.md) · [Unrun template routing cases](../evals/fixtures/stage-templates/TASK.md)
+
 ## v0.1.30 · unreleased six-stage document templates
 
 - Add starter templates for each stage's applicable deliverable while preserving existing project formats. The requirements template covers new products and additions to existing systems. Development, independent acceptance, release verification and operations link their own evidence. [Six-stage templates](../skills/engineering-loop/templates/index.md)
