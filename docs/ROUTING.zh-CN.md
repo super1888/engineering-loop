@@ -8,6 +8,7 @@
 
 ## 目录
 
+- [逐级填充目录](#逐级填充目录)
 - [1 术语与范围](#1-术语与范围)
 - [2 完整路由流程](#2-完整路由流程)
 - [3 MCP 接通条件](#3-mcp-接通条件)
@@ -22,6 +23,42 @@
 - [12 完整执行示例](#12-完整执行示例)
 - [13 规范状态和维护方法](#13-规范状态和维护方法)
 - [14 原文入口和验证边界](#14-原文入口和验证边界)
+
+## 逐级填充目录
+
+从 [skill 总入口](../skills/engineering-loop/SKILL.md) 定位本次交付的阶段。下表是维护导航，二级主题链接到当前规则原文。第 03 阶段已有独立场景正文，其余阶段在各自的阶段入口按需引用专题指南。
+
+### 五阶段入口与二级主题
+
+| 一级阶段 | 二级主题与现有规范 | 当前细化程度 |
+|---|---|---|
+| [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 问题与现状调研、范围与验收例子、实质需求变更，见[需求指南](../skills/engineering-loop/references/requirements.md) | 已有阶段入口及共用需求指南 |
+| [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构与项目约定](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[交付计划与分工](../skills/engineering-loop/references/collaboration.md) | 已有阶段入口和条件引用，具体架构、设计系统与模板由项目维护 |
+| [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景](#开发场景与执行正文) | 已有 28 个场景正文及条件规则 |
+| [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | 已有阶段入口和验证指南，版本范围与必验链路逐项对账的细则待补 |
+| [05 发布与验证](../skills/engineering-loop/references/stages/05-release.md) | [发布准备、部署切换与上线验证](../skills/engineering-loop/references/release.md)、[运行准备、故障与恢复](../skills/engineering-loop/references/operations.md) | 已有阶段入口和发布、运维指南 |
+
+### 开发场景与执行正文
+
+按场景编号进入对应目录，通过 `Read` 链接找执行正文。也可以用[全部 28 个正文的速查表](#开发分支正文速查)直接定位文件。
+
+| 二级目录 | 三级场景 |
+|---|---|
+| [前端 F1–F8](../skills/engineering-loop/references/development/scenarios/frontend.md) | F1 组件文案与样式、F2 表单与编辑、F3 列表与表格、F4 路由与导航、F5 状态与异步界面、F6 文件与媒体、F7 可访问性与目标设备、F8 前端工程 |
+| [后端 B1–B8](../skills/engineering-loop/references/development/scenarios/backend.md) | B1 接口与契约、B2 领域与服务、B3 数据与持久化、B4 事务与并发、B5 身份与资源权限、B6 异步任务与作业、B7 外部服务与 SDK、B8 配置与运行代码 |
+| [联调 I1–I8](../skills/engineering-loop/references/development/scenarios/integration.md) | I1 接口对齐、I2 身份与权限链路、I3 跨端数据表达、I4 写入与结果对账、I5 异步业务链路、I6 文件与存储链路、I7 状态与缓存联动、I8 环境与依赖连通 |
+| [工程能力 E1–E4](../skills/engineering-loop/references/development/scenarios/engineering.md) | E1 公共库与 SDK、E2 脚本与 CLI、E3 构建与依赖、E4 工具与生成代码 |
+
+### 公共入口与按需规则
+
+| 用途 | 原文入口 |
+|---|---|
+| 所有阶段的接通校验与关键问题核对 | [MCP 门禁](../skills/engineering-loop/references/connection.md) · [公共拷问](../skills/engineering-loop/references/grill.md) |
+| 任务定位与证据回写 | [PMS 任务操作](../skills/engineering-loop/references/pms.md) · [开发交付记录](../skills/engineering-loop/references/development/delivery.md) |
+| 随任务事实附加的规则 | [九类开发风险](../skills/engineering-loop/references/development/risks.md) · [技术栈](../skills/engineering-loop/references/development/stacks.md) · [组件模板](../skills/engineering-loop/references/development/templates.md) · [验证边界](../skills/engineering-loop/references/verification-boundaries.md) |
+| 项目接入、专项能力、协作和续接 | [项目约定](../skills/engineering-loop/references/project.md) · [专业 skill](../skills/engineering-loop/references/specialists.md) · [协作](../skills/engineering-loop/references/collaboration.md) · [恢复](../skills/engineering-loop/references/resume.md) · [沉淀](../skills/engineering-loop/references/learning.md) |
+
+每轮可从一个阶段主题或场景编号开始。填阶段入口时沿用进入条件、输入、执行与参考、PMS、交付物和退出条件六项。填具体场景时补触发与排除条件、执行正文、验收例子和项目绑定项。选一条应命中的任务及一条相近反例，按[命中率评测口径](../evals/README.md#measure-routing-hits)冻结预期并安排试跑。更多维护约定见 [第 13 节](#13-规范状态和维护方法)。
 
 ## 1 术语与范围
 
@@ -941,27 +978,7 @@ PMS assignee 表示交付责任；连接账号、用户、执行 agent／聊天�
 
 ### 文件读取地图
 
-```text
-skills/engineering-loop/SKILL.md                 五阶段总入口与权限边界
-references/connection.md                        实际 MCP 接通与失效恢复
-references/grill.md                             公共拷问方法
-references/stages/                              五个阶段的进入与退出
-references/development/index.md                 开发专业与场景路由
-references/development/core.md                  共通切片、诊断、契约和检查
-references/development/scenarios/               四份场景索引
-references/development/frontend/                前端八份执行正文
-references/development/backend/                 后端八份执行正文
-references/development/integration/             联调八份执行正文
-references/development/engineering/             工程四份执行正文
-references/development/risks.md 与 rules/        九类风险索引和正文
-references/development/stacks.md 与 stacks/     实际技术栈与条件行为指导
-references/development/templates.md             模板契约和缺失时处理
-references/development/delivery.md              实际产物、检查和任务证据
-references/pms.md                               任务查找、创建、领取与回写
-references/specialists.md                       专业 skill 的选择与结果返回
-```
-
-上图的 `references/` 均相对 `skills/engineering-loop/`。首次进入读总入口、门禁和匹配阶段，之后按触发选择；有效项目要求的整份文档阅读仍然保留。
+通过[逐级填充目录](#逐级填充目录)按阶段、场景和公共规则查看原文。第 03 阶段的[正文速查表](#开发分支正文速查)可按编号直达文件。
 
 ### 当前已经观察到什么
 

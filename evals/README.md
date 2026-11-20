@@ -12,6 +12,23 @@ Start with [current evidence status](STATUS.md). Use this page to select a metho
 
 The full methods below retain their own prerequisites and safety limits. Procedural separation is not a read sandbox. [Specified-directory read protection](#specified-directory-read-guard-macos) is optional and narrower than full filesystem, network or credential isolation.
 
+## Measure routing hits
+
+Use the [maintenance directory](../docs/ROUTING.zh-CN.md#逐级填充目录) to select a route. For each filled route, freeze a representative request and a nearby control before dispatch. Keep the expected stages and order, required reference sections, allowed alternatives, and out-of-scope routes or actions with the evaluator. Use fresh contexts and disposable fixtures. In held-out requests, omit route names and source pointers unless they are part of the real task input. Record the skill revision, host and available model identity for each cohort.
+
+| Check | Evidence to inspect |
+|---|---|
+| MCP gate | On the connected case, actual identity, intended-project and workflow reads precede downstream work. On an expected block, inspect the unmet prerequisite, subsequent actions and final state. An attempted prohibited downstream read, call or write fails the gate check. |
+| Common challenge | Evaluate fact gathering and the decisions or questions warranted by the prompt. A settled task can pass without a question. |
+| Stage selection | The observed stage guidance and actions match the expected stage or an allowed combination in the required order. |
+| Scenario and conditional references | Confirm the selected execution body and applicable risk, stack or support guidance from completed reads or recorded host-provided content before the action they govern. Inspect the relevant text from the frozen revision. |
+| False triggers | Record completed reads of excluded detailed guidance and confirmed out-of-scope route actions or tool calls. Allow required project full reads, permitted alternatives and preliminary discovery within scope. |
+| Task outcome | Compare changes, runtime behavior or the delivered analysis with independent expectations for the request. Record this result alongside the route evidence. |
+
+For each comparable cohort and layer, report verified hits over applicable attempts. Itemize misses and inconclusive attempts in that denominator, and list unrun cases and their blockers separately. A case expected to stop at the MCP gate has no applicable downstream hit. Report false triggers as cases with a confirmed exclusion violation over attempted controls with that exclusion, keeping inconclusive controls visible. A filename mention, successful artifact or hidden host load with no captured content leaves the corresponding read unverified. Keep counts tied to their cohort and revision.
+
+Start with S1–S5 for the stage entries and S9/S12 for alternate and combined routes, then sample C2/F2, C4/B1, C8/I3 and C9/E2 across the four development areas. These specifications provide starting points for new runs. Use the existing native copy-edit trial for the bounded connection control. Retain the initial F1 miss and identify the known-task pointer in the revised F1 run when comparing results. [Stage cases](fixtures/five-stage-routing/TASK.md) · [Development body cases](fixtures/development-details/TASK.md) · [Native copy-edit trial](fixtures/core-route/TASK.md) · [F1 observations](fixtures/development-details/RESULTS.md)
+
 ## Choose evidence by need
 
 | Need | Entry |
