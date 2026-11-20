@@ -1,5 +1,11 @@
 # Roadmap
 
+## v0.1.29 · unreleased kickoff and PMS planning
+
+- Add a reusable stage 02 kickoff plan for product design, technical design with shared contracts, development tasks and schedule, and module ownership and readiness. Carry the existing project format through drafting, kickoff decisions and authorized synchronization. [Delivery planning](../skills/engineering-loop/references/delivery-planning.md) · [Kickoff template](../skills/engineering-loop/templates/kickoff-plan.md)
+- Estimate human effort and elapsed time independently. Record stage 03 implementation and self-test evidence, track review according to project ownership and handoff, and link actual stage 04 acceptance where applicable.
+- Verify the intended PMS target, authenticated operator and responsible assignee before approved task writes. Check each participant's connector when the project requires individual access. [Planning scenarios](../evals/fixtures/kickoff-planning/TASK.md) · [Evidence index](../evals/STATUS.md)
+
 ## v0.1.28 · unreleased architecture selection and tradeoffs
 
 - Add focused architecture guidance to stage 02 and pair it with the common challenge. Resolve consequential gaps with evidence, a bounded check or an authorized decision.

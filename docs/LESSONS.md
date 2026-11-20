@@ -17,6 +17,10 @@ The user requested concrete detail while retaining project conventions. The init
 
 The user showed a Codex desktop screenshot where the current execution directory ended at 05. The prior update added a six-stage discussion draft. At that revision, the skill entrypoint and the manual's execution table each had five entries. The v0.1.27 correction updates the live entrypoint and current navigation together. For this repository, compare the ordered stage IDs and reference destinations in the active tables, then check the release and operations boundary with a direct incident and an identifiable release as controls. Behavioral and static evidence is recorded by version. [Six-stage scenarios](../evals/fixtures/six-stage-routing/TASK.md) · [Evidence index](../evals/STATUS.md)
 
+## Trial target and MCP identity (v0.1.29, candidate)
+
+During local kickoff-template maintenance, the user confirmed that a deleted trial board was unrelated to the task and identified different browser and MCP identities. Determine which project the work actually targets before probing a board. For live PMS work, use authenticated MCP reads to confirm the actual operator, intended project and workflow. A future trial should record these facts for the participating connections and distinguish task assignment from connection identity. The live trial remains pending. [Connection guide](../skills/engineering-loop/references/connection.md) · [Evidence index](../evals/STATUS.md)
+
 ## Intervening question displaced an unfinished task (2026-11-02; candidate)
 
 - **Trigger and evidence:** In a macOS Codex desktop chat, a user requested product disassembly references, then asked why the source page failed to connect. After restoring access, the assistant ended with an offer to continue; the user had to say continue. The original search remained unfinished. Exact serving model/build identity was not recorded; no evidence establishes a macOS-specific defect.

@@ -9,7 +9,7 @@ The first-level entries represent stages for the current task. Each entry points
 | First-level stage | Selected guidance |
 |---|---|
 | 01 Requirements analysis and confirmation | [Requirements entry](../skills/engineering-loop/references/stages/01-requirements.md) |
-| 02 Solution design and planning | [Design entry](../skills/engineering-loop/references/stages/02-design.md) · [Architecture selection and tradeoffs](../skills/engineering-loop/references/architecture.md) |
+| 02 Solution design and planning | [Design entry](../skills/engineering-loop/references/stages/02-design.md) · [Architecture selection and tradeoffs](../skills/engineering-loop/references/architecture.md) · [Kickoff and delivery planning](../skills/engineering-loop/references/delivery-planning.md) |
 | 03 Development and integration | [Development entry](../skills/engineering-loop/references/stages/03-development.md), including frontend/backend implementation, self-checks and integration |
 | 04 Testing and acceptance | [Testing entry](../skills/engineering-loop/references/stages/04-testing.md) |
 | 05 Release and validation | [Release entry](../skills/engineering-loop/references/stages/05-release.md), including release readiness, deployment and verification |
@@ -23,7 +23,9 @@ Project conventions, review, collaboration, resume and learning are conditional 
 
 Stage 02 pairs its architecture guide with the common challenge when the choice materially affects delivery, performance, cost or maintenance. Test the recommendation against a relevant counterexample and resolve decision-changing questions through evidence or an authorized decision. Compare feasible options under the same workload and cost horizon, distinguishing interaction response from background-result readiness when both matter. Record the simplest feasible recommendation, the verification method and what would trigger reconsideration. [Architecture guide](../skills/engineering-loop/references/architecture.md) · [Common challenge](../skills/engineering-loop/references/grill.md)
 
-Proposed refinements to requirements intake, design planning and PMS task structure are tracked in the Chinese discussion draft. [Six-stage discussion draft](ROUTING.zh-CN.md#六阶段设计草案)
+The stage 02 kickoff plan carries product and technical designs, a development schedule, and module ownership and readiness through drafting, kickoff decisions and authorized PMS synchronization. It reuses project formats, tracks unresolved fields and distinguishes estimated human effort from calendar duration. Implementation and self-test keep distinct evidence, with a linked review or stage 04 acceptance where the project requires one. [Delivery planning](../skills/engineering-loop/references/delivery-planning.md) · [Reusable kickoff template](../skills/engineering-loop/templates/kickoff-plan.md)
+
+Further refinements to requirements intake and project-specific PMS task structure are tracked in the Chinese discussion draft. [Six-stage discussion draft](ROUTING.zh-CN.md#六阶段设计草案)
 
 ## Development selection and pending detail
 

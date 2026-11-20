@@ -4,7 +4,7 @@ Read before any activated stage or specialist, including analysis-only work. Tea
 
 ## Pass with actual reads
 
-1. **Capability and identity:** required PMS tools are present and an authenticated identity read succeeds. The connection actor is not automatically the user or responsible task member.
+1. **Capability and identity:** required PMS tools are present and an authenticated identity read succeeds. Record the connection actor apart from the requesting user and task assignee. When the user or project requires a personal connection, match the authenticated account to the intended workspace member using a stable account ID or an authoritative account mapping. A mismatch or an unverified match fails this prerequisite.
 2. **Intended target:** read the workspace/project identified by explicit input or maintained project configuration and check its returned identity. A previous project's access is not a default. Ask only a missing target decision when ambiguous; supplied task references must belong to the intended project.
 3. **Workflow:** read actual project statuses; inspect required field definitions when relevant to the next operation. Use returned slugs/options, never guessed labels. Success from another project or unrelated service does not pass.
 
@@ -13,6 +13,8 @@ Keep a compact result with actor, target, required capabilities, status mapping,
 Missing tools, failed identity, denied/wrong project, unreadable workflow or unavailable required capability block downstream stages, specialists and source/PMS writes. Permit only minimal local reads and probes needed to identify the target or diagnose/repair connection within existing authority. Report the failed prerequisite and remedy; do not substitute offline work, expose secrets, change global configuration without authority or bypass MCP with direct APIs. A stop request takes effect immediately.
 
 Reuse evidence within the same session, credential identity, target and valid connection. Account/target changes, access changes or authentication/transport errors invalidate affected evidence: restore it before further routed work. A stage change alone needs no repeated identical probe. Preserve completed artifacts, live handles and pending synchronization; do not replay verified work to repair a connection.
+
+For an explicitly authorized new project, first verify the actor, intended workspace and project-creation capability. Check for a matching project before creating and reconcile an uncertain result before retrying. Limit this initial write to the requested project. Read the resulting project and its actual workflow before routed work or task writes.
 
 ## Adapter and next route
 

@@ -15,6 +15,7 @@ Reuse the relevant accepted behavior, boundaries, current architecture and desig
 - For architecture responsibilities, reference-project inheritance or enforcement gaps, read [project.md](../project.md) and the applicable maintained project architecture.
 - For interface decisions, read [ui.md](../ui.md), including its target-device gate.
 - For an applicable shared component/style catalog, use [template matching](../development/templates.md); it also serves design work without moving the request into implementation.
+- For kickoff materials, module assignments, delivery estimates or turning kickoff decisions into PMS tasks, read [delivery-planning.md](../delivery-planning.md).
 - For delegated ownership, dependencies or integrated planning, read [collaboration.md](../collaboration.md) when those boundaries apply.
 
 Apply the [common challenge](../grill.md) to the design. On the architecture route, actively test the recommendation against a material counterexample or failure case even when project evidence already answers the relevant questions. Use facts, representative content or a bounded experiment. Ask only for decisions that remain open and matter to this slice.
