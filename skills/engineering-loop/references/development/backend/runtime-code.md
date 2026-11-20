@@ -4,7 +4,7 @@
 
 ## Scope and inputs
 
-Use for configuration binding, feature-switch code, startup dependencies, logging or health-related code. Identify the actual runtime entrypoint, maintained config source/schema, affected mode, required dependencies and current checks. Applying deployed configuration or investigating an actual incident follows [stage 05](../../stages/05-release.md).
+Use for configuration binding, feature-switch code, startup dependencies, logging or health-related code. Identify the actual runtime entrypoint, maintained config source/schema, affected mode, required dependencies and current checks. Applying configuration as part of a release follows [stage 05](../../stages/05-release.md). An independent runtime configuration repair or incident follows [stage 06](../../stages/06-operations.md).
 
 ## Execute
 

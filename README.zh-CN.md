@@ -98,11 +98,11 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 默认保留范围明确的自动发现；是否触发受宿主与模型影响，显式调用最便于复现。没有“每个任务必须调用”的全局钩子。需要完全手动触发时，见[兼容说明](docs/COMPATIBILITY.md#explicit-only-use)。
 
-## 五阶段入口
+## 六阶段入口
 
 用户输入与项目／任务上下文 → MCP 硬校验 → 定位本次任务阶段，不确定且影响工作时提问 → 读取阶段规范 → 检查当前切片并按需加载专业细则 → 执行、验收、按授权回写 PMS。
 
-一级目录采用五阶段，定位对象是当前任务或交付物。同一项目的不同模块可以处于不同阶段；已有输入足够时直接进入所需阶段，不重走之前的工作。
+一级目录包含六个阶段，按当前任务或交付物定位。同一项目的不同模块可以处于不同阶段，已有输入足够时直接进入所需阶段。
 
 | 阶段 | 聚焦入口 |
 |---|---|
@@ -110,9 +110,10 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 | 02 方案设计与规划 | [产品、架构、UI 与交付规划](skills/engineering-loop/references/stages/02-design.md) |
 | 03 开发与联调 | [前后端实现、Bug 修复与集成](skills/engineering-loop/references/stages/03-development.md) |
 | 04 测试与验收 | [测试执行、证据与业务验收](skills/engineering-loop/references/stages/04-testing.md) |
-| 05 发布与验证 | [部署、上线验证与相关运维](skills/engineering-loop/references/stages/05-release.md) |
+| 05 发布与验证 | [发布准备、部署和版本验证](skills/engineering-loop/references/stages/05-release.md) |
+| 06 持续运维 | [故障响应、日常维护和运行准备](skills/engineering-loop/references/stages/06-operations.md) |
 
-每个阶段统一包含六项：进入条件、所需输入、执行与规范索引、PMS 使用、交付物、通过与返回条件。五阶段目录定义这些契约；开发分支进一步索引已有规则，具体团队标准保留后续补充位置。UI 设计归阶段 02，实现归阶段 03；开发自测仍属于开发工作。实际运维事件可直接进入阶段 05 的相关分支，不强制变成发布任务或重走前面阶段。
+每个阶段都说明进入条件、所需输入、执行与规范索引、PMS 使用、交付物及通过与返回条件。UI 设计归阶段 02，UI 实现和开发自测归阶段 03。已运行服务的实际故障可以直接进入阶段 06。
 
 项目规则、评审、协作、恢复、沉淀属于各阶段按条件调用的支持机制。阶段与看板状态分开，命中阶段不自动创建任务。
 
@@ -146,6 +147,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 分文件不能清除已进入会话的内容，也不保证固定 token 消耗；长任务仍需在适当检查点整理有效状态后交接。
 
 ## 如何逐步验证
+
+未发布的 v0.1.27 增加独立的持续运维阶段。阶段 05 处理与具体版本发布相关的工作，阶段 06 处理故障和服务的持续运行。路由用例规定两个阶段的边界，证据索引记录执行过的检查及其验证范围。 [六阶段用例](evals/fixtures/six-stage-routing/TASK.md) · [证据索引](evals/STATUS.md)
 
 未发布的 v0.1.26 补齐全部 28 个场景的执行基线，保留短索引与项目既有选择。React/Vue 条件行为检查引用官方文档；未提供的团队包／样式标准与实际组件模板继续待补。[细则场景](evals/fixtures/development-details/TASK.md)和[验证记录](evals/fixtures/development-details/RESULTS.md)区分源码／格式检查与真实任务／运行行为，旧版本结果单独保留。
 

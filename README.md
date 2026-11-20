@@ -147,7 +147,7 @@ user input + effective project/task context
  execute -> verify -> authorized PMS evidence write-back
 ```
 
-The first-level directory follows five project stages. Route the current task or deliverable, rather than assigning one exclusive stage to an entire project. Different modules can be at different stages; accepted inputs permit direct entry without replaying earlier work.
+The first-level directory follows six project stages. Select the stage for the current task or deliverable. Different modules can be at different stages, and accepted inputs permit direct entry without replaying earlier work.
 
 | Stage | Focused entry |
 |---|---|
@@ -155,9 +155,10 @@ The first-level directory follows five project stages. Route the current task or
 | 02 Solution design and planning | [Product, architecture, UI and delivery planning](skills/engineering-loop/references/stages/02-design.md) |
 | 03 Development and integration | [Frontend/backend implementation, bug repair and integration](skills/engineering-loop/references/stages/03-development.md) |
 | 04 Testing and acceptance | [Test execution, evidence and business acceptance](skills/engineering-loop/references/stages/04-testing.md) |
-| 05 Release and validation | [Deployment, release validation and relevant operations](skills/engineering-loop/references/stages/05-release.md) |
+| 05 Release and validation | [Release preparation, deployment and version verification](skills/engineering-loop/references/stages/05-release.md) |
+| 06 Continuous operations | [Incidents, ongoing maintenance and operational readiness](skills/engineering-loop/references/stages/06-operations.md) |
 
-Each stage uses six sections: entry conditions, inputs, execution/reference selection, PMS use, deliverables, and exit/return. The directory defines these contracts; the development branch below indexes existing rules while detailed team standards remain available for later completion. UI design belongs to stage 02 and UI implementation to stage 03; developer self-checks remain part of development. An operational incident can enter the relevant stage-05 operations branch without becoming a release or repeating earlier stages.
+Each stage covers entry conditions, inputs, execution and reference selection, PMS use, deliverables, and exit or return conditions. UI design belongs to stage 02. UI implementation and developer self-checks belong to stage 03. An incident affecting a running service can enter stage 06 directly.
 
 Every activated stage and selected specialist still passes the built-in [grill-me-style challenge](skills/engineering-loop/references/grill.md). Investigate facts and reuse decisions before asking about material gaps; settled work can pass with zero questions. Project rules, review, collaboration, recovery and learning are conditional support, rather than additional peer stages. [Specialist selection](skills/engineering-loop/references/specialists.md) and [PMS task operations](skills/engineering-loop/references/pms.md) are read only when applicable. A stage is distinct from a board status, and selecting a stage does not automatically create a task.
 
@@ -191,6 +192,8 @@ For a new project, the [project connection guide](skills/engineering-loop/refere
 The [requirements guide](skills/engineering-loop/references/requirements.md) distinguishes confirmed exclusions, authorized exceptions and undecided policies at relevant boundaries. It also separates an unclear request, an unsupported one and temporary unavailability when they have different outcomes. The [order-flow example](examples/workflows.md#a-bounded-order-flow-requirement) shows those distinctions without turning every hypothetical request into a feature.
 
 ## Validation and contribution
+
+Unreleased v0.1.27 adds a dedicated stage for continuous operations. Stage 05 covers work tied to an identifiable release, and stage 06 covers incidents and the ongoing operation of a service. The routing cases specify the release and operations boundaries. The evidence index records which checks ran and what they establish. [Six-stage scenarios](evals/fixtures/six-stage-routing/TASK.md) · [Evidence index](evals/STATUS.md)
 
 Unreleased v0.1.26 fills all 28 scenario execution baselines while retaining short matching indexes and existing project choices. Conditional React/Vue behavior checks cite official documentation; team package/style rules and actual component templates remain unfilled where unavailable. The [detail specification](evals/fixtures/development-details/TASK.md) and [validation record](evals/fixtures/development-details/RESULTS.md) distinguish source/format checks from real task/runtime behavior and keep older version results separate.
 

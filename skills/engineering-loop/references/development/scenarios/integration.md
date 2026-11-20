@@ -72,7 +72,7 @@ Resolve each side's actual stack/version and maintained contract independently. 
 - **ID / match:** `dev.integration.environment`; actual target identity, addresses/configuration, transport or producer/consumer version compatibility. Exclude deployment execution or global configuration changes without their separate authority.
 - **Read:** [environment/connectivity execution](../integration/environment.md) for this matched scenario only.
 - **Existing guidance:** maintained project environment/commands, [verification](../../verification.md) and [project.md](../../project.md) only for missing/conflicting conventions.
-- **Conditional rules:** [R8 SDK transport](../rules/sdk-transport.md) for changed transitive dependencies; use [stage 05](../../stages/05-release.md) for release/cutover, deployed incidents or authorized external repair rather than relabeling them as local integration.
+- **Conditional rules:** [R8 SDK transport](../rules/sdk-transport.md) for changed transitive dependencies. Use [stage 05](../../stages/05-release.md) for release and cutover work and [stage 06](../../stages/06-operations.md) for independent runtime incidents or authorized external runtime repairs.
 - **Verify:** the actual artifact/configuration/target and affected real connection; a port, HTTP 200 or mocked client alone does not identify the intended runtime or capability.
 - **Pending:** target-environment bindings, local integration setup and version compatibility policy; retain unavailable evidence as a limit.
 

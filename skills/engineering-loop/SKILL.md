@@ -3,7 +3,7 @@ name: engineering-loop
 description: Team delivery entrypoint with a required PMS MCP connection. Identify the current task's project stage, load its guidance and relevant specialist details, then coordinate execution and acceptance. Use for team delivery, task management, uncertain project recovery, or explicit invocation. Standalone explanations outside this workflow stay lightweight.
 license: MIT
 metadata:
-  version: "0.1.26"
+  version: "0.1.27"
 ---
 
 # Engineering Loop
@@ -14,7 +14,7 @@ Coordinate team intent, tasks, specialist work and delivery evidence. Match the 
 
 1. **Connect first:** read [connection.md](references/connection.md). Every activated stage and specialist, including analysis-only work, requires successful MCP identity, intended-project and workflow reads. Configuration or tool registration is insufficient. Failed or unknown access blocks downstream work and code/PMS writes; permit only minimal target/connection discovery and diagnosis.
 2. **Locate this task's stage:** use its requested deliverable, task and project evidence, not keywords or overall project progress. Modules may be in different stages. Investigate first; ask only a missing outcome/scope decision that changes the next action, not which internal route to use. Combine stages when needed without replaying completed ones.
-3. **Read the selected stage:** use the five-stage table below. Apply the common [grill.md](references/grill.md) with that stage's focus before execution: reuse settled decisions and resolve material assumptions and acceptance gaps. Sufficient evidence permits zero user questions; questioning never replaces verification.
+3. **Read the selected stage:** use the six-stage table below. Apply the common [grill.md](references/grill.md) with that stage's focus before execution: reuse settled decisions and resolve material assumptions and acceptance gaps. Sufficient evidence permits zero user questions; questioning never replaces verification.
 4. **Descend only as needed:** follow the stage's links to professional guidance, applicable stack conventions or [specialists.md](references/specialists.md) when selecting a specialist. Preserve all applicable project instructions, required full-document reads and delivery stop points. Read only matching details, not every stage or technology.
 
 Read [pms.md](references/pms.md) for a supplied task reference, task-management request, or work subject to the project's tracking policy. It governs lookup, deduplication, authorized creation/claiming and evidence write-back; the connection gate does not authorize task mutations. Keep credentials and project/member bindings in established configuration.
@@ -27,9 +27,10 @@ Answer intervening questions, then resume unfinished authorized work. Honor stop
 |---|---|---|
 | 01 需求分析与确认 | [01-requirements.md](references/stages/01-requirements.md) | Investigate the problem, current behavior and boundaries |
 | 02 方案设计与规划 | [02-design.md](references/stages/02-design.md) | Product/technical design, UI and delivery planning |
-| 03 开发与联调 | [03-development.md](references/stages/03-development.md) | Implement, diagnose a bug or integrate systems |
+| 03 开发与联调 | [03-development.md](references/stages/03-development.md) | Implement, diagnose a code defect or integrate systems |
 | 04 测试与验收 | [04-testing.md](references/stages/04-testing.md) | Test or assess a deliverable against accepted behavior |
-| 05 发布与验证 | [05-release.md](references/stages/05-release.md) | Release preparation/execution or an actual operational event |
+| 05 发布与验证 | [05-release.md](references/stages/05-release.md) | Prepare, deploy or verify a release, including its recovery |
+| 06 持续运维 | [06-operations.md](references/stages/06-operations.md) | Maintain a service, diagnose incidents or verify readiness |
 
 Stages classify work; PMS columns describe task state. Selecting a stage does not create a task or authorize the next phase. Each guide indexes entry, inputs, execution, PMS, deliverables and exit/return conditions; stack/template details remain conditional.
 

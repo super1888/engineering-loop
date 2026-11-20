@@ -2,7 +2,7 @@
 
 **ID:** `dev.integration.environment` · **Status:** available execution baseline; target setup and compatibility policy remain pending.
 
-Use for actual target identity, address/configuration, transport or producer/consumer compatibility. Changing local code does not authorize global configuration repair, deployment or production operations; those actions follow [stage 05](../../stages/05-release.md).
+Use for actual target identity, address/configuration, transport or producer/consumer compatibility. Applying a release or cutover follows [stage 05](../../stages/05-release.md). Independent runtime diagnosis or configuration repair follows [stage 06](../../stages/06-operations.md). Check the applicable authorization before applying changes outside the local workspace.
 
 ## Inputs
 

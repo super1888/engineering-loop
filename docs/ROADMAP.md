@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.27 · unreleased six-stage routing
+
+- Add 06 Continuous operations to the skill entrypoint and the current execution directory.
+- Route release preparation, deployment and verification of an identifiable release to 05. Route ongoing operations, actual incidents and independent recovery or readiness work directly to 06.
+- Use the existing operations reference, PMS gate and authorization boundaries. Track the proposed requirements, design and PMS task refinements in the [six-stage discussion draft](ROUTING.zh-CN.md#六阶段设计草案).
+- Use version-specific checks for the new entries and the release/operations boundary. [Six-stage scenarios](../evals/fixtures/six-stage-routing/TASK.md) · [Evidence index](../evals/STATUS.md)
+
 ## v0.1.26: unreleased scenario execution details
 
 - Give all 28 development scenarios individual execution bodies, leaving catalogs focused on matching and links.

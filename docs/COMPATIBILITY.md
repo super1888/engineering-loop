@@ -1,6 +1,10 @@
 # Compatibility and validation
 
-Last updated: 2026-11-19. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+Last updated: 2026-11-20. Intended targets: local Claude Code and Codex with Agent Skills support. Other compatible hosts may read the same instructions, but are not certified here.
+
+## Unreleased v0.1.27 release and operations routes
+
+The skill and current manual expose six entries. Stage 05 covers an identified release, including cutover, verification and release-specific recovery. Stage 06 covers ongoing operations and independent runtime incidents, readiness and recovery. The recorded evidence is scoped to the tested installation, package and routing cases. [Six-stage cases](../evals/fixtures/six-stage-routing/TASK.md) · [Execution status](../evals/STATUS.md)
 
 ## Unreleased v0.1.26 execution baselines
 

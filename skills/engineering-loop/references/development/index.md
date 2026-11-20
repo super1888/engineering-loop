@@ -1,6 +1,6 @@
 # Route development by facts and changed boundaries
 
-Use within [stage 03](../stages/03-development.md), after its MCP gate. This is a guidance index, not an executable classifier. A design-only request belongs to stage 02; independent testing/review to stage 04; production deployment or an operational event to stage 05. Updating build/configuration code can remain stage 03 without authorizing its application to production.
+Use within [stage 03](../stages/03-development.md), after its MCP gate. This is a guidance index, not an executable classifier. A design-only request belongs to stage 02 and independent testing or review to stage 04. Use [stage 05](../stages/05-release.md) for release and cutover work and [stage 06](../stages/06-operations.md) for independent runtime incidents and maintenance. Updating build or configuration code can remain stage 03 without authorizing its application to production.
 
 ## Locate the slice
 

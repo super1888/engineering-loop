@@ -2,26 +2,26 @@
 
 ## Enter
 
-Use after the entrypoint's MCP gate for release preparation, authorized deployment/cutover, deployed-version verification or an actual operations/readiness task. An incident may enter its operations branch directly; it does not require replaying project phases or creating a release task.
+Use after the entrypoint's MCP gate for release preparation, authorized deployment or cutover, verification of an identified release in its target environment, or recovery governed by that release. Use [continuous operations](06-operations.md) for an independent incident or maintenance request.
 
 ## Inputs
 
-Identify the target environment, actual authority, relevant artifact/configuration version, applicable acceptance evidence and existing runbook. For an incident, begin with observed impact and current runtime identity. Require only the recovery and prerequisite evidence relevant to the proposed action.
+Identify the target environment, actual authority, relevant artifact and configuration versions, applicable acceptance evidence and existing runbook. Check the prerequisites, recovery evidence and observation window relevant to the proposed release work.
 
 ## Execution and focused references
 
-Read [release.md](../release.md) for preparation, publication, migration, cutover or existing-consumer compatibility. Read [operations.md](../operations.md) for an incident, operational readiness, external configuration repair or risk-based restore validation. Read [verification.md](../verification.md) for the applicable evidence boundaries; combine guides only when the task crosses them.
+Read [release.md](../release.md) for preparation, publication, migration, cutover and existing-consumer compatibility. Use [verification.md](../verification.md) for the applicable evidence boundaries and the relevant [operations.md](../operations.md) guidance when the release depends on operational readiness, restore evidence or a handoff.
 
 Apply the [common challenge](../grill.md) to the artifact, target, impact and recovery assumption. Investigate available evidence before asking; preserve existing authorization and resolve only missing material decisions. Preparation does not itself authorize deployment, destructive repair or external notifications.
 
 ## PMS
 
-Follow [pms.md](../pms.md) when applicable. Bind release or maintenance work to its actual deliverable/event and dependencies; create additional verification tasks only under the project's policy and existing authority. Record observed outcome, blockers and pending synchronization, and read back updates. Deployment or moving a card alone is not completion evidence.
+Follow [pms.md](../pms.md) when applicable. Bind release work to the actual deliverable and dependencies. Create additional verification tasks only under the project's policy and existing authority. For authorized updates, record the observed outcome, blockers and pending synchronization, then read back the changed fields.
 
 ## Deliverables
 
-Keep the relevant release/runbook/verification or incident record in its maintained location, identifying the deployed artifact, action, recovery prerequisites, actual observations and untested boundaries. Link artifacts and versions rather than copying secrets or inventing a new document system.
+Keep the release plan or actual release and verification record in its maintained location. Identify the target, artifact, action, recovery prerequisites, actual observations and untested boundaries. Record the handoff and owner when the release calls for one.
 
 ## Exit and return
 
-Complete the requested preparation or establish the required deployed-path/recovery evidence for executed work. Classify a failure and return only its affected work to [development](03-development.md), [design](02-design.md), [requirements](01-requirements.md) or operations diagnosis. Use [learning.md](../learning.md) for a demonstrated lesson or requested retrospective; do not make it a ceremony on every release. Honor finite completion and ongoing-goal checkpoints.
+Complete the requested preparation or establish the required deployed-path and recovery evidence for executed work. For a failure, follow the release's authorized recovery path or return the affected work to [development](03-development.md), [design](02-design.md) or [requirements](01-requirements.md). Route ongoing work after handoff and independent runtime incidents to [continuous operations](06-operations.md) when applicable. Use [learning.md](../learning.md) for a demonstrated lesson or requested retrospective.

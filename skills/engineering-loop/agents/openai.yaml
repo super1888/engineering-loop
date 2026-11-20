@@ -1,6 +1,6 @@
 interface:
   display_name: "Engineering Loop"
-  short_description: "Five-stage delivery, MCP gates and focused guidance"
+  short_description: "Six-stage delivery, MCP gates and focused guidance"
   default_prompt: "Use $engineering-loop to verify PMS MCP access, identify this task's stage, read its guidance and resolve material gaps, then deliver within the agreed scope with traceable evidence."
 
 dependencies:

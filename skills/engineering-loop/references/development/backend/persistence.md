@@ -12,7 +12,7 @@ Use for query, constraint, field, conversion or migration-code changes. Identify
 2. Scope reads/writes to the requested actor, resource and result set. Check actual filtering, ordering, pagination and indexes where the changed query depends on them; do not infer correctness from method names or fetch unrelated data by convenience.
 3. Locate the constraints that enforce uniqueness, ownership and atomic state changes. Keep required guarantees at an enforceable boundary and select [R5](../rules/concurrent-edits.md) or [R6](../rules/split-transactions.md) only for the actual update/commit model.
 4. For schema changes, follow the project's authoritative baseline, upgrade and generation policy. Establish whether historical data/clients exist before choosing compatibility work; do not silently rewrite a released migration or impose upgrades on a confirmed new installation.
-5. Separate preparing migration code from applying it. Record prerequisites, data impact and necessary recovery; execution in a deployed environment follows [stage 05](../../stages/05-release.md) authority.
+5. Separate preparing migration code from applying it. Record prerequisites, data impact and necessary recovery. Apply a release migration under [stage 05](../../stages/05-release.md) authority and route an independent live maintenance or recovery task to [stage 06](../../stages/06-operations.md).
 
 ## Verify
 

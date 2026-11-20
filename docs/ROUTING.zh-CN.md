@@ -1,20 +1,20 @@
 # Engineering Loop 中文路由与执行手册
 
-适用版本：**v0.1.26**。规则基线：提交 `fe4ec40`。核对日期：2026 年 11 月 19 日。
+适用于 **v0.1.27**（2026 年 11 月 20 日核对）。
 
 本手册供团队理解、执行和维护当前 skill。主线是：**用户输入 → PMS MCP 接通 → 判断本次任务阶段和操作类型 → 读取匹配规范 → 解决关键缺口 → 执行与验证 → 按授权回写任务 → 交付**。先确定当前要交付什么，再选择需要的专业、技术栈和风险规则。
 
-本手册的现行章节解释 v0.1.26 的规则。实际项目的有效指令、已确认需求、权限和交付停点继续生效。手册供团队查阅，执行时按 skill 索引读取相关原文。
+现行执行目录有六个阶段。实际项目的有效指令、已确认需求、权限和交付停点继续生效。手册供团队查阅，执行时按 skill 索引读取相关原文。
 
 ## 目录
 
-- [六阶段设计草案](#六阶段设计草案)
 - [逐级填充目录](#逐级填充目录)
+- [设计讨论与待填细则](#六阶段设计草案)
 - [1 术语与范围](#1-术语与范围)
 - [2 完整路由流程](#2-完整路由流程)
 - [3 MCP 接通条件](#3-mcp-接通条件)
 - [4 识别阶段和解决关键问题](#4-识别阶段和解决关键问题)
-- [5 五个阶段如何执行](#5-五个阶段如何执行)
+- [5 六个阶段如何执行](#5-六个阶段如何执行)
 - [6 开发与联调的具体分支](#6-开发与联调的具体分支)
 - [7 九类共享风险规则](#7-九类共享风险规则)
 - [8 技术栈和组件模板的命中](#8-技术栈和组件模板的命中)
@@ -25,9 +25,46 @@
 - [13 规范状态和维护方法](#13-规范状态和维护方法)
 - [14 原文入口和验证边界](#14-原文入口和验证边界)
 
+## 逐级填充目录
+
+从 [skill 总入口](../skills/engineering-loop/SKILL.md) 定位本次交付的阶段。下表是维护导航，二级主题链接到当前规则原文。第 03 阶段已有独立场景正文，其余阶段在各自的阶段入口按需引用专题指南。
+
+### 六阶段入口与二级主题
+
+| 一级阶段 | 二级主题与现有规范 | 当前细化程度 |
+|---|---|---|
+| [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 问题与现状调研、范围与验收例子、实质需求变更，见[需求指南](../skills/engineering-loop/references/requirements.md) | 已有阶段入口及共用需求指南 |
+| [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构与项目约定](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[交付计划与分工](../skills/engineering-loop/references/collaboration.md) | 已有阶段入口和条件引用，具体架构、设计系统与模板由项目维护 |
+| [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景](#开发场景与执行正文) | 已有 28 个场景正文及条件规则 |
+| [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | 已有阶段入口和验证指南，版本范围与必验链路逐项对账的细则待补 |
+| [05 发布与验证](../skills/engineering-loop/references/stages/05-release.md) | [发布准备、部署切换、上线验证与随版本回退](../skills/engineering-loop/references/release.md) | 已有阶段入口和发布指南 |
+| [06 持续运维](../skills/engineering-loop/references/stages/06-operations.md) | [运行准备、故障调查、日常维护与独立恢复](../skills/engineering-loop/references/operations.md) | 已有阶段入口和运维指南，子目录待细化 |
+
+### 开发场景与执行正文
+
+按场景编号进入对应目录，通过 `Read` 链接找执行正文。也可以用[全部 28 个正文的速查表](#开发分支正文速查)直接定位文件。
+
+| 二级目录 | 三级场景 |
+|---|---|
+| [前端 F1–F8](../skills/engineering-loop/references/development/scenarios/frontend.md) | F1 组件文案与样式、F2 表单与编辑、F3 列表与表格、F4 路由与导航、F5 状态与异步界面、F6 文件与媒体、F7 可访问性与目标设备、F8 前端工程 |
+| [后端 B1–B8](../skills/engineering-loop/references/development/scenarios/backend.md) | B1 接口与契约、B2 领域与服务、B3 数据与持久化、B4 事务与并发、B5 身份与资源权限、B6 异步任务与作业、B7 外部服务与 SDK、B8 配置与运行代码 |
+| [联调 I1–I8](../skills/engineering-loop/references/development/scenarios/integration.md) | I1 接口对齐、I2 身份与权限链路、I3 跨端数据表达、I4 写入与结果对账、I5 异步业务链路、I6 文件与存储链路、I7 状态与缓存联动、I8 环境与依赖连通 |
+| [工程能力 E1–E4](../skills/engineering-loop/references/development/scenarios/engineering.md) | E1 公共库与 SDK、E2 脚本与 CLI、E3 构建与依赖、E4 工具与生成代码 |
+
+### 公共入口与按需规则
+
+| 用途 | 原文入口 |
+|---|---|
+| 所有阶段的接通校验与关键问题核对 | [MCP 门禁](../skills/engineering-loop/references/connection.md) · [公共拷问](../skills/engineering-loop/references/grill.md) |
+| 任务定位与证据回写 | [PMS 任务操作](../skills/engineering-loop/references/pms.md) · [开发交付记录](../skills/engineering-loop/references/development/delivery.md) |
+| 随任务事实附加的规则 | [九类开发风险](../skills/engineering-loop/references/development/risks.md) · [技术栈](../skills/engineering-loop/references/development/stacks.md) · [组件模板](../skills/engineering-loop/references/development/templates.md) · [验证边界](../skills/engineering-loop/references/verification-boundaries.md) |
+| 项目接入、专项能力、协作和续接 | [项目约定](../skills/engineering-loop/references/project.md) · [专业 skill](../skills/engineering-loop/references/specialists.md) · [协作](../skills/engineering-loop/references/collaboration.md) · [恢复](../skills/engineering-loop/references/resume.md) · [沉淀](../skills/engineering-loop/references/learning.md) |
+
+每轮可从一个阶段主题或场景编号开始。填阶段入口时沿用进入条件、输入、执行与参考、PMS、交付物和退出条件六项。填具体场景时补触发与排除条件、执行正文、验收例子和项目绑定项。选一条应命中的任务及一条相近反例，按[命中率评测口径](../evals/README.md#measure-routing-hits)冻结预期并安排试跑。更多维护约定见 [第 13 节](#13-规范状态和维护方法)。
+
 ## 六阶段设计草案
 
-从[逐级讨论目录](#逐级讨论目录)选一项继续补充。下方两张图对应一次工作如何在 PMS 开工和交付，以及工作如何跨阶段衔接。v0.1.26 的执行入口见[逐级填充目录](#逐级填充目录)。
+本节用于继续讨论 PMS 阶段父任务、01 和 02 的考问及各阶段待填细则。可按[逐级讨论目录](#逐级讨论目录)选题。实际执行以[现行目录](#逐级填充目录)和对应规范为准。
 
 ### 逐级讨论目录
 
@@ -121,49 +158,13 @@ flowchart TD
 
 处理已上线系统的持续工作，包括运行观察、实际事件、故障恢复和日常维护。发现新增业务需求时回到 01 的存量分支。06 的子目录、责任与实际检查细则待讨论。 [现行运维指南](../skills/engineering-loop/references/operations.md)
 
-## 逐级填充目录
-
-从 [skill 总入口](../skills/engineering-loop/SKILL.md) 定位本次交付的阶段。下表是维护导航，二级主题链接到当前规则原文。第 03 阶段已有独立场景正文，其余阶段在各自的阶段入口按需引用专题指南。
-
-### 五阶段入口与二级主题
-
-| 一级阶段 | 二级主题与现有规范 | 当前细化程度 |
-|---|---|---|
-| [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 问题与现状调研、范围与验收例子、实质需求变更，见[需求指南](../skills/engineering-loop/references/requirements.md) | 已有阶段入口及共用需求指南 |
-| [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构与项目约定](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[交付计划与分工](../skills/engineering-loop/references/collaboration.md) | 已有阶段入口和条件引用，具体架构、设计系统与模板由项目维护 |
-| [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景](#开发场景与执行正文) | 已有 28 个场景正文及条件规则 |
-| [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | 已有阶段入口和验证指南，版本范围与必验链路逐项对账的细则待补 |
-| [05 发布与验证](../skills/engineering-loop/references/stages/05-release.md) | [发布准备、部署切换与上线验证](../skills/engineering-loop/references/release.md)、[运行准备、故障与恢复](../skills/engineering-loop/references/operations.md) | 已有阶段入口和发布、运维指南 |
-
-### 开发场景与执行正文
-
-按场景编号进入对应目录，通过 `Read` 链接找执行正文。也可以用[全部 28 个正文的速查表](#开发分支正文速查)直接定位文件。
-
-| 二级目录 | 三级场景 |
-|---|---|
-| [前端 F1–F8](../skills/engineering-loop/references/development/scenarios/frontend.md) | F1 组件文案与样式、F2 表单与编辑、F3 列表与表格、F4 路由与导航、F5 状态与异步界面、F6 文件与媒体、F7 可访问性与目标设备、F8 前端工程 |
-| [后端 B1–B8](../skills/engineering-loop/references/development/scenarios/backend.md) | B1 接口与契约、B2 领域与服务、B3 数据与持久化、B4 事务与并发、B5 身份与资源权限、B6 异步任务与作业、B7 外部服务与 SDK、B8 配置与运行代码 |
-| [联调 I1–I8](../skills/engineering-loop/references/development/scenarios/integration.md) | I1 接口对齐、I2 身份与权限链路、I3 跨端数据表达、I4 写入与结果对账、I5 异步业务链路、I6 文件与存储链路、I7 状态与缓存联动、I8 环境与依赖连通 |
-| [工程能力 E1–E4](../skills/engineering-loop/references/development/scenarios/engineering.md) | E1 公共库与 SDK、E2 脚本与 CLI、E3 构建与依赖、E4 工具与生成代码 |
-
-### 公共入口与按需规则
-
-| 用途 | 原文入口 |
-|---|---|
-| 所有阶段的接通校验与关键问题核对 | [MCP 门禁](../skills/engineering-loop/references/connection.md) · [公共拷问](../skills/engineering-loop/references/grill.md) |
-| 任务定位与证据回写 | [PMS 任务操作](../skills/engineering-loop/references/pms.md) · [开发交付记录](../skills/engineering-loop/references/development/delivery.md) |
-| 随任务事实附加的规则 | [九类开发风险](../skills/engineering-loop/references/development/risks.md) · [技术栈](../skills/engineering-loop/references/development/stacks.md) · [组件模板](../skills/engineering-loop/references/development/templates.md) · [验证边界](../skills/engineering-loop/references/verification-boundaries.md) |
-| 项目接入、专项能力、协作和续接 | [项目约定](../skills/engineering-loop/references/project.md) · [专业 skill](../skills/engineering-loop/references/specialists.md) · [协作](../skills/engineering-loop/references/collaboration.md) · [恢复](../skills/engineering-loop/references/resume.md) · [沉淀](../skills/engineering-loop/references/learning.md) |
-
-每轮可从一个阶段主题或场景编号开始。填阶段入口时沿用进入条件、输入、执行与参考、PMS、交付物和退出条件六项。填具体场景时补触发与排除条件、执行正文、验收例子和项目绑定项。选一条应命中的任务及一条相近反例，按[命中率评测口径](../evals/README.md#measure-routing-hits)冻结预期并安排试跑。更多维护约定见 [第 13 节](#13-规范状态和维护方法)。
-
 ## 1 术语与范围
 
 ### 不同层级分别回答什么
 
 | 层级 | 回答的问题 | 当前例子 |
 |---|---|---|
-| 项目阶段 | 本次任务交付哪一类结果 | 需求、方案、开发、测试、发布 |
+| 项目阶段 | 本次任务交付哪一类结果 | 需求、方案、开发、测试、发布、持续运维 |
 | 专业方向 | 哪一类实现或链路受影响 | 前端、后端、联调、工程能力 |
 | 场景 | 正在改变什么具体行为 | 表单编辑、接口契约、未知写入结果 |
 | 技术栈 | 当前模块实际采用什么实现 | 已安装的 React、Vue、后端框架或 CLI 运行时 |
@@ -199,8 +200,12 @@ flowchart TD
     P -->|阶段03| D["共通基础与专业场景索引"]
     D --> L["选择场景 ID<br/>读取 Read 指向的执行正文"]
     L --> R["按条件补充技术栈 模板 风险与验证"]
-    P -->|其他阶段| O["读取该阶段匹配的专业指导"]
+    P -->|阶段05| PUB["读取发布与验证规范"]
+    P -->|阶段06| OPS["读取持续运维规范"]
+    P -->|阶段01 02 04| O["读取该阶段匹配的专业指导"]
     R --> C["应用公共拷问与当前工作焦点"]
+    PUB --> C
+    OPS --> C
     O --> C
     PM --> C
     SUP --> C
@@ -217,7 +222,7 @@ flowchart TD
     SYNC -->|只补同步 不重做实现| T
 ```
 
-图表示逻辑依赖，允许复用仍然有效的连接、决定、正文读取和验证证据。它不要求每次输入重启完整流程，也不意味着五阶段依次必走。
+图表示当前交付的逻辑依赖。按目标进入六个阶段中的对应入口，并复用仍然有效的连接、决定、正文读取和验证证据。
 
 执行时可以使用以下顺序核对：
 
@@ -272,6 +277,7 @@ flowchart TD
 - “后台管理页按钮”通常指浏览器界面，不能仅凭“后台”选择后端开发。
 - “做一个页面”可能是设计原型，也可能是实现已有设计；先查已有约定，只有缺失决定会改变工作时才问。
 - “上线前检查”不等于授权部署；先确定交付的是检查结果、发布方案还是实际发布。
+- 已部署系统的请求按目的选阶段。验证某次发布或执行该版本的回退进入 05，独立运行故障、运维修复或恢复进入 06。
 - 一个可见的保存问题可能发生在客户端、接口、持久化或跨端契约，不能先假定只改提示文案。
 
 可从代码或任务记录查到的事实，应先调查。不要让用户选择内部 skill 名称或代替 agent 找文件。
@@ -292,9 +298,9 @@ flowchart TD
 
 原文：[grill.md](../skills/engineering-loop/references/grill.md)、[开发路由](../skills/engineering-loop/references/development/index.md)。
 
-## 5 五个阶段如何执行
+## 5 六个阶段如何执行
 
-五阶段的规范结构一致：进入条件、所需输入、执行及相关规范、PMS 使用、交付物、退出与返回条件。下面给出实际操作顺序；阶段之间按当前任务的依赖连接。
+六个阶段使用相同的规范结构，包含进入条件、输入、执行与参考、PMS 使用、交付物和退出条件。阶段之间按当前任务的依赖连接。
 
 ### 需求分析与确认
 
@@ -348,17 +354,21 @@ UI 默认设计和验证桌面端；用户明确要求的设备及已有有效�
 
 ### 发布与验证
 
-**进入条件：** 发布准备、已授权部署／切换、已部署版本验证，或实际运维事件及运行准备工作。
+进入此阶段的工作包括发布准备、已授权的部署或切换、对指定发布的上线验证，以及随该版本执行的回退或恢复。
 
-核对目标环境、操作权限、产物／配置版本、适用验收依据和现有运行手册。事故调查从实际影响和运行实例身份开始；运维事件可以直接进入相关分支，不需要重走需求到发布或额外创建发布卡。
+核对目标环境、操作权限、产物和配置版本、适用验收依据及现有运行手册。按发布范围验证迁移、切换、现有使用方兼容和恢复前提。发布依赖运行准备、恢复证据或运维交接时，读取相应运维指导。
 
-发布工作读取发布指南，处理实际产物、迁移／切换、恢复前提和既有使用方兼容；故障、外部配置修复、运行准备和恢复验证读取运维指南。只补当前风险需要的验证。准备方案不授权真正部署、破坏性修复或外部通知。
+交付发布方案或发布验证记录，标识版本、环境、操作、恢复前提、实测结果和未验证范围。上线验证覆盖当前发布所需的关键业务路径及相关现有使用方。执行部署、回退或外部变更时，按已有授权与项目停点推进。
 
-交付发布计划或实际发布／事件记录，标识版本、目标、操作、恢复前提、真实观察及未验证边界。发布和新页面健康不自动证明旧页面、旧资源或业务链路连续可用。需要恢复证明时，在对应实际边界取得证据，不能只看备份文件或配置存在。
+完成本次准备或取得所需上线证据后交付。版本相关故障按此次发布的授权恢复路径处理，独立运行事件和交接后的持续工作进入 06。 [阶段 05](../skills/engineering-loop/references/stages/05-release.md)
 
-完成本次准备或取得所需上线／恢复证据后退出。失败只返回其影响的实现、设计、需求或运维调查部分。有已证明的教训或明确复盘要求时再进入沉淀，不把每次发布都变成新增规则。
+### 持续运维
 
-入口：[05-release.md](../skills/engineering-loop/references/stages/05-release.md)。正文：[release.md](../skills/engineering-loop/references/release.md)、[operations.md](../skills/engineering-loop/references/operations.md)。
+已有服务的日常维护、运行准备、实际故障、独立配置修复及恢复验证可以直接进入此阶段。
+
+先核对真实运行实例、环境、版本、影响范围与运行手册。围绕可证伪的假设选择最小干预的检查，纯调查按只读授权执行。获准修复或恢复后，同时核对服务恢复和受影响的实际业务路径。需要恢复证明时，在合适的隔离目的地取得证据。
+
+沿用现有运维、就绪或故障记录，保存范围、影响、检查结论、执行动作和剩余风险。涉及 PMS 跟踪时，按授权关联实际运行事件或维护交付。需要修改代码时按范围转 03，获准发布版本时转 05，发现新的业务需求时回 01。 [阶段 06](../skills/engineering-loop/references/stages/06-operations.md) · [运维指导](../skills/engineering-loop/references/operations.md)
 
 ## 6 开发与联调的具体分支
 
@@ -515,7 +525,7 @@ UI 默认设计和验证桌面端；用户明确要求的设备及已有有效�
 3. 找到唯一性和原子状态变化的实际约束；按更新／提交方式选择 R5、R6，只读承诺用 R3。
 4. schema 变化按项目基线／升级政策处理，先确认历史数据／客户端；迁移准备与部署执行分开，不擅改已发布迁移或为新安装强加升级工作。
 
-**验收与交付：** 检查实际存储、拒绝及相关约束；按契约选择空库、历史升级、重复执行等路径。ORM／模型测试不能冒充真实数据库隔离证据。记录 schema／迁移身份、数据假设、结果和未执行步骤；生产执行按阶段 05 授权。
+**验收与交付：** 检查实际存储、拒绝及相关约束；按契约选择空库、历史升级、重复执行等路径。ORM／模型测试不能冒充真实数据库隔离证据。记录 schema／迁移身份、数据假设、结果和未执行步骤。随版本应用迁移按 05，独立维护或恢复按 06，均遵循现有授权。
 
 #### B4 事务与并发
 
@@ -578,7 +588,7 @@ UI 默认设计和验证桌面端；用户明确要求的设备及已有有效�
 1. 追踪配置优先级、绑定及实际消费者，按契约区分缺失、非法和有意关闭，不输出秘密值。
 2. 开关同时检查注册／初始化和执行，保留未被关闭功能需要的共享调用方。
 3. 检查相关初始化副作用 R3、后台工作与恢复 R4；日志和健康检查不得泄露数据或降低阈值使失败变绿。
-4. 代码／模板修改和外部环境应用分开，记录必要配置过渡；部署修复和真实事件调查走阶段 05。
+4. 代码和模板修改随开发验证。应用到外部环境时记录配置过渡，随发布应用走 05，独立运行事件调查或授权配置修复走 06。
 
 **验收与交付：** 在受影响模式启动实际应用／产物，共享注册路径可能回归时检查相近未改模式，不做无关全组合。单个 bean 测试不代表应用就绪。交付配置来源、模式、运行身份、观察和未应用环境步骤。
 
@@ -688,7 +698,7 @@ UI 默认设计和验证桌面端；用户明确要求的设备及已有有效�
 3. 用窄范围授权连接区分 DNS、TLS／认证、传输、健康与具体能力；SDK 依赖替换用 R8 验证实际运行路径。
 4. 前置命令逐项判结果，必要条件失败就停依赖工作；不关闭保护、改全局配置或装工具链来获得绿灯。
 
-**验收与交付：** 保存无秘密的目标、产物、配置、命令和结果；必要负例不得破坏共享环境。回环传输不等于付费供应商接受，模拟不等于生产。交付实际能力和未决环境缺口，外部修复／部署另按阶段 05 授权。
+**验收与交付：** 保存无秘密的目标、产物、配置、命令和结果；必要负例不得破坏共享环境。回环传输不等于付费供应商接受，模拟不等于生产。交付实际能力和未决环境缺口。版本部署走 05，独立运行环境修复走 06，均遵循已有授权。
 
 ### 工程与共享能力 E1 至 E4
 
@@ -1028,7 +1038,7 @@ PMS assignee 表示交付责任；连接账号、用户、执行 agent／聊天�
 
 **输入示例：** 已部署队列积压，先调查原因，不修改生产配置。
 
-进入阶段 05 的运维分支，核对实际实例、产物／配置版本、影响和现有运行手册。围绕可证伪假设做已有权限内的调查，保留只读边界；不先建发布卡、重走前四阶段或注入故障。
+直接进入 06 持续运维，核对实际实例、产物和配置版本、影响及现有运行手册。围绕可证伪的假设在只读权限内调查，产出有证据支撑的初步结论和待核对事项。
 
 交付观察、已检验假设、影响及下一决策。已有修复授权时按其范围执行；缺少新的生产变更权限时，不能把调查自然延伸为部署或破坏性修复。
 
@@ -1078,6 +1088,8 @@ PMS assignee 表示交付责任；连接账号、用户、执行 agent／聊天�
 通过[逐级填充目录](#逐级填充目录)按阶段、场景和公共规则查看原文。第 03 阶段的[正文速查表](#开发分支正文速查)可按编号直达文件。
 
 ### 当前已经观察到什么
+
+v0.1.27 的发布与持续运维分流见[六阶段用例](../evals/fixtures/six-stage-routing/TASK.md)及[执行状态和边界](../evals/STATUS.md)。
 
 v0.1.26 的 [详细验证记录](../evals/fixtures/development-details/RESULTS.md) 保留了结构检查、独立静态评审及两次不同冻结版本的已知文案样例：
 

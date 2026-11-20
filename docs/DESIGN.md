@@ -1,10 +1,10 @@
 # Design boundaries
 
-One team task/delivery router with five stage entries, focused references, and project-owned artifacts. Routed work requires a verified PMS MCP connection; select the task's stage, then apply its evidence-based challenge and relevant professional guidance. The PMS stores shared task facts while the repository retains its engineering system and artifacts.
+Engineering Loop has six stage entries, focused references, and project-owned artifacts. Verify the PMS MCP connection before selecting the task's stage, challenging its assumptions and applying the relevant guidance. The PMS stores shared task facts. The repository retains its engineering system and artifacts.
 
-## Five-stage navigation
+## Six-stage navigation
 
-The v0.1.24 directory distinguishes project stages from professional details and cross-cutting support:
+The first-level entries represent stages for the current task. Each entry points to the relevant professional and supporting guidance.
 
 | First-level stage | Selected guidance |
 |---|---|
@@ -12,17 +12,20 @@ The v0.1.24 directory distinguishes project stages from professional details and
 | 02 Solution design and planning | [Design entry](../skills/engineering-loop/references/stages/02-design.md), including UI and architecture/planning references |
 | 03 Development and integration | [Development entry](../skills/engineering-loop/references/stages/03-development.md), including frontend/backend implementation, self-checks and integration |
 | 04 Testing and acceptance | [Testing entry](../skills/engineering-loop/references/stages/04-testing.md) |
-| 05 Release and validation | [Release entry](../skills/engineering-loop/references/stages/05-release.md), including relevant operational events |
+| 05 Release and validation | [Release entry](../skills/engineering-loop/references/stages/05-release.md), including release readiness, deployment and verification |
+| 06 Continuous operations | [Operations entry](../skills/engineering-loop/references/stages/06-operations.md), including incident response, ongoing maintenance and operational readiness |
 
 After the MCP gate, infer the current task/deliverable's stage from the request and effective project/task facts. Ask only when an unresolved distinction changes the next work; do not ask the user to choose internal skill names. An entire project need not occupy one stage, and a stage is not a PMS board status. A request spanning stages can be sequenced into authorized slices without replaying accepted prerequisites.
 
 Each stage has the same six sections: entry, inputs, execution/reference selection, PMS, deliverables, and exit/return. These are usable navigation contracts. The development layer below indexes existing rules; exact team stack standards, actual component entries, document schemas and project-specific task policies remain future detail. This is not a rule engine or automatic selector.
 
-Project conventions, review, collaboration, resume and learning remain conditional support. UI design enters stage 02 while implementation enters stage 03. Testing is also part of implementation self-checks; stage 04 owns a testing/acceptance deliverable. Actual operational incidents can enter the relevant stage-05 branch without creating a release or requiring earlier stages. Existing focused guides keep their paths and own their detailed rules.
+Project conventions, review, collaboration, resume and learning are conditional support. UI design enters stage 02. UI implementation and its self-checks enter stage 03. Stage 04 covers a testing or acceptance deliverable. Deployment, post-cutover verification and rollback tied to an identifiable release enter stage 05. Incidents, live configuration repair, operational readiness and recovery independent of a release can enter stage 06 directly. Read focused release and operations guidance as required by the task and preserve the authority for each action.
+
+Proposed refinements to requirements intake, design planning and PMS task structure are tracked in the Chinese discussion draft. [Six-stage discussion draft](ROUTING.zh-CN.md#六阶段设计草案)
 
 ## Development selection and pending detail
 
-The [development router](../skills/engineering-loop/references/development/index.md) adds scenario selection under stage 03 without expanding the five-stage entry table. Its professional indexes cover [frontend F1–F8](../skills/engineering-loop/references/development/scenarios/frontend.md), [backend B1–B8](../skills/engineering-loop/references/development/scenarios/backend.md), [integration I1–I8](../skills/engineering-loop/references/development/scenarios/integration.md) and [engineering/shared E1–E4](../skills/engineering-loop/references/development/scenarios/engineering.md). Version 0.1.26 links all 28 entries to individual execution bodies: inputs, actions, discriminating checks, actual deliverables and project bindings. These are conditional baselines, not 28 mandatory reads or new cross-project stack policies. The user confirmed retaining existing project conventions.
+The [development router](../skills/engineering-loop/references/development/index.md) adds scenario selection under stage 03. Its professional indexes cover [frontend F1–F8](../skills/engineering-loop/references/development/scenarios/frontend.md), [backend B1–B8](../skills/engineering-loop/references/development/scenarios/backend.md), [integration I1–I8](../skills/engineering-loop/references/development/scenarios/integration.md) and [engineering/shared E1–E4](../skills/engineering-loop/references/development/scenarios/engineering.md). Version 0.1.26 links all 28 entries to individual execution bodies: inputs, actions, discriminating checks, actual deliverables and project bindings. These are conditional baselines, not 28 mandatory reads or new cross-project stack policies. The user confirmed retaining existing project conventions.
 
 Select from the accepted outcome, affected modules/paths, actual configuration, representative code and call boundaries. Keywords discover candidates; they do not settle the route. Select relevant scenario sections and compatible stack guidance, then independently attach triggered risk rules. Frontend work can expose an API/concurrency boundary; a backend keyword cannot by itself turn an administration-page label edit into service work. Cross-boundary work reads its applicable combination rather than all professional indexes.
 

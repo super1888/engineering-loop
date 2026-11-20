@@ -64,7 +64,7 @@ Resolve language/framework/database versions from the affected module's maintain
 
 - **ID / match:** `dev.backend.runtime-code`; configuration binding, feature switches, startup dependencies, logging or health-related code. Exclude applying external production configuration without corresponding authority.
 - **Read:** [runtime-code execution and evidence](../backend/runtime-code.md); add [engineering scenarios](engineering.md) only when their actual build/tool boundary is involved.
-- **Conditional rules:** [R3](../rules/read-only.md) for initialization/inspection side effects; [R4](../rules/async-idempotency.md) for retained background work. Actual incident investigation or deployed configuration repair enters the [stage-05 operations branch](../../stages/05-release.md).
+- **Conditional rules:** [R3](../rules/read-only.md) for initialization and inspection side effects, and [R4](../rules/async-idempotency.md) for retained background work. Independent runtime incident investigation or configuration repair enters [stage 06](../../stages/06-operations.md). Release configuration changes follow [stage 05](../../stages/05-release.md).
 - **Verify:** the affected actual startup/runtime combination and retained required paths; a successful isolated unit check does not prove application readiness.
 - **Pending:** configuration, feature-switch, logging and health standards for the actual runtime.
 
