@@ -1,6 +1,6 @@
-# 阿里云录音电话通知 Demo
+# 阿里云电话通知 Demo
 
-用一段已审核的录音给指定的中国内地手机号打电话。接通后播报一次并自动挂断，Demo 将线路接通状态和实际通话秒数保存到本地。
+用已审核的录音或专属文本模板给指定的中国内地手机号打电话。接通后播报一次并自动挂断，Demo 将线路接通状态和实际通话秒数保存到本地。
 
 ## 先看模拟结果
 
@@ -31,6 +31,20 @@ read -rs 'ALIBABA_CLOUD_ACCESS_KEY_SECRET?阿里云 AccessKey Secret '
 printf '\n'
 export ALIBABA_CLOUD_ACCESS_KEY_ID ALIBABA_CLOUD_ACCESS_KEY_SECRET
 ```
+
+## 用带姓名的文本模板实拨
+
+在语音服务控制台申请专属模式文本模板，在正文用 `${name}` 表示收件人姓名，最后一句以「再见」结束。模板审核通过后，使用已启用的专属主叫号码或服务实例 ID。凭据需有 `dyvms:SingleCallByTts` 和 `dyvms:QueryCallDetailByCallId` 权限。 [模板说明](https://help.aliyun.com/zh/vms/user-guide/create-a-text-to-speech-template) · [外呼接口](https://help.aliyun.com/zh/vms/developer-reference/api-dyvmsapi-2017-05-25-singlecallbytts)
+
+```sh
+uv run --python 3.12 examples/aliyun-voice-demo/voice_demo.py call \
+  --phone '你的手机号' \
+  --template-code '审核通过的模板ID' \
+  --name '测试姓名' \
+  --caller '主叫号码或服务实例ID'
+```
+
+每次只播报一遍。播完后阿里云结束通话，话单可用下方的 `result` 命令续查。 [挂断规则](https://help.aliyun.com/zh/vms/support/number-using-the-faq)
 
 ## 查看话单
 

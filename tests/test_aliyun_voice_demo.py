@@ -30,6 +30,7 @@ class VoiceDemoTests(unittest.TestCase):
         self.directory = Path(temporary.name)
         self.service = Mock()
         self.service.dial.return_value = SimpleNamespace(code="OK", call_id=CALL_ID)
+        self.service.dial_template.return_value = SimpleNamespace(code="OK", call_id=CALL_ID)
         for change in (
             patch.object(demo, "VoiceService", return_value=self.service),
             patch.object(demo, "RESULTS_DIR", self.directory),
@@ -84,6 +85,29 @@ class VoiceDemoTests(unittest.TestCase):
         self.assertEqual(completed["call_id"], CALL_ID)
         self.assertEqual(json.loads(path.read_text()), completed)
         self.service.dial.assert_called_once_with(PHONE, VOICE_CODE, None)
+
+    def test_template_call_uses_name_and_dedicated_caller(self):
+        status, report, _ = self.run_cli(
+            "call", "--phone", PHONE, "--template-code", "TTS_example", "--name", "张三",
+            "--caller", "057100000000", "--wait", "0",
+        )
+        self.assertEqual(status, 0)
+        self.assertEqual(report["call_id"], CALL_ID)
+        self.service.dial_template.assert_called_once_with(
+            PHONE, "TTS_example", "张三", "057100000000",
+        )
+        self.service.dial.assert_not_called()
+        self.assertNotIn("张三", self.saved_file().read_text())
+
+    def test_template_call_without_caller_stops_before_dialing(self):
+        status, _, error = self.run_cli(
+            "call", "--phone", PHONE, "--template-code", "TTS_example", "--name", "张三",
+        )
+        self.assertEqual(status, 1)
+        self.assertIn("专属主叫", error)
+        self.assertEqual(list(self.directory.iterdir()), [])
+        self.service.dial_template.assert_not_called()
+        self.service.dial.assert_not_called()
 
     def test_submit_timeout_is_unknown_and_does_not_redial(self):
         self.service.dial.side_effect = TimeoutError("provider response unavailable")

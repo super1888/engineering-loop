@@ -3,7 +3,7 @@
 # dependencies = ["alibabacloud-dyvmsapi20170525==5.3.0"]
 # ///
 
-"""Call one number with an approved recording and save the call result."""
+"""Call one number with an approved voice notification and save the result."""
 
 import argparse
 import json
@@ -67,6 +67,16 @@ class VoiceService:
             play_times=1,
         )
         return self.client.single_call_by_voice_with_options(request, self.runtime).body
+
+    def dial_template(self, phone, template_code, name, caller):
+        request = self.models.SingleCallByTtsRequest(
+            called_number=phone,
+            called_show_number=caller,
+            tts_code=template_code,
+            tts_param=json.dumps({"name": name}, ensure_ascii=False),
+            play_times=1,
+        )
+        return self.client.single_call_by_tts_with_options(request, self.runtime).body
 
     def query(self, call_id, query_date_ms):
         request = self.models.QueryCallDetailByCallIdRequest(
@@ -154,9 +164,19 @@ def query_result(service, path, record, wait_seconds):
 
 
 def call(args):
-    voice_code = args.voice_code.strip()
-    if not voice_code:
-        raise DemoError("请输入审核通过的语音文件 ID。")
+    if args.template_code is not None:
+        template_code = args.template_code.strip()
+        name = (args.name or "").strip()
+        caller = (args.caller or "").strip()
+        if not template_code or not name or not caller:
+            raise DemoError("文本模板需要审核通过的模板 ID、工程师姓名和专属主叫号码或服务实例 ID。")
+    else:
+        voice_code = args.voice_code.strip()
+        if not voice_code:
+            raise DemoError("请输入审核通过的语音文件 ID。")
+        if args.name is not None:
+            raise DemoError("--name 用于文本转语音模板，请与 --template-code 一起使用。")
+
     service = VoiceService()
     started = datetime.now(BEIJING)
     path = RESULTS_DIR / f"call-{uuid4().hex}.json"
@@ -171,7 +191,10 @@ def call(args):
     save_record(path, record)
     print(f"话单文件 {path}", file=sys.stderr, flush=True)
     try:
-        body = service.dial(args.phone, voice_code, args.caller)
+        if args.template_code is not None:
+            body = service.dial_template(args.phone, template_code, name, caller)
+        else:
+            body = service.dial(args.phone, voice_code, args.caller)
     except Exception as error:
         raise DemoError(
             f"提交结果待确认（{sdk_error_code(error)}）。请先在阿里云控制台核对呼叫记录。"
@@ -223,7 +246,7 @@ def seconds_to_wait(value):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="阿里云预录语音通知试拨")
+    parser = argparse.ArgumentParser(description="阿里云语音通知试拨")
     commands = parser.add_subparsers(required=True)
     mock = commands.add_parser("simulate", help="查看模拟话单")
     mock.add_argument("--missed", action="store_true", help="模拟无人接听")
@@ -231,7 +254,10 @@ def main(argv=None):
 
     live = commands.add_parser("call", help="拨打一通真实电话")
     live.add_argument("--phone", required=True, type=phone_number, help="中国内地手机号")
-    live.add_argument("--voice-code", required=True, help="审核通过的语音文件 ID")
+    content = live.add_mutually_exclusive_group(required=True)
+    content.add_argument("--voice-code", help="审核通过的语音文件 ID")
+    content.add_argument("--template-code", help="审核通过的专属文本转语音模板 ID")
+    live.add_argument("--name", help="文本转语音模板的 name 变量")
     live.add_argument("--caller", help="专属模式的主叫号码或服务实例 ID")
     live.add_argument("--wait", type=seconds_to_wait, default=300, help="等待话单的秒数，0 为仅提交")
     live.set_defaults(run=call)
