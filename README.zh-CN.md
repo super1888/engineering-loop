@@ -107,7 +107,7 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 | 阶段 | 聚焦入口 |
 |---|---|
 | 01 需求分析与确认 | [问题、证据与行为边界](skills/engineering-loop/references/stages/01-requirements.md) |
-| 02 方案设计与规划 | [产品、架构、UI 与交付规划](skills/engineering-loop/references/stages/02-design.md) |
+| 02 方案设计与规划 | [产品、架构、UI 与交付规划](skills/engineering-loop/references/stages/02-design.md) · [架构选型与权衡](skills/engineering-loop/references/architecture.md) |
 | 03 开发与联调 | [前后端实现、Bug 修复与集成](skills/engineering-loop/references/stages/03-development.md) |
 | 04 测试与验收 | [测试执行、证据与业务验收](skills/engineering-loop/references/stages/04-testing.md) |
 | 05 发布与验证 | [发布准备、部署和版本验证](skills/engineering-loop/references/stages/05-release.md) |
@@ -147,6 +147,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 分文件不能清除已进入会话的内容，也不保证固定 token 消耗；长任务仍需在适当检查点整理有效状态后交接。
 
 ## 如何逐步验证
+
+未发布的 v0.1.28 为阶段 02 增加实质架构决定的指导。架构选型结合公共拷问，按可测负载、总成本和验证证据比较可行方案。 [架构选型用例](evals/fixtures/architecture-tradeoffs/TASK.md) · [证据索引](evals/STATUS.md)
 
 未发布的 v0.1.27 增加独立的持续运维阶段。阶段 05 处理与具体版本发布相关的工作，阶段 06 处理故障和服务的持续运行。路由用例规定两个阶段的边界，证据索引记录执行过的检查及其验证范围。 [六阶段用例](evals/fixtures/six-stage-routing/TASK.md) · [证据索引](evals/STATUS.md)
 

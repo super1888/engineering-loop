@@ -11,12 +11,13 @@ Reuse the relevant accepted behavior, boundaries, current architecture and desig
 ## Execution and focused references
 
 - For behavior specifications or consequential scope changes, read [requirements.md](../requirements.md).
-- For architecture responsibilities, reference-project inheritance or enforcement gaps, read [project.md](../project.md) and the applicable maintained project architecture; this index supplies no separate architecture standard.
+- For a consequential choice of system shape, technology, capacity, user wait or ownership cost, read [architecture.md](../architecture.md). Use its challenge and evidence checks when comparing options and before concluding the design.
+- For architecture responsibilities, reference-project inheritance or enforcement gaps, read [project.md](../project.md) and the applicable maintained project architecture.
 - For interface decisions, read [ui.md](../ui.md), including its target-device gate.
 - For an applicable shared component/style catalog, use [template matching](../development/templates.md); it also serves design work without moving the request into implementation.
 - For delegated ownership, dependencies or integrated planning, read [collaboration.md](../collaboration.md) when those boundaries apply.
 
-Apply the [common challenge](../grill.md) to the uncertain design choice. Use facts, representative content or a bounded experiment; ask only a material unresolved decision, without reopening an accepted direction.
+Apply the [common challenge](../grill.md) to the design. On the architecture route, actively test the recommendation against a material counterexample or failure case even when project evidence already answers the relevant questions. Use facts, representative content or a bounded experiment. Ask only for decisions that remain open and matter to this slice.
 
 ## PMS
 

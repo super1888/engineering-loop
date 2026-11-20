@@ -1,6 +1,6 @@
 # Engineering Loop 中文路由与执行手册
 
-适用于 **v0.1.27**（2026 年 11 月 20 日核对）。
+适用于 **v0.1.28**（2026 年 11 月 20 日核对）。
 
 本手册供团队理解、执行和维护当前 skill。主线是：**用户输入 → PMS MCP 接通 → 判断本次任务阶段和操作类型 → 读取匹配规范 → 解决关键缺口 → 执行与验证 → 按授权回写任务 → 交付**。先确定当前要交付什么，再选择需要的专业、技术栈和风险规则。
 
@@ -27,14 +27,14 @@
 
 ## 逐级填充目录
 
-从 [skill 总入口](../skills/engineering-loop/SKILL.md) 定位本次交付的阶段。下表是维护导航，二级主题链接到当前规则原文。第 03 阶段已有独立场景正文，其余阶段在各自的阶段入口按需引用专题指南。
+从 [skill 总入口](../skills/engineering-loop/SKILL.md) 定位本次交付的阶段。下表是维护导航，二级主题链接到现行执行说明或规则原文。第 03 阶段已有独立场景正文，其余阶段在各自的阶段入口按需引用专题指南。
 
 ### 六阶段入口与二级主题
 
 | 一级阶段 | 二级主题与现有规范 | 当前细化程度 |
 |---|---|---|
 | [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 问题与现状调研、范围与验收例子、实质需求变更，见[需求指南](../skills/engineering-loop/references/requirements.md) | 已有阶段入口及共用需求指南 |
-| [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构与项目约定](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[交付计划与分工](../skills/engineering-loop/references/collaboration.md) | 已有阶段入口和条件引用，具体架构、设计系统与模板由项目维护 |
+| [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构选型与权衡](#架构选型与权衡)、[项目约定与架构继承](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[交付计划与分工](../skills/engineering-loop/references/collaboration.md) | 架构选型须结合公共拷问，具体技术约定、设计系统与模板由项目维护 |
 | [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景](#开发场景与执行正文) | 已有 28 个场景正文及条件规则 |
 | [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | 已有阶段入口和验证指南，版本范围与必验链路逐项对账的细则待补 |
 | [05 发布与验证](../skills/engineering-loop/references/stages/05-release.md) | [发布准备、部署切换、上线验证与随版本回退](../skills/engineering-loop/references/release.md) | 已有阶段入口和发布指南 |
@@ -71,7 +71,7 @@
 | 一级阶段 | 下一级讨论入口 | 待填内容 |
 |---|---|---|
 | [01 需求分析与确认](#01-需求分析与确认) | 从零建立需求、现有系统新增需求 | 两类产物、验收及确认方式，存量重大变更的专项设计归属 |
-| [02 方案设计与规划](#02-方案设计与规划) | 从零项目的方案考问、[架构选型与权衡](#架构选型与权衡)、开发任务拆分 | 方案规则、产物格式、子任务粒度和字段 |
+| [02 方案设计与规划](#02-方案设计与规划) | 从零项目的方案考问、开发任务拆分 | 方案规则、产物格式、子任务粒度和字段 |
 | [03 开发与联调](#03-开发与联调) | 前端 F1–F8、后端 B1–B8、联调 I1–I8、工程能力 E1–E4 | 逐项补执行与验证细则，确定进度汇总口径 |
 | [04 测试与验收](#04-测试与验收) | 差异评审、独立测试与集成验证、版本与业务验收 | 版本覆盖核对、业务签认及其他阶段细则 |
 | [05 发布与验证](#05-发布与验证) | 发布准备、切换与上线验证 | 观察窗口、发布完成与运维交接条件 |
@@ -132,15 +132,7 @@ flowchart TD
 
 方案和拆分范围确认后，按授权在 PMS 复用或建立开发子任务。开发子任务挂在 03 阶段父任务下，并按需关联设计产物和真正的阻塞前置。需求到任务的拆分规则、方案模板和子任务的具体字段待讨论。
 
-#### 架构选型与权衡
-
-候选规则适用于选型会影响交付、性能或持有成本的方案。以首版已确认目标为范围，先给一个团队能交付和维护的最小完整方案。
-
-1. **把用户目标写成可验证场景。** 从实际使用者、关键操作与代表数据出发。需要估算容量时，结合客户规模、活跃用户和操作频次，估算典型与峰值的并发或任务到达量。把交互反馈时间和后台结果可用时间各自写清。只有会改变选择的指标才纳入比较，并注明来源是实测、已确认目标还是估算。
-2. **在同一负载和周期下比较。** 先核对关键场景、硬指标和有效项目约束，再比较交付工期、运行和许可费用、团队维护负担及迁移成本。按需求选择语言、架构和中间件，团队熟悉度及可复用能力计入实际成本。只展开会改变决定的备选。增加组件前，说明当前方案在哪个目标上不足，以及如何核实增量的收益。
-3. **用明确的验证与复查条件收口。** 当已有证据支持最小方案满足已确认的关键目标，且剩余不确定性不会改变选型时，交付一份推荐方案、关键取舍和验收方法，结束本轮方案探索。若一项不确定性会改变选择，先查已有证据，必要时做能区分方案的小验证。把当前范围之外的扩展留到具体需求或指标触发时，再重新比较。
-
-后续评测可用两个对照。最小方案已有证据达标时应及时交付。出现有依据的峰值等待或预算缺口时，应能定位受限环节，比较刚好能解决该问题的增量方案。 [架构设计 skill](https://github.com/magnus919/agent-skills/blob/main/software-architecture/SKILL.md) · [容量与成本 skill](https://github.com/magnus919/agent-skills/blob/main/capacity-and-cost-engineering/SKILL.md) · [Google SRE 逐步设计](https://sre.google/workbook/non-abstract-design/) · [arc42 质量场景](https://docs.arc42.org/tips/1-12/) · [AWS 成本建模](https://docs.aws.amazon.com/wellarchitected/latest/framework/cost06-bp01.html)
+架构选择的执行规范已纳入现行阶段 02。 [架构选型与权衡](#架构选型与权衡)
 
 ### 01 和 02 的主动考问
 
@@ -330,13 +322,23 @@ flowchart TD
 
 复用已确认行为、现有架构、设计系统、项目约定和交付约束。只核对本设计切片的前提；已有共识足够时，不强制补齐整套 PRD 或重新做设计讨论。
 
-根据问题进入匹配指导：行为规格找需求指南，职责和架构继承找项目指南，界面决定找 UI 指南，共享组件／样式选择按需读取模板契约，委派与集成计划按需读取协作指南。先验证会造成返工的关键决定，再复制类似设计。
+按本次设计问题选读相应指导。行为规格查需求指南，架构选型查本阶段的专项规范，职责和架构继承查项目指南，界面决定查 UI 指南，共享组件或样式查模板契约，委派与集成计划查协作指南。先验证会造成返工的关键决定，再复制类似设计。
 
 UI 默认设计和验证桌面端；用户明确要求的设备及已有有效项目要求按相应范围处理，不能擅自删除已有移动端行为。静态渲染用于视觉判断；导航、编辑、焦点或恢复等问题需要对应交互证据。纯设计建议本身不强制启动浏览器验收，无法渲染时也不能宣称界面已经完成实测。
 
 交付实际规格、设计、架构决定或计划，记录版本、范围、前提、决定和未决项。关键业务冲突返回阶段 01。设计工作完成不自动开始代码实现，设计原型也不证明后端集成或生产可用。
 
 入口：[02-design.md](../skills/engineering-loop/references/stages/02-design.md)。相关正文：[ui.md](../skills/engineering-loop/references/ui.md)、[项目指南](../skills/engineering-loop/references/project.md)。
+
+#### 架构选型与权衡
+
+选型会实质影响交付、性能、总成本或维护时，**架构选型须结合现有「拷问我」方法**。先查项目已有材料，用足以影响判断的反例或失败场景检验推荐，逐项核对已确认需求和硬约束的证据或验收条件。会改变方案、验收、权限或导致显著返工的问题，用可复核的证据、小验证或有权人的决定收口。实质问题仍待解决时，给出带条件的推荐和受影响的停点。 [架构选型规范](../skills/engineering-loop/references/architecture.md) · [公共拷问](../skills/engineering-loop/references/grill.md)
+
+1. **把用户目标写成可验证场景。** 从实际使用者、关键操作和代表数据推导典型及峰值负载，写清用户路径的响应目标。有后台任务时，分别记录从操作发起到可见反馈、从任务提交到结果可用的等待。标明指标来自实测、已确认目标、估算还是未知。
+2. **在同一负载和周期下比较。** 先找团队能交付、维护且达到确认目标的最小完整方案。评估会改变决定的可行选项时，纳入交付工期、运行与许可费用、维护和迁移投入。按有效项目约束、团队能力和实际场景选择语言、部署形态、存储和中间件。增加组件前，明确原方案的不足及如何验证收益。
+3. **以验证与复查条件收口。** 证据支持最小方案达标，且剩余不确定性不会改变选择时，交付推荐、关键取舍和验收方法。会改变选型的证据缺口用能区分选项的小验证处理。按需要记录触发复查的实际需求或指标。
+
+质量场景、渐进设计和成本建模的参考资料见以下原文。 [架构设计 skill](https://github.com/magnus919/agent-skills/blob/main/software-architecture/SKILL.md) · [容量与成本 skill](https://github.com/magnus919/agent-skills/blob/main/capacity-and-cost-engineering/SKILL.md) · [Google SRE 逐步设计](https://sre.google/workbook/non-abstract-design/) · [arc42 质量场景](https://docs.arc42.org/tips/1-12/) · [AWS 成本建模](https://docs.aws.amazon.com/wellarchitected/latest/framework/cost06-bp01.html)
 
 ### 开发与联调
 
@@ -1098,6 +1100,8 @@ PMS assignee 表示交付责任；连接账号、用户、执行 agent／聊天�
 通过[逐级填充目录](#逐级填充目录)按阶段、场景和公共规则查看原文。第 03 阶段的[正文速查表](#开发分支正文速查)可按编号直达文件。
 
 ### 当前已经观察到什么
+
+v0.1.28 的用例定义了如何检验阶段 02 架构选型与配套拷问。证据索引记录执行状态与验证范围。 [架构选型用例](../evals/fixtures/architecture-tradeoffs/TASK.md) · [证据索引](../evals/STATUS.md)
 
 v0.1.27 的发布与持续运维分流见[六阶段用例](../evals/fixtures/six-stage-routing/TASK.md)及[执行状态和边界](../evals/STATUS.md)。
 

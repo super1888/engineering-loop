@@ -152,7 +152,7 @@ The first-level directory follows six project stages. Select the stage for the c
 | Stage | Focused entry |
 |---|---|
 | 01 Requirements analysis and confirmation | [Problem, evidence and behavior boundaries](skills/engineering-loop/references/stages/01-requirements.md) |
-| 02 Solution design and planning | [Product, architecture, UI and delivery planning](skills/engineering-loop/references/stages/02-design.md) |
+| 02 Solution design and planning | [Product, architecture, UI and delivery planning](skills/engineering-loop/references/stages/02-design.md) · [Architecture selection and tradeoffs](skills/engineering-loop/references/architecture.md) |
 | 03 Development and integration | [Frontend/backend implementation, bug repair and integration](skills/engineering-loop/references/stages/03-development.md) |
 | 04 Testing and acceptance | [Test execution, evidence and business acceptance](skills/engineering-loop/references/stages/04-testing.md) |
 | 05 Release and validation | [Release preparation, deployment and version verification](skills/engineering-loop/references/stages/05-release.md) |
@@ -192,6 +192,8 @@ For a new project, the [project connection guide](skills/engineering-loop/refere
 The [requirements guide](skills/engineering-loop/references/requirements.md) distinguishes confirmed exclusions, authorized exceptions and undecided policies at relevant boundaries. It also separates an unclear request, an unsupported one and temporary unavailability when they have different outcomes. The [order-flow example](examples/workflows.md#a-bounded-order-flow-requirement) shows those distinctions without turning every hypothetical request into a feature.
 
 ## Validation and contribution
+
+Unreleased v0.1.28 adds stage 02 guidance for consequential architecture decisions. It pairs architecture selection with the common challenge and compares feasible options by measurable workload, total cost and verification evidence. [Architecture scenarios](evals/fixtures/architecture-tradeoffs/TASK.md) · [Evidence index](evals/STATUS.md)
 
 Unreleased v0.1.27 adds a dedicated stage for continuous operations. Stage 05 covers work tied to an identifiable release, and stage 06 covers incidents and the ongoing operation of a service. The routing cases specify the release and operations boundaries. The evidence index records which checks ran and what they establish. [Six-stage scenarios](evals/fixtures/six-stage-routing/TASK.md) · [Evidence index](evals/STATUS.md)
 

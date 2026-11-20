@@ -9,7 +9,7 @@ The first-level entries represent stages for the current task. Each entry points
 | First-level stage | Selected guidance |
 |---|---|
 | 01 Requirements analysis and confirmation | [Requirements entry](../skills/engineering-loop/references/stages/01-requirements.md) |
-| 02 Solution design and planning | [Design entry](../skills/engineering-loop/references/stages/02-design.md), including UI and architecture/planning references |
+| 02 Solution design and planning | [Design entry](../skills/engineering-loop/references/stages/02-design.md) · [Architecture selection and tradeoffs](../skills/engineering-loop/references/architecture.md) |
 | 03 Development and integration | [Development entry](../skills/engineering-loop/references/stages/03-development.md), including frontend/backend implementation, self-checks and integration |
 | 04 Testing and acceptance | [Testing entry](../skills/engineering-loop/references/stages/04-testing.md) |
 | 05 Release and validation | [Release entry](../skills/engineering-loop/references/stages/05-release.md), including release readiness, deployment and verification |
@@ -20,6 +20,8 @@ After the MCP gate, infer the current task/deliverable's stage from the request 
 Each stage has the same six sections: entry, inputs, execution/reference selection, PMS, deliverables, and exit/return. These are usable navigation contracts. The development layer below indexes existing rules; exact team stack standards, actual component entries, document schemas and project-specific task policies remain future detail. This is not a rule engine or automatic selector.
 
 Project conventions, review, collaboration, resume and learning are conditional support. UI design enters stage 02. UI implementation and its self-checks enter stage 03. Stage 04 covers a testing or acceptance deliverable. Deployment, post-cutover verification and rollback tied to an identifiable release enter stage 05. Incidents, live configuration repair, operational readiness and recovery independent of a release can enter stage 06 directly. Read focused release and operations guidance as required by the task and preserve the authority for each action.
+
+Stage 02 pairs its architecture guide with the common challenge when the choice materially affects delivery, performance, cost or maintenance. Test the recommendation against a relevant counterexample and resolve decision-changing questions through evidence or an authorized decision. Compare feasible options under the same workload and cost horizon, distinguishing interaction response from background-result readiness when both matter. Record the simplest feasible recommendation, the verification method and what would trigger reconsideration. [Architecture guide](../skills/engineering-loop/references/architecture.md) · [Common challenge](../skills/engineering-loop/references/grill.md)
 
 Proposed refinements to requirements intake, design planning and PMS task structure are tracked in the Chinese discussion draft. [Six-stage discussion draft](ROUTING.zh-CN.md#六阶段设计草案)
 

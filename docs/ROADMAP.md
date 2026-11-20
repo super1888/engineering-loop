@@ -1,5 +1,11 @@
 # Roadmap
 
+## v0.1.28 · unreleased architecture selection and tradeoffs
+
+- Add focused architecture guidance to stage 02 and pair it with the common challenge. Resolve consequential gaps with evidence, a bounded check or an authorized decision.
+- Compare feasible options using measurable workloads, both waits where applicable and the same cost horizon. Record the recommended minimum design, verification and triggers to reconsider. [Architecture guide](../skills/engineering-loop/references/architecture.md)
+- Track checks for the new route by version. [Architecture scenarios](../evals/fixtures/architecture-tradeoffs/TASK.md) · [Evidence index](../evals/STATUS.md)
+
 ## v0.1.27 · unreleased six-stage routing
 
 - Add 06 Continuous operations to the skill entrypoint and the current execution directory.
