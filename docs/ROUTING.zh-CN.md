@@ -1,6 +1,6 @@
 # Engineering Loop 中文路由与执行手册
 
-适用于 **v0.1.29**（2026 年 11 月 20 日核对）。
+适用于 **v0.1.30**（2026 年 11 月 20 日核对）。
 
 本手册供团队理解、执行和维护当前 skill。主线是：**用户输入 → PMS MCP 接通 → 判断本次任务阶段和操作类型 → 读取匹配规范 → 解决关键缺口 → 执行与验证 → 按授权回写任务 → 交付**。先确定当前要交付什么，再选择需要的专业、技术栈和风险规则。
 
@@ -9,6 +9,7 @@
 ## 目录
 
 - [逐级填充目录](#逐级填充目录)
+- [阶段文档和交接模板](#阶段文档和交接模板)
 - [设计讨论与待填细则](#六阶段设计草案)
 - [1 术语与范围](#1-术语与范围)
 - [2 完整路由流程](#2-完整路由流程)
@@ -31,14 +32,20 @@
 
 ### 六阶段入口与二级主题
 
-| 一级阶段 | 二级主题与现有规范 | 当前细化程度 |
-|---|---|---|
-| [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 问题与现状调研、范围与验收例子、实质需求变更，见[需求指南](../skills/engineering-loop/references/requirements.md) | 已有阶段入口及共用需求指南 |
-| [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构选型与权衡](#架构选型与权衡)、[项目约定与架构继承](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[启动计划与 PMS 规划](#启动计划与-pms-规划)、[协作与分工](../skills/engineering-loop/references/collaboration.md) | 架构选型须结合公共拷问，启动计划沿用项目现有样式与规则 |
-| [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景](#开发场景与执行正文) | 已有 28 个场景正文及条件规则 |
-| [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | 已有阶段入口和验证指南，版本范围与必验链路逐项对账的细则待补 |
-| [05 发布与验证](../skills/engineering-loop/references/stages/05-release.md) | [发布准备、部署切换、上线验证与随版本回退](../skills/engineering-loop/references/release.md) | 已有阶段入口和发布指南 |
-| [06 持续运维](../skills/engineering-loop/references/stages/06-operations.md) | [运行准备、故障调查、日常维护与独立恢复](../skills/engineering-loop/references/operations.md) | 已有阶段入口和运维指南，子目录待细化 |
+| 一级阶段 | 二级主题与现有规范 | 文档或交接模板（按需） | 当前细化程度 |
+|---|---|---|---|
+| [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 问题与现状调研、范围与验收例子、实质需求变更，见[需求指南](../skills/engineering-loop/references/requirements.md) | [需求分析与确认](../skills/engineering-loop/templates/requirements.md)，按需记录调研、需求与痛点、访谈、评审确认 | 已有阶段入口及共用需求指南 |
+| [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构选型与权衡](#架构选型与权衡)、[项目约定与架构继承](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[启动计划与 PMS 规划](#启动计划与-pms-规划)、[协作与分工](../skills/engineering-loop/references/collaboration.md) | [启动计划](../skills/engineering-loop/templates/kickoff-plan.md) | 架构选型须结合公共拷问，启动计划沿用项目现有样式与规则 |
+| [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景](#开发场景与执行正文) | [模块开发与自测记录](../skills/engineering-loop/templates/development-record.md) | 已有 28 个场景正文及条件规则 |
+| [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | [测试方案、用例和验收记录](../skills/engineering-loop/templates/acceptance-record.md) | 已有阶段入口和验证指南，版本范围与必验链路逐项对账的细则待补 |
+| [05 发布与验证](../skills/engineering-loop/references/stages/05-release.md) | [发布准备、部署切换、上线验证与随版本回退](../skills/engineering-loop/references/release.md) | [发布计划、部署及上线验证记录](../skills/engineering-loop/templates/release-record.md) | 已有阶段入口和发布指南 |
+| [06 持续运维](../skills/engineering-loop/references/stages/06-operations.md) | [运行准备、故障调查、日常维护与独立恢复](../skills/engineering-loop/references/operations.md) | [运维和线上缺陷记录](../skills/engineering-loop/templates/operations-record.md) | 已有阶段入口和运维指南，子目录待细化 |
+
+### 阶段文档和交接模板
+
+先定位当前任务及交付物。需要文档或交接时，沿用项目已有格式和存放位置。确需模板时，只读当前交付匹配的模板正文。没有确认的字段留空或标为待定，说明对工作和验收的影响。已知的关键缺口先用公共拷问解决，能继续的独立工作照常推进。 [阶段模板索引](../skills/engineering-loop/templates/index.md) · [公共拷问](../skills/engineering-loop/references/grill.md)
+
+已有简短的任务记录足够时直接复用。交接、任务同步、上线和恢复按项目现有要求和授权执行。共享组件或样式复用遵循对应的组件模板契约。 [组件模板契约](../skills/engineering-loop/references/development/templates.md)
 
 ### 开发场景与执行正文
 
@@ -232,7 +239,7 @@ flowchart TD
 2. 完成或复用有效 MCP 接通证据；失败时停止下游。
 3. 必要时只读现有任务和项目记录，确定当前切片的阶段。
 4. 读取该阶段，应用公共拷问，补齐会影响行为、验收或权限的缺口。
-5. 开发任务按专业和场景选择执行正文，再按条件附加技术栈、模板、风险及检查。
+5. 开发任务按专业和场景选择执行正文，再按条件附加技术栈、组件模板、风险及检查。需要阶段文档或交接时，优先沿用项目记录，按需选择本阶段的模板。
 6. 执行当前已成立的工作，遵守项目要求的评审、提交或发布停点。
 7. 区分通过、失败、未运行，记录实际版本、环境和范围。
 8. 涉及任务跟踪时，按已有授权同步产物和实际状态并回读；最后交付结果及剩余限制。
@@ -314,7 +321,7 @@ flowchart TD
 
 执行时核对用户正在完成什么任务、现有替代方法、成功信号及当前最小切片。用正常、拒绝和不确定结果的代表例子确认边界；只有影响本次工作的问题才继续澄清。必要时做已有授权内的小调查或实验。明确需求已经足够的局部修改不重开完整调研。
 
-交付已确认结果、范围和排除项、验收例子、依据及未决决定，复用现有文档或任务记录。当前切片的下一步条件成立即可退出；只要求调查时，交付调查结果后结束。需要设计或实现时，再按已有授权进入下一相关阶段。
+交付已确认结果、范围和排除项、验收例子、依据及未决决定，复用现有文档或任务记录。需要结构化记录时，选择模板中适用于从零建立需求或已有系统新增需求的部分，保留已确认范围和验收口径。当前切片的下一步条件成立即可退出。只要求调查时，交付调查结果后结束。需要设计或实现时，再按已有授权进入下一相关阶段。 [需求文档模板](../skills/engineering-loop/templates/requirements.md)
 
 入口：[01-requirements.md](../skills/engineering-loop/references/stages/01-requirements.md)。按需正文：[requirements.md](../skills/engineering-loop/references/requirements.md)；缺少或冲突的项目约定进入 [project.md](../skills/engineering-loop/references/project.md)。
 
@@ -398,6 +405,8 @@ UI 默认设计和验证桌面端；用户明确要求的设备及已有有效�
 先核对真实运行实例、环境、版本、影响范围与运行手册。围绕可证伪的假设选择最小干预的检查，纯调查按只读授权执行。获准修复或恢复后，同时核对服务恢复和受影响的实际业务路径。需要恢复证明时，在合适的隔离目的地取得证据。
 
 沿用现有运维、就绪或故障记录，保存范围、影响、检查结论、执行动作和剩余风险。涉及 PMS 跟踪时，按授权关联实际运行事件或维护交付。需要修改代码时按范围转 03，获准发布版本时转 05，发现新的业务需求时回 01。 [阶段 06](../skills/engineering-loop/references/stages/06-operations.md) · [运维指导](../skills/engineering-loop/references/operations.md)
+
+线上缺陷可在运维记录中跟踪，独立回归或版本验收引用对应的 04 结果。已有参考中的《缺陷跟踪与测试验收记录》涉及两个阶段，具体归档归属仍待项目确认。 [运维记录模板](../skills/engineering-loop/templates/operations-record.md) · [测试验收记录模板](../skills/engineering-loop/templates/acceptance-record.md)
 
 ## 6 开发与联调的具体分支
 
@@ -1117,6 +1126,8 @@ PMS assignee 表示交付责任；连接账号、用户、执行 agent／聊天�
 通过[逐级填充目录](#逐级填充目录)按阶段、场景和公共规则查看原文。第 03 阶段的[正文速查表](#开发分支正文速查)可按编号直达文件。
 
 ### 当前已经观察到什么
+
+v0.1.30 的用例规定了怎样核验两类需求、06 直入和沿用已有简短记录时的模板选择，新增用例尚未运行。 [模板路由用例](../evals/fixtures/stage-templates/TASK.md) · [证据索引](../evals/STATUS.md)
 
 v0.1.29 的用例定义了如何核验启动计划、阶段交接和 PMS 写入边界。证据索引记录执行状态。 [启动规划用例](../evals/fixtures/kickoff-planning/TASK.md) · [证据索引](../evals/STATUS.md)
 

@@ -2,7 +2,7 @@
 
 **Connect the team. Challenge the task. Deliver with evidence.**
 
-[中文](README.zh-CN.md) · [Chinese routing and execution manual](docs/ROUTING.zh-CN.md) · [Install](#install) · [How it works](#how-it-works) · [Examples](examples/workflows.md) · [Evaluation](evals/README.md) · [Contribute](CONTRIBUTING.md)
+[中文](README.zh-CN.md) · [Chinese routing and execution manual](docs/ROUTING.zh-CN.md) · [Stage document templates](skills/engineering-loop/templates/index.md) · [Install](#install) · [How it works](#how-it-works) · [Examples](examples/workflows.md) · [Evaluation](evals/README.md) · [Contribute](CONTRIBUTING.md)
 
 [![Checks](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml/badge.svg)](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -10,7 +10,7 @@
 
 A team task and delivery entrypoint for Claude Code and Codex. It requires verified PMS MCP access before routed work, challenges assumptions on every stage or specialist route, and coordinates task creation, claiming, execution and acceptance with traceable evidence.
 
-**Using it in an existing Git repository?** Copy only the complete [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) directory into that project's skill location. Keep its `references/` and `agents/` subfolders; the rest of this repository is for development and evaluation.
+**Using it in an existing Git repository?** Copy only the complete [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) directory into that project's skill location, including `references/`, `templates/` and `agents/`. The rest of this repository supports development and evaluation.
 
 **v0.1 is an experimental workflow draft.** Packaging checks do not prove fewer bugs or faster delivery. We publish behavioral scenarios and welcome reproducible counterexamples before expanding the rules.
 
@@ -160,6 +160,8 @@ The first-level directory follows six project stages. Select the stage for the c
 
 Each stage covers entry conditions, inputs, execution and reference selection, PMS use, deliverables, and exit or return conditions. UI design belongs to stage 02. UI implementation and developer self-checks belong to stage 03. An incident affecting a running service can enter stage 06 directly.
 
+When the current stage needs a document or handoff, use the project's maintained format first. Open the matching stage template when a reusable structure is needed. Keep unknown fields pending, use the common challenge to resolve decision-changing gaps, and keep a concise existing record for a simple change. [Stage template index](skills/engineering-loop/templates/index.md)
+
 Every activated stage and selected specialist still passes the built-in [grill-me-style challenge](skills/engineering-loop/references/grill.md). Investigate facts and reuse decisions before asking about material gaps; settled work can pass with zero questions. Project rules, review, collaboration, recovery and learning are conditional support, rather than additional peer stages. [Specialist selection](skills/engineering-loop/references/specialists.md) and [PMS task operations](skills/engineering-loop/references/pms.md) are read only when applicable. A stage is distinct from a board status, and selecting a stage does not automatically create a task.
 
 All applicable project instructions, full-document requirements and delivery stop points still apply. Read only the selected stage and matching details, reuse valid connection evidence, and preserve effective state/evidence pointers in the established project sources. Stage changes alone do not restart the interview or identical connection probes. Already-loaded content still consumes context.
@@ -192,6 +194,8 @@ For a new project, the [project connection guide](skills/engineering-loop/refere
 The [requirements guide](skills/engineering-loop/references/requirements.md) distinguishes confirmed exclusions, authorized exceptions and undecided policies at relevant boundaries. It also separates an unclear request, an unsupported one and temporary unavailability when they have different outcomes. The [order-flow example](examples/workflows.md#a-bounded-order-flow-requirement) shows those distinctions without turning every hypothetical request into a feature.
 
 ## Validation and contribution
+
+Unreleased v0.1.30 provides on-demand templates for all six stages. The specification covers the two requirements cases, direct operations entry and an existing concise record. The new behavioral cases remain unrun. [Stage template index](skills/engineering-loop/templates/index.md) · [Template routing cases](evals/fixtures/stage-templates/TASK.md) · [Evidence index](evals/STATUS.md)
 
 Unreleased v0.1.29 adds a reusable stage 02 kickoff plan. It uses the project's formats and carries the same plan from draft through kickoff decisions to authorized PMS task synchronization. [Kickoff template](skills/engineering-loop/templates/kickoff-plan.md) · [Planning scenarios](evals/fixtures/kickoff-planning/TASK.md) · [Evidence index](evals/STATUS.md)
 

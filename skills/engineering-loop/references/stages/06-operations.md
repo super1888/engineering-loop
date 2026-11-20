@@ -22,6 +22,8 @@ Follow [pms.md](../pms.md) when a task reference, operation or tracking policy a
 
 Use the existing incident, maintenance or readiness record. Identify the runtime and configuration, observed impact, checked hypotheses, actions taken, business-path evidence and outstanding limits. Capture the next action and owner when work remains. Keep secrets in their established channel.
 
+When a new structured record is needed and the project has no applicable format, adapt the [operations record](../../templates/operations-record.md). Link related defect records when they supply evidence for this operating task. Independent version testing or business acceptance follows [stage 04](04-testing.md), with references to the relevant evidence.
+
 ## Exit and return
 
 For an investigation, report the supported conclusion and remaining uncertainty. For an executed recovery, verify the affected service and business path. Route a scoped code repair to [development](03-development.md), release work to [stage 05](05-release.md), and a newly discovered business need to [requirements](01-requirements.md) when authorized. Apply [learning.md](../learning.md) for a demonstrated lesson or requested retrospective.

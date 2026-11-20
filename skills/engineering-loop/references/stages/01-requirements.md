@@ -12,6 +12,8 @@ Use the request, relevant task and existing requirement records, observed curren
 
 Read [requirements.md](../requirements.md) for the applicable product hypothesis, slice, acceptance examples or change decision. Read [project.md](../project.md) only when effective conventions, authoritative sources or ownership are missing or conflicting.
 
+For requirement intake, establish whether this is a new product or a change to an existing system. Check current behavior and retained boundaries for an existing system. If the distinction changes the investigation and remains unclear after checking available evidence, clarify it early.
+
 Apply the [common challenge](../grill.md) to the current problem and success assumption. Investigate available facts before asking; ask only unresolved choices that change the next slice's behavior, acceptance or authority. Preserve accepted answers.
 
 ## PMS
@@ -21,6 +23,8 @@ Use [pms.md](../pms.md) when a task reference, task operation or tracking policy
 ## Deliverables
 
 Record the agreed outcome, scope and exclusions, representative acceptance examples, evidence and unresolved decisions in the project's existing source of truth. Link an existing research or current-state report when relevant; do not require a new document for every conversation.
+
+For a maintained requirements record, use the project's format first. When a new structured record is needed and the project has no applicable format, adapt the relevant sections of the [requirements record template](../../templates/requirements.md).
 
 ## Exit and return
 

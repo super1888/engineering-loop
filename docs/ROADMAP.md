@@ -1,5 +1,10 @@
 # Roadmap
 
+## v0.1.30 · unreleased six-stage document templates
+
+- Add starter templates for each stage's applicable deliverable while preserving existing project formats. The requirements template covers new products and additions to existing systems. Development, independent acceptance, release verification and operations link their own evidence. [Six-stage templates](../skills/engineering-loop/templates/index.md)
+- Leave team-specific fields and decisions open until needed. Ask about gaps that can change delivery or acceptance and keep the evidence of settled decisions in the existing record.
+
 ## v0.1.29 · unreleased kickoff and PMS planning
 
 - Add a reusable stage 02 kickoff plan for product design, technical design with shared contracts, development tasks and schedule, and module ownership and readiness. Carry the existing project format through drafting, kickoff decisions and authorized synchronization. [Delivery planning](../skills/engineering-loop/references/delivery-planning.md) · [Kickoff template](../skills/engineering-loop/templates/kickoff-plan.md)

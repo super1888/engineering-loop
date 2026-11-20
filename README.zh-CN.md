@@ -2,11 +2,11 @@
 
 **接通团队协作，追问关键假设，用证据交付。**
 
-[English](README.md) · [中文路由与执行手册](docs/ROUTING.zh-CN.md) · [安装](#安装) · [设计边界](docs/DESIGN.md) · [参与贡献](CONTRIBUTING.md)
+[English](README.md) · [中文路由与执行手册](docs/ROUTING.zh-CN.md) · [阶段文档模板](skills/engineering-loop/templates/index.md) · [安装](#安装) · [设计边界](docs/DESIGN.md) · [参与贡献](CONTRIBUTING.md)
 
 面向 Claude Code 和 Codex 的团队任务与交付统一入口。路由执行前必须通过 PMS MCP 接入校验，每个阶段及专业 skill 路由都核对关键假设，组织建任务、领取、执行与验收，并关联可追溯证据。
 
-**在已有 Git 仓库使用？** 只需将完整的 [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) 目录复制到该项目的 skill 安装位置。保留目录内的 `references/` 和 `agents/`；本仓库其余内容用于开发和评估。
+**在已有 Git 仓库使用？** 只需将完整的 [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) 目录复制到该项目的 skill 安装位置，保留其中的 `references/`、`templates/` 和 `agents/`。本仓库其余内容用于开发和评估。
 
 **当前 v0.1 是实验性初版。** 已执行的包装与安装检查不等于证明能减少 bug 或提高开发速度；行为评估方案公开，效果需要实际项目验证。
 
@@ -115,6 +115,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 每个阶段都说明进入条件、所需输入、执行与规范索引、PMS 使用、交付物及通过与返回条件。UI 设计归阶段 02，UI 实现和开发自测归阶段 03。已运行服务的实际故障可以直接进入阶段 06。
 
+本阶段需要文档或交接时，优先沿用项目已有格式。确需可复用结构时只读匹配的阶段模板。未知字段留待定，先用公共拷问解决影响决定的缺口。简单修改用项目已有简短记录。 [阶段模板索引](skills/engineering-loop/templates/index.md)
+
 项目规则、评审、协作、恢复、沉淀属于各阶段按条件调用的支持机制。阶段与看板状态分开，命中阶段不自动创建任务。
 
 ### 开发子路由
@@ -147,6 +149,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 分文件不能清除已进入会话的内容，也不保证固定 token 消耗；长任务仍需在适当检查点整理有效状态后交接。
 
 ## 如何逐步验证
+
+未发布的 v0.1.30 为六阶段提供按需使用的文档及交接模板。新增用例覆盖两类需求、直接进入运维及沿用已有简短记录，目前均未运行。 [阶段模板索引](skills/engineering-loop/templates/index.md) · [模板路由用例](evals/fixtures/stage-templates/TASK.md) · [证据索引](evals/STATUS.md)
 
 未发布的 v0.1.29 为阶段 02 增加可复用的启动计划。沿用项目格式，用同一份计划承接草稿、开工决定及获准的 PMS 任务同步。 [启动计划模板](skills/engineering-loop/templates/kickoff-plan.md) · [启动规划用例](evals/fixtures/kickoff-planning/TASK.md) · [证据索引](evals/STATUS.md)
 

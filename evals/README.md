@@ -46,6 +46,7 @@ Use the v0.1.27 matched release and ongoing-operations pair for the changed stag
 | Mandatory PMS/MCP connection and challenged skill routing | [Unexecuted v0.1.22 matrix](fixtures/pms-grill-routing/TASK.md); gate, task-write reconciliation and bounded questioning controls |
 | Conditional architecture guidance and active challenge in stage 02 | [Architecture decision cases](fixtures/architecture-tradeoffs/TASK.md) · [Read-only native observations](fixtures/architecture-tradeoffs/RESULTS.md) |
 | Stage-02 delivery planning, kickoff and task handoff | [Unrun kickoff and planning cases](fixtures/kickoff-planning/TASK.md) · [Current evidence](STATUS.md) |
+| On-demand stage documents and handoffs | [Unrun stage template selection cases](fixtures/stage-templates/TASK.md) · [Current evidence](STATUS.md) |
 | Common-core split: connected versus missing MCP | [Controlled native local-copy task](fixtures/core-route/TASK.md); inspect real mock calls, reference reads and exact file changes separately from protocol tests |
 | 05 release and 06 ongoing operations | [Six-stage routing specification](fixtures/six-stage-routing/TASK.md) · [Read-only native observations](fixtures/six-stage-routing/RESULTS.md) |
 | Historical v0.1.24 navigation and task boundaries | [Five-stage routing specification](fixtures/five-stage-routing/TASK.md) · [Historical validation record](fixtures/five-stage-routing/RESULTS.md) |

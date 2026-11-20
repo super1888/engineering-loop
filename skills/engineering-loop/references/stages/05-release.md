@@ -22,6 +22,8 @@ Follow [pms.md](../pms.md) when applicable. Bind release work to the actual deli
 
 Keep the release plan or actual release and verification record in its maintained location. Identify the target, artifact, action, recovery prerequisites, actual observations and untested boundaries. Record the handoff and owner when the release calls for one.
 
+When a new structured record is needed and the project has no applicable format, adapt the [release, deployment and verification record](../../templates/release-record.md).
+
 ## Exit and return
 
 Complete the requested preparation or establish the required deployed-path and recovery evidence for executed work. For a failure, follow the release's authorized recovery path or return the affected work to [development](03-development.md), [design](02-design.md) or [requirements](01-requirements.md). Route ongoing work after handoff and independent runtime incidents to [continuous operations](06-operations.md) when applicable. Use [learning.md](../learning.md) for a demonstrated lesson or requested retrospective.

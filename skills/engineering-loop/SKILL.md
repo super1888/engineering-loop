@@ -3,7 +3,7 @@ name: engineering-loop
 description: Team delivery entrypoint with a required PMS MCP connection. Identify the current task's project stage, load its guidance and relevant specialist details, then coordinate execution and acceptance. Use for team delivery, task management, uncertain project recovery, or explicit invocation. Standalone explanations outside this workflow stay lightweight.
 license: MIT
 metadata:
-  version: "0.1.29"
+  version: "0.1.30"
 ---
 
 # Engineering Loop
@@ -32,7 +32,7 @@ Answer intervening questions, then resume unfinished authorized work. Honor stop
 | 05 发布与验证 | [05-release.md](references/stages/05-release.md) | Prepare, deploy or verify a release, including its recovery |
 | 06 持续运维 | [06-operations.md](references/stages/06-operations.md) | Maintain a service, diagnose incidents or verify readiness |
 
-Stages classify work; PMS columns describe task state. Selecting a stage does not create a task or authorize the next phase. Each guide indexes entry, inputs, execution, PMS, deliverables and exit/return conditions; stack/template details remain conditional.
+Stages classify work; PMS columns describe task state. Selecting a stage does not create a task or authorize the next phase. Read focused references and [stage templates](templates/index.md) as needed from the selected stage.
 
 Conditional support: [project.md](references/project.md) for missing conventions, [review.md](references/review.md) for concrete review, [collaboration.md](references/collaboration.md) for coordination, [resume.md](references/resume.md) for uncertain recovery, [learning.md](references/learning.md) for a demonstrated lesson or requested retrospective. A support-only task need not launch development or replay the lifecycle.
 

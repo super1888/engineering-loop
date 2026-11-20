@@ -26,6 +26,8 @@ Use [pms.md](../pms.md) when applicable. Reuse or create authorized tasks at ind
 
 Produce the scoped code/configuration changes, relevant regression or integration checks, artifact/version identity and remaining limits. Update maintained contracts or documentation when the change requires them; use project conventions for paths and templates.
 
+For a maintained delivery or handoff record, apply the [development evidence guidance](../development/delivery.md) in the project's format. When a new structured record is needed and the project has no applicable format, adapt the [development record template](../../templates/development-record.md). Include handoff or PMS synchronization fields when they apply.
+
 ## Exit and return
 
 The slice must implement its accepted behavior and pass its required checks. Return a consequential behavior/design conflict to [requirements](01-requirements.md) or [design](02-design.md), affecting only dependent work. Enter [testing and acceptance](04-testing.md) when broader verification or acceptance is required; a verified local change does not require unrelated stages.

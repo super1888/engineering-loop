@@ -22,6 +22,8 @@ Follow [pms.md](../pms.md) when applicable. Link the actual version, covered sco
 
 Record passed, failed and unrun checks with commands or method, artifact/environment identity, covered scope, findings and unresolved limits. Use existing test and acceptance records; do not fabricate human acceptance or require a new report for every small check.
 
+When a new structured record is needed and the project has no applicable format, adapt the [test plan and case record](../../templates/acceptance-record.md). Keep expected outcomes and actual evidence traceable to their sources.
+
 ## Exit and return
 
 Required evidence and authorized acceptance must support the claimed result. Classify failures before returning to [development](03-development.md), a bounded [requirement decision](01-requirements.md), or the affected environment/check. Preserve intended assertions. Preparation or [release](05-release.md) proceeds only within existing authority and project stop points; testing alone does not authorize publication.

@@ -27,6 +27,8 @@ Read this index to select evidence, then open only the relevant report. It summa
 
 ## Tool controls and remaining gaps
 
+The v0.1.30 [stage template specification](fixtures/stage-templates/TASK.md) adds unrun controls for both requirements situations, direct operations handoff and reuse of an existing short record. The kickoff and general routing cases retain their own acceptance and evidence history.
+
 The v0.1.29 [kickoff and delivery planning specification](fixtures/kickoff-planning/TASK.md) covers pre-meeting planning, a wrong personal actor, a confirmed meeting subset with partial task synchronization, and the development-to-acceptance handoff. The cases remain unrun while project formats are finalized.
 
 The v0.1.27 [six-stage routing specification](fixtures/six-stage-routing/TASK.md) includes the matched read-only pair and additional gate, restore and rollback controls. O1 and O2 have [native observations](fixtures/six-stage-routing/RESULTS.md). O3–O5 remain unrun. The prior five-stage incident case belongs to its original layout.
