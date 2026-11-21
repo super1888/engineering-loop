@@ -23,8 +23,8 @@ def check(root=ROOT):
             or re.fullmatch(r"""(?:(['"])\s*\1|~|null)(?:[ \t]+#.*)?""", description_value, re.I)):
         errors.append("Missing skill description")
     # A packaging budget, not a token estimate or a runtime guarantee.
-    if len(text.encode("utf-8")) > 7000:
-        errors.append("Entrypoint exceeds the 7 KB maintenance budget")
+    if len(text.encode("utf-8")) > 4000:
+        errors.append("Entrypoint exceeds the 4 KB maintenance budget")
     for path in skill.rglob("*"):
         if (path.is_symlink() or getattr(path.lstat(), "st_reparse_tag", 0)
                 == getattr(stat, "IO_REPARSE_TAG_MOUNT_POINT", -1)):

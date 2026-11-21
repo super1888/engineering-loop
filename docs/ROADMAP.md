@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.33 · unreleased routing-only entrypoint
+
+- Reduce the [entrypoint](../skills/engineering-loop/SKILL.md) from 6,921 to under 4,000 bytes and lower its maintenance budget from 7 KB to 4 KB. It keeps the connection gate, stage location, the six-stage table, a support table and five always-on rules: project instructions are preserved, a stage is not authority, interrupted work resumes, checks are not weakened to pass, and only checked results are claimed.
+- Remove general conduct that the [common challenge](../skills/engineering-loop/references/grill.md), [verification](../skills/engineering-loop/references/verification.md), [connection](../skills/engineering-loop/references/connection.md) and [collaboration](../skills/engineering-loop/references/collaboration.md) guides already state. Move the sentences that existed only in the entrypoint: changing the hypothesis when an attempt yields no new evidence goes to the [development core](../skills/engineering-loop/references/development/core.md) and verification; keeping acceptance independent goes to the development core; binding evidence to its version and stopping at a finished result go to verification; keeping one recoverable state goes to [resume](../skills/engineering-loop/references/resume.md).
+- Bytes are not measured tokens or quality. A rule outside the entrypoint applies only when its guide is read; an earlier same-chat continuation sample already failed with the rule in the entrypoint. The effect of this move is unmeasured.
+- Stage templates are unchanged. The new cases are unrun. [Entrypoint scenarios](../evals/fixtures/slim-entry/TASK.md) · [Evidence index](../evals/STATUS.md)
+
 ## v0.1.32 · unreleased challenge depth and extracted team stack rules
 
 - Give the common challenge two depths. Stage 01 and 02 deliverables use Full depth: separate the problem from the proposed solution, ask open questions before offering options, disagree with evidence, produce assumptions, an alternative, a disconfirming case, coverage and open decisions, pass a fresh-context check where available, and wait for the owner's confirmation before dependent work. Settled local edits stay Light. [Common challenge](../skills/engineering-loop/references/grill.md)

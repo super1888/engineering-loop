@@ -16,13 +16,13 @@ Bound unfinished work by what can be explained, reviewed and verified together, 
 
 ## Diagnosis and correction
 
-For a bug, reproduce the symptom and preserve a regression that distinguishes it. Form a falsifiable hypothesis, run the smallest useful experiment, then modify the relevant cause. Classify code, configuration, environment, dependency, test, and misunderstood-requirement failures before choosing a fix. A number of failed attempts is not proof of bad architecture.
+For a bug, reproduce the symptom and preserve a regression that distinguishes it. Form a falsifiable hypothesis, run the smallest useful experiment, then modify the relevant cause. Classify code, configuration, environment, dependency, test, and misunderstood-requirement failures before choosing a fix. A number of failed attempts is not proof of bad architecture. When an attempt yields no new evidence, change the hypothesis or report the blocker instead of repeating speculative patches.
 
 For a user correction, infer its intended scope from the request and existing decisions; clarify only consequential ambiguity. Check relevant callers or analogous implementations for the same demonstrated cause, fix applicable occurrences within scope, and report material remaining ones. Do not turn a local preference into a global rule or expand this check into a repository audit. If the correction should govern future tasks, use [learning.md](../learning.md) to place it in a durable implementation, check or discoverable convention rather than relying on conversation memory.
 
 ## Checks and evidence
 
-For testable behavior changes, use red → green → refactor where it provides useful feedback. Derive expected behavior from an accepted example, independent calculation, or contract. Avoid tests that simply repeat the implementation. A copy-only edit may need consistency checks rather than unit tests.
+For testable behavior changes, use red → green → refactor where it provides useful feedback. Derive expected behavior from an accepted example, independent calculation, or contract. Avoid tests that simply repeat the implementation. Keep acceptance independent of the implementation: do not lower a threshold, delete a failing assertion or change an expectation to make a check pass. A legitimate correction records its reason and the intent it preserves. A copy-only edit may need consistency checks rather than unit tests.
 
 Explain justified redundancy by the failure it addresses and its maintenance cost. Preserve required recovery and authorization behavior when simplifying. Reconcile source inventories for broad replacements. Raise material contract or data-impact changes as concrete deltas; continue authorized work elsewhere.
 

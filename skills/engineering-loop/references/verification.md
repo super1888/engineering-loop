@@ -30,7 +30,7 @@ For delegated verification, provide the effective agreement and independent exam
 
 Use an explicitly configured test environment for real boundaries. Do not treat a mock database, preview page, or synthetic model as proof of real integration. For AI output quality, separate structure from semantics; use independently specified examples and human domain review where needed. Keep evaluation samples/version changes traceable, and retain cases not used for tuning when practical.
 
-When checks fail, classify implementation regression, accepted contract change, fixture weakness, timing/resource instability, or environment/command failure. Preserve the intended assertion. Do not silently update snapshots, remove cases, or broaden tolerances to fit an incorrect result.
+When an attempt yields no new evidence, change the hypothesis or report the blocker instead of repeating it. When checks fail, classify implementation regression, accepted contract change, fixture weakness, timing/resource instability, or environment/command failure. Preserve the intended assertion. Do not silently update snapshots, remove cases, lower thresholds or broaden tolerances to fit an incorrect result. A legitimate correction records its reason and the intent it preserves.
 
 When one shell invocation runs several native commands, a later success can hide an earlier failed prerequisite. Check each required native result before dependent writes or verification launches; stop those dependent steps on an unexpected failure. In PowerShell, inspect `$LASTEXITCODE` immediately; `$ErrorActionPreference = 'Stop'` alone does not establish native-command success. An intentional negative check may continue when its actual result matches the expected failure. If an apply helper failed, confirm the intended artifact exists before running final verification; passing checks against the unapplied baseline do not verify the change.
 
@@ -38,4 +38,6 @@ When implementation conforms but observed use fails the intended task, record th
 
 For an enumerable migration or replacement, compare the source set with covered/excluded/remaining items. State limits for claims that cannot be enumerated.
 
-Record command, exit/result, scope, relevant revision or dirty-file snapshot, environment/configuration identity, and limitations without secrets. Report passed, failed, and unrun separately. Related changes invalidate related evidence; an old success count does not establish the new behavior.
+Record command, exit/result, scope, relevant revision or dirty-file snapshot, environment/configuration identity, and limitations without secrets. Report passed, failed, and unrun separately. Bind evidence to the code, configuration, data and environment it covers, and reuse it while those are unchanged. Related changes invalidate related evidence; an old success count does not establish the new behavior. A PMS status or a tidy task list is not delivery proof.
+
+When a finite result and its required checks are complete, report results, evidence and limits, then stop. An explicitly ongoing goal continues within its authorization.
