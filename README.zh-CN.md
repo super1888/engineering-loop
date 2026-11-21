@@ -150,6 +150,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 ## 如何逐步验证
 
+未发布的 v0.1.34 澄清 Spring 事务代理的实际行为，保留团队仅在 `public` 方法使用 `@Transactional` 的约定。同时修正了 GitHub Ubuntu 作业中因 `/tmp` 路径触发失败的评测记录断言。 [Java / Spring 规范](skills/engineering-loop/references/development/stacks/java-spring.md) · [复现记录](evals/TOOLING.md#preserve-unrelated-path-prefixes)
+
 未发布的 v0.1.33 将入口收敛为路由：连接门禁、六阶段表、支持文件表和五条始终生效的规则，维护上限由 7 KB 降到 4 KB。阶段和支持指南里已有的通用守则从入口删除，只在入口出现过的几句移入开发共通基础、验证和恢复指南。规则本身不打算改变；移出入口的规则只在对应指南被读取时生效，这一影响尚未测量。新增用例尚未运行。 [入口](skills/engineering-loop/SKILL.md) · [用例](evals/fixtures/slim-entry/TASK.md)
 
 未发布的 v0.1.32 将公共拷问分为两档。01 和 02 的交付物使用完整档，要求五项书面产出、可用时的全新上下文复核，以及负责人确认后才开展依赖工作；已确定的局部修改保持轻量档。同时加入从团队现有服务和产品中提取的 Java/Spring、Python/FastAPI 和 React 前端规范，状态为部分可用，团队尚未统一的选择保持待定，阶段模板未改动。新增用例尚未运行。 [公共拷问](skills/engineering-loop/references/grill.md) · [技术栈绑定](skills/engineering-loop/references/development/stacks.md) · [用例](evals/fixtures/challenge-depth-and-stack-rules/TASK.md)

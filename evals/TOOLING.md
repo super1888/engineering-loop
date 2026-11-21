@@ -24,6 +24,8 @@ A root `.venv` dependency README containing an upstream-only relative link, or a
 
 A summary containing another absolute path formed as `/archive` plus a known trial root was previously changed inside that unrelated path. The normalizer now checks a left boundary as well as the existing sibling suffix boundary. Controls preserve common embedded prefixes while retaining standalone roots, punctuation and aliases. This is scoped text normalization, not an exhaustive parser or confidentiality guarantee. See [path controls](../tests/test_trial_paths.py).
 
+On 2026-11-21, the Ubuntu job for `ccc6ada` failed because the recorder test built its expected output by replacing every `/tmp` substring in `/tmp/tmp…/workspace`. The recorder correctly kept the temporary directory name. Setting `TMPDIR=/tmp` on macOS with Python 3.12.16 and Node 24.22.2 reproduced the failure. Both recorder tests now build the exact expected summary from the relative workspace path. Both tests and the standalone and embedded-path controls passed under `/tmp`. [Ubuntu job](https://github.com/super1888/engineering-loop/actions/runs/44889806472/job/136802974432) · [Routing recorder test](../tests/test_routing_oracle.py) · [Convention recorder test](../tests/test_convention_recorder.py)
+
 ## Packaged input takes precedence over local-output names
 
 On Python 3.12.16, a temporary repository containing a broken Markdown link and malformed JSON under `skills/engineering-loop/dist` passed distribution checks; the offline archive included both unchecked files. The same files outside a normally excluded directory failed validation. The checker applied repository-local output exclusions to published input.

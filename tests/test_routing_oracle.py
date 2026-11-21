@@ -492,8 +492,9 @@ class RoutingOracleTests(unittest.TestCase):
             before = record(Path(trial.name), output, "full-A")
         finally:
             os.chdir(previous)
+        relative_workspace = self.workspace.relative_to(trial.parent)
         self.assertEqual((output / "full-A-final.txt").read_text(encoding="utf-8"),
-                         "A stable table. " + str(self.workspace).replace(str(trial.parent), "<trial-root>") + "\n")
+                         f"A stable table. <trial-root>{os.sep}{relative_workspace}\n")
         patch = (output / "full-A.patch").read_text(encoding="utf-8")
         subprocess.run(["git", "add", "backend/orders.py", "ui/order-form.mjs", tracked_name],
                        cwd=self.workspace, check=True, capture_output=True)

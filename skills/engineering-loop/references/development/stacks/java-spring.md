@@ -28,7 +28,7 @@ Several rules deliberately differ from common Spring advice. Follow them; do not
 
 ## Transactions and concurrency (B4)
 
-- Put `@Transactional` only on public methods. A non-public method gets no proxy and silently runs without a transaction.
+- As a team convention, put `@Transactional` only on public methods. In Spring 6 and later, class-based proxies can also advise protected and package-private methods by default. Interface-based proxies require a public method declared in the proxied interface. In proxy mode, transaction advice applies only to calls through the proxy. [Spring transaction method visibility](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html#transaction-declarative-annotations-method-visibility)
 - Keep model, OCR, object-storage, mail and broker calls out of a database transaction. Wrap the short write segments around the remote call in `TransactionTemplate`. A remote client call inside a `@Transactional` manager is the sign of a miss.
 - A persistent `version` field carries `@Version`, one per hierarchy. Turn an affected-row count other than 1 into a conflict response; never overwrite silently. See [R5](../rules/concurrent-edits.md).
 - Scope idempotency to actor, key, action and request fingerprint. The same key with a different payload is a conflict. Write the reservation in the business transaction. See [R4](../rules/async-idempotency.md).

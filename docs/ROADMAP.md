@@ -1,5 +1,10 @@
 # Roadmap
 
+## v0.1.34 · unreleased transaction and test corrections
+
+- Document Spring 6+ class-based and interface-based transaction proxy behavior. Retain the team's public-method convention. [Java / Spring rules](../skills/engineering-loop/references/development/stacks/java-spring.md)
+- Build recorder test expectations from the relative workspace path to preserve temporary-directory names on Ubuntu. [Reproduction](../evals/TOOLING.md#preserve-unrelated-path-prefixes)
+
 ## v0.1.33 · unreleased routing-only entrypoint
 
 - Reduce the [entrypoint](../skills/engineering-loop/SKILL.md) from 6,921 to under 4,000 bytes and lower its maintenance budget from 7 KB to 4 KB. It keeps the connection gate, stage location, the six-stage table, a support table and five always-on rules: project instructions are preserved, a stage is not authority, interrupted work resumes, checks are not weakened to pass, and only checked results are claimed.

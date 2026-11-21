@@ -419,8 +419,9 @@ class ConventionRecorderTests(unittest.TestCase):
                 unchanged = run_result(Path(trial.name), output, "amount-A")
             finally:
                 os.chdir(previous)
+            relative_workspace = workspace.relative_to(trial.parent)
             self.assertEqual((output / "amount-A-final.txt").read_text(encoding="utf-8"),
-                             "A stable table. " + str(workspace).replace(str(trial.parent), "<trial-root>") + "\n")
+                             f"A stable table. <trial-root>{os.sep}{relative_workspace}\n")
             self.assertEqual(unchanged["changed_files"], [])
             self.assertEqual((output / "amount-A.patch").read_text(encoding="utf-8"), "")
 
