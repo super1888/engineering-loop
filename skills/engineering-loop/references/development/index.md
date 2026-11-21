@@ -12,7 +12,7 @@ Investigate available facts before asking. Ask only a remaining outcome, busines
 
 1. Read the [shared core](core.md) for a complete development slice. Do not restart project discovery or an already-settled interview.
 2. Select the affected areas and scenario IDs below. Follow each selected scenario's **Read** link and read that execution body before implementation, even for a settled copy-only task. The catalog's summaries/checks are discovery metadata, not a substitute for the body. Reuse valid prior body reads; do not preload unrelated areas or bodies. Multiple areas are valid only when their changed behavior or contracts need them.
-3. Match the actual module's stack and project rules. Read [stack bindings](stacks.md) only when locating or filling a specialist convention; a framework name alone does not supply a standard.
+3. Match the actual module's stack and project rules. When [stack bindings](stacks.md) list a team rule file for that stack, read it before implementing a change its rules can affect (a settled copy-only edit needs none); effective project instructions win where they differ, and its open decisions are not settled defaults. A stack without a team rule file supplies no standard from its name alone.
 4. Check the short [risk index](risks.md) against the actual changes and downstream effects. Read every triggered rule, including a relevant rule outside the apparent frontend/backend label. Scenario suggestions are not an exhaustive risk checklist.
 5. For component/style reuse, consult [template matching](templates.md) only when relevant. Read selected bodies and necessary related checks, then apply the stage's common challenge before execution. New boundaries need affected questions, not another full interview.
 

@@ -14,7 +14,7 @@ Read [requirements.md](../requirements.md) for the applicable product hypothesis
 
 For requirement intake, establish whether this is a new product or a change to an existing system. Check current behavior and retained boundaries for an existing system. If the distinction changes the investigation and remains unclear after checking available evidence, clarify it early.
 
-Apply the [common challenge](../grill.md) to the current problem and success assumption. Investigate available facts before asking; ask only unresolved choices that change the next slice's behavior, acceptance or authority. Preserve accepted answers.
+Apply the [common challenge](../grill.md) at **Full depth** to a requirements deliverable: challenge whether the stated request covers the real problem before accepting its solution, and produce the written outputs, independent check and confirmation gate. A bounded fact-finding question or an accepted local change stays Light. Investigate available facts before asking; ask only unresolved choices that change the next slice's behavior, acceptance or authority. Preserve accepted answers.
 
 ## PMS
 

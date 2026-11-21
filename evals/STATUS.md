@@ -27,6 +27,8 @@ Read this index to select evidence, then open only the relevant report. It summa
 
 ## Tool controls and remaining gaps
 
+The v0.1.32 [challenge-depth and stack-rule specification](fixtures/challenge-depth-and-stack-rules/TASK.md) covers Full and Light challenge depth, pushback without new facts, hosts without an independent reviewer, and the application and limits of the extracted Java/Spring, Python/FastAPI and frontend team rules. All ten cases are unrun; no reduction in agreement bias or rework has been measured.
+
 v0.1.31 refines the unrun operations handoff case T2 to check that stage 06 records production defects and references the original stage 04 pre-release acceptance record and affected version. [Stage template specification](fixtures/stage-templates/TASK.md)
 
 The v0.1.30 [stage template specification](fixtures/stage-templates/TASK.md) adds unrun controls for both requirements situations, direct operations handoff and reuse of an existing short record. The kickoff and general routing cases retain their own acceptance and evidence history.

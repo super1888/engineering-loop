@@ -3,7 +3,7 @@ name: engineering-loop
 description: Team delivery entrypoint with a required PMS MCP connection. Identify the current task's project stage, load its guidance and relevant specialist details, then coordinate execution and acceptance. Use for team delivery, task management, uncertain project recovery, or explicit invocation. Standalone explanations outside this workflow stay lightweight.
 license: MIT
 metadata:
-  version: "0.1.31"
+  version: "0.1.32"
 ---
 
 # Engineering Loop

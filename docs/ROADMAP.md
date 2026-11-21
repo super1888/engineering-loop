@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.1.32 · unreleased challenge depth and extracted team stack rules
+
+- Give the common challenge two depths. Stage 01 and 02 deliverables use Full depth: separate the problem from the proposed solution, ask open questions before offering options, disagree with evidence, produce assumptions, an alternative, a disconfirming case, coverage and open decisions, pass a fresh-context check where available, and wait for the owner's confirmation before dependent work. Settled local edits stay Light. [Common challenge](../skills/engineering-loop/references/grill.md)
+- Add team rule files extracted from the team's existing services and products for [Java / Spring](../skills/engineering-loop/references/development/stacks/java-spring.md), [Python / FastAPI](../skills/engineering-loop/references/development/stacks/python-fastapi.md) and [React frontends](../skills/engineering-loop/references/development/stacks/frontend-team.md). They are partial: confirmation as the shared standard is pending and each lists choices the team has not settled. The development router reads the matching file before implementation; project instructions win where they differ.
+- Stage templates are unchanged. The shared component and style catalog remains unavailable.
+- The new cases are unrun. [Challenge and stack-rule scenarios](../evals/fixtures/challenge-depth-and-stack-rules/TASK.md) · [Evidence index](../evals/STATUS.md)
+
 ## v0.1.31 · unreleased acceptance and production-defect handoff
 
 - Keep the original pre-release defect and test acceptance record in stage 04. Track production defects in stage 06 and reference that record and the affected version. Reuse the project's existing formats and locations. [Acceptance template](../skills/engineering-loop/templates/acceptance-record.md) · [Operations template](../skills/engineering-loop/templates/operations-record.md) · [Unrun template routing cases](../evals/fixtures/stage-templates/TASK.md)

@@ -195,6 +195,8 @@ The [requirements guide](skills/engineering-loop/references/requirements.md) dis
 
 ## Validation and contribution
 
+Unreleased v0.1.32 gives the common challenge a Full depth for stage 01 and 02 deliverables, with required written outputs, a fresh-context check where available and an owner confirmation gate, and keeps settled local edits Light. It also adds partial team rule files extracted from existing team services and products for Java/Spring, Python/FastAPI and React frontends; open team decisions stay open and stage templates are unchanged. The new cases are unrun. [Common challenge](skills/engineering-loop/references/grill.md) · [Stack bindings](skills/engineering-loop/references/development/stacks.md) · [Scenarios](evals/fixtures/challenge-depth-and-stack-rules/TASK.md)
+
 Unreleased v0.1.31 records pre-release defect tracking and acceptance in stage 04. Stage 06 tracks production defects and references that same record and the affected version. Use the project's existing formats and locations. The refined handoff case remains unrun. [Acceptance template](skills/engineering-loop/templates/acceptance-record.md) · [Operations template](skills/engineering-loop/templates/operations-record.md) · [Template routing cases](evals/fixtures/stage-templates/TASK.md)
 
 Unreleased v0.1.30 provides on-demand templates for all six stages. The specification covers the two requirements cases, direct operations entry and an existing concise record. The new behavioral cases remain unrun. [Stage template index](skills/engineering-loop/templates/index.md) · [Template routing cases](evals/fixtures/stage-templates/TASK.md) · [Evidence index](evals/STATUS.md)

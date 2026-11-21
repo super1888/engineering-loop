@@ -18,7 +18,7 @@ Reuse the relevant accepted behavior, boundaries, current architecture and desig
 - For kickoff materials, module assignments, delivery estimates or turning kickoff decisions into PMS tasks, read [delivery-planning.md](../delivery-planning.md).
 - For delegated ownership, dependencies or integrated planning, read [collaboration.md](../collaboration.md) when those boundaries apply.
 
-Apply the [common challenge](../grill.md) to the design. On the architecture route, actively test the recommendation against a material counterexample or failure case even when project evidence already answers the relevant questions. Use facts, representative content or a bounded experiment. Ask only for decisions that remain open and matter to this slice.
+Apply the [common challenge](../grill.md) at **Full depth** to a design, architecture or delivery-plan deliverable: challenge whether the proposed solution and task split meet the confirmed need with the least that works, and produce the written outputs, independent check and confirmation gate before dependent development or task creation. A known implementation detail stays Light. On the architecture route, actively test the recommendation against a material counterexample or failure case even when project evidence already answers the relevant questions. Use facts, representative content or a bounded experiment. Ask only for decisions that remain open and matter to this slice.
 
 ## PMS
 

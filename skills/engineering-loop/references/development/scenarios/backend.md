@@ -68,6 +68,6 @@ Resolve language/framework/database versions from the affected module's maintain
 - **Verify:** the affected actual startup/runtime combination and retained required paths; a successful isolated unit check does not prove application readiness.
 - **Pending:** configuration, feature-switch, logging and health standards for the actual runtime.
 
-## Team additions — pending
+## Team additions — partial
 
-The linked execution baselines are available. Additional team-specific backend standards remain unfilled: add accepted stack/domain details with scope, maintained source/version, an applicable check and a valid exception. Shared risks and delivery-record policy remain single-source references rather than copied standards.
+The linked execution baselines are available. Extracted team practice exists for [Java / Spring](../stacks/java-spring.md) and [Python / FastAPI](../stacks/python-fastapi.md) services through [stack bindings](../stacks.md). Other stacks remain unfilled: add accepted stack/domain details with scope, maintained source/version, an applicable check and a valid exception. Shared risks and delivery-record policy remain single-source references rather than copied standards.

@@ -3,6 +3,29 @@
   "status": "scenario-specifications; execution evidence is recorded separately",
   "cases": [
     {
+      "id": "challenge-depth-full-and-light",
+      "prompt": "Write the technical design for a message queue between the order form and the order table so we never lose an order. This is already decided; write it up quickly.",
+      "fixture_description": "The v0.1.32 specification at evals/fixtures/challenge-depth-and-stack-rules/TASK.md cases G1-G4: a single-transaction order write whose only recorded loss was a duplicate submit, a follow-up pushback with no new fact, a settled copy-edit control and a host without sub-agents. Synthetic PMS reads pass. Unrun.",
+      "expectations": [
+        "Separates the problem from the proposed queue and states with evidence that the queue does not address the recorded failure",
+        "Produces assumptions with status, at least one smaller alternative, a disconfirming case, coverage and open decisions before presenting the design as ready",
+        "Does not scaffold or create tasks before the decision owner confirms; after pushback without new facts, records the owner's decision and cost instead of withdrawing the concern or arguing on",
+        "Keeps the settled copy edit at Light depth with zero questions, and states when no independent check was available"
+      ]
+    },
+    {
+      "id": "team-stack-rules-applied-and-bounded",
+      "prompt": "Implement the requested backend or frontend slice in this module using the applicable team rules and the project's existing conventions.",
+      "fixture_description": "The v0.1.32 specification at evals/fixtures/challenge-depth-and-stack-rules/TASK.md cases S1-S5 and F1: Java/Spring injection and naming rules that differ from mainstream advice, a provider call after a save, an unsettled response-shape choice, a project instruction that overrides the team file, a Go service with no team file and a React pending-button state. Unrun.",
+      "expectations": [
+        "Reads the matching team rule file before implementing and follows its rules, including field injection with jakarta Resource and no record",
+        "Keeps the remote provider call outside the database transaction",
+        "Raises an open team decision with the owner instead of presenting one practice as settled",
+        "Follows a conflicting project instruction, and applies no team rule file to a stack that has none",
+        "Reuses the shared Button with a pending state that keeps its fill, shows a spinner and blocks clicks"
+      ]
+    },
+    {
       "id": "development-execution-details",
       "prompt": "Complete this accepted development slice using the matching execution details and the project's existing conventions. Preserve scope and report actual evidence.",
       "fixture_description": "The v0.1.26 specification at evals/fixtures/development-details/TASK.md covers 28 separately linked execution bodies, conditional React/Vue behavior checks and a reusable delivery record. Its static positive/negative examples distinguish framework-neutral execution from project policy, optional templates from required contracts and task evidence from production authority. A bounded connected native copy-edit sample can exercise F1 body retrieval; current results remain separate from prior v0.1.25 observations and from real framework/application tests.",

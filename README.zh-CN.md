@@ -150,6 +150,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 ## 如何逐步验证
 
+未发布的 v0.1.32 将公共拷问分为两档。01 和 02 的交付物使用完整档，要求五项书面产出、可用时的全新上下文复核，以及负责人确认后才开展依赖工作；已确定的局部修改保持轻量档。同时加入从团队现有服务和产品中提取的 Java/Spring、Python/FastAPI 和 React 前端规范，状态为部分可用，团队尚未统一的选择保持待定，阶段模板未改动。新增用例尚未运行。 [公共拷问](skills/engineering-loop/references/grill.md) · [技术栈绑定](skills/engineering-loop/references/development/stacks.md) · [用例](evals/fixtures/challenge-depth-and-stack-rules/TASK.md)
+
 未发布的 v0.1.31 将发布前的《缺陷跟踪与测试验收记录》归入 04。06 跟踪线上缺陷时引用同一份原记录及受影响版本，沿用项目已有格式与存放位置。调整后的交接用例尚未运行。 [测试验收模板](skills/engineering-loop/templates/acceptance-record.md) · [持续运维模板](skills/engineering-loop/templates/operations-record.md) · [模板路由用例](evals/fixtures/stage-templates/TASK.md)
 
 未发布的 v0.1.30 为六阶段提供按需使用的文档及交接模板。新增用例覆盖两类需求、直接进入运维及沿用已有简短记录，目前均未运行。 [阶段模板索引](skills/engineering-loop/templates/index.md) · [模板路由用例](evals/fixtures/stage-templates/TASK.md) · [证据索引](evals/STATUS.md)

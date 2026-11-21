@@ -2,9 +2,9 @@
 
 This independently written draft was informed by public ideas in:
 
-- [Matt Pocock's skills](https://github.com/mattpocock/skills), including [grill-me](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) and [grilling](https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md) (MIT): dependency-aware questioning and scoped learning. The built-in route challenge is independently written; no upstream skill is installed or bundled.
+- [Matt Pocock's skills](https://github.com/mattpocock/skills), including [grill-me](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) and [grilling](https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md) (MIT): dependency-aware questioning, delegated fact lookup and scoped learning. The built-in route challenge is independently written; no upstream skill is installed or bundled.
 - [Addy Osmani's agent-skills](https://github.com/addyosmani/agent-skills): executable constraints and evaluating skill behavior.
-- [Superpowers](https://github.com/obra/superpowers): diagnostic discipline and verification before completion.
+- [Superpowers](https://github.com/obra/superpowers): diagnostic discipline, verification before completion, a confirmation gate before building and reviewers that do not receive the author's reasoning.
 - [OpenSpec](https://github.com/Fission-AI/OpenSpec): separating effective specifications from changes.
 - [GSD Core](https://github.com/open-gsd/gsd-core): recoverable task state and end-to-end wiring.
 - [Project-vibe-spec](https://github.com/coderlishang/Project-vibe-spec) and [ai-rd-skills](https://github.com/535803710/ai-rd-skills): project-aware documentation and practical requirement clarification.

@@ -68,6 +68,6 @@ Identify the affected module's framework, component library and versions from ma
 - **Verify:** the actual affected build/runtime path and a discriminating performance/compatibility observation, not package metadata alone.
 - **Pending:** bundler, resource, performance-budget and browser-support standards supplied by the project.
 
-## Team additions — pending
+## Team additions — partial
 
-No additional team-specific frontend standard is supplied here yet. Add accepted details with applicability, source/version, a check and a legitimate nearby exception; keep general routing and shared risks in their existing homes.
+Extracted team practice for React products is in [team frontend rules](../stacks/frontend-team.md); the shared component and style catalog is still unavailable. Add further accepted details with applicability, source/version, a check and a legitimate nearby exception; keep general routing and shared risks in their existing homes.

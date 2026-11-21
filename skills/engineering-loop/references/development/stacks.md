@@ -1,6 +1,6 @@
 # Bind actual module stacks to maintained conventions
 
-Read when a selected scenario needs stack-specific guidance or when maintaining that binding. Discovery and conditional React/Vue behavior checks are available; team-specific choices below remain **pending** unless the selected project supplies them. These checks do not introduce a new cross-project framework, package or architecture standard.
+Read when a selected scenario's change can be affected by stack-specific rules, or when maintaining a binding. Discovery, conditional React/Vue behavior checks and partial team rule files for some stacks are available; other team-specific choices remain **pending** unless the selected project supplies them. A team rule file records extracted team practice awaiting confirmation; nothing here authorizes a new framework, package or upgrade.
 
 ## Discover and select
 
@@ -11,11 +11,9 @@ Read when a selected scenario needs stack-specific guidance or when maintaining 
 
 ## React
 
-Read [React behavior checks](stacks/react.md) only when an affected React state/effect boundary is involved. Use the installed runtime/framework and its maintained project rules; a copy-only edit does not need this body. Team-specific conventions remain pending.
+Read [React behavior checks](stacks/react.md) only when an affected React state/effect boundary is involved. Use the installed runtime/framework and its maintained project rules; a copy-only edit does not need this body.
 
-Team-specific conventions:
-
-<!-- Reserved for an accepted reference, scope/version, representative example and owning check. -->
+Team-specific conventions: read [team frontend rules](stacks/frontend-team.md) before implementing a component, style, data-handling or test change in a React module. A settled copy-only edit does not need them. They cover components and styles, antd 6, data handling and testing, and list the product choices that remain open. They are partial: extracted from the team's products and awaiting confirmation as the shared standard.
 
 ## Vue
 
@@ -27,11 +25,14 @@ Team-specific conventions:
 
 ## Backend stacks
 
-Status: pending. Bind the actual module's language, framework and persistence stack; no default is supplied.
+Status: partial. Bind the actual module's language, framework and persistence stack. Read the matching team rule file before implementing a change its rules can affect:
 
-Team-specific conventions:
+| Module stack | Team rules | Basis |
+|---|---|---|
+| Java / Spring with MyBatis-Plus | [java-spring.md](stacks/java-spring.md) | Two team services; mostly build-enforced in one |
+| Python / FastAPI with SQLAlchemy | [python-fastapi.md](stacks/python-fastapi.md) | One team service |
 
-<!-- Reserved for accepted module/stack bindings; do not prefill assumed Java, Python, Go or ORM rules. -->
+These files hold extracted team practice, not assumed language rules, and each lists the choices that remain open. Another stack has no team rule file yet: use the project's maintained conventions and do not borrow rules from a different stack.
 
 ## Engineering and other stacks
 
