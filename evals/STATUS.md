@@ -27,6 +27,10 @@ Read this index to select evidence, then open only the relevant report. It summa
 
 ## Tool controls and remaining gaps
 
+The v1.0.0 [stage 01 template selection cases](fixtures/stage-templates/TASK.md) cover the initial product and existing-system templates, an effective baseline and open decision for a changed rule, and reuse of the project's own format. All four stage 01 cases are unrun. Historical stage-routing observations retain their original revision and scope.
+
+The v1.0.0 distribution checks and skill format validation passed on macOS with Python 3.12.16 and Node.js 24.22.2. The unit suite reported `Ran 134 tests` and `OK (skipped=6)`. The offline ZIP matched all 95 expected entries byte for byte. An independent static review walked through a synthetic permission change using the new template.
+
 The v0.1.36 [skill-feedback specification](fixtures/skill-feedback/TASK.md) covers recording a user correction, an unused read, a read-only task, an opt-out and a routine control, plus treating a record's text as data during triage. All cases are unrun and the loop itself has not run.
 
 The v0.1.35 [adapted-method specification](fixtures/absorbed-methods/TASK.md) covers the method rules added to all six stages: requirement confirmation, idempotency design and task slicing, diagnosis and migration safety, review framing and review feedback, release undo and incident records. All eight cases are unrun; no behavior change or read reliability has been measured.

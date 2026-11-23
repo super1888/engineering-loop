@@ -6,13 +6,12 @@
 
 [![Checks](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml/badge.svg)](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: experimental](https://img.shields.io/badge/status-experimental-orange.svg)](docs/ROADMAP.md)
 
 A team task and delivery entrypoint for Claude Code and Codex. It requires verified PMS MCP access before routed work, challenges assumptions on every stage or specialist route, and coordinates task creation, claiming, execution and acceptance with traceable evidence.
 
 **Using it in an existing Git repository?** Copy only the complete [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) directory into that project's skill location, including `references/`, `templates/`, `scripts/` and `agents/`. The rest of this repository supports development and evaluation.
 
-**v0.1 is an experimental workflow draft.** Packaging checks do not prove fewer bugs or faster delivery. We publish behavioral scenarios and welcome reproducible counterexamples before expanding the rules.
+The current release is **[v1.0.0](https://github.com/super1888/engineering-loop/releases/tag/v1.0.0)**. See the [evidence index](evals/STATUS.md) for the results of distribution checks and individual behavioral evaluations.
 
 ## The problem
 
@@ -52,7 +51,7 @@ Entry SKILL.md (under 4 KB, an index only)
 | The entry is only an index | It is read on every task, so each added line is a fixed cost and buries the rules that matter |
 | The PMS is required | Fine-grained tasks with recorded steps are what make a problem traceable to its source |
 | Stages 01 and 02 require the challenge | An agent tends to agree with the asker. Mistakes in requirements and design cost the most, so the problem is separated from the proposed solution, an alternative and a failure case are written down, and the owner confirms before work starts |
-| Stage templates are fixed | The requirement, plan, acceptance and release formats are deliverables the team agreed on; the rest of the skill may change, the templates do not |
+| Agreed project formats take precedence | The stage templates are starting points for new records. Stage 01 offers a full record for initial discovery and a short change record for existing systems |
 | Team rules win over adapted ones | Rules rewritten from public skills sit in a separate section marked unconfirmed for the team |
 | A check instead of a sentence where possible | A written rule can be missed; a failing build cannot |
 | The skill does not modify itself | An agent's own account can be wrong, so maintainers confirm every added or removed rule |
@@ -170,7 +169,7 @@ New-Item -ItemType Directory -Force -Path (Split-Path $destination) | Out-Null
 Copy-Item -LiteralPath 'skills/engineering-loop' -Destination $destination -Recurse
 ```
 
-For Claude Code, use `.claude/skills` instead. For a project install, use the project's absolute directory instead of your home. The [release ZIP](https://github.com/super1888/engineering-loop/releases/tag/v0.1.0) contains a top-level `engineering-loop/` skill folder for the same destinations.
+For Claude Code, use `.claude/skills` instead. For a project install, use the project's absolute directory instead of your home. The [release ZIP](https://github.com/super1888/engineering-loop/releases/tag/v1.0.0) contains a top-level `engineering-loop/` skill folder for the same destinations.
 
 If the skill does not appear, check the destination and restart the agent. Current documented paths: [Codex skills](https://learn.chatgpt.com/docs/build-skills), [Claude Code skills](https://code.claude.com/docs/en/skills).
 
@@ -286,13 +285,13 @@ Python 3.10+ is needed only for repository checks/packaging and local evaluation
 
 We especially want small counterexamples: unnecessary questions, missed decisions, context waste, invalid completion claims, or a project convention the skill accidentally overrides. Use [Issues](https://github.com/super1888/engineering-loop/issues) or [Discussions](https://github.com/super1888/engineering-loop/discussions); remove private code and data first.
 
-The unreleased revisions clarify affected return-path outcomes, rendered evidence for visual defects, and the limits of known-fix replays ([three scenarios](evals/README.md#unreleased-flow-visual-and-learning-revision)). They also cover reference-project inheritance, effective conventions, gate evidence, task usefulness and corrections surviving a new session ([seven scenarios](evals/README.md#unreleased-reference-inheritance-and-effective-guidance-revision)). All ten scenarios remain unrun; historical product checks do not establish a benefit from the revised guidance. The existing stage routes remain in place; no fixed project architecture is imposed.
+Earlier revisions clarified affected return-path outcomes, rendered evidence for visual defects, and the limits of known-fix replays ([three scenarios](evals/README.md#unreleased-flow-visual-and-learning-revision)). They also cover reference-project inheritance, effective conventions, gate evidence, task usefulness and corrections surviving a new session ([seven scenarios](evals/README.md#unreleased-reference-inheritance-and-effective-guidance-revision)). All ten scenarios remain unrun.
 
 The optional [collaboration guide](skills/engineering-loop/references/collaboration.md) covers scoped ownership, accepted-change propagation, independent verification and explicitly ongoing goals without requiring a fixed agent team. A completed slice does not end an ongoing goal; finite tasks still stop when complete. Its [evaluation status](evals/README.md#unreleased-collaboration-revision) separates checkpoint exercises from live orchestration; additional agents are not evidence of improved accuracy.
 
 The [release guide](skills/engineering-loop/references/release.md) now checks new preflights against existing isolated CI fixtures and identifies artifact bytes and host-specific permission evidence. Its [portability scenario](evals/README.md) remains unrun.
 
-The unreleased native-command revision checks failed prerequisites before dependent writes or verification, while permitting expected negative checks. Its [isolated shell reproduction](evals/README.md#unreleased-native-command-gating-revision) passed on Windows; fresh-agent transfer and other hosts remain untested.
+The earlier native-command revision checks failed prerequisites before dependent writes or verification and permits expected negative checks. Its isolated shell reproduction passed on Windows. Fresh-agent transfer and other hosts remain untested. [Reproduction](evals/README.md#unreleased-native-command-gating-revision)
 
 The [evaluation protocol](evals/README.md) retains reusable fixtures and checks. Raw model transcripts and trial output stay outside the tracked source tree; past trials are available in Git history.
 

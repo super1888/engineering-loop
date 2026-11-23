@@ -8,7 +8,7 @@
 
 **在已有 Git 仓库使用？** 只需将完整的 [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) 目录复制到该项目的 skill 安装位置，保留其中的 `references/`、`templates/`、`scripts/` 和 `agents/`。本仓库其余内容用于开发和评估。
 
-**当前 v0.1 是实验性初版。** 已执行的包装与安装检查不等于证明能减少 bug 或提高开发速度；行为评估方案公开，效果需要实际项目验证。
+当前正式版本为 **[v1.0.0](https://github.com/super1888/engineering-loop/releases/tag/v1.0.0)**。发行检查和各项行为评测的结果见[证据索引](evals/STATUS.md)。
 
 ## 解决什么问题
 
@@ -46,7 +46,7 @@
 | 入口只做索引 | 入口每次都会被读到，写得越多，每个任务的固定成本越高，重要规则越容易被淹没 |
 | PMS 必选 | 任务拆得细、每步有记录，出了问题才能追溯到源头 |
 | 01 和 02 强制拷问 | 智能体倾向于顺着提问者说。需求和方案阶段的错误最贵，所以要求先把问题和方案分开、给出备选和反例，负责人确认后才动手 |
-| 阶段模板固定 | 需求、计划、验收、发布等文档格式是团队约定的交付物，skill 的其他部分可以改，模板不改 |
+| 项目已确认的格式优先 | 阶段模板用于需要新建记录时。01 提供首期调研记录和存量系统的简版变更记录 |
 | 团队规范优先于外来规则 | 从公开 skill 改写来的规则单独成节并标注“团队未确认”，与团队做法不同时以团队为准 |
 | 能做成检查的不写成文字 | 文字规则会被漏读，构建失败不会 |
 | skill 不自动修改自己 | 智能体的自述可能有误，规则的增删由维护者确认 |
@@ -147,7 +147,7 @@ npx skills add super1888/engineering-loop --skill engineering-loop -a claude-cod
 | Codex | `<项目>/.agents/skills/engineering-loop` | `~/.agents/skills/engineering-loop` |
 | Claude Code | `<项目>/.claude/skills/engineering-loop` | `~/.claude/skills/engineering-loop` |
 
-不要只复制 `SKILL.md`，还需要 `references/`、`templates/`、`scripts/` 和 `agents/`。[发行版 ZIP](https://github.com/super1888/engineering-loop/releases/tag/v0.1.0) 解压后包含同名 skill 文件夹。Windows PowerShell 和 macOS/Linux 的具体复制命令见 [英文安装说明](README.md#3-manual-copy--no-package-manager)。已安装时先查看差异，不盲目覆盖本地修改。
+不要只复制 `SKILL.md`，还需要 `references/`、`templates/`、`scripts/` 和 `agents/`。[发行版 ZIP](https://github.com/super1888/engineering-loop/releases/tag/v1.0.0) 解压后包含同名 skill 文件夹。Windows PowerShell 和 macOS/Linux 的具体复制命令见 [英文安装说明](README.md#3-manual-copy--no-package-manager)。已安装时先查看差异，不盲目覆盖本地修改。
 
 更新或卸载优先使用原安装器；手动安装只替换或移除确认过路径的本 skill 文件夹，不操作整个 skills 目录。
 
@@ -243,13 +243,13 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 
 小型黄金集和盲评门禁可用于对照测试；模型试跑不等于人工验收，也不是 CI 中的模型检查。
 
-当前未发布修订明确了受影响返回路径的可见结果、视觉缺陷的实际渲染证据和已知修复回放的结论边界（[三个场景](evals/README.md#unreleased-flow-visual-and-learning-revision)），并补充参考项目继承、有效约定维护、门禁证据、实际使用效果及纠正的跨会话保留（[七个场景](evals/README.md#unreleased-reference-inheritance-and-effective-guidance-revision)）。这十个场景均待执行；历史产品检查不能证明新指导有额外收益。保留现有阶段路由，不强制统一项目架构。
+早期修订明确了受影响返回路径的可见结果、视觉缺陷的实际渲染证据和已知修复回放的结论边界，并补充参考项目继承、有效约定维护、门禁证据、实际使用效果及纠正的跨会话保留。这十个场景均待执行。 [返回路径、视觉与沉淀](evals/README.md#unreleased-flow-visual-and-learning-revision) · [参考继承与有效约定](evals/README.md#unreleased-reference-inheritance-and-effective-guidance-revision)
 
 可选的[协作指南](skills/engineering-loop/references/collaboration.md)涵盖职责归属、已接受变更的同步、独立验证和明确授权的持续目标，不要求固定 agent 团队。完成一个切片不代表持续目标结束；有限任务完成后仍然停止。[评估状态](evals/README.md#unreleased-collaboration-revision)区分检查点练习与真实协作执行；增加 agent 不代表已经提高准确率。
 
 [发布指南](skills/engineering-loop/references/release.md)现要求用已有隔离 CI 夹具验证新增门禁，并核对发行产物的实际字节与平台相关的权限证据。[跨平台场景](evals/README.md)仍未试跑。
 
-未发布的原生命令修订要求在依赖写入或验证前检查失败的前置步骤，同时允许结果符合预期的负向检查。[隔离脚本复现](evals/README.md#unreleased-native-command-gating-revision)已在 Windows 通过；新聊天的指导迁移效果及其他宿主尚未验证。
+早期的原生命令修订要求在依赖写入或验证前检查失败的前置步骤，同时允许结果符合预期的负向检查。隔离脚本复现已在 Windows 通过。新聊天的指导迁移效果及其他宿主尚未验证。 [复现记录](evals/README.md#unreleased-native-command-gating-revision)
 
 [评估协议](evals/README.md)保留可复用的场景、夹具和检查；历史试跑记录可从 Git 历史查阅，不能据此推断普遍收益。
 

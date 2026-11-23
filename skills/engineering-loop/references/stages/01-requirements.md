@@ -24,7 +24,10 @@ Use [pms.md](../pms.md) when a task reference, task operation or tracking policy
 
 Record the agreed outcome, scope and exclusions, representative acceptance examples, evidence and unresolved decisions in the project's existing source of truth. Link an existing research or current-state report when relevant; do not require a new document for every conversation.
 
-For a maintained requirements record, use the project's format first. When a new structured record is needed and the project has no applicable format, adapt the relevant sections of the [requirements record template](../../templates/requirements.md).
+Update or reference a project document or task record that covers the required content. Use the project's format when creating a new record. If a new structured record is needed and the project has no applicable format, choose a template for the current work.
+
+- For **0→1**, use the [initial requirements record](../../templates/requirements.md) for a new product direction that needs discovery and first-slice confirmation.
+- For **1→10**, use the [requirements change record](../../templates/requirements-change.md) for additions or changes to an existing system. Start from the effective baseline, identify what changes and what must still hold, and reuse relevant prior research. Investigate only the gaps that can change the current slice's behavior or acceptance.
 
 ## Exit and return
 

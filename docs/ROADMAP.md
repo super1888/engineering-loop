@@ -1,5 +1,10 @@
 # Roadmap
 
+## v1.0.0 · stage 01 requirements records
+
+- Provide a separate [change record](../skills/engineering-loop/templates/requirements-change.md) for existing systems alongside the [initial requirements record](../skills/engineering-loop/templates/requirements.md). The [stage 01 guide](../skills/engineering-loop/references/stages/01-requirements.md) selects the record based on the current deliverable and gives existing project formats priority.
+- Check template choice, effective baselines and existing-record reuse through the [stage template scenarios](../evals/fixtures/stage-templates/TASK.md). See the [evidence index](../evals/STATUS.md) for execution status.
+
 ## v0.1.36 · unreleased feedback loop from use
 
 - Record problems with the skill's own guidance where they are observed: the user corrected the agent, no guidance covered a choice, a rule conflicted with the project, a file was read and not used, or a defect escaped a rule meant to catch it. Records hold facts and evidence, at most three per task, with no names or secrets. [Feedback rules](../skills/engineering-loop/references/feedback.md)

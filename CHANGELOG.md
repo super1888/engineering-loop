@@ -1,6 +1,12 @@
 # Changelog
 
-Newest first. These versions are unreleased; each entry states what changed, its basis and what remains unverified. See the [roadmap](docs/ROADMAP.md) for direction and the [evidence index](evals/STATUS.md) for executed evaluations. [中文](CHANGELOG.zh-CN.md)
+Newest first. See the [roadmap](docs/ROADMAP.md) for direction and the [evidence index](evals/STATUS.md) for executed evaluations. [中文](CHANGELOG.zh-CN.md)
+
+## v1.0.0 · 2026-11-23
+
+Stage 01 offers an [initial requirements record](skills/engineering-loop/templates/requirements.md) and a [requirements change record](skills/engineering-loop/templates/requirements-change.md) for existing systems. The change record links the effective baseline, intended change, retained behavior, acceptance and regression examples, and the applicable decision. Existing project records and identifiers can carry the same evidence. The new and revised [template-selection scenarios](evals/fixtures/stage-templates/TASK.md) are unrun.
+
+## Earlier development revisions
 
 Unreleased v0.1.36 adds a feedback loop from use. On five observable events the agent records a problem with the skill's own guidance under `.engineering-loop/feedback/` at the project root; the directory ignores itself and never reaches git, and each task adds one line listing the files read. A bundling script packs the records and sends nothing. Collection, triage, promotion, retirement and reporting back are a separate maintainer procedure, and the skill does not modify itself. The README gains design, rule-source and feedback-loop sections, and per-version notes move to this file. The entrypoint stays under 4 KB. The procedure has not run and the new cases are unrun. [Feedback rules](skills/engineering-loop/references/feedback.md) · [Collection and triage (Chinese)](docs/FEEDBACK.zh-CN.md) · [Scenarios](evals/fixtures/skill-feedback/TASK.md)
 

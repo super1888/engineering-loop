@@ -1,6 +1,6 @@
 # Engineering Loop 中文路由与执行手册
 
-适用于仓库中的 **v0.1.36**（2026 年 11 月 23 日核对）。
+适用于仓库中的 **v1.0.0**（2026 年 11 月 23 日核对）。
 
 团队执行的主线是 **核验 PMS MCP 接通 → 按本次交付确定阶段 → 读取相关原文并核对关键假设 → 执行与验证 → 按授权同步任务**。任务所需的专业、技术栈和风险规则随实际变更范围而定。
 
@@ -34,7 +34,7 @@
 
 | 一级阶段 | 当前阶段交付的结果 | 二级主题与现行规范 | 文档或交接模板（按需） |
 |---|---|---|---|
-| [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 调研结论，或已确认的业务行为、范围和验收例子 | 从零建立需求、现有系统新增或变更需求，见[需求指南](../skills/engineering-loop/references/requirements.md) | [需求分析与确认](../skills/engineering-loop/templates/requirements.md) |
+| [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 调研结论，或已确认的业务行为、范围和验收例子 | 从零建立需求、现有系统新增或变更需求，见[需求指南](../skills/engineering-loop/references/requirements.md) | [0→1 首期需求分析与确认](../skills/engineering-loop/templates/requirements.md) · [1→10 需求与修改情况说明](../skills/engineering-loop/templates/requirements-change.md) |
 | [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | 产品规格、技术选型、交互方案或可验收的交付计划 | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构选型与权衡](#架构选型与权衡)、[项目约定与架构继承](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[启动计划与 PMS 规划](#启动计划与-pms-规划)、[协作与分工](../skills/engineering-loop/references/collaboration.md) | [启动计划](../skills/engineering-loop/templates/kickoff-plan.md) |
 | [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | 可验证的实现、修复或集成结果及开发自测证据 | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景的 28 个执行正文](#开发场景与执行正文) | [模块开发与自测记录](../skills/engineering-loop/templates/development-record.md) |
 | [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | 针对指定范围和版本的评审、测试或业务验收结果 | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | [测试方案、用例、缺陷与验收记录](../skills/engineering-loop/templates/acceptance-record.md) |
@@ -78,7 +78,7 @@
 
 | 一级阶段 | 下一级讨论入口 | 待填内容 |
 |---|---|---|
-| [01 需求分析与确认](#01-需求分析与确认) | [先核对阶段交接](#01-的交接条件)，再看从零建立需求、现有系统新增或变更需求 | 两类需求记录的最小内容、确认方式，以及存量变更何时需要单独记录方案 |
+| [01 需求分析与确认](#01-需求分析与确认) | [核对阶段交接](#01-的交接条件)及首期需求、存量变更各自的模板 | 存量变更何时需要单独记录方案 |
 | [02 方案设计与规划](#02-方案设计与规划) | 产品规格、技术与架构方案、交互、启动计划和任务拆分 | 项目特定方案规则、产物格式、子任务粒度和字段 |
 | [03 开发与联调](#03-开发与联调) | 前端 F1–F8、后端 B1–B8、联调 I1–I8、工程能力 E1–E4 | 核对既有正文，按实际缺口补团队细则和验证，讨论进度汇总口径 |
 | [04 测试与验收](#04-测试与验收) | 差异评审、独立测试与集成验证、版本与业务验收 | 版本覆盖核对、业务签认及其他阶段细则 |
@@ -125,12 +125,12 @@ flowchart TD
 
 ### 01 需求分析与确认
 
-先查目标项目、已有产品和任务事实，识别是从零建立需求，还是变更现有行为。沿用已明确的答案。查完资料仍无法判断，且答案会改变调研或验收范围时，再向用户确认。两类工作沿用共用需求指南和项目现有格式，必要时选用需求模板中匹配的部分。 [阶段 01 原文](../skills/engineering-loop/references/stages/01-requirements.md) · [需求记录模板](../skills/engineering-loop/templates/requirements.md)
+先查目标项目、当前需求对应的产品能力及任务事实，识别是从零建立需求，还是给现有系统新增或修改能力。沿用已明确的答案。只有影响本次行为或验收且证据不足的问题才需要确认。两类工作沿用共用需求指南和项目已有格式。需要新建结构化记录且缺少适用的项目格式时，选用本次交付对应的模板。 [阶段 01 原文](../skills/engineering-loop/references/stages/01-requirements.md)
 
 | 子主题 | 已有考问重点 | 已有记录要点 |
 |---|---|---|
-| 从零建立需求 | 谁遇到什么问题，当前替代做法及代价，最关键的假设，第一版如何验证 | 调研及依据、目标用户、问题与范围、代表性验收例子、未决决定 |
-| 现有系统新增或变更需求 | 现有行为及变更前后差异，受影响用户、契约、数据和已有约定 | 现状和影响、应保留的行为、代表性验收或回归例子、未决决定 |
+| [0→1 首期需求](../skills/engineering-loop/templates/requirements.md) | 谁遇到什么问题，当前替代做法及代价，最关键的假设，第一版如何验证 | 调研及依据、目标用户、问题与范围、代表性验收例子、未决决定 |
+| [1→10 存量变更](../skills/engineering-loop/templates/requirements-change.md) | 哪条规则或实际行为当前生效，本次变化影响哪些用户、契约及数据 | 需求编号、现状依据、本次变化、影响与保留项、验收与回归、确认或待定 |
 
 #### 01 的交接条件
 
@@ -339,7 +339,7 @@ flowchart TD
 
 执行时核对用户正在完成什么任务、现有替代方法、成功信号及当前最小切片。用正常、拒绝和不确定结果的代表例子确认边界；只有影响本次工作的问题才继续澄清。必要时做已有授权内的小调查或实验。明确需求已经足够的局部修改不重开完整调研。
 
-交付已确认结果、范围和排除项、验收例子、依据及未决决定，复用现有文档或任务记录。需要结构化记录时，选择模板中适用于从零建立需求或已有系统新增需求的部分，保留已确认范围和验收口径。当前切片的下一步条件成立即可退出。只要求调查时，交付调查结果后结束。需要设计或实现时，再按已有授权进入下一相关阶段。 [需求文档模板](../skills/engineering-loop/templates/requirements.md)
+交付已确认结果、范围和排除项、验收例子、依据及未决决定，复用现有文档或任务记录。需要新建结构化记录且缺少适用的项目格式时，按本次交付选用[首期需求模板](../skills/engineering-loop/templates/requirements.md)或[存量变更模板](../skills/engineering-loop/templates/requirements-change.md)。存量变更可用同一需求标识关联已有设计、任务、用例和发布记录。当前切片的下一步条件成立即可退出。只要求调查时，交付调查结果后结束。需要设计或实现时，再按已有授权进入下一相关阶段。
 
 入口：[01-requirements.md](../skills/engineering-loop/references/stages/01-requirements.md)。按需正文：[requirements.md](../skills/engineering-loop/references/requirements.md)；缺少或冲突的项目约定进入 [project.md](../skills/engineering-loop/references/project.md)。
 
@@ -1158,6 +1158,8 @@ PMS assignee 表示交付责任；连接账号、用户、执行 agent／聊天�
 通过[逐级填充目录](#逐级填充目录)按阶段、场景和公共规则查看原文。第 03 阶段的[正文速查表](#开发分支正文速查)可按编号直达文件。
 
 ### 当前已经观察到什么
+
+v1.0.0 的 01 阶段增加存量变更简版，并明确两类记录的选用规则。模板选择用例及其执行状态见[证据索引](../evals/STATUS.md)。
 
 v0.1.36 加入使用反馈循环：智能体把 skill 自身的问题记到项目根目录的 `.engineering-loop/feedback/`，成员用打包脚本发给维护者，维护者按[收集与筛选流程](FEEDBACK.zh-CN.md)确认后才修改规则。项目自身的教训仍走沉淀指南。这套流程和五个新增用例都尚未运行。 [用例](../evals/fixtures/skill-feedback/TASK.md) · [证据索引](../evals/STATUS.md)
 

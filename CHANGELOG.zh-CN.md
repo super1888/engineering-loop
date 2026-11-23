@@ -1,6 +1,12 @@
 # 更新日志
 
-按版本倒序。这些版本尚未正式发布；每条说明改了什么、依据和未验证的部分。后续方向见[路线图](docs/ROADMAP.md)，已执行的评测见[证据索引](evals/STATUS.md)。[English](CHANGELOG.md)
+按版本倒序。后续方向见[路线图](docs/ROADMAP.md)，已执行的评测见[证据索引](evals/STATUS.md)。[English](CHANGELOG.md)
+
+## v1.0.0 · 2026-11-23
+
+01 阶段提供[首期需求分析与确认](skills/engineering-loop/templates/requirements.md)和[存量需求与修改情况说明](skills/engineering-loop/templates/requirements-change.md)。存量简版记录有效基线、本次变化、需保留的行为、验收与回归预期，以及确认或待定事项。可沿用项目现有记录及标识。新增和修订的[模板选择用例](evals/fixtures/stage-templates/TASK.md)尚未运行。
+
+## 早期开发版本
 
 未发布的 v0.1.36 加入使用反馈循环。智能体在五种可观察事件下把 skill 自身的问题记到项目根目录的 `.engineering-loop/feedback/`，该目录自我忽略、不进 git；每次任务另记一行读取了哪些文件。新增打包脚本，只打包不发送。维护者的收集、筛选、晋级、淘汰和回音流程单独成文，skill 不自动修改自己。README 增加设计思路、规则来源和反馈循环三节，各版本说明移到本文件。入口仍在 4 KB 以内。这套流程尚未运行，新增用例尚未运行。 [使用反馈规则](skills/engineering-loop/references/feedback.md) · [收集与筛选](docs/FEEDBACK.zh-CN.md) · [用例](evals/fixtures/skill-feedback/TASK.md)
 
