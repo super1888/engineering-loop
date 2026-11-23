@@ -2,7 +2,7 @@
 
 **Challenge focus:** Which observed failure supports the correction, does its safeguard reject that failure while permitting a valid nearby case, and is transfer still unmeasured?
 
-Use this after a demonstrated failure, repeated friction, or an explicit retrospective. A successful routine edit does not need a new policy.
+Use this after a demonstrated failure, repeated friction, or an explicit retrospective. A successful routine edit does not need a new policy. When the failure lies in this skill's own guidance, also [record skill feedback](feedback.md) for its maintainers.
 
 Route the correction to its narrowest useful home:
 

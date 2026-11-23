@@ -32,3 +32,5 @@ Maintain the requested specification, design, architecture decision or delivery 
 ## Exit and return
 
 The requested design must support its accepted examples and make unresolved decisions explicit. UI conclusions need the applicable rendered or interactive evidence; a proposal is not implementation proof. Return to [requirements](01-requirements.md) for a consequential behavior dispute. Move to [development](03-development.md) only when authorized; design-only work stops with its design.
+
+Before finishing a task in this stage, follow [feedback.md](../feedback.md): append the usage line, and record any point where this skill's guidance was missing, wrong, unused or corrected.

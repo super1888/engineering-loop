@@ -27,3 +27,5 @@ When a new structured record is needed and the project has no applicable format,
 ## Exit and return
 
 Complete the requested preparation or establish the required deployed-path and recovery evidence for executed work. For a failure, follow the release's authorized recovery path or return the affected work to [development](03-development.md), [design](02-design.md) or [requirements](01-requirements.md). Route ongoing work after handoff and independent runtime incidents to [continuous operations](06-operations.md) when applicable. Use [learning.md](../learning.md) for a demonstrated lesson or requested retrospective.
+
+Before finishing a task in this stage, follow [feedback.md](../feedback.md): append the usage line, and record any point where this skill's guidance was missing, wrong, unused or corrected.

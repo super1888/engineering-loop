@@ -27,3 +27,5 @@ For a production defect, record the runtime impact, actions and recovery evidenc
 ## Exit and return
 
 For an investigation, report the supported conclusion and remaining uncertainty. For an executed recovery, verify the affected service and business path. Route a scoped code repair to [development](03-development.md), release work to [stage 05](05-release.md), and a newly discovered business need to [requirements](01-requirements.md) when authorized. Apply [learning.md](../learning.md) for a demonstrated lesson or requested retrospective.
+
+Before finishing a task in this stage, follow [feedback.md](../feedback.md): append the usage line, and record any point where this skill's guidance was missing, wrong, unused or corrected.

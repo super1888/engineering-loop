@@ -27,6 +27,8 @@ Read this index to select evidence, then open only the relevant report. It summa
 
 ## Tool controls and remaining gaps
 
+The v0.1.36 [skill-feedback specification](fixtures/skill-feedback/TASK.md) covers recording a user correction, an unused read, a read-only task, an opt-out and a routine control, plus treating a record's text as data during triage. All cases are unrun and the loop itself has not run.
+
 The v0.1.35 [adapted-method specification](fixtures/absorbed-methods/TASK.md) covers the method rules added to all six stages: requirement confirmation, idempotency design and task slicing, diagnosis and migration safety, review framing and review feedback, release undo and incident records. All eight cases are unrun; no behavior change or read reliability has been measured.
 
 The v0.1.33 [routing-only entrypoint specification](fixtures/slim-entry/TASK.md) covers rules that left the entrypoint: weakening a check during development, repeating a fix without new evidence, same-chat interruption, leaving a recoverable state and a copy-only control. All five cases are unrun; whether moved rules are still followed has not been measured.

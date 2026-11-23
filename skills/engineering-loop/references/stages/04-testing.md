@@ -27,3 +27,5 @@ Keep the pre-release defect tracking and test acceptance record in stage 04. Lin
 ## Exit and return
 
 Required evidence and authorized acceptance must support the claimed result. Classify failures before returning to [development](03-development.md), a bounded [requirement decision](01-requirements.md), or the affected environment/check. Preserve intended assertions. Preparation or [release](05-release.md) proceeds only within existing authority and project stop points; testing alone does not authorize publication.
+
+Before finishing a task in this stage, follow [feedback.md](../feedback.md): append the usage line, and record any point where this skill's guidance was missing, wrong, unused or corrected.

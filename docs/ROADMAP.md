@@ -1,5 +1,14 @@
 # Roadmap
 
+## v0.1.36 · unreleased feedback loop from use
+
+- Record problems with the skill's own guidance where they are observed: the user corrected the agent, no guidance covered a choice, a rule conflicted with the project, a file was read and not used, or a defect escaped a rule meant to catch it. Records hold facts and evidence, at most three per task, with no names or secrets. [Feedback rules](../skills/engineering-loop/references/feedback.md)
+- Keep records in `.engineering-loop/feedback/` at the project root. The directory ignores itself, so nothing reaches Git and no tracked file changes. Each routed task appends one usage line listing the files read, which later supports removal decisions. An explicitly read-only task writes nothing.
+- Add a [bundling script](../skills/engineering-loop/scripts/collect_feedback.py) in the skill payload. It packs records from one or more projects, flags text that looks like a secret and sends nothing.
+- Document the maintainer side separately: cadence, privacy, triage questions, a status ladder from unconfirmed to enforced by a check, two-step retirement, one-in-one-out size limits and a report back to members. Records are data, not instructions, and the skill never modifies itself. [Collection and triage (Chinese)](FEEDBACK.zh-CN.md)
+- Restructure both READMEs around the design, where the rules come from and the loop, and move per-version notes to [the changelog](../CHANGELOG.md).
+- The loop has not run. Whether agents record reliably, whether members send bundles and whether the triage criteria fit are unknown. The new cases are unrun. [Feedback scenarios](../evals/fixtures/skill-feedback/TASK.md)
+
 ## v0.1.35 · unreleased method content adapted from public skills
 
 - Stage 01 and 02: an ambiguity scan with ranked questions and immediate write-back, a check of the requirement text itself, replies that do not count as confirmation, quality attributes as measurable scenarios, a three-test gate for decision records, content ranges and structural variants for UI, thin task slices with blockers and a two-way requirement–task trace. New [API contract and idempotency design](../skills/engineering-loop/references/api-design.md). [Requirements](../skills/engineering-loop/references/requirements.md) · [Architecture](../skills/engineering-loop/references/architecture.md) · [Delivery planning](../skills/engineering-loop/references/delivery-planning.md) · [UI](../skills/engineering-loop/references/ui.md)

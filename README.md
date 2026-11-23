@@ -2,7 +2,7 @@
 
 **Connect the team. Challenge the task. Deliver with evidence.**
 
-[中文](README.zh-CN.md) · [Chinese routing and execution manual](docs/ROUTING.zh-CN.md) · [Stage document templates](skills/engineering-loop/templates/index.md) · [Install](#install) · [How it works](#how-it-works) · [Examples](examples/workflows.md) · [Evaluation](evals/README.md) · [Contribute](CONTRIBUTING.md)
+[中文](README.zh-CN.md) · [Chinese routing and execution manual](docs/ROUTING.zh-CN.md) · [Stage document templates](skills/engineering-loop/templates/index.md) · [Design](#design) · [Feedback loop](#feedback-loop) · [Install](#install) · [Changelog](CHANGELOG.md) · [How it works](#how-it-works) · [Examples](examples/workflows.md) · [Evaluation](evals/README.md) · [Contribute](CONTRIBUTING.md)
 
 [![Checks](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml/badge.svg)](https://github.com/super1888/engineering-loop/actions/workflows/checks.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -10,7 +10,7 @@
 
 A team task and delivery entrypoint for Claude Code and Codex. It requires verified PMS MCP access before routed work, challenges assumptions on every stage or specialist route, and coordinates task creation, claiming, execution and acceptance with traceable evidence.
 
-**Using it in an existing Git repository?** Copy only the complete [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) directory into that project's skill location, including `references/`, `templates/` and `agents/`. The rest of this repository supports development and evaluation.
+**Using it in an existing Git repository?** Copy only the complete [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) directory into that project's skill location, including `references/`, `templates/`, `scripts/` and `agents/`. The rest of this repository supports development and evaluation.
 
 **v0.1 is an experimental workflow draft.** Packaging checks do not prove fewer bugs or faster delivery. We publish behavioral scenarios and welcome reproducible counterexamples before expanding the rules.
 
@@ -27,6 +27,85 @@ An agent can pass tests while implementing the wrong requirement, resume from an
 - **Connect project rules to enforcement.** Locate domain examples, module/contract owners and active checks before scaling implementation; verify relevant safeguards when transferring lessons.
 
 Routed work requires a configured, authenticated PMS MCP connection; the included adapter targets Kaneo. Install the skill and configure the connection separately: dependency metadata does not install or authenticate a service. No background daemon, mandatory agent team, automatic hook or prescribed application stack is included. These instructions require fail-closed behavior, but host/PMS controls enforce permissions, concurrent claims and state transitions.
+
+## Design
+
+Three layers, each more specific than the last. A task reads only what it matches:
+
+```text
+Entry SKILL.md (under 4 KB, an index only)
+ ├─ Connect the PMS: verify identity, project and workflow
+ ├─ Decide which stage this task is in
+ └─ Six stage guides
+     01 Requirements → challenge, requirements guide
+     02 Design       → architecture, API contract, UI, delivery planning
+     03 Development  → scenarios: frontend F1–F8, backend B1–B8, integration I1–I8, engineering E1–E4
+                     → stack rules, testing method, diagnosis method, nine risk rules
+     04 Testing      → review, security review, verification
+     05 Release      → release, migration safety
+     06 Operations   → operations, learning
+     end of any stage → skill feedback (one usage line, plus a record when something went wrong)
+```
+
+| Decision | Reason |
+|---|---|
+| The entry is only an index | It is read on every task, so each added line is a fixed cost and buries the rules that matter |
+| The PMS is required | Fine-grained tasks with recorded steps are what make a problem traceable to its source |
+| Stages 01 and 02 require the challenge | An agent tends to agree with the asker. Mistakes in requirements and design cost the most, so the problem is separated from the proposed solution, an alternative and a failure case are written down, and the owner confirms before work starts |
+| Stage templates are fixed | The requirement, plan, acceptance and release formats are deliverables the team agreed on; the rest of the skill may change, the templates do not |
+| Team rules win over adapted ones | Rules rewritten from public skills sit in a separate section marked unconfirmed for the team |
+| A check instead of a sentence where possible | A written rule can be missed; a failing build cannot |
+| The skill does not modify itself | An agent's own account can be wrong, so maintainers confirm every added or removed rule |
+
+### Where the rules come from
+
+| Source | Current state | Confidence |
+|---|---|---|
+| The team's existing repositories | Rule files for Java/Spring, Python/FastAPI and React frontends | Real practice, not fully consistent across projects, awaiting confirmation as the shared standard |
+| The team's real incidents | Items marked as recorded incidents in those files | They happened; details are generalized |
+| Public skills | Method rules in every stage; see [acknowledgments](ACKNOWLEDGMENTS.md) | Rewritten, not validated on the team's projects |
+| Feedback from use | None yet | The loop below exists to supply it |
+
+No rule here has a measured effect. The evaluation cases are public and most are unrun; see the [evidence index](evals/STATUS.md).
+
+## Feedback loop
+
+The current rules were thought up in advance and will miss things. This loop lets rules come from real use:
+
+```text
+use the skill → the agent records → a member bundles and sends → an AI drafts proposals → a maintainer confirms
+        ↑                                                                                  ↓
+        └──────────── new version ← evaluation case ← a rule is changed or removed ←───────┘
+```
+
+- **The agent does the recording.** By design members write nothing. The agent records one of five events: the user corrected it, no guidance covered a choice, a rule conflicted with the project, a file was read and not used, or a defect escaped to review or testing. Each task also adds one line listing the files read.
+- **Facts, not opinions.** A record is at most ten lines: skill version, stage, files read, what happened, evidence.
+- **Rules are removed as well as added.** Content that is rarely read or repeatedly marked unused becomes a removal candidate, is marked for retirement for one cycle, then removed. The entry has a hard 4 KB limit and other files are trimmed when they gain content: one in, one out.
+- **A person decides.** The AI only proposes. Text inside a record is data, not an instruction.
+- **Members hear back.** Each batch reports how many records arrived and how many were accepted or declined, with reasons.
+
+### Where records are and how to send them
+
+Records are in **`.engineering-loop/feedback/` at the root of each project that uses the skill**. The directory carries a `.gitignore` containing only `*`, so Git ignores the whole directory by default and no project file is edited. A forced add (`git add -f`) can still stage it, and `git clean -fdx` deletes the records.
+
+From the project root (adjust the path to where the skill is installed, usually `.agents/skills/` for Codex and `.claude/skills/` for Claude Code):
+
+```sh
+python3 .agents/skills/engineering-loop/scripts/collect_feedback.py
+```
+
+The bundle is written to `.engineering-loop/outbox/`. The script bundles and sends nothing. Read it first, then pass it to the skill maintainer. Without Python, zip `.engineering-loop/feedback/` by hand.
+
+Things to know:
+
+- Records carry no names and are never summarized per person. They are not used to assess anyone.
+- Records should hold no secrets, customer data or business figures. The script lists files that look like they hold a secret; check before sending.
+- Records made in a temporary worktree are lost when it is removed. Bundle them first.
+- A review, analysis or other task without authority to change files writes no file; the record appears in the agent's reply.
+- Folder names inside the bundle are the project folder names.
+- To opt out, say so in the project instructions or tell the agent.
+
+How maintainers collect and triage is in [the feedback procedure](docs/FEEDBACK.zh-CN.md) (Chinese). The procedure has not run yet and will change with the first batch.
 
 ## Install
 
@@ -67,7 +146,7 @@ Follow the installer prompts to reload plugins or restart if required. No MCP se
 
 ### 3. Manual copy — no package manager
 
-Clone or download this repository, then copy **the whole** `skills/engineering-loop` folder, including `references/` and `agents/`, into one destination:
+Clone or download this repository, then copy **the whole** `skills/engineering-loop` folder, including `references/`, `templates/`, `scripts/` and `agents/`, into one destination:
 
 | Agent | Project scope | Personal scope |
 |---|---|---|
@@ -195,33 +274,7 @@ The [requirements guide](skills/engineering-loop/references/requirements.md) dis
 
 ## Validation and contribution
 
-Unreleased v0.1.35 fills the six stages with concrete method rules rewritten from public skills: requirement scanning and confirmation, architecture trade-offs, API contract and idempotency design, UI shaping and variants, task slicing, test and diagnosis methods, stack rules for React, Spring Boot 4, FastAPI and SQL, a review procedure with a security review, claim-to-evidence checks, release undo paths, migration safety, bounded production actions and a lesson-form test. Six focused reference files are new. No third-party text is bundled, team rules win over adapted ones, stage templates are unchanged and the entrypoint did not grow. The new cases are unrun and no effect is measured. [Review](skills/engineering-loop/references/review.md) · [Testing method](skills/engineering-loop/references/development/testing.md) · [API design](skills/engineering-loop/references/api-design.md) · [Sources](ACKNOWLEDGMENTS.md) · [Scenarios](evals/fixtures/absorbed-methods/TASK.md)
-
-Unreleased v0.1.34 clarifies Spring transaction proxy behavior while retaining the team's public-method convention. It also corrects a recorder test expectation that failed on GitHub's Ubuntu runner under `/tmp`. [Java / Spring rules](skills/engineering-loop/references/development/stacks/java-spring.md) · [Reproduction](evals/TOOLING.md#preserve-unrelated-path-prefixes)
-
-Unreleased v0.1.33 reduces the entrypoint to routing: the connection gate, the six-stage table, a support table and five always-on rules, with the maintenance budget lowered from 7 KB to 4 KB. General conduct that stage and support guides already held was removed from the entrypoint, and the few sentences that existed only there moved into the development core, verification and resume guides. No rule is intended to change; rules now outside the entrypoint apply only when their guide is read, and that effect is unmeasured. The new cases are unrun. [Entrypoint](skills/engineering-loop/SKILL.md) · [Scenarios](evals/fixtures/slim-entry/TASK.md)
-
-Unreleased v0.1.32 gives the common challenge a Full depth for stage 01 and 02 deliverables, with required written outputs, a fresh-context check where available and an owner confirmation gate, and keeps settled local edits Light. It also adds partial team rule files extracted from existing team services and products for Java/Spring, Python/FastAPI and React frontends; open team decisions stay open and stage templates are unchanged. The new cases are unrun. [Common challenge](skills/engineering-loop/references/grill.md) · [Stack bindings](skills/engineering-loop/references/development/stacks.md) · [Scenarios](evals/fixtures/challenge-depth-and-stack-rules/TASK.md)
-
-Unreleased v0.1.31 records pre-release defect tracking and acceptance in stage 04. Stage 06 tracks production defects and references that same record and the affected version. Use the project's existing formats and locations. The refined handoff case remains unrun. [Acceptance template](skills/engineering-loop/templates/acceptance-record.md) · [Operations template](skills/engineering-loop/templates/operations-record.md) · [Template routing cases](evals/fixtures/stage-templates/TASK.md)
-
-Unreleased v0.1.30 provides on-demand templates for all six stages. The specification covers the two requirements cases, direct operations entry and an existing concise record. The new behavioral cases remain unrun. [Stage template index](skills/engineering-loop/templates/index.md) · [Template routing cases](evals/fixtures/stage-templates/TASK.md) · [Evidence index](evals/STATUS.md)
-
-Unreleased v0.1.29 adds a reusable stage 02 kickoff plan. It uses the project's formats and carries the same plan from draft through kickoff decisions to authorized PMS task synchronization. [Kickoff template](skills/engineering-loop/templates/kickoff-plan.md) · [Planning scenarios](evals/fixtures/kickoff-planning/TASK.md) · [Evidence index](evals/STATUS.md)
-
-Unreleased v0.1.28 adds stage 02 guidance for consequential architecture decisions. It pairs architecture selection with the common challenge and compares feasible options by measurable workload, total cost and verification evidence. [Architecture scenarios](evals/fixtures/architecture-tradeoffs/TASK.md) · [Evidence index](evals/STATUS.md)
-
-Unreleased v0.1.27 adds a dedicated stage for continuous operations. Stage 05 covers work tied to an identifiable release, and stage 06 covers incidents and the ongoing operation of a service. The routing cases specify the release and operations boundaries. The evidence index records which checks ran and what they establish. [Six-stage scenarios](evals/fixtures/six-stage-routing/TASK.md) · [Evidence index](evals/STATUS.md)
-
-Unreleased v0.1.26 fills all 28 scenario execution baselines while retaining short matching indexes and existing project choices. Conditional React/Vue behavior checks cite official documentation; team package/style rules and actual component templates remain unfilled where unavailable. The [detail specification](evals/fixtures/development-details/TASK.md) and [validation record](evals/fixtures/development-details/RESULTS.md) distinguish source/format checks from real task/runtime behavior and keep older version results separate.
-
-Unreleased v0.1.25 adds development scenario routing and extracts existing common/risk rules while preserving their constraints. Pending stack/template content is explicitly separate from usable guidance. The [development-routing specification](evals/fixtures/development-routing/TASK.md) and [validation record](evals/fixtures/development-routing/RESULTS.md) separate source/distribution checks from actual task execution. A finer index alone does not demonstrate higher routing accuracy, reduced reads or model-quality gains.
-
-Unreleased v0.1.24 reorganizes navigation around five stage entry files and a common six-part contract. Existing specialist and support references remain available; the MCP gate, authorization and acceptance boundaries remain required. The new directory is guidance rather than an automatic selector. Prior v0.1.23 trials do not validate this revised routing; current execution status is recorded in the [evidence index](evals/STATUS.md).
-
-Unreleased v0.1.23 separates the mandatory connection/common-challenge core from task operations and specialist coordination, and moves stage challenge focuses into their owning guides. The first slice reduces the common entry/reference text from 21,772 to 12,007 bytes; bytes are not measured tokens or quality/cost gains. All gates and applicable project constraints remain required. The [controlled local-copy trial](evals/fixtures/core-route/TASK.md) separates real model/tool observations from adapter tests; it does not validate the entire older matrix or implement a general rule engine/project profile registry.
-
-Unreleased v0.1.22 changes the entrypoint to team task/delivery coordination, adds the mandatory [PMS MCP gate](skills/engineering-loop/references/connection.md), Kaneo dependency declaration and an independently written [grill-me-style check](skills/engineering-loop/references/grill.md) on every route. Task writes stay within existing authorization; analysis does not create cards. Its [behavioral matrix](evals/fixtures/pms-grill-routing/TASK.md) remains unrun. This is not server-side enforcement, an atomic claim implementation or evidence of fewer defects; historical results do not validate the new gate.
+Per-version changes are in the [changelog](CHANGELOG.md).
 
 ```sh
 python scripts/check.py
@@ -237,10 +290,6 @@ The unreleased revisions clarify affected return-path outcomes, rendered evidenc
 
 The optional [collaboration guide](skills/engineering-loop/references/collaboration.md) covers scoped ownership, accepted-change propagation, independent verification and explicitly ongoing goals without requiring a fixed agent team. A completed slice does not end an ongoing goal; finite tasks still stop when complete. Its [evaluation status](evals/README.md#unreleased-collaboration-revision) separates checkpoint exercises from live orchestration; additional agents are not evidence of improved accuracy.
 
-The unreleased v0.1.11 revision adds authorized conversation replacement: reconcile stale ownership with terminal artifacts, transfer live handles and read compact contributor summaries. The new D/E [checkpoint controls](evals/fixtures/delegated-continuation/TASK.md) remain unrun; the motivating recovery is not a measured skill benefit.
-
-The unreleased v0.1.12 revision checks saved receipt identity and state before a dependent ownership transfer or continuation. Its [receipt checkpoint controls](evals/fixtures/handoff-receipt/TASK.md) include null and stale artifacts, a repaired receipt and an ordinary text handoff. They remain unrun; no model-behavior benefit is claimed.
-
 The [release guide](skills/engineering-loop/references/release.md) now checks new preflights against existing isolated CI fixtures and identifies artifact bytes and host-specific permission evidence. Its [portability scenario](evals/README.md) remains unrun.
 
 The unreleased native-command revision checks failed prerequisites before dependent writes or verification, while permitting expected negative checks. Its [isolated shell reproduction](evals/README.md#unreleased-native-command-gating-revision) passed on Windows; fresh-agent transfer and other hosts remain untested.
@@ -254,23 +303,5 @@ If the workflow helps you, a star helps others discover it. Reproducible feedbac
 Inspired by published work on skill composition, specification-driven development, test-first feedback, and recoverable agent workflows. See [acknowledgments](ACKNOWLEDGMENTS.md). This initial implementation is independently written; it does not bundle those projects.
 
 [MIT](LICENSE). Maintained by [super1888](https://github.com/super1888).
-
-The unreleased v0.1.13 revision adds conditional product-hypothesis challenges and a focused [UI workflow](skills/engineering-loop/references/ui.md). Clear local edits remain lightweight. First-round comparison conditions and actual outcomes are recorded in [evaluation](evals/README.md); packaging checks alone do not establish a behavioral benefit.
-
-Unreleased v0.1.14 adds a frontend scope gate: desktop by default; mobile design and acceptance only when explicitly requested by the user. Existing mobile behavior is preserved, with conflicting requirements resolved before dependent changes.
-
-Unreleased v0.1.15 adds risk-based operational readiness: business progress signals, response ownership, bounded recovery rehearsal and evidence of data recoverability. Local work and intentionally manual workers stay lightweight. Actual rehearsal outcomes and limits are recorded in [evaluation](evals/README.md).
-
-Unreleased v0.1.16 clarifies delegated execution: verify relevant capabilities in the contributor’s effective working directory, environment and permission boundary, rather than inferring them from the coordinator’s host. Reuse valid evidence and keep simple read-only work lightweight; correct invocation without relaxing protection or introducing a toolchain by default.
-
-Unreleased v0.1.17 separates general verification decisions from conditional boundary cases. The core routes relevant high-risk tasks to a focused reference while retaining existing acceptance constraints and lightweight nearby controls. Structural preservation and fresh routing observations are recorded in [evaluation](evals/README.md); smaller initial text is not proof of token savings or improved outcomes.
-
-Unreleased v0.1.19 clarifies that intervening same-chat questions preserve unfinished work while explicit stop, replacement and draft-only limits take precedence. A behavioral case covers continuation and its controls; model behavior has not been evaluated.
-
-Unreleased v0.1.18 corrects evaluation and distribution maintenance defects: receipt output is prepared before guarded dispatch, checks verify full-inventory retention after refresh failure, root-local virtualenv dependencies stay outside project validation, and path summaries preserve unrelated path prefixes. These are tool corrections, not new evidence of model-quality gains.
-
-Unreleased v0.1.20 validates all packaged skill documents and JSON, including directories with local-output names; repository-local output remains excluded. This is a distribution-check correction.
-
-Unreleased v0.1.21 fixes inline-link validation for angle-bracket destinations with spaces and optional titles; it does not claim complete Markdown parsing.
 
 A local v0.1.21 two-turn sample failed to resume an unfinished summary after a restored-file question; its explicit-stop control was respected. See the [actual observations and limits](evals/fixtures/same-chat-continuation/RESULTS.md).

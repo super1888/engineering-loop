@@ -29,3 +29,5 @@ For a maintained requirements record, use the project's format first. When a new
 ## Exit and return
 
 Proceed when the current slice has enough accepted behavior and evidence for its next authorized action; report material unresolved decisions and their affected work. A design-only or investigation-only request ends with that result. Enter [design and planning](02-design.md) or [development and integration](03-development.md) only when needed and authorized; do not force a full lifecycle.
+
+Before finishing a task in this stage, follow [feedback.md](../feedback.md): append the usage line, and record any point where this skill's guidance was missing, wrong, unused or corrected.

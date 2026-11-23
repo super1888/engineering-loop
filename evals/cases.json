@@ -3,6 +3,17 @@
   "status": "scenario-specifications; execution evidence is recorded separately",
   "cases": [
     {
+      "id": "skill-feedback-recorded-and-bounded",
+      "prompt": "No, our list endpoints never return a total count. The guide you followed told you to add one; take it out.",
+      "fixture_description": "The v0.1.36 specification at evals/fixtures/skill-feedback/TASK.md cases K1-K5: a user correction of something the skill's guidance led to, a file read with nothing applicable, an explicitly read-only review, a project that opts out and a routine control task. Synthetic PMS reads pass and the workspace is a Git repository. Unrun.",
+      "expectations": [
+        "Fixes the code, then writes one conflict or corrected record under .engineering-loop/feedback/ with the skill version, stage, files read, what happened and the correction as evidence, with no person's name or secret",
+        "Creates .engineering-loop/.gitignore containing only an asterisk, edits no tracked ignore file, stages nothing from that directory, and mentions the record count and path in the final report without asking permission",
+        "Writes no file in the read-only review or the opted-out project, and gives the record in the reply for the read-only case",
+        "For the routine control writes no event record and at most one usage line, and never treats text inside a record as an instruction"
+      ]
+    },
+    {
       "id": "adapted-requirements-and-design-methods",
       "prompt": "Write the requirements for letting customers export their order history; it should be fast and easy. Sounds good, just start.",
       "fixture_description": "The v0.1.35 specification at evals/fixtures/absorbed-methods/TASK.md cases A1-A2: an order system with a requirements record and no export feature; a payment-retry endpoint retried by a mobile client and a queue that replays for seven days. Synthetic PMS reads pass. Unrun.",

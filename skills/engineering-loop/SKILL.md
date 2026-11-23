@@ -3,7 +3,7 @@ name: engineering-loop
 description: Team delivery entrypoint with a required PMS MCP connection. Identify the current task's project stage, load its guidance and relevant specialist details, then coordinate execution and acceptance. Use for team delivery, task management, uncertain project recovery, or explicit invocation. Standalone explanations outside this workflow stay lightweight.
 license: MIT
 metadata:
-  version: "0.1.35"
+  version: "0.1.36"
 ---
 
 # Engineering Loop
@@ -15,9 +15,9 @@ Match the user's language.
 1. **Connect:** read [connection.md](references/connection.md). Every stage and specialist, including analysis-only work, requires successful MCP identity, intended-project and workflow reads. Configuration or tool registration is insufficient. Failed or unknown access blocks downstream work and code/PMS writes; permit only minimal target/connection discovery and diagnosis.
 2. **Locate the stage** from the task's requested deliverable and project evidence, not keywords or overall project progress. Modules may be in different stages. Investigate first; ask only a decision that changes the next action, never which route to use. Combine stages when needed without replaying completed ones.
 3. **Read the stage guide** and apply the common [grill.md](references/grill.md) with that stage's focus before execution.
-4. **Descend only as needed** through the stage's links to scenarios, stack rules, [templates](templates/index.md) and [specialists](references/specialists.md). Read matching details only, not every stage or technology.
+4. **Descend only as needed** through the stage's links to scenarios, stack rules, [templates](templates/index.md) and [specialists](references/specialists.md).
 
-| Current task's stage | Stage guide | Main routing signals |
+| Current task's stage | Stage guide | Signals |
 |---|---|---|
 | 01 需求分析与确认 | [01-requirements.md](references/stages/01-requirements.md) | Investigate the problem, current behavior and boundaries |
 | 02 方案设计与规划 | [02-design.md](references/stages/02-design.md) | Product/technical design, UI and delivery planning |
@@ -38,8 +38,9 @@ Re-route on a stage transition, material scope or risk change, conflicting evide
 | Several contributors or an ongoing goal | [collaboration.md](references/collaboration.md) |
 | Leaving work for later, a handoff or uncertain recovery | [resume.md](references/resume.md) |
 | A demonstrated lesson or requested retrospective | [learning.md](references/learning.md) |
+| This skill's guidance failed or was corrected | [feedback.md](references/feedback.md) |
 
-A support-only task need not launch development or replay the lifecycle.
+A support-only task need not replay the lifecycle.
 
 ## Always
 

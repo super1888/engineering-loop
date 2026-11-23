@@ -31,3 +31,5 @@ For a maintained delivery or handoff record, apply the [development evidence gui
 ## Exit and return
 
 The slice must implement its accepted behavior and pass its required checks. Return a consequential behavior/design conflict to [requirements](01-requirements.md) or [design](02-design.md), affecting only dependent work. Enter [testing and acceptance](04-testing.md) when broader verification or acceptance is required; a verified local change does not require unrelated stages.
+
+Before finishing a task in this stage, follow [feedback.md](../feedback.md): append the usage line, and record any point where this skill's guidance was missing, wrong, unused or corrected.

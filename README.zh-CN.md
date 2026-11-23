@@ -2,11 +2,11 @@
 
 **接通团队协作，追问关键假设，用证据交付。**
 
-[English](README.md) · [中文路由与执行手册](docs/ROUTING.zh-CN.md) · [阶段文档模板](skills/engineering-loop/templates/index.md) · [安装](#安装) · [设计边界](docs/DESIGN.md) · [参与贡献](CONTRIBUTING.md)
+[English](README.md) · [中文路由与执行手册](docs/ROUTING.zh-CN.md) · [阶段文档模板](skills/engineering-loop/templates/index.md) · [设计思路](#设计思路) · [使用反馈](#使用反馈循环) · [安装](#安装) · [更新日志](CHANGELOG.zh-CN.md) · [设计边界](docs/DESIGN.md) · [参与贡献](CONTRIBUTING.md)
 
 面向 Claude Code 和 Codex 的团队任务与交付统一入口。路由执行前必须通过 PMS MCP 接入校验，每个阶段及专业 skill 路由都核对关键假设，组织建任务、领取、执行与验收，并关联可追溯证据。
 
-**在已有 Git 仓库使用？** 只需将完整的 [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) 目录复制到该项目的 skill 安装位置，保留其中的 `references/`、`templates/` 和 `agents/`。本仓库其余内容用于开发和评估。
+**在已有 Git 仓库使用？** 只需将完整的 [`skills/engineering-loop`](skills/engineering-loop/SKILL.md) 目录复制到该项目的 skill 安装位置，保留其中的 `references/`、`templates/`、`scripts/` 和 `agents/`。本仓库其余内容用于开发和评估。
 
 **当前 v0.1 是实验性初版。** 已执行的包装与安装检查不等于证明能减少 bug 或提高开发速度；行为评估方案公开，效果需要实际项目验证。
 
@@ -21,6 +21,85 @@
 - 新项目把业务规则、模块与契约负责人、实际检查对应起来；迁移经验时验证防护在当前项目确实生效。
 
 路由执行依赖已配置、已认证的 PMS MCP，当前内置 Kaneo 适配。skill 安装和服务配置分别完成，依赖声明不会自动安装或认证服务。没有后台守护进程、自动 hooks、强制 agent 团队或固定应用技术栈。指南要求接入失败即阻断；权限、并发领取和状态流转的强制执行仍依赖宿主与 PMS，不保证零错误。
+
+## 设计思路
+
+三层结构，越往下越具体，每次任务只读命中的部分：
+
+```text
+入口 SKILL.md（不到 4 KB，只做索引）
+ ├─ 连接 PMS：确认身份、项目和流程
+ ├─ 判断本次任务属于哪个阶段
+ └─ 六个阶段指南
+     01 需求 → 拷问、需求指南
+     02 设计 → 架构、接口契约、界面、交付计划
+     03 开发 → 场景：前端 F1–F8、后端 B1–B8、联调 I1–I8、工程 E1–E4
+              → 技术栈规范、测试方法、排错方法、九类风险规则
+     04 测试 → 审查、安全审查、验证
+     05 发布 → 发布、迁移安全
+     06 运维 → 运维、沉淀
+     每个阶段结束 → 使用反馈（记一行流水，有问题时记一条记录）
+```
+
+| 设计决定 | 理由 |
+|---|---|
+| 入口只做索引 | 入口每次都会被读到，写得越多，每个任务的固定成本越高，重要规则越容易被淹没 |
+| PMS 必选 | 任务拆得细、每步有记录，出了问题才能追溯到源头 |
+| 01 和 02 强制拷问 | 智能体倾向于顺着提问者说。需求和方案阶段的错误最贵，所以要求先把问题和方案分开、给出备选和反例，负责人确认后才动手 |
+| 阶段模板固定 | 需求、计划、验收、发布等文档格式是团队约定的交付物，skill 的其他部分可以改，模板不改 |
+| 团队规范优先于外来规则 | 从公开 skill 改写来的规则单独成节并标注“团队未确认”，与团队做法不同时以团队为准 |
+| 能做成检查的不写成文字 | 文字规则会被漏读，构建失败不会 |
+| skill 不自动修改自己 | 智能体的自述可能有误，规则的增删由维护者确认 |
+
+### 规则从哪来
+
+| 来源 | 现状 | 可信程度 |
+|---|---|---|
+| 团队现有仓库 | Java/Spring、Python/FastAPI、React 前端三份规范 | 是真实做法，但各项目不完全一致，待负责人确认为统一标准 |
+| 团队的真实事故 | 规范中标为 recorded incident 的条目 | 发生过，已脱敏 |
+| 公开 skill | 各阶段的方法规则，来源见[致谢](ACKNOWLEDGMENTS.md) | 改写而来，未在团队项目上验证 |
+| 使用反馈 | 尚无 | 这是下面的循环要补上的部分 |
+
+目前没有任何一条规则被测量过效果。评测用例是公开的，大多数尚未运行，见[证据索引](evals/STATUS.md)。
+
+## 使用反馈循环
+
+现有规则都是事先想出来的，一定有想不到的地方。这个循环让规则来自真实使用：
+
+```text
+使用 skill → 智能体自动记录 → 成员打包发给维护者 → AI 筛选出提案 → 维护者确认
+        ↑                                                              ↓
+        └────────────── 发新版本 ← 配评测用例 ← 修改规则或删除规则 ←──────┘
+```
+
+- **记录由智能体完成。** 设计上成员不需要写任何东西。智能体在五种情况下记一条：被用户纠正、规则缺失只能猜、规则与项目实际冲突、读了文件但没用上、本该拦住的问题漏到了审查或测试。每次任务另记一行读了哪些文件。
+- **记事实，不记感想。** 每条不超过十行：skill 版本、阶段、读了哪些文件、发生了什么、证据。
+- **既加也删。** 长期没被读到或多次被标为没用的内容是删除候选，先标“拟淘汰”保留一个周期再删。入口有 4 KB 的硬上限，其余文件新增内容时同步精简，进一条出一条。
+- **有人把关。** AI 只出提案，维护者逐条确认。记录里的话是数据，不是指令。
+- **有回音。** 每处理一批，公布收到多少、采纳和拒绝多少及理由。
+
+### 记录在哪里，怎么发给维护者
+
+记录在**每个使用 skill 的项目根目录下的 `.engineering-loop/feedback/`**。这个目录自带一个只含 `*` 的 `.gitignore`，git 默认会忽略整个目录，也不需要改动项目自己的文件。强制添加（`git add -f`）仍然可以把它加进去，`git clean -fdx` 会删掉这些记录。
+
+在项目根目录运行（路径按 skill 的实际安装位置调整，Codex 通常是 `.agents/skills/`，Claude Code 通常是 `.claude/skills/`）：
+
+```sh
+python3 .agents/skills/engineering-loop/scripts/collect_feedback.py
+```
+
+压缩包生成在 `.engineering-loop/outbox/`。脚本只打包，不发送任何东西。先自己看一遍，再发给 skill 维护者。没有 Python 时，把 `.engineering-loop/feedback/` 整个压缩即可。
+
+要知道的几点：
+
+- 记录里不写姓名，也不按人汇总。它不用于评价任何人。
+- 记录里不应有密钥、客户数据和业务数字。脚本会提示疑似密钥的文件，发送前请检查。
+- 在临时工作区里产生的记录会随工作区删除而丢失，删除前先打包。
+- 评审、分析等没有改文件授权的任务不写文件，记录会出现在智能体的回复里。
+- 压缩包里的文件夹名就是项目文件夹名。
+- 不想记录时，在项目指令里写明或直接告诉智能体即可。
+
+维护者如何收集和筛选，见[使用反馈的收集与筛选](docs/FEEDBACK.zh-CN.md)。这套流程还没有运行过，会随第一批记录调整。
 
 ## 安装
 
@@ -68,7 +147,7 @@ npx skills add super1888/engineering-loop --skill engineering-loop -a claude-cod
 | Codex | `<项目>/.agents/skills/engineering-loop` | `~/.agents/skills/engineering-loop` |
 | Claude Code | `<项目>/.claude/skills/engineering-loop` | `~/.claude/skills/engineering-loop` |
 
-不要只复制 `SKILL.md`，还需要 `references/` 和 `agents/`。[发行版 ZIP](https://github.com/super1888/engineering-loop/releases/tag/v0.1.0) 解压后包含同名 skill 文件夹。Windows PowerShell 和 macOS/Linux 的具体复制命令见 [英文安装说明](README.md#3-manual-copy--no-package-manager)。已安装时先查看差异，不盲目覆盖本地修改。
+不要只复制 `SKILL.md`，还需要 `references/`、`templates/`、`scripts/` 和 `agents/`。[发行版 ZIP](https://github.com/super1888/engineering-loop/releases/tag/v0.1.0) 解压后包含同名 skill 文件夹。Windows PowerShell 和 macOS/Linux 的具体复制命令见 [英文安装说明](README.md#3-manual-copy--no-package-manager)。已安装时先查看差异，不盲目覆盖本地修改。
 
 更新或卸载优先使用原安装器；手动安装只替换或移除确认过路径的本 skill 文件夹，不操作整个 skills 目录。
 
@@ -150,33 +229,7 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 ## 如何逐步验证
 
-未发布的 v0.1.35 用改写自公开 skill 的具体方法规则填充六个阶段：需求扫描与确认、架构取舍、接口契约与幂等设计、界面定形与样稿、任务切片、测试与排错方法、React、Spring Boot 4、FastAPI 和 SQL 的技术栈规则、带安全审查的审查流程、声明与证据对照、发布撤销路径、迁移安全、有边界的生产操作，以及教训形式的判定。新增六份专题文件。不捆绑第三方原文，团队规范优先于改写规则，阶段模板未改动，入口没有变大。新增用例尚未运行，效果未测量。 [审查](skills/engineering-loop/references/review.md) · [测试方法](skills/engineering-loop/references/development/testing.md) · [接口设计](skills/engineering-loop/references/api-design.md) · [来源](ACKNOWLEDGMENTS.md) · [用例](evals/fixtures/absorbed-methods/TASK.md)
-
-未发布的 v0.1.34 澄清 Spring 事务代理的实际行为，保留团队仅在 `public` 方法使用 `@Transactional` 的约定。同时修正了 GitHub Ubuntu 作业中因 `/tmp` 路径触发失败的评测记录断言。 [Java / Spring 规范](skills/engineering-loop/references/development/stacks/java-spring.md) · [复现记录](evals/TOOLING.md#preserve-unrelated-path-prefixes)
-
-未发布的 v0.1.33 将入口收敛为路由：连接门禁、六阶段表、支持文件表和五条始终生效的规则，维护上限由 7 KB 降到 4 KB。阶段和支持指南里已有的通用守则从入口删除，只在入口出现过的几句移入开发共通基础、验证和恢复指南。规则本身不打算改变；移出入口的规则只在对应指南被读取时生效，这一影响尚未测量。新增用例尚未运行。 [入口](skills/engineering-loop/SKILL.md) · [用例](evals/fixtures/slim-entry/TASK.md)
-
-未发布的 v0.1.32 将公共拷问分为两档。01 和 02 的交付物使用完整档，要求五项书面产出、可用时的全新上下文复核，以及负责人确认后才开展依赖工作；已确定的局部修改保持轻量档。同时加入从团队现有服务和产品中提取的 Java/Spring、Python/FastAPI 和 React 前端规范，状态为部分可用，团队尚未统一的选择保持待定，阶段模板未改动。新增用例尚未运行。 [公共拷问](skills/engineering-loop/references/grill.md) · [技术栈绑定](skills/engineering-loop/references/development/stacks.md) · [用例](evals/fixtures/challenge-depth-and-stack-rules/TASK.md)
-
-未发布的 v0.1.31 将发布前的《缺陷跟踪与测试验收记录》归入 04。06 跟踪线上缺陷时引用同一份原记录及受影响版本，沿用项目已有格式与存放位置。调整后的交接用例尚未运行。 [测试验收模板](skills/engineering-loop/templates/acceptance-record.md) · [持续运维模板](skills/engineering-loop/templates/operations-record.md) · [模板路由用例](evals/fixtures/stage-templates/TASK.md)
-
-未发布的 v0.1.30 为六阶段提供按需使用的文档及交接模板。新增用例覆盖两类需求、直接进入运维及沿用已有简短记录，目前均未运行。 [阶段模板索引](skills/engineering-loop/templates/index.md) · [模板路由用例](evals/fixtures/stage-templates/TASK.md) · [证据索引](evals/STATUS.md)
-
-未发布的 v0.1.29 为阶段 02 增加可复用的启动计划。沿用项目格式，用同一份计划承接草稿、开工决定及获准的 PMS 任务同步。 [启动计划模板](skills/engineering-loop/templates/kickoff-plan.md) · [启动规划用例](evals/fixtures/kickoff-planning/TASK.md) · [证据索引](evals/STATUS.md)
-
-未发布的 v0.1.28 为阶段 02 增加实质架构决定的指导。架构选型结合公共拷问，按可测负载、总成本和验证证据比较可行方案。 [架构选型用例](evals/fixtures/architecture-tradeoffs/TASK.md) · [证据索引](evals/STATUS.md)
-
-未发布的 v0.1.27 增加独立的持续运维阶段。阶段 05 处理与具体版本发布相关的工作，阶段 06 处理故障和服务的持续运行。路由用例规定两个阶段的边界，证据索引记录执行过的检查及其验证范围。 [六阶段用例](evals/fixtures/six-stage-routing/TASK.md) · [证据索引](evals/STATUS.md)
-
-未发布的 v0.1.26 补齐全部 28 个场景的执行基线，保留短索引与项目既有选择。React/Vue 条件行为检查引用官方文档；未提供的团队包／样式标准与实际组件模板继续待补。[细则场景](evals/fixtures/development-details/TASK.md)和[验证记录](evals/fixtures/development-details/RESULTS.md)区分源码／格式检查与真实任务／运行行为，旧版本结果单独保留。
-
-未发布的 v0.1.25 增加开发场景子路由，并归位已有共通与风险规则，保留原约束。待补技术栈／模板内容与可用指导分开标明。[开发路由场景](evals/fixtures/development-routing/TASK.md)及[验证记录](evals/fixtures/development-routing/RESULTS.md)区分源码／分发检查与实际任务执行；目录更细本身不证明命中率提高、少读内容或模型质量收益。
-
-未发布的 v0.1.24 将一级导航收敛为五阶段入口，并统一六项阶段规范。现有专业与支持指南保留，MCP 门禁、授权和验收边界继续生效。目录是指导索引，并非自动选择器；v0.1.23 的历史试验不能为新路由背书。本轮执行状态见[证据索引](evals/STATUS.md)。
-
-未发布的 v0.1.23 将强制连接／共同拷问核心与任务操作、专业 skill 协调分开，阶段焦点迁回各自指南。首个切片将共同入口与参考文本从 21,772 减到 12,007 字节；字节不等于实测 token 或质量、成本收益。全部门禁与有效项目约束继续生效。[受控局部文案试验](evals/fixtures/core-route/TASK.md)区分实际模型／工具观察与适配器检查；它不代表旧矩阵全面通过，也未实现通用规则引擎或项目 profile 注册表。
-
-未发布的 v0.1.22 将入口调整为团队任务与交付协调，加入强制 [PMS MCP 接入门禁](skills/engineering-loop/references/connection.md)、Kaneo 依赖声明及每个路由的原创 [grill-me 式拷问](skills/engineering-loop/references/grill.md)。任务写入仍遵守已有授权，仅分析不自动建卡。其[行为矩阵](evals/fixtures/pms-grill-routing/TASK.md)仍未执行；这不是服务端强制门禁或原子领取实现，历史结果不能为新门禁背书，也不证明减少缺陷。
+各版本的改动见[更新日志](CHANGELOG.zh-CN.md)。
 
 仓库提供包装检查、离线打包脚本和可复用的行为评估场景。多数场景仍待执行；已有本地试跑未证明 skill 带来质量优势或提速。试跑原始输出留在本地，不纳入当前源码树。
 
@@ -194,10 +247,6 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 
 可选的[协作指南](skills/engineering-loop/references/collaboration.md)涵盖职责归属、已接受变更的同步、独立验证和明确授权的持续目标，不要求固定 agent 团队。完成一个切片不代表持续目标结束；有限任务完成后仍然停止。[评估状态](evals/README.md#unreleased-collaboration-revision)区分检查点练习与真实协作执行；增加 agent 不代表已经提高准确率。
 
-未发布的 v0.1.11 修订补充已授权的对话轮换：用终态产物核对过期归属、移交活跃句柄，并精简贡献者摘要读取。新增 D/E [检查点对照](evals/fixtures/delegated-continuation/TASK.md)尚未执行；本次恢复不能证明 skill 的实测收益。
-
-未发布的 v0.1.12 修订要求在依赖回执移交归属或继续任务前，核对保存内容中的身份和状态。[回执检查点对照](evals/fixtures/handoff-receipt/TASK.md)涵盖 null、过期内容、修复回执及普通文字交接；尚未执行，不宣称模型行为收益。
-
 [发布指南](skills/engineering-loop/references/release.md)现要求用已有隔离 CI 夹具验证新增门禁，并核对发行产物的实际字节与平台相关的权限证据。[跨平台场景](evals/README.md)仍未试跑。
 
 未发布的原生命令修订要求在依赖写入或验证前检查失败的前置步骤，同时允许结果符合预期的负向检查。[隔离脚本复现](evals/README.md#unreleased-native-command-gating-revision)已在 Windows 通过；新聊天的指导迁移效果及其他宿主尚未验证。
@@ -209,23 +258,5 @@ Python 3.10+ 仅用于仓库检查、打包和本地评估工具，使用 skill 
 如果对你有用，欢迎 Star；可复现的反馈更能帮助项目成长。
 
 [MIT 许可](LICENSE) · [参考与致谢](ACKNOWLEDGMENTS.md) · [后续方向](docs/ROADMAP.md)
-
-未发布的 v0.1.13 修订补充按需触发的产品假设挑战与聚焦的 [UI 工作指南](skills/engineering-loop/references/ui.md)，明确局部修改保持轻量。第一轮对照的条件与实际结果记录在[评估说明](evals/README.md)；包装检查本身不证明行为收益。
-
-未发布的 v0.1.14 增加前端范围门禁：默认仅桌面端，用户明确要求时才加入对应移动端设计与验收。保留已有移动行为，约定冲突须在依赖变更前明确。
-
-未发布的 v0.1.15 补充按风险触发的运维准备：业务进度信号、响应归属、有限恢复演练与数据可恢复性证据。本地任务与有意使用的手动 worker 保持轻量，实际演练结果和边界记录在[评估说明](evals/README.md)。
-
-未发布的 v0.1.16 明确委派执行环境：按子任务实际工作目录、环境和权限核对相关能力，不能由主进程的主机能力推断。复用有效证据、简单只读任务保持轻量；通过正确调用修复环境差异，不默认放宽保护或新增工具链。
-
-未发布的 v0.1.17 将通用验证判断与条件化边界场景分开：核心指南按相关风险路由到聚焦参考，保留既有验收约束与轻量反例。结构保留检查和新上下文路由观察记录在[评估入口](evals/README.md)；首次文本变小不等于证明 token 节省或结果提升。
-
-未发布的 v0.1.19 明确同一对话中的插入提问应保留未完成任务，并尊重明确停止、替换目标和仅起草不发送的限制。新增行为用例及反例；尚未进行模型行为评估。
-
-未发布的 v0.1.18 修正评估与分发维护缺陷：门禁执行前准备回执输出、刷新失败检查完整库存保留、根目录本地虚拟环境不参与项目文件验证、路径摘要保留无关前缀。这些是工具修复，不是新的模型质量收益证据。
-
-未发布的 v0.1.20 检查全部打包 skill 文档和 JSON，同名本地产物目录也不能绕过；仓库本地产物仍保持排除。这是分发检查修正。
-
-未发布的 v0.1.21 修复带空格尖括号目标和可选标题的行内链接检查；不宣称完整解析 Markdown。
 
 本地 v0.1.21 双轮样例在确认缺失文件恢复后未继续原摘要任务；明确停止的对照得到遵守。见[实际观察及限制](evals/fixtures/same-chat-continuation/RESULTS.md)。
