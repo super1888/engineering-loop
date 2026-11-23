@@ -29,3 +29,19 @@ Use when the affected module is a Python service on FastAPI and SQLAlchemy. An e
 - Run database tests on real PostgreSQL only, and fail when it is missing instead of skipping. No SQLite and no mocked session.
 - Do not add `skip`, `xfail`, `# type: ignore` or `# noqa` without a reason on the line and disclosure in the delivery record.
 - Keep `ruff`, `mypy --strict` and the import contracts green without weakening them.
+
+## Adapted from public sources (unconfirmed for the team)
+
+A team rule above wins where they differ. Nothing here adds a package.
+
+- Declare parameters and dependencies with `Annotated`, and give each shared dependency (session, current actor) one type alias that routes reuse.
+- Declare a return type on every route; it filters the response. Use `response_model` when the returned object differs from the public schema. Never return an ORM row whose extra columns would leak.
+- `async def` is valid only when everything inside is non-blocking. In doubt, plain `def`, for dependencies as well.
+- Put the prefix, tags and shared dependencies on the `APIRouter`, not in `include_router()`. Attach authentication there, so a new route cannot omit it, and mark each public route explicitly.
+- Do not introduce `ORJSONResponse` or `UJSONResponse`; current FastAPI deprecates them in favour of a declared return type.
+- Request models on write endpoints forbid unknown fields (`extra="forbid"`). Never spread a raw body `dict` into a model or an update.
+- Disable or protect `/docs`, `/redoc` and `/openapi.json` in production.
+- Verify a JWT's signature against an explicit algorithm allowlist and check `exp`, plus `iss` and `aud` when several services share an issuer. Its payload is readable by the client.
+- A URL supplied by a caller and fetched by the server: `http` or `https` only, host allowlist, no loopback, private or metadata address, a timeout, and no redirects unless needed.
+- Enforce an upload size limit in the application as well as at the edge. Check the type by content against an allowlist, store under a server-generated name and serve as an attachment. See [R7](../rules/uploads.md).
+- Check migration locks and index shape against the [SQL rules](sql.md).

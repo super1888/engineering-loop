@@ -10,7 +10,7 @@ Identify the target environment, actual authority, relevant artifact and configu
 
 ## Execution and focused references
 
-Read [release.md](../release.md) for preparation, publication, migration, cutover and existing-consumer compatibility. Use [verification.md](../verification.md) for the applicable evidence boundaries and the relevant [operations.md](../operations.md) guidance when the release depends on operational readiness, restore evidence or a handoff.
+Read [release.md](../release.md) for preparation, publication, migration, cutover and existing-consumer compatibility. When the release changes stored data, a schema or an interface that old and new versions share, also read [migration-safety.md](../migration-safety.md). Use [verification.md](../verification.md) for the applicable evidence boundaries and the relevant [operations.md](../operations.md) guidance when the release depends on operational readiness, restore evidence or a handoff.
 
 Apply the [common challenge](../grill.md) to the artifact, target, impact and recovery assumption. Investigate available evidence before asking; preserve existing authorization and resolve only missing material decisions. Preparation does not itself authorize deployment, destructive repair or external notifications.
 

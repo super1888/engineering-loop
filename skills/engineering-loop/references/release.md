@@ -31,3 +31,28 @@ When a release relies on a limit enforced by an external ingress or proxy, verif
 If a new frontend build replaces versioned assets, check whether already-open pages can still fetch the files they reference, especially lazy-loaded code. Preserve those files or verify a recovery path appropriate to the project's state; a fresh-page smoke check does not cover existing sessions.
 
 Record actual outcome and untested boundaries. Never convert a skipped external check into a success claim.
+
+## Choose the undo path before the rollout
+
+These are conditions on an already authorized release; naming an undo path does not authorize running it.
+
+Promote the artifact that passed its checks. Rebuilding per environment produces a different artifact that the earlier evidence does not cover; where the build forces it, record that and rerun the affected checks on the rebuilt artifact. Where the project can separate installing a version from exposing it to users, record which step the authorization covers and which one each check observed.
+
+Before the rollout, name the undo path for each changed layer and confirm its prerequisite:
+
+| Undo path | Holds only when |
+|---|---|
+| Switch the behavior off | The change sits behind a runtime switch whose off position was exercised on the new version |
+| Redeploy the previous artifact | That exact artifact is retained and still runs against the resulting schema, data and configuration |
+| Roll forward with a fix | The fix is small enough to pass the same gates in the time the impact allows |
+| Restore data | See [migration-safety.md](migration-safety.md) |
+
+A version-control revert is not a rollback. It builds an artifact that has never run in the target and leaves schema, data, configuration and switch state as they are; treat it as a roll-forward that needs the full gates.
+
+Gate the rollout on error and latency signals split by version and compared with the previous version over the same window, not on an aggregate before and after. Before undoing, confirm the suspected version is the one producing the errors. Where signals cannot be split by version, record the attribution as unverified.
+
+Completion, recorded in the release record's recovery, stop-point and verification fields:
+
+- Preparation: artifact identity, target, the undo path and prerequisite evidence per layer, the indicators and thresholds that stop or reverse the rollout, and who may call it.
+- Executed release: the deployed version, user path and those indicators observed over the agreed window.
+- Executed undo: the same indicators back at baseline, not the redeploy command exiting.

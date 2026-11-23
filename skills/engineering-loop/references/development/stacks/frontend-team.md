@@ -35,6 +35,25 @@ Use when the affected module is a React frontend. An existing project's effectiv
 
 - In Playwright use role or label locators, and read `getBoundingClientRect()` for a layout claim. Do not use `force`, fixed waits or `reuseExistingServer`. See [R9](../rules/rendered-ui.md).
 
+## Adapted from public sources (unconfirmed for the team)
+
+A team rule above wins where they differ, and every open decision below stays open. Component composition and data-loading rules are in the adapted section of [React behavior checks](react.md#adapted-from-public-sources-unconfirmed-for-the-team).
+
+- Never remove a focus outline without a visible replacement on the same element, whichever outline style the product chose. A sticky header or footer must not cover the focused element.
+- A flex child that truncates text needs `min-width: 0`. Without it the ellipsis never appears and the row overflows.
+- Number columns, and figures compared down a column, use tabular numerals (`font-variant-numeric: tabular-nums`).
+- A destructive action never runs on one click. It needs a confirmation or an undo window, in the product's own pattern.
+- On a failed submit, show each error beside its field and move focus to the first one. Keep the submit button enabled until the request starts.
+- Never block paste in an input.
+- Format dates and numbers through the product's one formatter or `Intl`, not strings assembled in a page.
+
+Optional antd lookup. A project may already have the Ant Design command-line tool (`antd`), which answers offline from bundled metadata. Where it is present, use it before writing antd 6 code:
+
+- `antd info <Component> --version <installed version>` for the props that exist in that version, and `antd token <Component>` for its design tokens.
+- `antd lint <changed files> --only deprecated` after the edit.
+
+Do not install or upgrade it for this, and do not run its bug-report commands, which post to an external tracker. Without it, read the installed package's type definitions and the documentation for that version. Do not write antd props from memory.
+
 ## Enforcement
 
 The strongest product enforces tokens with stylelint and architecture tests and runs Playwright with axe in CI; the others hold several rules as documentation only. Port the check together with the rule. Where a rule is documentation only in the current product, verify it in the rendered result.

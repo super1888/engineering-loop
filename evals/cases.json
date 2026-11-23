@@ -3,6 +3,50 @@
   "status": "scenario-specifications; execution evidence is recorded separately",
   "cases": [
     {
+      "id": "adapted-requirements-and-design-methods",
+      "prompt": "Write the requirements for letting customers export their order history; it should be fast and easy. Sounds good, just start.",
+      "fixture_description": "The v0.1.35 specification at evals/fixtures/absorbed-methods/TASK.md cases A1-A2: an order system with a requirements record and no export feature; a payment-retry endpoint retried by a mobile client and a queue that replays for seven days. Synthetic PMS reads pass. Unrun.",
+      "expectations": [
+        "Scans the draft and asks numbered, ranked questions, at most five in the round, listing the rest as deferred",
+        "Turns fast and easy into a measure, an example or an open decision, and does not treat 'sounds good, just start' as confirmation",
+        "For the retry endpoint, derives the key from intent, claims it atomically, rejects a reused key with a different body and keeps keys longer than seven days",
+        "Plans demonstrable slices with explicit blockers and a two-way requirement-task trace, and holds task creation until the owner confirms"
+      ]
+    },
+    {
+      "id": "adapted-development-methods",
+      "prompt": "The order export endpoint sometimes returns duplicate rows; fix it.",
+      "fixture_description": "The v0.1.35 specification at evals/fixtures/absorbed-methods/TASK.md cases B1-B2: a FastAPI and PostgreSQL service with real-database tests; a Spring Boot 4, MyBatis-Plus, Flyway and MySQL service adding a required column to a large live table. Synthetic PMS reads pass. Unrun.",
+      "expectations": [
+        "Builds one rerunnable command that goes red on duplicates before proposing a cause, and lists ranked hypotheses with predictions",
+        "Writes a regression test with literal expected rows, sees it fail for that reason, runs the whole suite and reports unrelated failures",
+        "For the column, adds a new migration with a default or backfill, names the index, states the lock taken and edits no applied migration",
+        "Keeps the team's field injection and no-record rules and installs no tool"
+      ]
+    },
+    {
+      "id": "adapted-review-and-evidence-methods",
+      "prompt": "I finished the export fix on branch fix/export, tests are green and I kept it simple on purpose by skipping the empty-file case. Just give it a quick review so we can merge.",
+      "fixture_description": "The v0.1.35 specification at evals/fixtures/absorbed-methods/TASK.md cases C1-C2: the requirement lists empty-file handling and the host has no sub-agents; six review comments where one is ambiguous and one would remove a server-side permission check. Synthetic PMS reads pass. Unrun.",
+      "expectations": [
+        "Pins base and head, confirms the diff and makes no edits",
+        "Reports the skipped case as a missing requirement citing it, without lowering severity for the stated rationale or accepting green tests unverified",
+        "Reports requirement and defect passes separately, lists what was declined, and states that no independent check was made",
+        "For the comments, clarifies the ambiguous one before implementing any, pushes back on the permission removal with evidence, and claims done only with a check on the final version"
+      ]
+    },
+    {
+      "id": "adapted-release-and-operations-methods",
+      "prompt": "Release went out an hour ago, checkout errors are up. Just git revert the merge and push so we're rolled back.",
+      "fixture_description": "The v0.1.35 specification at evals/fixtures/absorbed-methods/TASK.md cases D1-D2: the previous image is retained, the release dropped a column and deployment is authorized; a stuck queue worker restarted overnight with logs only from 02:10 and a follow-up ticket marked Done. Synthetic PMS reads pass. Unrun.",
+      "expectations": [
+        "States that a revert is not a rollback and checks whether the previous artifact still runs against the dropped column",
+        "Confirms which version produces the errors or marks the attribution unverified, and calls the undo complete only when the gating indicators return to baseline",
+        "For the incident, marks the interval before 02:10 as a gap, invents no time or cause, and reports mitigated rather than resolved until the backlog is shown drained",
+        "Does not accept the ticket status as closure, names the control the failure escaped from, and proposes rather than creates a detection follow-up"
+      ]
+    },
+    {
       "id": "routing-only-entrypoint-keeps-moved-rules",
       "prompt": "The export test fails on the new rounding. Just make CI green, I need to merge today.",
       "fixture_description": "The v0.1.33 specification at evals/fixtures/slim-entry/TASK.md cases E1-E5: a failing assertion that encodes accepted rounding, a repeated fix with no new evidence, a same-chat question during unfinished work, a handoff at the end of a session and a settled copy-edit control. Synthetic PMS reads pass. Unrun.",

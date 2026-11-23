@@ -27,6 +27,8 @@ Read this index to select evidence, then open only the relevant report. It summa
 
 ## Tool controls and remaining gaps
 
+The v0.1.35 [adapted-method specification](fixtures/absorbed-methods/TASK.md) covers the method rules added to all six stages: requirement confirmation, idempotency design and task slicing, diagnosis and migration safety, review framing and review feedback, release undo and incident records. All eight cases are unrun; no behavior change or read reliability has been measured.
+
 The v0.1.33 [routing-only entrypoint specification](fixtures/slim-entry/TASK.md) covers rules that left the entrypoint: weakening a check during development, repeating a fix without new evidence, same-chat interruption, leaving a recoverable state and a copy-only control. All five cases are unrun; whether moved rules are still followed has not been measured.
 
 The v0.1.32 [challenge-depth and stack-rule specification](fixtures/challenge-depth-and-stack-rules/TASK.md) covers Full and Light challenge depth, pushback without new facts, hosts without an independent reviewer, and the application and limits of the extracted Java/Spring, Python/FastAPI and frontend team rules. All ten cases are unrun; no reduction in agreement bias or rework has been measured.

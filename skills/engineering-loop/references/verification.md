@@ -41,3 +41,23 @@ For an enumerable migration or replacement, compare the source set with covered/
 Record command, exit/result, scope, relevant revision or dirty-file snapshot, environment/configuration identity, and limitations without secrets. Report passed, failed, and unrun separately. Bind evidence to the code, configuration, data and environment it covers, and reuse it while those are unchanged. Related changes invalidate related evidence; an old success count does not establish the new behavior. A PMS status or a tidy task list is not delivery proof.
 
 When a finite result and its required checks are complete, report results, evidence and limits, then stop. An explicitly ongoing goal continues within its authorization.
+
+## Match the claim to its evidence
+
+A completion claim needs a check run on the current version in this turn, with its output read. Earlier evidence is reused only as allowed above and cited with its version. "Should", "probably" or "seems" in a draft conclusion marks an unrun check: run it or report it unrun.
+
+| Claim | Needs | Does not suffice |
+|---|---|---|
+| Build succeeds | The build itself | A clean linter or type check |
+| Defect fixed | The original symptom re-exercised | The code was changed |
+| Regression test guards the fix | It was seen failing before the fix, or fails with the fix reverted in a throwaway copy, and passes with the fix | One passing run |
+| Delegated work done | Its diff and checks inspected | The delegate's success report |
+| Requirement met | Each accepted item checked | A green suite |
+
+Rerun a suspected flaky failure once. If results differ, report the case as unstable with both results and do not count it as passed; quarantine it only under project authority, and never rerun until green.
+
+Before acceptance execution, fix the expected results and required case identifiers; a required case left out is unrun. Flag acceptance wording with no observable outcome to its owner. The implementer's own runs are development evidence; acceptance by a separate evaluator is reported separately or stated as not done.
+
+## Act on review feedback
+
+Check each item against the code before changing anything. If an item is unclear, clarify it before implementing it or any item that depends on it. Where an item is wrong for this codebase, breaks accepted behavior or adds unrequested scope, say so with evidence; where it cannot be verified, say what is missing. When shown wrong, state the correction in one sentence and proceed. Do not agree or thank before checking.

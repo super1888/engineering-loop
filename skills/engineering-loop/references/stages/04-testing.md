@@ -10,7 +10,7 @@ Identify the accepted examples and scope, artifact/revision and configuration, r
 
 ## Execution and focused references
 
-Read [verification.md](../verification.md) to match checks to claims and select only applicable sections of its boundary companion. For a concrete diff review, also read [review.md](../review.md); for visible or interactive behavior, read the relevant [ui.md](../ui.md) guidance. Use [collaboration.md](../collaboration.md) when independent contributors or integrated ownership need coordination.
+Read [verification.md](../verification.md) to match checks to claims and select only applicable sections of its boundary companion. For a concrete diff review, also read [review.md](../review.md) and follow its procedure, adding [security-review.md](../security-review.md) when the change touches a trust boundary; before a completion claim or acting on review feedback, apply its [claim-to-evidence](../verification.md#match-the-claim-to-its-evidence) and [review-feedback](../verification.md#act-on-review-feedback) sections; for visible or interactive behavior, read the relevant [ui.md](../ui.md) guidance. Use [collaboration.md](../collaboration.md) when independent contributors or integrated ownership need coordination.
 
 Apply the [common challenge](../grill.md) to the claim, independent expected result and likely failure boundary. Investigate missing facts before asking; resolve a material acceptance dispute with its authorized owner rather than deriving expectations from the implementation.
 

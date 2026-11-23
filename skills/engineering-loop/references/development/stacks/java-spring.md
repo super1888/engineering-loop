@@ -50,6 +50,31 @@ Several rules deliberately differ from common Spring advice. Follow them; do not
 - Run a targeted test as `-pl <module> -am -Dtest=X -Dsurefire.failIfNoSpecifiedTests=false`, because `-am` pulls in upstream modules without that class. Never use `-DskipTests`.
 - A MySQL integration test connects directly to a freshly created random database. A reused Connector/J `Statement` keeps its original database and can run unqualified DDL against the wrong schema.
 
+## Adapted from public sources (unconfirmed for the team)
+
+A team rule above wins where they differ, and every open decision below stays open. This section holds Spring Boot 4 facts and migration safety only. It does not change the injection, naming or layering rules and adds no dependency.
+
+Spring Boot 4, after confirming the module's version:
+
+- Starters were renamed. When a build file is touched, use `spring-boot-starter-webmvc` (not `-web`), `-aspectj` (not `-aop`), `spring-boot-starter-security-oauth2-*`, `spring-boot-starter-flyway` with `flyway-mysql`, and the per-technology test starters `spring-boot-starter-<technology>-test`.
+- Jackson 3 lives in `tools.jackson`. Use `JsonMapper` where `ObjectMapper` was used, and `@JacksonComponent` for `@JsonComponent`. Only the annotations keep `com.fasterxml.jackson.annotation`.
+- `@MockBean` and `@SpyBean` are removed. Use `@MockitoBean` and `@MockitoSpyBean`.
+- Boot no longer manages a Spring Retry version. An existing use needs an explicit version or the framework's own retry support.
+- Build with the Maven command, not from IDE-compiled classes, which can hide compiler errors.
+
+Errors:
+
+- A catch-all handler logs the exception and returns a fixed message. It never returns the exception's message, class name or SQL text, in either response shape.
+- Where the project uses problem details, the catch-all 500 and validation errors use that shape too.
+- Map a unique-key violation to a conflict by its error code, not by matching message text that can change.
+
+Migrations, where the project uses versioned Flyway files:
+
+- Never edit an applied migration. Each change is one new `V<n>__<description>.sql`, in the same commit as the entity and mapper change.
+- A new `NOT NULL` column carries a `DEFAULT` or a backfill, so existing rows keep working.
+- Name every constraint and index explicitly in the project's prefix scheme. Keep column defaults equal to entity defaults.
+- Check lock behavior and index shape against the [SQL rules](sql.md).
+
 ## Enforcement
 
 In the reference service most of these rules are ArchUnit or contract tests run by the build. Port the check together with the rule into a new service; a rule without its check is documentation only. Three rules above are documentation only today: remote calls outside transactions, the lock rule, and the claim and outbox rule.

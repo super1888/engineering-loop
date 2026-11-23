@@ -9,7 +9,7 @@ Use for authentication actor, role, tenant, resource ownership or shared-user ac
 ## Execute
 
 1. Follow the real actor and resource through transport, services and delegated calls using [R2](../rules/access.md); distinguish the connection/service account from the responsible or requesting user.
-2. Reuse the maintained server authorization contract at the protected read/write boundary. Keep unresolved permission policy with its authorized owner; do not create a new role or broad allow rule to unblock a feature.
+2. Reuse the maintained server authorization contract at the protected read/write boundary. Keep unresolved permission policy with its authorized owner; do not create a new role or broad allow rule to unblock a feature. For token validation, unexpected request fields and exposed API documentation, see the adapted section of the matching [stack rule file](../stacks.md#backend-stacks) where one exists.
 3. Check access before protected effects. When mutable membership or ownership can change before final state transition, select [R5](../rules/concurrent-edits.md) and coordinate the relevant invalidating writers.
 4. Trace inspection calls for hidden effects through [R3](../rules/read-only.md) when a read-only promise applies. Preserve existing authorized refresh and audit behavior within its own contract.
 5. Preserve intended denial precedence and public resource boundaries. Do not weaken ownership checks merely to make an internal caller or a shared-user workflow succeed; reconcile its legitimate access contract.

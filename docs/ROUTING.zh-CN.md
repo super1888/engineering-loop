@@ -1,6 +1,6 @@
 # Engineering Loop 中文路由与执行手册
 
-适用于仓库中的 **v0.1.34**（2026 年 11 月 23 日核对）。
+适用于仓库中的 **v0.1.35**（2026 年 11 月 23 日核对）。
 
 团队执行的主线是 **核验 PMS MCP 接通 → 按本次交付确定阶段 → 读取相关原文并核对关键假设 → 执行与验证 → 按授权同步任务**。任务所需的专业、技术栈和风险规则随实际变更范围而定。
 
@@ -65,6 +65,7 @@
 | 所有阶段的接通校验与关键问题核对 | [MCP 门禁](../skills/engineering-loop/references/connection.md) · [公共拷问](../skills/engineering-loop/references/grill.md) |
 | 任务定位与证据回写 | [PMS 任务操作](../skills/engineering-loop/references/pms.md) · [开发交付记录](../skills/engineering-loop/references/development/delivery.md) |
 | 随任务事实附加的规则 | [九类开发风险](../skills/engineering-loop/references/development/risks.md) · [技术栈](../skills/engineering-loop/references/development/stacks.md) · [组件模板](../skills/engineering-loop/references/development/templates.md) · [验证边界](../skills/engineering-loop/references/verification-boundaries.md) |
+| v0.1.35 新增的方法专题 | [接口契约与幂等](../skills/engineering-loop/references/api-design.md) · [测试方法](../skills/engineering-loop/references/development/testing.md) · [排错方法](../skills/engineering-loop/references/development/debugging.md) · [SQL 规则](../skills/engineering-loop/references/development/stacks/sql.md) · [安全审查](../skills/engineering-loop/references/security-review.md) · [迁移安全](../skills/engineering-loop/references/migration-safety.md) |
 | 项目接入、专项能力、协作和续接 | [项目约定](../skills/engineering-loop/references/project.md) · [专业 skill](../skills/engineering-loop/references/specialists.md) · [协作](../skills/engineering-loop/references/collaboration.md) · [恢复](../skills/engineering-loop/references/resume.md) · [沉淀](../skills/engineering-loop/references/learning.md) |
 
 讨论先确认一级阶段的职责和交接条件，再进入它的第一个子主题。每次核对当前主题的触发条件、相近反例、已有正文、交付和验收证据，最后处理确实缺失的项目约定。形成决定后写回对应的现有规范。实现新的路由行为时，选一条应命中的任务和一条相近反例，按评测口径冻结预期并记录实际结果。 [命中率评测口径](../evals/README.md#measure-routing-hits) · [规范维护方法](#13-规范状态和维护方法)
@@ -1157,6 +1158,8 @@ PMS assignee 表示交付责任；连接账号、用户、执行 agent／聊天�
 通过[逐级填充目录](#逐级填充目录)按阶段、场景和公共规则查看原文。第 03 阶段的[正文速查表](#开发分支正文速查)可按编号直达文件。
 
 ### 当前已经观察到什么
+
+v0.1.35 把公开 skill 中的具体方法改写后填入六个阶段的现有指南，并新增六份专题文件。各阶段入口按触发条件引用它们，团队规范优先于改写规则，阶段模板未改动。八个新增用例全部尚未运行，这些规则是否改变行为没有测量。 [来源](../ACKNOWLEDGMENTS.md) · [用例](../evals/fixtures/absorbed-methods/TASK.md) · [证据索引](../evals/STATUS.md)
 
 v0.1.33 把总入口收敛为路由：连接门禁、六阶段表、支持文件表和五条始终生效的规则，上限由 7 KB 降到 4 KB；通用守则留在拷问、验证、开发共通基础和恢复指南中。新增五个用例全部尚未运行，规则移出入口后是否仍被遵守没有测量。 [用例](../evals/fixtures/slim-entry/TASK.md) · [证据索引](../evals/STATUS.md)
 

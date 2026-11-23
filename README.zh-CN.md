@@ -150,6 +150,8 @@ Claude Code 使用 `/engineering-loop`；插件安装使用 `/engineering-loop:e
 
 ## 如何逐步验证
 
+未发布的 v0.1.35 用改写自公开 skill 的具体方法规则填充六个阶段：需求扫描与确认、架构取舍、接口契约与幂等设计、界面定形与样稿、任务切片、测试与排错方法、React、Spring Boot 4、FastAPI 和 SQL 的技术栈规则、带安全审查的审查流程、声明与证据对照、发布撤销路径、迁移安全、有边界的生产操作，以及教训形式的判定。新增六份专题文件。不捆绑第三方原文，团队规范优先于改写规则，阶段模板未改动，入口没有变大。新增用例尚未运行，效果未测量。 [审查](skills/engineering-loop/references/review.md) · [测试方法](skills/engineering-loop/references/development/testing.md) · [接口设计](skills/engineering-loop/references/api-design.md) · [来源](ACKNOWLEDGMENTS.md) · [用例](evals/fixtures/absorbed-methods/TASK.md)
+
 未发布的 v0.1.34 澄清 Spring 事务代理的实际行为，保留团队仅在 `public` 方法使用 `@Transactional` 的约定。同时修正了 GitHub Ubuntu 作业中因 `/tmp` 路径触发失败的评测记录断言。 [Java / Spring 规范](skills/engineering-loop/references/development/stacks/java-spring.md) · [复现记录](evals/TOOLING.md#preserve-unrelated-path-prefixes)
 
 未发布的 v0.1.33 将入口收敛为路由：连接门禁、六阶段表、支持文件表和五条始终生效的规则，维护上限由 7 KB 降到 4 KB。阶段和支持指南里已有的通用守则从入口删除，只在入口出现过的几句移入开发共通基础、验证和恢复指南。规则本身不打算改变；移出入口的规则只在对应指南被读取时生效，这一影响尚未测量。新增用例尚未运行。 [入口](skills/engineering-loop/SKILL.md) · [用例](evals/fixtures/slim-entry/TASK.md)

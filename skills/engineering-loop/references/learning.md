@@ -28,3 +28,25 @@ Transfer the smallest useful artifact: a regression for a business bug, a check 
 Separate artifact repair from workflow improvement: replaying a known fix can validate a regression, but cannot show that new guidance would discover it independently. Record whether the solution was already known and whether acceptance was fixed before seeing it; add later discoveries transparently. Evaluate guidance on a fresh task and a legitimate nearby counterexample before claiming transfer. If both variants behave alike, record no observed advantage and retain only independently justified corrections. Remove or narrow ineffective instructions. Preserve privacy when sharing examples. Do not autonomously broaden permissions, publish project experience, or promote a local policy to global scope.
 
 Assess both compliance and usefulness: following a costly rule is not proof it helps. Observe missed acceptance items, escaped defects/rework, unnecessary questions/reads, repeated checks, scope expansion and human effort/time when measured. Test the prevented failure and a legitimate nearby task that must remain possible. When warranted, compare no-skill, reduced-guidance and full-skill runs with matched inputs; remove one component at a time to identify its effect. Record host/model and task conditions; do not infer internal reasoning or generalize one run across models. Missing measurements stay unknown; more rules, tests or generated code are not evidence of improvement.
+
+## Decide whether to record, and in which form
+
+Handle one lesson at a time.
+
+Record a lesson only if someone working from the current code, checks and documents, without this record, would likely repeat the mistake or redo substantial investigation. Effort spent and change size do not qualify it. If the test fails, write nothing and say why.
+
+Take the first form that holds:
+
+1. **Remove the duplicate way.** The mistake was possible because two ways of doing the same thing exist. Consolidation changes product code, so propose it to that code's owner.
+2. **An automated check** that runs where the project already runs checks and whose failure says what to fix. First read the existing checks: one that exists but is unwired or silently failing is the finding, not a reason to write another.
+3. **A coding or review rule** in the project's existing standards, for a defect a reviewer can see in a change and no check can hold.
+4. **A written note**, for reasoning that code, checks and rules cannot carry, such as measured facts or rejected alternatives.
+
+If a check or rule already states the lesson, write nothing and name where it lives. Exercise a new check against the defect in a throwaway copy, never by breaking the working tree. After writing a check or rule, apply the test again and write a note only for what would still be lost.
+
+Keep an always-loaded instruction file to pointers. Propose to its owner moving what a check or reviewer can enforce out of it.
+
+For an incident, also:
+
+- Name the control the failure escaped from: a missing or incomplete requirement, a check that did not exercise the path, monitoring with no signal, authority that allowed an unsafe action, a migration, or how people actually adopted the feature. Aim the follow-up at that control; a detection gap is not closed by a code patch alone.
+- Close a follow-up on three pieces of evidence: the change was made, it was verified against the original condition, and its effect was observed. A task status, an assignment or a deferral is none of these. If the effect cannot be observed yet, keep it open with a re-check date. Record a dropped follow-up as rejected, with the reason and who accepted the remaining risk.

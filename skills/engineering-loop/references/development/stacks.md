@@ -11,7 +11,7 @@ Read when a selected scenario's change can be affected by stack-specific rules, 
 
 ## React
 
-Read [React behavior checks](stacks/react.md) only when an affected React state/effect boundary is involved. Use the installed runtime/framework and its maintained project rules; a copy-only edit does not need this body.
+Read [React behavior checks](stacks/react.md) only when an affected React state/effect boundary is involved, or when its adapted section's triggers apply (data loading, a server/client boundary, a heavy import or a shared component's props). Use the installed runtime/framework and its maintained project rules; a copy-only edit does not need this body.
 
 Team-specific conventions: read [team frontend rules](stacks/frontend-team.md) before implementing a component, style, data-handling or test change in a React module. A settled copy-only edit does not need them. They cover components and styles, antd 6, data handling and testing, and list the product choices that remain open. They are partial: extracted from the team's products and awaiting confirmation as the shared standard.
 
@@ -31,8 +31,9 @@ Status: partial. Bind the actual module's language, framework and persistence st
 |---|---|---|
 | Java / Spring with MyBatis-Plus | [java-spring.md](stacks/java-spring.md) | Two team services; mostly build-enforced in one |
 | Python / FastAPI with SQLAlchemy | [python-fastapi.md](stacks/python-fastapi.md) | One team service |
+| PostgreSQL or MySQL schema, index, migration or locking query | [sql.md](stacks/sql.md) | Public sources; unconfirmed for the team |
 
-These files hold extracted team practice, not assumed language rules, and each lists the choices that remain open. Another stack has no team rule file yet: use the project's maintained conventions and do not borrow rules from a different stack.
+The first two files hold extracted team practice, not assumed language rules, and each lists the choices that remain open. Each also carries a separate section adapted from public sources; it is unconfirmed for the team and a team rule wins where they differ. Another stack has no team rule file yet: use the project's maintained conventions and do not borrow rules from a different stack.
 
 ## Engineering and other stacks
 

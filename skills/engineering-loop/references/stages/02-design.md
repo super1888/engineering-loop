@@ -12,6 +12,7 @@ Reuse the relevant accepted behavior, boundaries, current architecture and desig
 
 - For behavior specifications or consequential scope changes, read [requirements.md](../requirements.md).
 - For a consequential choice of system shape, technology, capacity, user wait or ownership cost, read [architecture.md](../architecture.md). Use its challenge and evidence checks when comparing options and before concluding the design.
+- For an interface another module, client or external system consumes, including retry and idempotency behavior, read [api-design.md](../api-design.md).
 - For architecture responsibilities, reference-project inheritance or enforcement gaps, read [project.md](../project.md) and the applicable maintained project architecture.
 - For interface decisions, read [ui.md](../ui.md), including its target-device gate.
 - For an applicable shared component/style catalog, use [template matching](../development/templates.md); it also serves design work without moving the request into implementation.
