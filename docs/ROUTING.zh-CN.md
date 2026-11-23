@@ -1,16 +1,16 @@
 # Engineering Loop 中文路由与执行手册
 
-适用于 **v0.1.33**（2026 年 11 月 21 日核对）。
+适用于仓库中的 **v0.1.34**（2026 年 11 月 23 日核对）。
 
-本手册供团队理解、执行和维护当前 skill。主线是：**用户输入 → PMS MCP 接通 → 判断本次任务阶段和操作类型 → 读取匹配规范 → 解决关键缺口 → 执行与验证 → 按授权回写任务 → 交付**。先确定当前要交付什么，再选择需要的专业、技术栈和风险规则。
+团队执行的主线是 **核验 PMS MCP 接通 → 按本次交付确定阶段 → 读取相关原文并核对关键假设 → 执行与验证 → 按授权同步任务**。任务所需的专业、技术栈和风险规则随实际变更范围而定。
 
-现行执行目录有六个阶段。实际项目的有效指令、已确认需求、权限和交付停点继续生效。手册供团队查阅，执行时按 skill 索引读取相关原文。
+手册从六个一级阶段展开，供团队查阅和逐级讨论。实际执行沿 skill 索引读取相关原文，并遵守项目的有效指令、已确认需求、权限和交付停点。
 
 ## 目录
 
 - [逐级填充目录](#逐级填充目录)
 - [阶段文档和交接模板](#阶段文档和交接模板)
-- [设计讨论与待填细则](#六阶段设计草案)
+- [逐级讨论与待填细则](#逐级讨论目录) · [01 的交接条件](#01-的交接条件)
 - [1 术语与范围](#1-术语与范围)
 - [2 完整路由流程](#2-完整路由流程)
 - [3 MCP 接通条件](#3-mcp-接通条件)
@@ -28,18 +28,18 @@
 
 ## 逐级填充目录
 
-从 [skill 总入口](../skills/engineering-loop/SKILL.md) 定位本次交付的阶段。下表是维护导航，二级主题链接到现行执行说明或规则原文。第 03 阶段已有独立场景正文，其余阶段在各自的阶段入口按需引用专题指南。
+从本次要交付的结果定位一级阶段。进入阶段后，再按受影响的行为选二级主题。03 下有独立的三级场景正文，其余阶段按专题读取相关规则。PMS 状态由项目工作流决定，同一个项目可以同时有处在不同交付阶段的工作。 [skill 总入口](../skills/engineering-loop/SKILL.md)
 
 ### 六阶段入口与二级主题
 
-| 一级阶段 | 二级主题与现有规范 | 文档或交接模板（按需） | 当前细化程度 |
+| 一级阶段 | 当前阶段交付的结果 | 二级主题与现行规范 | 文档或交接模板（按需） |
 |---|---|---|---|
-| [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 问题与现状调研、范围与验收例子、实质需求变更，见[需求指南](../skills/engineering-loop/references/requirements.md) | [需求分析与确认](../skills/engineering-loop/templates/requirements.md)，按需记录调研、需求与痛点、访谈、评审确认 | 已有阶段入口及共用需求指南 |
-| [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构选型与权衡](#架构选型与权衡)、[项目约定与架构继承](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[启动计划与 PMS 规划](#启动计划与-pms-规划)、[协作与分工](../skills/engineering-loop/references/collaboration.md) | [启动计划](../skills/engineering-loop/templates/kickoff-plan.md) | 架构选型须结合公共拷问，启动计划沿用项目现有样式与规则 |
-| [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景](#开发场景与执行正文) | [模块开发与自测记录](../skills/engineering-loop/templates/development-record.md) | 已有 28 个场景正文及条件规则 |
-| [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | [测试方案、用例、缺陷与验收记录](../skills/engineering-loop/templates/acceptance-record.md) | 已有阶段入口和验证指南，版本范围与必验链路逐项对账的细则待补 |
-| [05 发布与验证](../skills/engineering-loop/references/stages/05-release.md) | [发布准备、部署切换、上线验证与随版本回退](../skills/engineering-loop/references/release.md) | [发布计划、部署及上线验证记录](../skills/engineering-loop/templates/release-record.md) | 已有阶段入口和发布指南 |
-| [06 持续运维](../skills/engineering-loop/references/stages/06-operations.md) | [运行准备、故障调查、日常维护与独立恢复](../skills/engineering-loop/references/operations.md) | [运维和线上缺陷记录](../skills/engineering-loop/templates/operations-record.md) | 已有阶段入口和运维指南，子目录待细化 |
+| [01 需求分析与确认](../skills/engineering-loop/references/stages/01-requirements.md) | 调研结论，或已确认的业务行为、范围和验收例子 | 从零建立需求、现有系统新增或变更需求，见[需求指南](../skills/engineering-loop/references/requirements.md) | [需求分析与确认](../skills/engineering-loop/templates/requirements.md) |
+| [02 方案设计与规划](../skills/engineering-loop/references/stages/02-design.md) | 产品规格、技术选型、交互方案或可验收的交付计划 | [产品规格](../skills/engineering-loop/references/requirements.md)、[架构选型与权衡](#架构选型与权衡)、[项目约定与架构继承](../skills/engineering-loop/references/project.md)、[界面与交互设计](../skills/engineering-loop/references/ui.md)、[启动计划与 PMS 规划](#启动计划与-pms-规划)、[协作与分工](../skills/engineering-loop/references/collaboration.md) | [启动计划](../skills/engineering-loop/templates/kickoff-plan.md) |
+| [03 开发与联调](../skills/engineering-loop/references/stages/03-development.md) | 可验证的实现、修复或集成结果及开发自测证据 | [开发路由](../skills/engineering-loop/references/development/index.md)、[共通开发基础](../skills/engineering-loop/references/development/core.md)及[四类场景的 28 个执行正文](#开发场景与执行正文) | [模块开发与自测记录](../skills/engineering-loop/templates/development-record.md) |
+| [04 测试与验收](../skills/engineering-loop/references/stages/04-testing.md) | 针对指定范围和版本的评审、测试或业务验收结果 | [差异评审](../skills/engineering-loop/references/review.md)、[独立测试与集成验证](../skills/engineering-loop/references/verification.md)、[版本与业务验收](../skills/engineering-loop/references/stages/04-testing.md#deliverables) | [测试方案、用例、缺陷与验收记录](../skills/engineering-loop/templates/acceptance-record.md) |
+| [05 发布与验证](../skills/engineering-loop/references/stages/05-release.md) | 指定版本的发布准备结果、目标环境中的上线验证，或该版本的恢复证据 | [发布准备、部署切换、上线验证与随版本回退](../skills/engineering-loop/references/release.md) | [发布计划、部署及上线验证记录](../skills/engineering-loop/templates/release-record.md) |
+| [06 持续运维](../skills/engineering-loop/references/stages/06-operations.md) | 服务就绪、运行维护、故障调查或独立恢复结果 | [运行准备、故障调查、日常维护与独立恢复](../skills/engineering-loop/references/operations.md) | [运维和线上缺陷记录](../skills/engineering-loop/templates/operations-record.md) |
 
 ### 阶段文档和交接模板
 
@@ -67,7 +67,7 @@
 | 随任务事实附加的规则 | [九类开发风险](../skills/engineering-loop/references/development/risks.md) · [技术栈](../skills/engineering-loop/references/development/stacks.md) · [组件模板](../skills/engineering-loop/references/development/templates.md) · [验证边界](../skills/engineering-loop/references/verification-boundaries.md) |
 | 项目接入、专项能力、协作和续接 | [项目约定](../skills/engineering-loop/references/project.md) · [专业 skill](../skills/engineering-loop/references/specialists.md) · [协作](../skills/engineering-loop/references/collaboration.md) · [恢复](../skills/engineering-loop/references/resume.md) · [沉淀](../skills/engineering-loop/references/learning.md) |
 
-每轮可从一个阶段主题或场景编号开始。填阶段入口时沿用进入条件、输入、执行与参考、PMS、交付物和退出条件六项。填具体场景时补触发与排除条件、执行正文、验收例子和项目绑定项。选一条应命中的任务及一条相近反例，按[命中率评测口径](../evals/README.md#measure-routing-hits)冻结预期并安排试跑。更多维护约定见 [第 13 节](#13-规范状态和维护方法)。
+讨论先确认一级阶段的职责和交接条件，再进入它的第一个子主题。每次核对当前主题的触发条件、相近反例、已有正文、交付和验收证据，最后处理确实缺失的项目约定。形成决定后写回对应的现有规范。实现新的路由行为时，选一条应命中的任务和一条相近反例，按评测口径冻结预期并记录实际结果。 [命中率评测口径](../evals/README.md#measure-routing-hits) · [规范维护方法](#13-规范状态和维护方法)
 
 ## 六阶段设计草案
 
@@ -77,9 +77,9 @@
 
 | 一级阶段 | 下一级讨论入口 | 待填内容 |
 |---|---|---|
-| [01 需求分析与确认](#01-需求分析与确认) | 从零建立需求、现有系统新增需求 | 两类产物、验收及确认方式，存量重大变更的专项设计归属 |
-| [02 方案设计与规划](#02-方案设计与规划) | 从零项目的方案考问、团队采用的开发任务拆分方式 | 项目特定方案规则、产物格式、子任务粒度和字段 |
-| [03 开发与联调](#03-开发与联调) | 前端 F1–F8、后端 B1–B8、联调 I1–I8、工程能力 E1–E4 | 逐项补执行与验证细则，确定进度汇总口径 |
+| [01 需求分析与确认](#01-需求分析与确认) | [先核对阶段交接](#01-的交接条件)，再看从零建立需求、现有系统新增或变更需求 | 两类需求记录的最小内容、确认方式，以及存量变更何时需要单独记录方案 |
+| [02 方案设计与规划](#02-方案设计与规划) | 产品规格、技术与架构方案、交互、启动计划和任务拆分 | 项目特定方案规则、产物格式、子任务粒度和字段 |
+| [03 开发与联调](#03-开发与联调) | 前端 F1–F8、后端 B1–B8、联调 I1–I8、工程能力 E1–E4 | 核对既有正文，按实际缺口补团队细则和验证，讨论进度汇总口径 |
 | [04 测试与验收](#04-测试与验收) | 差异评审、独立测试与集成验证、版本与业务验收 | 版本覆盖核对、业务签认及其他阶段细则 |
 | [05 发布与验证](#05-发布与验证) | 发布准备、切换与上线验证 | 观察窗口、发布完成与运维交接条件 |
 | [06 持续运维](#06-持续运维) | 候选主题包括运行观察、故障响应与恢复、日常维护 | 子目录、职责及实际检查要求 |
@@ -111,9 +111,9 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    Req["01 需求分析与确认<br/>确认需求类型并主动考问"] -->|从零需求已确认| Design["02 方案设计与规划<br/>考问方案与任务拆分"]
-    Req -->|存量新增且实现条件具备| Dev["03 开发与联调<br/>按子任务执行并自测"]
-    Design -->|按确认的方案复用或建立 03 子任务| Dev
+    Req["01 需求分析与确认<br/>核对目标、行为与验收边界"] -->|需求已确认且所需设计或规划已获授权| Design["02 方案设计与规划<br/>核对方案与任务拆分"]
+    Req -->|前提齐备且已有实现授权| Dev["03 开发与联调<br/>完成实现并自测"]
+    Design -->|方案确认且已有实现授权| Dev
     Dev -->|另有独立验收要求| Test["04 测试与验收"]
     Test -->|满足发布前提且已授权| Release["05 发布与验证"]
     Release -->|完成上线验证并满足接管条件| Ops["06 持续运维"]
@@ -124,18 +124,28 @@ flowchart TD
 
 ### 01 需求分析与确认
 
-先看目标项目、已有产品和任务事实。进入 01 时主动与用户确认「这次是从零建立需求，还是在已完成的系统上新增需求？」用户已明确的答案直接沿用，发现事实冲突时说明原因再追问。确认后进入对应子目录，主动考问该分支的关键缺口。
+先查目标项目、已有产品和任务事实，识别是从零建立需求，还是变更现有行为。沿用已明确的答案。查完资料仍无法判断，且答案会改变调研或验收范围时，再向用户确认。两类工作沿用共用需求指南和项目现有格式，必要时选用需求模板中匹配的部分。 [阶段 01 原文](../skills/engineering-loop/references/stages/01-requirements.md) · [需求记录模板](../skills/engineering-loop/templates/requirements.md)
 
-| 子目录 | 考问重点 | 产物 |
+| 子主题 | 已有考问重点 | 已有记录要点 |
 |---|---|---|
-| 从零建立需求 | 谁遇到什么问题，现用方式哪里不足，第一版解决什么，成功和失败如何识别 | 待讨论 |
-| 现有系统新增需求 | 复用当前行为和已定约定，核对新增目标、受影响用户或链路、需要延续的行为及验收边界 | 待讨论 |
+| 从零建立需求 | 谁遇到什么问题，当前替代做法及代价，最关键的假设，第一版如何验证 | 调研及依据、目标用户、问题与范围、代表性验收例子、未决决定 |
+| 现有系统新增或变更需求 | 现有行为及变更前后差异，受影响用户、契约、数据和已有约定 | 现状和影响、应保留的行为、代表性验收或回归例子、未决决定 |
 
-从零需求确认后按授权进入 02。存量需求明确范围、验收与实现条件后可进入 03，已明确的开发子任务直接进入 03。待讨论的反例是存量系统新增功能却必须调整架构、权限或数据契约。建议先在 01 确认影响和专项设计前置，专项设计子任务的阶段归属待定。
+#### 01 的交接条件
+
+01 确认业务结果、范围和验收例子。待决的业务行为或例外留在 01。业务要求已定，后续需要设计或规划时，按授权进入 02。有效需求和实现前提齐备时，已有实现授权的任务可以直接进入 03。仅调查的工作以调查结论收口。 [阶段 01 原文](../skills/engineering-loop/references/stages/01-requirements.md) · [阶段 02 原文](../skills/engineering-loop/references/stages/02-design.md)
+
+| 同一现有系统中的例子 | 当前需要交付 |
+|---|---|
+| 新角色能否查看历史订单仍待确认 | 01 确认谁能看、能看哪些数据，以及允许与拒绝的验收例子 |
+| 可见范围已确认，旧客户端接口兼容和历史数据映射仍需选择 | 02 决定方案并说明验证方式 |
+| 按已批准的角色规则和兼容方案增加入口，实现已授权 | 03 交付实现及权限与兼容检查 |
+
+**待定的团队规则**。涉及权限或数据契约的存量变更，可以讨论何时单独留下方案记录。候选条件是仍有会影响验收、迁移成本或后续维护的实质方案取舍。已有适用方案时，可引用它的版本及适用范围，沿用项目已有的安全评审、审计或文档要求。
 
 ### 02 方案设计与规划
 
-以从零建设项目中已确认的需求为输入。主动核对方案是否漏掉重要需求、是否有更简单的做法，以及关键取舍、跨端契约、故障场景和验收条件是否经得住反例。把需求逐项对应到方案及可独立验收的开发成果，找出遗漏、重复和依赖不清的任务。
+以当前切片已确认的需求为输入，适用于从零建设和需要专项方案的存量变更。主动核对方案是否漏掉重要需求、是否有更简单的做法，以及关键取舍、跨端契约、故障场景和验收条件是否经得住反例。把需求逐项对应到方案及可独立验收的开发成果，找出遗漏、重复和依赖不清的任务。
 
 项目采用阶段父任务时，可将批准的开发子任务放在已确认的 03 父任务下，并按需关联设计产物和实际的阻塞前置。项目具体拆分规则、样式及任务字段仍由项目确认。
 
@@ -156,9 +166,9 @@ v0.1.32 起，01 和 02 的交付物（需求、产品或技术方案、架构�
 
 ### 03 开发与联调
 
-项目采用 PMS 子任务跟踪时，从设计阶段已规划的子任务开工。存量需求等工作可按项目规则使用新建的 03 子任务。先核对该卡的范围、责任、前置和验收要求，再依据本次变更选择[前端、后端、联调或工程能力的场景正文](#开发场景与执行正文)，按实际技术栈和变化风险补相应规则。一个可验收的成果可以覆盖多类规范。只有成果可独立验收时，才考虑为它独立建卡。开发自测随子任务在本阶段完成，各类执行细则按任务逐级补充。
+项目跟踪开发任务时，先核对任务的范围、责任、前置和验收要求。复用已有的匹配任务，或按授权为可独立验收的成果建卡。一个成果可以覆盖多类规范。依据本次变更选择前端、后端、联调或工程能力的场景正文，按实际技术栈和变化风险补相应规则。开发自测随实现完成。 [开发场景与执行正文](#开发场景与执行正文)
 
-量化以同一版本已确认的子任务范围为基础，按实际状态统计未开始、执行中、待验收和已验收，另标阻塞。开发完成与业务签认各自记录，正式汇总口径后续讨论。
+进度汇总口径待定。一种可讨论的做法是按同一版本已确认的子任务范围，把项目实际状态映射为未开始、执行中、待验收和已验收，另标阻塞。开发完成和业务签认分别记录。
 
 ### 04 测试与验收
 
@@ -878,7 +888,9 @@ v0.1.32 起，下列技术栈有从团队现有仓库提取的规范文件，命
 | Python／FastAPI＋SQLAlchemy | [python-fastapi.md](../skills/engineering-loop/references/development/stacks/python-fastapi.md) | 一个团队服务 |
 | React 前端 | [frontend-team.md](../skills/engineering-loop/references/development/stacks/frontend-team.md) | 至少两个产品遵循或有检查强制 |
 
-这些文件的状态是“部分可用”：尚待负责人确认为跨项目统一标准。项目自己的有效指令与之不同时以项目为准。每个文件末尾列出团队各项目做法不一致的选择（响应格式、迁移方式、组件底座、表单库等），遇到时沿用当前项目的做法；新项目在阶段 02 向负责人提出，不由智能体自行选定。其他技术栈没有团队规范文件，沿用项目自己的维护来源，不借用别的技术栈的规则。
+这些文件目前部分可用，尚待负责人确认为跨项目统一标准。以项目有效指令为准。Java 和 React 团队规则列出了待统一的选择，例如响应格式、迁移方式、组件底座和表单库。Python 指导取自一个服务，仍待跨项目确认。涉及待统一事项时沿用已有项目的做法，新项目中会影响方案的选择在阶段 02 交负责人决定。其他技术栈沿用项目维护的规范。
+
+v0.1.34 澄清了 Spring 事务代理的边界。团队把 `@Transactional` 的使用范围限定在 `public` 方法。Spring 6+ 的类代理默认也可拦截受保护或包可见方法，接口代理要求方法公开且声明在被代理接口上。两种代理模式都要求调用实际经过代理。 [Java／Spring 团队规则](../skills/engineering-loop/references/development/stacks/java-spring.md#transactions-and-concurrency-b4)
 
 ### React 的条件检查
 
